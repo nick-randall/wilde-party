@@ -1,4 +1,6 @@
-export const myGCZCards: GameCard[] = [
+import { getCardGroupObjs } from "./groupGCZCards";
+
+const myGCZCards: GameCard[] = [
   {
     id: "092832908423",
     name: "saufnase1",
@@ -114,3 +116,35 @@ export const myGCZCards: GameCard[] = [
      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
 ];
+
+const myEnchantmentsRowCards: GameCard[] | null[] = [
+  
+  {
+    id: "asdf2r42345",
+    name: "zwilling2",
+    placeId: "324562132300",
+    playerId: "l93fld9",
+    index: 1,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "zwilling",
+    cardType: "zwilling",
+     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  {
+    id: "3w3323434",
+    name: "bffs5",
+    placeId: "324562132300",
+    playerId: "l93fld9",
+    index: 3,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "bffs2",
+    cardType: "bff",
+     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+];
+
+export const myGCZCardRow = getCardGroupObjs(myEnchantmentsRowCards, myGCZCards)

@@ -1,4 +1,4 @@
-type DragGroup = GameCard[];
+type CardGroup = GameCard[];
 
 type PlaceDimensions = {
   cardHeight: number;
@@ -222,6 +222,6 @@ type DraggedData = {
 type CardGroupObj = {
   id: string;
   size: number;
-  cards: DragGroup;
+  cards: CardGroup;
   ghost: boolean;
 }

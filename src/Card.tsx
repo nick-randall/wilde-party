@@ -23,11 +23,11 @@ const Card = (props:CardProps) => {
     zIndex: dimensions.tableCardzIndex,
     width: dimensions.cardWidth,
     height: dimensions.cardHeight,
-    left: index * dimensions.cardLeftSpread + dimensions.leftOffset,
-    top: index * dimensions.cardTopSpread,
+    // left: index * dimensions.cardLeftSpread + dimensions.leftOffset,
+    // top: index * dimensions.cardTopSpread,
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
-    transition: "left 250ms ease",
+    //transition: "left 250ms ease",
     // pointerEvents:
     //   legalTargetStatus === "notAmongLegalTargets" || legalTargetStatus === "placeIsLegalTarget" || legalTargetStatus === "placeIsRearranging"
     //     ? "none"
