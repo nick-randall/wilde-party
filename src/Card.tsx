@@ -5,11 +5,14 @@ export interface CardProps {
   index: number;
   image: string;
   dimensions: CardDimensions;
+  offsetLeft?: number;
+  offsetTop?: number;
+  cardGroupIndex: number;
 }
 
 
 const Card = (props:CardProps) => {
-  const { id, index, dimensions,  image, } = props;
+  const { id, index, dimensions, offsetTop, offsetLeft, image, } = props;
 
   const [rotation, setRotation] = useState(0);
 
@@ -23,6 +26,8 @@ const Card = (props:CardProps) => {
     zIndex: dimensions.tableCardzIndex,
     width: dimensions.cardWidth,
     height: dimensions.cardHeight,
+    left: offsetLeft || "",
+    top: offsetTop || "",
     // left: index * dimensions.cardLeftSpread + dimensions.leftOffset,
     // top: index * dimensions.cardTopSpread,
     position: "absolute",

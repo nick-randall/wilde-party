@@ -1,6 +1,6 @@
 import { getCardGroupObjs } from "./groupGCZCards";
 
-const myGCZCards: GameCard[] = [
+export const myGCZCards: GameCard[] = [
   {
     id: "092832908423",
     name: "saufnase1",
@@ -117,7 +117,7 @@ const myGCZCards: GameCard[] = [
   },
 ];
 
-const myEnchantmentsRowCards: GameCard[] | null[] = [
+export const myEnchantmentsRowCards: GameCard[]= [
   
   {
     id: "asdf2r42345",
@@ -146,5 +146,3 @@ const myEnchantmentsRowCards: GameCard[] | null[] = [
      action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
 ];
-
-export const myGCZCardRow = getCardGroupObjs(myEnchantmentsRowCards, myGCZCards)

@@ -21,5 +21,23 @@ export const getCardGroupArray = (enchantmentsCards: GameCard[], GCZCards: GameC
       ? [card, GCZCards[index + 1], enchantmentsCards.filter((cardB) => cardB.index === index)[0]]
       : [card, enchantmentsCards.filter((cardB) => cardB.index === index)[0]]
   );
+export const getCardGroupsShape = (enchantmentsCards: GameCard[], GCZCards: GameCard[]) => getCardGroupObjs(enchantmentsCards, GCZCards).map((e) => e.size).map(cumulativeSum)
+
 export const getCardGroupObjs = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupObj[] =>
   pipe(getCardGroupArray, filterOutDuplicates, convertCardGroupToObj)(enchantmentsCards, GCZCards);
+
+interface CardGroupData {
+  cardGroupObjs: CardGroupObj[],
+  cardGroupsShape: number[],
+}
+
+export const getCardGroupData = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupData => ({
+  cardGroupObjs: getCardGroupObjs(enchantmentsCards, GCZCards),
+  cardGroupsShape: getCardGroupsShape(enchantmentsCards, GCZCards)
+})
+
+
+const cumulativeSum = (
+  (sum) => (value: number) =>
+    (sum += value)
+)(0);

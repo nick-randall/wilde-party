@@ -29,12 +29,12 @@ export const GhostCard = (props: GhostCardProps) => {
             width: cardWidth,
             border: "thin solid",
             //left: props.left,
-            left: (index + 1 )* cardLeftSpread,
+            left: (index + 1 ) * cardLeftSpread,
             top: dimensions.topOffset,
             rotate: rotation + "deg" || "0deg",
             position: "relative",
             transition: "left 250ms ease, opacity 250ms",
-            zIndex: tableCardzIndex,
+            zIndex: 0,
           }}
         />
     //   )}
