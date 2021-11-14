@@ -34,6 +34,7 @@ export const getCardGroupsShape = (enchantmentsCards: GameCard[], GCZCards: Game
   [0].concat(getCardGroupObjs(enchantmentsCards, GCZCards).map((e) => e.size).map(cumulativeSum(0)));
 
 export const getCardGroupsShape2 = (cardGroupObjs: CardGroupObj[]) : number [] =>
+  //[0].concat(cardGroupObjs.map((e) => e.size).map(cumulativeSum(0)));
   [0].concat(cardGroupObjs.map((e) => e.size).map(cumulativeSum(0)));
 
 export const getCardGroupObjs = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupObj[] =>

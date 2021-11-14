@@ -14,6 +14,7 @@ export const GhostCard = (props: GhostCardProps) => {
   const {cardLeftSpread, cardWidth,  leftOffset, tableCardzIndex } = dimensions;
   //const { image } = card;
   const id = "ghostCard" + image;
+  console.log(index)
   
   //const cardIndex = offsetWithinCardGroup !==undefined ? offsetWithinCardGroup : index;
   return (
@@ -29,7 +30,7 @@ export const GhostCard = (props: GhostCardProps) => {
             width: cardWidth,
             border: "thin solid",
             //left: props.left,
-            left: (index + 1 ) * cardLeftSpread,
+            left: (index) * cardLeftSpread,
             top: dimensions.topOffset,
             rotate: rotation + "deg" || "0deg",
             position: "relative",
