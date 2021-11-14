@@ -4,7 +4,7 @@ import Card from "./Card";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCard from "./GhostCard";
-import { getCardGroupData } from "./groupGCZCards";
+import { getCardGroupObjs, getCardGroupsShape, getCardGroupsShape2 } from "./groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
 interface ghostCardGroupProps {
@@ -14,10 +14,11 @@ interface ghostCardGroupProps {
 
 function App() {
   const [ghostCardGroup, setGhostCardGroup] = useState<ghostCardGroupProps>();
-  const myGCZCardRow = useMemo(() => getCardGroupData(myEnchantmentsRowCards, myGCZCards).cardGroupObjs, []);
-  const myGCZCardRowShape = useMemo(() => getCardGroupData(myEnchantmentsRowCards, myGCZCards).cardGroupsShape, []);
+  const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
+  const myGCZCardRowShape = useMemo(()=> getCardGroupsShape2(myGCZCardRow), [myGCZCardRow]);
+  console.log(myGCZCardRowShape)
 
-  const onDragStart = (start: DragStart, provided: ResponderProvided) =>
+  const onDragStart = (start: DragStart) =>
     setGhostCardGroup({ index: start.source.index, cardGroupId: start.draggableId });
   // could instead set cards based on cardGroupId here...
 
@@ -32,7 +33,7 @@ function App() {
         {(provided) => (
           <div className="GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ padding: 6, display: "flex", top:100, position: "absolute" }}>
             {myGCZCardRow.map((cardGroup, index) => (
-              <CardGroup cardGroup={cardGroup} index= {index} dimensions = {dimensions}/>
+              <CardGroup cardGroup={cardGroup} index= {index} dimensions = {dimensions} key={cardGroup.id}/>
             ))}
             {provided.placeholder}
 
@@ -41,7 +42,7 @@ function App() {
                 {myGCZCardRow
                   .filter((cardGroup) => cardGroup.id === ghostCardGroup.cardGroupId)[0]
                   .cards.map((ghostCard) => (
-                    <GhostCard index={ghostCardGroup.index} image={ghostCard.image} dimensions={dimensions} />
+                    <GhostCard index={ghostCardGroup.index} image={ghostCard.image} dimensions={dimensions} key={ghostCard.id}/>
                   ))}
               </div>
             ) : null}

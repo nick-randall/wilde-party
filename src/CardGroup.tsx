@@ -50,6 +50,7 @@ const CardGroup = (props: CardGroupProps) => {
                   image={card.image}
                   index={index}
                   dimensions={dimensions}
+                  key={card.id}
                 />
               ))}
             </div>
