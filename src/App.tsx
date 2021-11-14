@@ -4,12 +4,13 @@ import Card from "./Card";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCard from "./GhostCard";
+import GhostCardGroup from "./GhostCardGroup";
 import { getCardGroupObjs, getCardGroupsShape, getCardGroupsShape2 } from "./groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
 interface GhostCardGroupProps {
   index: number;
-  cardGroupObj: CardGroupObj;
+  ghostCardGroup: CardGroupObj;
 }
 
 function App() {
@@ -20,14 +21,14 @@ function App() {
   const onDragStart = (start: DragStart) =>
     setGhostCardGroup({
       index: myGCZCardRowShape[start.source.index],
-      cardGroupObj: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
+      ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
     });
 
   const onDragUpdate = (update: DragUpdate) =>
     update.destination
       ? setGhostCardGroup({
           index: myGCZCardRowShape[update.destination.index],
-          cardGroupObj: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
+          ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
         })
       : setGhostCardGroup(undefined);
 
@@ -48,13 +49,7 @@ function App() {
             ))}
             {provided.placeholder}
 
-            {ghostCardGroup ? (
-              <div id={`ghostcard-absolute-positioning-container${ghostCardGroup}`} style={{ position: "absolute", zIndex: 0 }}>
-                {ghostCardGroup.cardGroupObj.cards.map((ghostCard) => (
-                  <GhostCard index={ghostCardGroup.index} image={ghostCard.image} dimensions={dimensions} key={ghostCard.id} />
-                ))}
-              </div>
-            ) : null}
+            {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup.ghostCardGroup} index={ghostCardGroup.index} dimensions={dimensions}/>: null}
           </div>
         )}
       </Droppable>
