@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GCZ from './GCZ';
+import { Board } from './Board';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <GCZ />
+    <Board />
   </React.StrictMode>,
   document.getElementById('root')
 );

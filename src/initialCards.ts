@@ -1,5 +1,5 @@
-import { getCardGroupObjs } from "./groupGCZCards";
 
+// Sort Queries by index so the array structure reflects the
 export const myGCZCards: GameCard[] = [
   {
     id: "092832908423",
@@ -117,7 +117,51 @@ export const myGCZCards: GameCard[] = [
   },
 ];
 
-export const myEnchantmentsRowCards: GameCard[]= [
+export const myHandCards: GameCard[] = [
+  {
+    id: "jadsif293jfnjskdnv",
+    name: "schleckermaul4",
+    playerId: "l93fld9",
+    placeId: "pqewoi",
+    index: 0,
+    image: "schleckermaul4",
+    cardType: "guest",
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    guestCardType: "schleckermaul", //???
+     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  },
+  {
+    id: "123123",
+    name: "barkeeper",
+    placeId: "pqewoi",
+    playerId: "l93fld9",
+    index: 1,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "barkeeper",
+    cardType: "special",
+    specialsCardType: "saufnase",
+     action: { actionType: "addDragged", highlightType: "card", placeHighlightType: "specialsZone" },
+  },
+  {
+    id: "sdvklmklm",
+    name: "bffs",
+    placeId: "324562132300",
+    playerId: "l93fld9",
+    index: 2,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "bffs1",
+    cardType: "bff",
+     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  
+];
+export const myEnchantmentsRowCards: GameCard[]  = [
   
   {
     id: "asdf2r42345",
@@ -145,17 +189,235 @@ export const myEnchantmentsRowCards: GameCard[]= [
     cardType: "bff",
      action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
+];
+
+const mySpecialsZoneCards: GameCard [] = [
   {
-    id: "ddddd",
-    name: "bffs1",
-    placeId: "324562132300",
+    id: "9d2304jf",
+    name: "partypizza",
+    placeId: "klsjfd",
     playerId: "l93fld9",
-    index: 6,
-    pointValue: 1,
+    index: 0,
+    pointValue: 0,
     bffs: false,
     zwilling: false,
-    image: "bffs1",
-    cardType: "bff",
-     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+    image: "partypizza",
+    cardType: "special",
+    specialsCardType: "schleckermaul",
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  {
+    id: "mnbvyxcv",
+    name: "nebelmaschine",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 1,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "nebelmaschine",
+    cardType: "special",
+    specialsCardType: "taenzerin",
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  {
+    id: "pppppppf1",
+    name: "playlist",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 2,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "playlist",
+    cardType: "special",
+    specialsCardType: "taenzerin",
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  {
+    id: "pppppppf1",
+    name: "megaphon",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 3,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "megaphon",
+    cardType: "special",
+    specialsCardType: "rumgroelerin",
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+  {
+    id: "pppppppf1",
+    name: "prost",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 4,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "prost",
+    cardType: "special",
+    specialsCardType: "saufnase",
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
+
+]
+
+export const initialGamePlayers: GamePlayer[] = [
+  {
+    id: "l93fld9",
+    name: "Nick",
+    places: {
+      GCZ: {
+        id: "pd0s9fd",
+        playerId: "l93fld9",
+        maxNumCards: 13,
+        placeType: "GCZ",
+        acceptedCardType: "guest",
+        cards: myGCZCards,
+      },
+      UWZ: {
+        id: "0239842kl",
+        playerId: "l93fld9",
+        placeType: "GCZ",
+        cards: [],
+      },
+      specialsZone: {
+        id: "klsjfd",
+        playerId: "l93fld9",
+        placeType: "specialsZone",
+        cards: mySpecialsZoneCards,
+      },
+      hand: {
+        id: "pqewoi",
+        playerId: "l93fld9",
+        placeType: "hand",
+        cards: myHandCards,
+      },
+      enchantmentsRow: {
+        id: "324562132300",
+        playerId: "l93fld9",
+        placeType: "enchantmentsRow",
+        cards: myEnchantmentsRowCards,
+      },
+    },
+    current: true,
+    currentPhase: "normalActionPhase",
+    draws: 1,
+    plays: 1,
+    rolls: 1,
+    //points:number;//??????
+    glitzaglitza: false,
+    skipNextTurn: false,
   },
 ];
+
+
+const initialGameSnapshot: GameSnapshot = {
+  players: [
+    {
+      id: "l93fld9",
+      name: "Nick",
+      current: true,
+      currentPhase: "normalDrawPhase",
+      draws: 1,
+      plays: 1,
+      rolls: 1,
+      //points:number,//??????
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        GCZ: {
+          id: "pd0s9fd",
+          playerId: "l93fld9",
+          maxNumCards: 13,
+          placeType: "GCZ",
+          acceptedCardType: "guest",
+          cards: myGCZCards,
+        },
+        UWZ: {
+          id: "0239842kl",
+          playerId: "l93fld9",
+          placeType: "GCZ",
+          cards: [],
+        },
+        specialsZone: {
+          id: "klsjfd",
+          playerId: "l93fld9",
+          placeType: "specialsZone",
+          cards: mySpecialsZoneCards,
+        },
+        hand: {
+          id: "pqewoi",
+          playerId: "l93fld9",
+          placeType: "GCZ",
+          cards: myHandCards,
+        },
+        enchantmentsRow: {
+          id: "324562132300",
+          playerId: "l93fld9",
+          placeType: "enchantmentsRow",
+          cards: myEnchantmentsRowCards,
+        },
+      },
+    },
+    {
+      id: "enemy",
+      name: "string",
+      current: false,
+      currentPhase: "normalDrawPhase",
+      draws: 1,
+      plays: 1,
+      rolls: 1,
+      //points:number,//??????
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        GCZ: {
+          id: "jr2034jrpdsf",
+          playerId: "enemy",
+          placeType: "GCZ",
+          cards: [],
+        },
+        UWZ: {
+          id: "aqu2389uh234rj",
+          playerId: "enemy",
+          placeType: "UWZ",
+          cards: [],
+        },
+        specialsZone: {
+          id: "09asdufj",
+          playerId: "enemy",
+          placeType: "specialsZone",
+          cards: [],
+        },
+        hand: {
+          id: "2kopvjops",
+          playerId: "enemy",
+          placeType: "hand",
+          cards: [],
+        },
+        enchantmentsRow: {
+          id: "jfw3o90jvskd",
+          playerId: "enemy",
+          placeType: "enchantmentsRow",
+          cards: [],
+        },
+      },
+    },
+  ],
+  nonPlayerPlaces: {
+    deck: {
+      id: "klasdf",
+      placeType: "deck",
+      cards: [],
+    },
+    discardPile: {
+      id: "klasd02mcvdlw",
+      placeType: "discardPile",
+      cards: [],
+    },
+  },
+};
