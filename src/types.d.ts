@@ -223,5 +223,4 @@ type CardGroupObj = {
   id: string;
   size: number;
   cards: CardGroup;
-  ghost: boolean;
 }

@@ -1,4 +1,4 @@
-import React, { CSSProperties, ForwardedRef, forwardRef, useState } from "react";
+import React, { CSSProperties, useState } from "react";
 
 export interface CardProps {
   id: string;

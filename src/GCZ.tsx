@@ -8,35 +8,39 @@ import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
 interface GhostCardGroupData {
   index: number;
-  ghostCardGroup: CardGroupObj;
+  ghostCardObjects: CardGroupObj;
 }
 
-function App() {
+
+
+function GCZ() {
   const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
-  const [ghostCardGroup, setGhostCardGroup] = useState<GhostCardGroupData>();
-  // an array containing the offset from left of each cardGroup eg. [0,1,2,4,5,7]
+  const [ghostCardGroupData, setGhostCardGroupData] = useState<GhostCardGroupData>();
+  // an array containing the offset from left of each cardGroup eg. [0, 1, 2, 4, 5, 7]
   const [cardRowShape, setCardRowShape] = useState<number[]>([]);
+
+  console.log(myGCZCardRow)
 
   const onDragStart = (start: DragStart) => {
     const startIndex = start.source.index;
     const cardRowShape = getCardRowShapeOnRearrange(myGCZCardRow, startIndex);
     setCardRowShape(cardRowShape);
 
-    setGhostCardGroup({
+    setGhostCardGroupData({
       index: cardRowShape[startIndex],
-      ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
+      ghostCardObjects: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
     });
   };
 
   const onDragUpdate = (update: DragUpdate) =>
     update.destination
-      ? setGhostCardGroup({
+      ? setGhostCardGroupData({
           index: cardRowShape[update.destination.index],
-          ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
+          ghostCardObjects: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
         })
-      : setGhostCardGroup(undefined);
+      : setGhostCardGroupData(undefined);
 
-  const onDragEnd = () => setGhostCardGroup(undefined);
+  const onDragEnd = () => setGhostCardGroupData(undefined);
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate} onDragStart={onDragStart}>
@@ -46,15 +50,15 @@ function App() {
             className="GCZ"
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ padding: 6, display: "flex", top: 100, position: "absolute" }}
+            style={{display: "flex", top: 100, position: "absolute" }}
           >
             {myGCZCardRow.map((cardGroup, index) => (
               <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
             ))}
             {provided.placeholder}
 
-            {ghostCardGroup ? (
-              <GhostCardGroup ghostCardGroup={ghostCardGroup.ghostCardGroup} index={ghostCardGroup.index} dimensions={dimensions} />
+            {ghostCardGroupData ? (
+              <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardObjects} index={ghostCardGroupData.index} dimensions={dimensions} />
             ) : null}
           </div>
         )}
@@ -63,7 +67,7 @@ function App() {
   );
 }
 
-export default App;
+export default GCZ;
 
 // <Droppable droppableId="GCZ" direction="horizontal">
 // {(provided) => (
