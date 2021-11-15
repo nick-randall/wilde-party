@@ -145,4 +145,17 @@ export const myEnchantmentsRowCards: GameCard[]= [
     cardType: "bff",
      action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
+  {
+    id: "ddddd",
+    name: "bffs1",
+    placeId: "324562132300",
+    playerId: "l93fld9",
+    index: 6,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "bffs1",
+    cardType: "bff",
+     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+  },
 ];

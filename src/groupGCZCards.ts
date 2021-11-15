@@ -22,12 +22,7 @@ export const getCardGroupArray = (enchantmentsCards: GameCard[], GCZCards: GameC
       : [card, enchantmentsCards.filter((cardB) => cardB.index === index)[0]]
   );
 
-// const cumulativeSum = (
-//   (sum: number) => (value: number) =>
-//     (sum += value)
-// )(0);
-
-const cumulativeSum = ((sum:number) => (value: number) => sum += value);
+export const cumulativeSum = ((sum:number) => (value: number) => sum += value);
 
 
 export const getCardGroupsShape = (enchantmentsCards: GameCard[], GCZCards: GameCard[]) : number [] =>

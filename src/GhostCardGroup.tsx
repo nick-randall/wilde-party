@@ -1,5 +1,3 @@
-import { Draggable } from "react-beautiful-dnd";
-import Card from "./Card";
 import GhostCard from "./GhostCard";
 
 export interface GhostCardGroupProps {
@@ -26,17 +24,17 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
 
   return (
     <div id={`ghostcard-absolute-positioning-container${ghostCardGroup}`} style={{ position: "absolute", zIndex: 0 }}>
-      <div style={{position:"relative"}}>
-      {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
-        <GhostCard
-          index={index}
-          image={ghostCard.image}
-          dimensions={dimensions}
-          key={ghostCard.id}
-          offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}
-          offsetTop={getOffset(ghostCard, ghostCardGroupIndex).top}
-        />
-      ))}
+      <div id={`ghostcard-relative-positioning-container${ghostCardGroup}`} style={{ position: "relative" }}>
+        {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
+          <GhostCard
+            index={index}
+            image={ghostCard.image}
+            dimensions={dimensions}
+            key={ghostCard.id}
+            offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}
+            offsetTop={getOffset(ghostCard, ghostCardGroupIndex).top}
+          />
+        ))}
       </div>
     </div>
   );

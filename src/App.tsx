@@ -1,33 +1,43 @@
-import React, { useMemo, useState } from "react";
-import { DragDropContext, Droppable, Draggable, DragUpdate, ResponderProvided, DragStart } from "react-beautiful-dnd";
-import Card from "./Card";
+import { useMemo, useState } from "react";
+import { DragDropContext, Droppable, DragUpdate, DragStart } from "react-beautiful-dnd";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
-import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
-import { getCardGroupObjs, getCardGroupsShape, getCardGroupsShape2 } from "./groupGCZCards";
+import { cumulativeSum, getCardGroupObjs, getCardGroupsShape2 } from "./groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
-interface GhostCardGroupProps {
+interface GhostCardGroupInputs {
   index: number;
   ghostCardGroup: CardGroupObj;
 }
 
 function App() {
-  const [ghostCardGroup, setGhostCardGroup] = useState<GhostCardGroupProps>();
+  const [ghostCardGroup, setGhostCardGroup] = useState<GhostCardGroupInputs>();
   const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
-  const myGCZCardRowShape = useMemo(() => getCardGroupsShape2(myGCZCardRow), [myGCZCardRow]);
+  //const myGCZCardRowShape = useMemo(() => getCardGroupsShape2(myGCZCardRow), [myGCZCardRow]);
+  const [cardRowShape, setCardRowShape] = useState<number[]>([]);
 
-  const onDragStart = (start: DragStart) =>
+  const getCardRowShape = (cardGroupObjs: CardGroupObj[], startIndex: number): number[] => {
+    const shape = cardGroupObjs.map((e) => e.size);
+    shape.splice(startIndex, 1);
+    const finished = [0].concat(shape.map(cumulativeSum(0)));
+    return finished;
+  };
+  const onDragStart = (start: DragStart) => {
+    const startIndex = start.source.index;
+    const cardRowShape = getCardRowShape(myGCZCardRow, startIndex);
+    setCardRowShape(cardRowShape);
+
     setGhostCardGroup({
-      index: myGCZCardRowShape[start.source.index],
+      index: cardRowShape[startIndex],
       ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
     });
+  };
 
   const onDragUpdate = (update: DragUpdate) =>
     update.destination
       ? setGhostCardGroup({
-          index: myGCZCardRowShape[update.destination.index],
+          index: cardRowShape[update.destination.index],
           ghostCardGroup: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
         })
       : setGhostCardGroup(undefined);
@@ -49,7 +59,9 @@ function App() {
             ))}
             {provided.placeholder}
 
-            {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup.ghostCardGroup} index={ghostCardGroup.index} dimensions={dimensions}/>: null}
+            {ghostCardGroup ? (
+              <GhostCardGroup ghostCardGroup={ghostCardGroup.ghostCardGroup} index={ghostCardGroup.index} dimensions={dimensions} />
+            ) : null}
           </div>
         )}
       </Droppable>
