@@ -31,7 +31,8 @@ const CardGroup = (props: CardGroupProps) => {
             id={`cardgroup-relative-positioning-container${cardGroup.id}`}
             style={{
               width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
-              height: cardHeight,
+              // this here determines height of GCZ dragover area
+              height: cardHeight * 1.5,
             }}
           >
             <div

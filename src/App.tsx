@@ -3,30 +3,20 @@ import { DragDropContext, Droppable, DragUpdate, DragStart } from "react-beautif
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCardGroup from "./GhostCardGroup";
-import { cumulativeSum, getCardGroupObjs, getCardGroupsShape2, getCumulativeSum, removeSourceIndex } from "./groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnRearrange, } from "./groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
-interface GhostCardGroupInputs {
+interface GhostCardGroupData {
   index: number;
   ghostCardGroup: CardGroupObj;
 }
 
 function App() {
-  const [ghostCardGroup, setGhostCardGroup] = useState<GhostCardGroupInputs>();
   const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
+  const [ghostCardGroup, setGhostCardGroup] = useState<GhostCardGroupData>();
+  // an array containing the offset from left of each cardGroup eg. [0,1,2,4,5,7]
   const [cardRowShape, setCardRowShape] = useState<number[]>([]);
-  const removeDragSourceIndex = (dragPoints: number[], sourceIndex: number) => dragPoints.splice(sourceIndex, 1) 
-  //const getCumulativeSum = (dragPoints: number[]) => dragPoints.map(cumulativeSum(0));
-  const addFirstIndex = (dragPoints: number []) => [0].concat(dragPoints)
 
-
-  const getCardRowShapeOnRearrange = (cardGroupObjs: CardGroupObj[], startIndex: number): number[] => {
-    const shape = cardGroupObjs.map((e) => e.size);
-    shape.splice(startIndex, 1);
-    const finished = [0].concat(shape.map(cumulativeSum(0)));
-    console.log(getCumulativeSum(cardGroupObjs, startIndex))
-    return finished;
-  };
   const onDragStart = (start: DragStart) => {
     const startIndex = start.source.index;
     const cardRowShape = getCardRowShapeOnRearrange(myGCZCardRow, startIndex);
