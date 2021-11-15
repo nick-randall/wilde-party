@@ -34,7 +34,17 @@ export const getCardGroupsShape2 = (cardGroupObjs: CardGroupObj[]) : number [] =
 
 export const getCardGroupObjs = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupObj[] =>
   pipe(getCardGroupArray, filterOutDuplicates, convertCardGroupToObj)(enchantmentsCards, GCZCards);
+  
+  const mapToSizes = (cardGroups: CardGroupObj[]) => (sourceIndex: number) => cardGroups.map(e => e.size)
+  const removeDragSourceIndex = (indexArray: number[], sourceIndex: number) => indexArray.splice(sourceIndex, 1) 
+  //const getCumulativeSum = (indexArray: number[]) => indexArray.map(cumulativeSum(0));
+  const addFirstIndex = (indexArray: number []) => [0].concat(indexArray)
 
+  export const mappedSizes = (cardGroups: CardGroupObj[])  => mapToSizes(cardGroups)
+  export const removeSourceIndex = (cardGroups: CardGroupObj[]) => (sourceIndex: number) => mappedSizes(cardGroups)(sourceIndex)
+  export const getCumulativeSum = (cardGroups: CardGroupObj[], sourceIndex: number) => removeSourceIndex(cardGroups)(sourceIndex).map(cumulativeSum)
+  //(cardGroups: CardGroupObj[]) => pipe(mapToSizes(cardGroups), removeDragSourceIndex)(cardGroups, sour)
+//export const getCardRowShapeOnRearrange = (cardGroups: CardGroupObj[], sourceIndex: number) => pipe(mapToSizes(cardGroups), removeDragSourceIndex, getCumulativeSum, addFirstIndex)(dragPoints, sourceIndex)
 interface CardGroupData {
   cardGroupObjs: CardGroupObj[];
   cardGroupsShape: number[];
