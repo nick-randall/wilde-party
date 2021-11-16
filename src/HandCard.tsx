@@ -1,4 +1,5 @@
 import React, { CSSProperties, ForwardedRef, forwardRef, useRef, useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { Transition } from "react-transition-group";
 
@@ -7,11 +8,11 @@ export interface HandCardProps {
   index: number;
   image: string;
   dimensions: CardDimensions;
-  numHandCards: number,
-  spread: number,
+  numHandCards: number;
+  spread: number;
   offsetLeft?: number;
   offsetTop?: number;
-  transitionData: TransitionData | undefined
+  transitionData: TransitionData | undefined;
 }
 
 interface TransitionStyles {
@@ -27,7 +28,7 @@ const HandCard = (props: HandCardProps) => {
   const cardRef = useRef<HTMLImageElement>(null);
   const [hover, setHover] = useState<Hover>("none");
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  console.log(image)
+  console.log(image);
 
   //const dispatch = useDispatch();
 
@@ -79,40 +80,47 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  console.log({...normalStyles, ...hoverStyles[hover] } )
+  console.log({ ...normalStyles, ...hoverStyles[hover] });
   return (
-    <Transition
-      in={true}
-      timeout={transitionData != null ? transitionData.wait : 0}
-      appear={true}
-      addEndListener={(node: HTMLElement) => {
-        node.addEventListener(
-          "transitionend",
-          () => {
-           // removeCardTransition(id);
-          },
-          false
-        );
-      }}
-    >
-      {(state) => {
-        return (
-          <img
-            alt={image}
-            src={`./images/${image}.jpg`}
-            ref={cardRef}
-            onMouseEnter={setHoverStyles}
-            onMouseLeave={resetHoverStyles}
-            id={id}
-            style={{
-              ...normalStyles,
-              ...hoverStyles[hover],
-              ...transitionStyles[state],
+    <Draggable draggableId={id} index={index} key={id}>
+      {provided => (
+        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <Transition
+            in={true}
+            timeout={transitionData != null ? transitionData.wait : 0}
+            appear={true}
+            addEndListener={(node: HTMLElement) => {
+              node.addEventListener(
+                "transitionend",
+                () => {
+                  // removeCardTransition(id);
+                },
+                false
+              );
             }}
-          />
-        );
-      }}
-    </Transition>
+          >
+            {state => {
+              return (
+                <img
+                  alt={image}
+                  src={`./images/${image}.jpg`}
+                  ref={cardRef}
+                  onMouseEnter={setHoverStyles}
+                  onMouseLeave={resetHoverStyles}
+                  id={id}
+                  style={{
+                    ...normalStyles,
+                    ...hoverStyles[hover],
+                    ...transitionStyles[state],
+                  }}
+                />
+              );
+            }}
+          </Transition>
+          
+        </div>
+      )}
+    </Draggable>
   );
 };
 export default HandCard;

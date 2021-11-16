@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { handDimensions } from "./handDimensions";
 import HandCard from "./HandCard";
 import { myHandCards } from "./initialCards";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, DragStart, Droppable } from "react-beautiful-dnd";
 interface HandProps {
   id: string;
   // //children: React.ReactNode;
@@ -22,8 +22,6 @@ const dimensions = handDimensions;
 const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
-  const handRef = useRef<HTMLDivElement>(null);
-  console.log(handCards);
   //const { numCards, dimensions, cards, gameSnapshot, legalTargets, removeCardTransition, transitionData } = props;
 
   const [spread, setSpread] = useState<number>(35);
@@ -32,6 +30,7 @@ const Hand = (props: HandProps) => {
 
   // const onCardDragStart = (card: GameCard, cardRef: React.RefObject<HTMLImageElement>): Action =>
   //   dispatch({ type: "SET_DRAGGED_CARD_DATA", payload: { card: card, cardRef: cardRef } });
+
   return (
     <DragDropContext onDragEnd={() => {}}>
       <Droppable droppableId="handpl0">
@@ -52,10 +51,6 @@ const Hand = (props: HandProps) => {
             ref={provided.innerRef}
           >
             {handCards.map((card, index) => (
-              <Draggable draggableId={card.id} index={index} key={card.id}>
-                {provided => (
-                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                  
                   <HandCard
                     id={card.id}
                     index={index}
@@ -66,10 +61,7 @@ const Hand = (props: HandProps) => {
                     numHandCards={handCards.length}
                     key={card.id}
                   />
-                  </div>
-                )}
-                
-              </Draggable>
+               
             ))}
           </div>
         )}
