@@ -26,7 +26,7 @@ const CardGroup = (props: CardGroupProps) => {
   return (
     <Draggable draggableId={cardGroup.id} index={index} key={cardGroup.id}>
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <div ref={provided.innerRef} {...provided.draggableProps}{...provided.dragHandleProps}>
           <div
             id={`cardgroup-relative-positioning-container${cardGroup.id}`}
             style={{

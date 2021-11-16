@@ -27,6 +27,7 @@ const HandCard = (props: HandCardProps) => {
   const { tableCardzIndex, cardWidth, cardHeight, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
   const [hover, setHover] = useState<Hover>("none");
+  //const [isDragging, setIsDragging] = useState(false);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
   console.log(image);
 
@@ -66,6 +67,8 @@ const HandCard = (props: HandCardProps) => {
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
+  const dragStyles = (isDragging: boolean):CSSProperties => isDragging ? {transform: `rotate(0deg)`} : {};
+
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
     transitionStyles = {
@@ -80,10 +83,10 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  console.log({ ...normalStyles, ...hoverStyles[hover] });
+  //console.log({ ...normalStyles, ...hoverStyles[hover] });
   return (
     <Draggable draggableId={id} index={index} key={id}>
-      {provided => (
+      {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <Transition
             in={true}
@@ -108,16 +111,18 @@ const HandCard = (props: HandCardProps) => {
                   onMouseEnter={setHoverStyles}
                   onMouseLeave={resetHoverStyles}
                   id={id}
-                  style={{
-                    ...normalStyles,
-                    ...hoverStyles[hover],
-                    ...transitionStyles[state],
-                  }}
+                  style={
+                    {
+                          ...normalStyles,
+                          ...hoverStyles[hover],
+                          ...transitionStyles[state],
+                          ...dragStyles(snapshot.isDragging)
+                        }
+                  }
                 />
               );
             }}
           </Transition>
-          
         </div>
       )}
     </Draggable>
