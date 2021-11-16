@@ -99,13 +99,17 @@ type GamePlace = {
   placeType: PlaceType;
   playerId?: string;
   cards: GameCard[];
-  maxNumCards?: number;
   acceptedCardType?: CardType;
   // numCards should be INFERRED from GameCards
   // but where does this happen? useEffect of app?
   // => gameState can still be interpreted from database--which we do after every DB update
   //numCards: number;
 };
+
+type GCZ = GamePlace & {
+  maxNumCards: number
+
+}
 
 type GamePlayer = {
   id: string;
@@ -125,7 +129,7 @@ type GamePlayer = {
 type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
 
 type PlayerPlaces = {
-  [type: string]: GamePlace;
+  [type: string]: GamePlace | GCZ;
 };
 // type PlayerPlaces = {
 //  "GCZ" : GamePlace

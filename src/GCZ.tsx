@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, DragUpdate, DragStart } from "react-beautif
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCardGroup from "./GhostCardGroup";
-import { getCardGroupObjs, getCardRowShapeOnRearrange, } from "./groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnRearrange, } from "./helperFunctions/groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
 
 interface GhostCardGroupData {

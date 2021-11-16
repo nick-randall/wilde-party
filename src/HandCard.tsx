@@ -1,6 +1,5 @@
-import React, { CSSProperties, ForwardedRef, forwardRef, useRef, useState } from "react";
+import React, { CSSProperties, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { useDispatch } from "react-redux";
 import { Transition } from "react-transition-group";
 
 export interface HandCardProps {
@@ -27,7 +26,6 @@ const HandCard = (props: HandCardProps) => {
   const { tableCardzIndex, cardWidth, cardHeight, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
   const [hover, setHover] = useState<Hover>("none");
-  //const [isDragging, setIsDragging] = useState(false);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
   console.log(image);
 
@@ -47,7 +45,12 @@ const HandCard = (props: HandCardProps) => {
   };
 
   const hoverStyles = {
-    longHover: { transform: "scale(2.2)", transition: "transform 800ms", zIndex: tableCardzIndex + 1 },
+    longHover: {
+      transform: "scale(2.2)",
+      transition: "transform 800ms",
+      zIndex: tableCardzIndex + 1,
+      left: 125 * (index - (numHandCards / 2 - 0.5)),
+    },
     shortHover: {
       transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
       transition: "transform 300ms, left 180ms, width 180ms",
@@ -67,7 +70,7 @@ const HandCard = (props: HandCardProps) => {
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
-  const dragStyles = (isDragging: boolean):CSSProperties => isDragging ? {transform: `rotate(0deg)`} : {};
+  const dragStyles = (isDragging: boolean): CSSProperties => (isDragging ? { transform: `rotate(0deg)` } : {});
 
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
@@ -111,14 +114,12 @@ const HandCard = (props: HandCardProps) => {
                   onMouseEnter={setHoverStyles}
                   onMouseLeave={resetHoverStyles}
                   id={id}
-                  style={
-                    {
-                          ...normalStyles,
-                          ...hoverStyles[hover],
-                          ...transitionStyles[state],
-                          ...dragStyles(snapshot.isDragging)
-                        }
-                  }
+                  style={{
+                    ...normalStyles,
+                    ...hoverStyles[hover],
+                    ...transitionStyles[state],
+                    ...dragStyles(snapshot.isDragging),
+                  }}
                 />
               );
             }}
