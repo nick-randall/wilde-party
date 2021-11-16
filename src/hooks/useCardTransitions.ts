@@ -36,7 +36,7 @@ const useCardTransitions = (gameSnapshot: GameSnapshot) => {
   const setRearrangeCardsTransition = (
     dragEvent: MouseEvent,
     draggedCardsData: DraggedCardData[],
-    draggedCards: DragGroup,
+    draggedCards: CardGroup,
     newIndex: number,
     dropZoneElement: HTMLElement
   ) => {
