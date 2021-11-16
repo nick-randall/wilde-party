@@ -315,7 +315,7 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 
-const initialGameSnapshot: GameSnapshot = {
+export const initialGameSnapshot: GameSnapshot = {
   players: [
     {
       id: "l93fld9",
