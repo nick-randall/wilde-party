@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import GCZ from "./GCZ";
@@ -30,7 +30,7 @@ export const Board = () => {
           type: "START_GCZ_REARRANGE",
           payload: {
             cardRowShape: GCZRowShape,
-            index: sourceIndex,
+            index: GCZRowShape[sourceIndex],
             ghostCardsObject: GCZRow.filter(cardGroup => cardGroup.id === draggableId)[0],
           },
         });
@@ -39,12 +39,37 @@ export const Board = () => {
     console.log(data.source.droppableId);
   };
 
+  const handleDragUpdate = (data: DragUpdate) => {
+    const sourceId = data.source.droppableId;
+    const { player, place } = locate3(sourceId);
+    switch (place) {
+      // here assuming that it is player 0, since opponents' GCZ will be disabled
+      case "GCZ":
+        const newIndex = data.destination?.index;
+        dispatch({
+          type: "UPDATE_GCZ_REARRANGING_INDEX",
+          payload: newIndex,
+        });
+    }
+  };
+
   const handleDragEnd = (data: DropResult) => {
+    const sourceId = data.source.droppableId;
+    const targetIndex = data.destination?.index;
+    const { player, place } = locate3(sourceId);
+    switch (place) {
+      // here assuming that it is player 0, since opponents' GCZ will be disabled
+      case "GCZ":
+        dispatch({
+          type: "END_GCZ_REARRANGE",
+          payload: { targetIndex: targetIndex },
+        });
+    }
     console.log(data.destination);
   };
 
   return (
-    <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd}>
       <div>
         {" "}
         <GCZ

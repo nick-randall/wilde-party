@@ -21,38 +21,10 @@ interface GCZProps {
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
   const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
-  const [ghostCardGroupData, setGhostCardGroupData] = useState<GhostCardGroupData>();
-  // an array containing the offset from left of each cardGroup eg. [0, 1, 2, 4, 5, 7]
-  const [cardRowShape, setCardRowShape] = useState<number[]>([]);
-
+  const ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
+  console.log(ghostCardGroupData)
   
-
-  const rearrangingData = useSelector((state: RootState) => state.GCZRearrangingData);
-  console.log(rearrangingData)
-
-  // const onDragStart = (start: DragStart) => {
-  //   const startIndex = start.source.index;
-  //   const cardRowShape = getCardRowShapeOnRearrange(myGCZCardRow, startIndex);
-  //   setCardRowShape(cardRowShape);
-
-  //   setGhostCardGroupData({
-  //     index: cardRowShape[startIndex],
-  //     ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === start.draggableId)[0],
-  //   });
-  // };
-
-  const onDragUpdate = (update: DragUpdate) =>
-    update.destination
-      ? setGhostCardGroupData({
-          index: cardRowShape[update.destination.index],
-          ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === update.draggableId)[0],
-        })
-      : setGhostCardGroupData(undefined);
-
-  const onDragEnd = () => setGhostCardGroupData(undefined);
-
   return (
-   // <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate} onDragStart={onDragStart}>
       <Droppable droppableId={id} direction="horizontal">
         {provided => (
           <div className="pl0GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ display: "flex", top: 100, position: "absolute" }}>
@@ -62,12 +34,11 @@ function GCZ(props: GCZProps) {
             {provided.placeholder}
 
             {ghostCardGroupData ? (
-              <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardObjects} index={ghostCardGroupData.index} dimensions={dimensions} />
+              <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardsObject} index={ghostCardGroupData.index} dimensions={dimensions} />
             ) : null}
           </div>
         )}
       </Droppable>
-  //  </DragDropContext>
   );
 }
 

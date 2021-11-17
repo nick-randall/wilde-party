@@ -8,4 +8,14 @@ export type StartGCZRearrangingData = {
   payload: GCZRearrangingData
 }
 
-export type Action =  RemoveTransition | StartGCZRearrangingData;//SetRearrangingCardsData | UpdateDraggedOverIndex | EndRearrange;
+export type UpdateGCZRearrangingIndex = {
+  type: "UPDATE_GCZ_REARRANGING_INDEX"
+  payload: number
+}
+
+export type EndGCZRearrange = {
+  type: "END_GCZ_REARRANGE",
+  payload: { targetIndex: number },
+}
+
+export type Action =  RemoveTransition | StartGCZRearrangingData | UpdateGCZRearrangingIndex | EndGCZRearrange;
