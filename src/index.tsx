@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { Board } from './Board';
+import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store ={store}>
     <Board />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

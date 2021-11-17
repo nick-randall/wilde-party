@@ -1,3 +1,5 @@
+import store from "../redux/store";
+
 interface Locator {
   player: number | null;
   place: PlaceType;
@@ -70,6 +72,28 @@ export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
     return { player: null, place: "place" };
   }
 };
+
+export const locate3 = (id: string) => {
+
+  const gameSnapshot = store.getState().gameSnapshot
+
+  const player: GamePlayer | undefined = gameSnapshot.players.find((player) =>
+    getPlayerPlaceKeys(gameSnapshot, player).map((placeKey) => player.places[placeKey].cards.find((card) => card.id === id))
+  );
+  if (player) {
+    const place: string | undefined = getPlayerPlaceKeys(gameSnapshot, player).find((placeKey) =>
+      player.places[placeKey].cards.find((card) => card.id === id)
+    );
+    return { player: gameSnapshot.players.indexOf(player), place: place || "place" };
+  } else {
+    const place: string | undefined = getNonPlayerPlaceKeys(gameSnapshot).find((placeKey) =>
+      gameSnapshot.nonPlayerPlaces[placeKey].cards.find((card) => card.id)
+    );
+    if (!place) console.log("place for " + id + " not found");
+    return { player: null, place: "place" };
+  }
+};
+
 
 // const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.players.map((player) => player.places));
 // const getNonPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.nonPlayerPlaces);

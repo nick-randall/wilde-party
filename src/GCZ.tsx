@@ -1,17 +1,17 @@
 import { useMemo, useState } from "react";
 import { DragDropContext, Droppable, DragUpdate, DragStart } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCardGroup from "./GhostCardGroup";
-import { getCardGroupObjs, getCardRowShapeOnRearrange, } from "./helperFunctions/groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
+import { RootState } from "./redux/store";
 
 interface GhostCardGroupData {
   index: number;
   ghostCardObjects: CardGroupObj;
 }
-
-
 
 function GCZ() {
   const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
@@ -19,7 +19,9 @@ function GCZ() {
   // an array containing the offset from left of each cardGroup eg. [0, 1, 2, 4, 5, 7]
   const [cardRowShape, setCardRowShape] = useState<number[]>([]);
 
-  console.log(myGCZCardRow)
+  const rearrangingData = useSelector((state: RootState) => state.GCZRearrangingData);
+
+  console.log(rearrangingData);
 
   const onDragStart = (start: DragStart) => {
     const startIndex = start.source.index;
@@ -28,7 +30,7 @@ function GCZ() {
 
     setGhostCardGroupData({
       index: cardRowShape[startIndex],
-      ghostCardObjects: myGCZCardRow.filter((cardGroup) => cardGroup.id === start.draggableId)[0],
+      ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === start.draggableId)[0],
     });
   };
 
@@ -36,7 +38,7 @@ function GCZ() {
     update.destination
       ? setGhostCardGroupData({
           index: cardRowShape[update.destination.index],
-          ghostCardObjects: myGCZCardRow.filter((cardGroup) => cardGroup.id === update.draggableId)[0],
+          ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === update.draggableId)[0],
         })
       : setGhostCardGroupData(undefined);
 
@@ -45,13 +47,8 @@ function GCZ() {
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate} onDragStart={onDragStart}>
       <Droppable droppableId="GCZ" direction="horizontal">
-        {(provided) => (
-          <div
-            className="GCZ"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            style={{display: "flex", top: 100, position: "absolute" }}
-          >
+        {provided => (
+          <div className="GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ display: "flex", top: 100, position: "absolute" }}>
             {myGCZCardRow.map((cardGroup, index) => (
               <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
             ))}

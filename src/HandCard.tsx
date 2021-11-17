@@ -1,6 +1,7 @@
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Transition } from "react-transition-group";
+import useHoverStyles from "./hooks/useCardInspector";
 
 export interface HandCardProps {
   id: string;
@@ -18,38 +19,34 @@ interface TransitionStyles {
   [status: string]: {};
 }
 
-type Hover = "shortHover" | "longHover" | "none";
-
 //const HandCard = forwardRef((props: HandCardProps, forwardedRef: ForwardedRef<HTMLImageElement | null>) => {
 const HandCard = (props: HandCardProps) => {
   const { id, index, dimensions, image, numHandCards, spread, transitionData } = props;
   const { tableCardzIndex, cardWidth, cardHeight, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
-  const [hover, setHover] = useState<Hover>("none");
-  const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  console.log(image);
+  //const [hover, setHover] = useState<Hover>("none");
+  // const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   //const dispatch = useDispatch();
 
   //const onDragStart = (clickEvent: React.MouseEvent) => props.onDragStart(card, cardRef, cardWidth, rotation);
   //dispatch({ type: "SET_DRAGGED_CARD", payload: card });
+  const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
 
-  const setHoverStyles = () => {
-    setHover("shortHover");
-    hoverTimerRef.current = setTimeout(() => setHover("longHover"), 1000);
-  };
-
-  const resetHoverStyles = () => {
-    setHover("none");
-    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+  const handleMouseMove = (event: React.MouseEvent) => {
+    const element = cardRef.current;
+    if (element) {
+      const { left: boundingBoxLeft, top: boundingBoxTop } = element.getBoundingClientRect();
+      setMousePosition(event, boundingBoxLeft, boundingBoxTop);
+    }
   };
 
   const hoverStyles = {
     longHover: {
-      transform: "scale(2.2)",
+      transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
       transition: "transform 800ms",
       zIndex: tableCardzIndex + 1,
-      left: 125 * (index - (numHandCards / 2 - 0.5)),
+      //left: 125 * (index - (numHandCards / 2 - 0.5)),
     },
     shortHover: {
       transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
@@ -70,7 +67,8 @@ const HandCard = (props: HandCardProps) => {
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
-  const dragStyles = (isDragging: boolean): CSSProperties => (isDragging ? { transform: `rotate(0deg)`, left:  125 * (index - (numHandCards / 2 - 0.5))} : {});
+  const dragStyles = (isDragging: boolean): CSSProperties =>
+    isDragging ? { transform: `rotate(0deg)`, left: 125 * (index - (numHandCards / 2 - 0.5)) } : {};
 
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
@@ -86,7 +84,7 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  //console.log({ ...normalStyles, ...hoverStyles[hover] });
+
   return (
     <Draggable draggableId={id} index={index} key={id}>
       {(provided, snapshot) => (
@@ -111,8 +109,9 @@ const HandCard = (props: HandCardProps) => {
                   alt={image}
                   src={`./images/${image}.jpg`}
                   ref={cardRef}
+                  onMouseMove={handleMouseMove}
                   onMouseEnter={setHoverStyles}
-                  onMouseLeave={resetHoverStyles}
+                  onMouseLeave={clearHoverStyles}
                   id={id}
                   style={{
                     ...normalStyles,

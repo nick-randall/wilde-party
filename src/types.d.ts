@@ -229,3 +229,12 @@ type CardGroupObj = {
   size: number;
   cards: CardGroup;
 }
+
+type Hover = "shortHover" | "longHover" | "none";
+
+type GCZRearrangingData = {
+  cardRowShape: number[],
+  index: number,
+  ghostCardsObject: CardGroupObj[]
+
+}

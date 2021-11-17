@@ -3,4 +3,9 @@ export type RemoveTransition = {
   payload: string;
 }
 
-export type Action =  RemoveTransition //| SetRearrangingCardsData | UpdateDraggedOverIndex | EndRearrange;
+export type StartGCZRearrangingData = {
+  type: "START_GCZ_REARRANGE",
+  payload: GCZRearrangingData
+}
+
+export type Action =  RemoveTransition | StartGCZRearrangingData;//SetRearrangingCardsData | UpdateDraggedOverIndex | EndRearrange;

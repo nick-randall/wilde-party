@@ -32,7 +32,7 @@ const Hand = (props: HandProps) => {
   //   dispatch({ type: "SET_DRAGGED_CARD_DATA", payload: { card: card, cardRef: cardRef } });
 
   return (
-    <DragDropContext onDragEnd={() => {}}>
+    // <DragDropContext onDragEnd={() => {}}>
       <Droppable droppableId="handpl0">
         {provided => (
           <div
@@ -63,11 +63,13 @@ const Hand = (props: HandProps) => {
                   />
                
             ))}
+            {provided.placeholder}
           </div>
+          
         )}
         
       </Droppable>
-    </DragDropContext>
+    // </DragDropContext>
   );
 };
 
