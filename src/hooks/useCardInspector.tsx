@@ -40,7 +40,7 @@ const useHoverStyles = (dimensions: CardDimensions) => {
     if (lowerbound > windowHeight) {
       console.log("too big");
       deltaY = windowHeight - (dimensions.cardHeight * scale) - boundingBoxTop;
-      console.log(deltaY)
+      //console.log(deltaY)
     }
     setMousePositionFromCenter({ x: deltaX, y: deltaY });
     // }

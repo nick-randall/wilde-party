@@ -23,17 +23,12 @@ const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
   //const { numCards, dimensions, cards, gameSnapshot, legalTargets, removeCardTransition, transitionData } = props;
+  const {id} = props;
 
   const [spread, setSpread] = useState<number>(35);
-  // const draggedCard = useSelector<State, State["draggedCard"]>((state) => state.draggedCard);
-  // const dispatch = useDispatch();
-
-  // const onCardDragStart = (card: GameCard, cardRef: React.RefObject<HTMLImageElement>): Action =>
-  //   dispatch({ type: "SET_DRAGGED_CARD_DATA", payload: { card: card, cardRef: cardRef } });
 
   return (
-    // <DragDropContext onDragEnd={() => {}}>
-      <Droppable droppableId="handpl0">
+      <Droppable droppableId={id}>
         {provided => (
           <div
             id={props.id}
@@ -69,7 +64,6 @@ const Hand = (props: HandProps) => {
         )}
         
       </Droppable>
-    // </DragDropContext>
   );
 };
 

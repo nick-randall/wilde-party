@@ -46,7 +46,7 @@ const HandCard = (props: HandCardProps) => {
       transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
       transition: "transform 800ms",
       zIndex: tableCardzIndex + 1,
-      //left: 125 * (index - (numHandCards / 2 - 0.5)),
+      left: 125 * (index - (numHandCards / 2 - 0.5)),
     },
     shortHover: {
       transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,

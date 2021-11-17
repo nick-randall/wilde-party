@@ -41,8 +41,8 @@ export const Board = () => {
 
   const handleDragUpdate = (data: DragUpdate) => {
     const sourceId = data.source.droppableId;
-    const { player, place } = locate3(sourceId);
-    switch (place) {
+    const { player, place:sourcePlace } = locate3(sourceId);
+    switch (sourcePlace) {
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         const newIndex = data.destination?.index;
@@ -53,11 +53,21 @@ export const Board = () => {
     }
   };
 
-  const handleDragEnd = (data: DropResult) => {
-    const sourceId = data.source.droppableId;
-    const targetIndex = data.destination?.index;
-    const { player, place } = locate3(sourceId);
-    switch (place) {
+  const handleDragEnd = (result: DropResult) => {
+    
+    const sourceId = result.source.droppableId;
+    if (result.destination) {
+      console.log(result.destination.index)
+      const destinationId = result.destination.droppableId;
+      if (destinationId === sourceId) {
+      }
+    }
+    // need to differentiate between dragging to new index
+    // and just droppping into nothing (destination === undefined)
+
+    const targetIndex = result.destination?.index;
+    const { player, place: sourcePlace } = locate3(sourceId);
+    switch (sourcePlace) {
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         dispatch({
@@ -65,7 +75,7 @@ export const Board = () => {
           payload: { targetIndex: targetIndex },
         });
     }
-    console.log(data.destination);
+    console.log(result.destination);
   };
 
   return (
