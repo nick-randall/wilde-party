@@ -75,23 +75,28 @@ export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
 
 export const locate3 = (id: string) => {
 
-  const gameSnapshot = store.getState().gameSnapshot
-
-  const player: GamePlayer | undefined = gameSnapshot.players.find((player) =>
-    getPlayerPlaceKeys(gameSnapshot, player).map((placeKey) => player.places[placeKey].cards.find((card) => card.id === id))
-  );
-  if (player) {
-    const place: string | undefined = getPlayerPlaceKeys(gameSnapshot, player).find((placeKey) =>
-      player.places[placeKey].cards.find((card) => card.id === id)
-    );
-    return { player: gameSnapshot.players.indexOf(player), place: place || "place" };
-  } else {
-    const place: string | undefined = getNonPlayerPlaceKeys(gameSnapshot).find((placeKey) =>
-      gameSnapshot.nonPlayerPlaces[placeKey].cards.find((card) => card.id)
-    );
-    if (!place) console.log("place for " + id + " not found");
-    return { player: null, place: "place" };
+  const gameSnapshot = store.getState().gameSnapshot;
+  
+  const { players, nonPlayerPlaces } = gameSnapshot;
+  for (let i: number = 0; i < players.length; i++) {
+    for (let j: number = 0; j < playerPlacesTypes.length; j++) {
+      const place = playerPlacesTypes[j];
+      if (id === players[i]["places"][place].id) return { player: i, place: place };
+      for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
+        if (players[i]["places"][place].cards[l].id === id) return { player: i, place: place }; // player is i, place is place
+      }
+    }
   }
+  for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
+    const place = nonPlayerPlacesTypes[k];
+    for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
+      if (nonPlayerPlaces[place].cards[l].id === id) return { player: null, place: place };
+    }
+    if (id === nonPlayerPlaces[place].id) return { player: null, place: place };
+  }
+  console.log("cardId" + id);
+  return { player: null, place: "error" };
+  
 };
 
 

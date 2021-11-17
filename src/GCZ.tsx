@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
-import { DragDropContext, Droppable, DragUpdate, DragStart } from "react-beautiful-dnd";
+import { Droppable, DragUpdate } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";
 import GhostCardGroup from "./GhostCardGroup";
-import { getCardGroupObjs, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
-import { myEnchantmentsRowCards, myGCZCards } from "./initialCards";
+import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
 interface GhostCardGroupData {
@@ -13,26 +12,34 @@ interface GhostCardGroupData {
   ghostCardObjects: CardGroupObj;
 }
 
-function GCZ() {
-  const myGCZCardRow = useMemo(() => getCardGroupObjs(myEnchantmentsRowCards, myGCZCards), []);
+interface GCZProps {
+  id: string
+  enchantmentsRowCards: GameCard[],
+  GCZCards: GameCard[] 
+}
+
+function GCZ(props: GCZProps) {
+  const { id, enchantmentsRowCards, GCZCards } = props;
+  const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
   const [ghostCardGroupData, setGhostCardGroupData] = useState<GhostCardGroupData>();
   // an array containing the offset from left of each cardGroup eg. [0, 1, 2, 4, 5, 7]
   const [cardRowShape, setCardRowShape] = useState<number[]>([]);
 
+  
+
   const rearrangingData = useSelector((state: RootState) => state.GCZRearrangingData);
+  console.log(rearrangingData)
 
-  console.log(rearrangingData);
+  // const onDragStart = (start: DragStart) => {
+  //   const startIndex = start.source.index;
+  //   const cardRowShape = getCardRowShapeOnRearrange(myGCZCardRow, startIndex);
+  //   setCardRowShape(cardRowShape);
 
-  const onDragStart = (start: DragStart) => {
-    const startIndex = start.source.index;
-    const cardRowShape = getCardRowShapeOnRearrange(myGCZCardRow, startIndex);
-    setCardRowShape(cardRowShape);
-
-    setGhostCardGroupData({
-      index: cardRowShape[startIndex],
-      ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === start.draggableId)[0],
-    });
-  };
+  //   setGhostCardGroupData({
+  //     index: cardRowShape[startIndex],
+  //     ghostCardObjects: myGCZCardRow.filter(cardGroup => cardGroup.id === start.draggableId)[0],
+  //   });
+  // };
 
   const onDragUpdate = (update: DragUpdate) =>
     update.destination
@@ -45,10 +52,10 @@ function GCZ() {
   const onDragEnd = () => setGhostCardGroupData(undefined);
 
   return (
-    <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate} onDragStart={onDragStart}>
-      <Droppable droppableId="GCZ" direction="horizontal">
+   // <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate} onDragStart={onDragStart}>
+      <Droppable droppableId={id} direction="horizontal">
         {provided => (
-          <div className="GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ display: "flex", top: 100, position: "absolute" }}>
+          <div className="pl0GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ display: "flex", top: 100, position: "absolute" }}>
             {myGCZCardRow.map((cardGroup, index) => (
               <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
             ))}
@@ -60,7 +67,7 @@ function GCZ() {
           </div>
         )}
       </Droppable>
-    </DragDropContext>
+  //  </DragDropContext>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { CSSProperties, useState } from "react";
+import { getSettings } from "./gameSettings/uiSettings";
 
 export interface CardProps {
   id: string;
@@ -13,13 +14,14 @@ export interface CardProps {
 
 const Card = (props:CardProps) => {
   const { id, index, dimensions, offsetTop, offsetLeft, image, } = props;
+  const settings = getSettings();
 
   const [rotation, setRotation] = useState(0);
 
   React.useEffect(() => {
     const rnd = Math.random() - 0.5;
-    setRotation(rnd * 3);
-  }, [setRotation, index]);
+    setRotation(rnd * settings.messiness);
+  }, [setRotation, index, settings.messiness]);
 
 
   const normalStyles: CSSProperties = {
