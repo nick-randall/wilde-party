@@ -88,7 +88,10 @@ const HandCard = (props: HandCardProps) => {
   return (
     <Draggable draggableId={id} index={index} key={id}>
       {(provided, snapshot) => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+          <div style={{width:cardWidth, ...dragStyles(snapshot.isDragging)}} 
+          // This width causes cards to move aside and make room in other droppables.
+          > 
           <Transition
             in={true}
             timeout={transitionData != null ? transitionData.wait : 0}
@@ -118,13 +121,16 @@ const HandCard = (props: HandCardProps) => {
                     ...hoverStyles[hover],
                     ...transitionStyles[state],
                     ...dragStyles(snapshot.isDragging),
+                    
                   }}
                 />
               );
             }}
           </Transition>
         </div>
+        </div>
       )}
+      
     </Draggable>
   );
 };

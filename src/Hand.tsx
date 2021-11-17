@@ -3,6 +3,7 @@ import { handDimensions } from "./handDimensions";
 import HandCard from "./HandCard";
 import { myHandCards } from "./initialCards";
 import { DragDropContext, Draggable, DragStart, Droppable } from "react-beautiful-dnd";
+import CardGroup from "./CardGroup";
 interface HandProps {
   id: string;
   // //children: React.ReactNode;
@@ -28,7 +29,7 @@ const Hand = (props: HandProps) => {
   const [spread, setSpread] = useState<number>(35);
 
   return (
-      <Droppable droppableId={id}>
+      <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
         {provided => (
           <div
             id={props.id}
