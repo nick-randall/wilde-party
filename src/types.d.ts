@@ -50,6 +50,7 @@ type GameCard = {
   zwilling: boolean;
   guestCardType?: GuestCardType;
   specialsCardType?: GuestCardType;
+  numGuestPlaces?:number
   action: CardAction;
 };
 

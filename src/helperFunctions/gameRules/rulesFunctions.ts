@@ -1,3 +1,4 @@
+import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 
 const allTrue =
   (...funcs: ((...args: any[]) => boolean)[]) =>
@@ -9,8 +10,10 @@ const allTrueWithArgs =
   (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
     !funcs.map(func => func(highlightPlace, draggedCard, gameSnapshot)).includes(false);
 
+
 // add
 export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
+  
   true//!highlightPlace.maxNumCards ? true : highlightPlace.maxNumCards > getNumCards(highlightPlace.id, gameSnapshot);
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
@@ -33,8 +36,11 @@ export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, 
 export const canEnchantZwilling = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted);
 
 // steal
-export const pl0GCZenoughSpace = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
-  true//gameSnapshot.players[0].places.GCZ.cards.length < gameSnapshot.players[0].places.GCZ.maxNumCards;
+
+const getNumGuestCards = (GCZ: GamePlace) => GCZ.cards.map(e => e.numGuestPlaces ? e.numGuestPlaces : 0).reduce((acc, curr) =>  acc + curr)
+
+const pl0GCZenoughSpace = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
+  getNumGuestCards(gameSnapshot.players[0].places.GCZ) < maxNumGuestCards
 
 // "accepted type" is an attribute of a place NOT a check that a targeted card is of correct type
 export const highlightCardIsOfAcceptedType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => highlightCard.cardType === draggedCard.action.cardHighlightType;

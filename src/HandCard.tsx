@@ -70,7 +70,7 @@ const HandCard = (props: HandCardProps) => {
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
-  const dragStyles = (isDragging: boolean): CSSProperties => (isDragging ? { transform: `rotate(0deg)` } : {});
+  const dragStyles = (isDragging: boolean): CSSProperties => (isDragging ? { transform: `rotate(0deg)`, left:  125 * (index - (numHandCards / 2 - 0.5))} : {});
 
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
