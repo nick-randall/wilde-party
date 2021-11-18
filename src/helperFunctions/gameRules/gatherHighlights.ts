@@ -7,11 +7,13 @@ export const getHighlights = (draggedCard: GameCard) => {
   const { action } = draggedCard;
   const { highlightType, actionType } = action;
 
-
+  // highlightFunctions is a nested object containing all highlight 
+  // functions indexed first by type ("card", "place" or "player") and then 
+  // by actionType ("addDragged", "steal", etc.)
   const functions: HighlightFunctions = highlightFunctions[highlightType];
   const highlightFunction = functions[actionType]
-  // const potentialHighlights = getPotentialHighlights(highlightType);
-  // const highlights = highlightFunction(potentialHighlights);
+  // const potentialHighlights: (GameCard | GamePlace | GamePlayer) [] = getPotentialHighlights(highlightType);
+  // const highlights: string [] = highlightFunction(potentialHighlights);
 };
 
 const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
@@ -21,21 +23,6 @@ const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
 
 //const getEntries = (id: string, obj: object) : any | [string, any] => typeof obj === "object" ? Array.isArray(obj) ? obj.getEntries(id, obj) : getEntries(id, Object.entries(obj)) :
-
-export const gatherHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
-  let legalTargets: string[] = [];
-  switch (draggedCard.action?.actionType) {
-    case undefined:
-      legalTargets = [];
-      break;
-    case "addDragged":
-      legalTargets = getHighlightPlaces(draggedCard, gameSnapshot);
-      break;
-    default:
-      legalTargets = [];
-  }
-  return legalTargets;
-};
 
 export const getHighlightPlaces = (draggedCard: GameCard, gameSnapshot: any): string[] =>
   gameSnapshot.players.reduce((player: GamePlayer) =>
