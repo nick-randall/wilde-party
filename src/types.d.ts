@@ -54,7 +54,13 @@ type GameCard = {
   action: CardAction;
 };
 
-type ActionType = "addDragged" |" destroy" | "steal" | "enchant" | "swap" | "protectSelf";
+type PlaceActionType = "addDragged" 
+
+type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap"
+
+type PlayerActionType = "protectSelf"
+
+type ActionType =  PlaceActionType | CardActionType | PlayerActionType
 
 type HighlightType = "card" | "place" | "player";
 

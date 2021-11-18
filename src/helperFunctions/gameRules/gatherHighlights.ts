@@ -1,10 +1,24 @@
-import { canAdd } from "./rulesFunctions";
+import store from "../../redux/store";
+import { canAddDragged, highlightFunctions} from "./highlightFunctions";
+import { HighlightFunctions } from "./highlightFunctionTypes";
+
+export const getHighlights = (draggedCard: GameCard) => {
+  const gameSnapshot = store.getState().gameSnapshot;
+  const { action } = draggedCard;
+  const { highlightType, actionType } = action;
+
+
+  const functions: HighlightFunctions = highlightFunctions[highlightType];
+  const highlightFunction = functions[actionType]
+  // const potentialHighlights = getPotentialHighlights(highlightType);
+  // const highlights = highlightFunction(potentialHighlights);
+};
 
 const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
 
 const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
-const checkPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
+const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
 
 //const getEntries = (id: string, obj: object) : any | [string, any] => typeof obj === "object" ? Array.isArray(obj) ? obj.getEntries(id, obj) : getEntries(id, Object.entries(obj)) :
 
@@ -13,7 +27,7 @@ export const gatherHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapsh
   switch (draggedCard.action?.actionType) {
     case undefined:
       legalTargets = [];
-      break
+      break;
     case "addDragged":
       legalTargets = getHighlightPlaces(draggedCard, gameSnapshot);
       break;
@@ -25,10 +39,7 @@ export const gatherHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapsh
 
 export const getHighlightPlaces = (draggedCard: GameCard, gameSnapshot: any): string[] =>
   gameSnapshot.players.reduce((player: GamePlayer) =>
-    Object.values(player.places).reduce(
-      (acc: any[], place) => (canAdd(place, draggedCard, gameSnapshot) ? acc.concat(place.id) : acc),
-      []
-    )
+    Object.values(player.places).reduce((acc: any[], place) => (canAddDragged(place, draggedCard, gameSnapshot) ? acc.concat(place.id) : acc), [])
   );
 export const getHighlightCards = (draggedCard: GameCard, gameSnapshot: GameSnapshot) => {};
 //highlightPlace.
