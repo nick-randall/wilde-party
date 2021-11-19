@@ -73,6 +73,9 @@ export const Board = () => {
     const targetIndex = result.destination?.index;
     const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
+      // case "hand":
+      //   dispatch({type: "SET_HAND_CARD_DRAG", payload: undefined})
+      //   break;
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         dispatch({
@@ -92,7 +95,7 @@ export const Board = () => {
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
           GCZCards={gameSnapshot.players[0].places.GCZ.cards}
         />{" "}
-        <Hand id={ids.pl0hand} />
+        <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards}/>
       </div>
     </DragDropContext>
   );

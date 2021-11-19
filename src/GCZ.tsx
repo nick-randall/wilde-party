@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
-import { dimensions } from "./dimensions";
 import GhostCardGroup from "./GhostCardGroup";
+import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
@@ -17,11 +17,11 @@ function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
   const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
   const ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
-  console.log(ghostCardGroupData);
+  const dimensions = getAllDimensions(id)
 
   return (
     <Droppable droppableId={id} direction="horizontal">
-      {(provided, snapshot) => (
+      {(provided, snapshot) => ( 
         <div
           className="pl0GCZ"
           {...provided.droppableProps}

@@ -44,8 +44,9 @@ const useHoverStyles = (dimensions: CardDimensions) => {
     setMousePositionFromCenter({ x: deltaX, y: deltaY });
     // }
   };
+  const [featuredCardOffset, setFeaturedCardOffset] = useState({x:0, y:0})
 
-  return { hover, setHoverStyles, clearHoverStyles, setMousePosition, inspectingCenterOffset };
+  return { hover, setHoverStyles, clearHoverStyles, setMousePosition, inspectingCenterOffset, featuredCardOffset, setFeaturedCardOffset };
 };
 
 export default useHoverStyles;

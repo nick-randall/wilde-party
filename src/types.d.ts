@@ -8,6 +8,7 @@ type PlaceDimensions = {
   leftOffset: number;
   topOffset: number;
   zIndex: number;
+  featuredCardScale: number;
 };
 
 type CardDimensions = {
@@ -22,7 +23,25 @@ type CardDimensions = {
   draggedCardzIndex: number;
   tableCardzIndex: number;
   rotation: number;
+  featuredCardScale: number;
 };
+
+type AllDimensions = {
+  cardHeight: number;
+  cardWidth: number;
+  cardLeftSpread: number;
+  cardTopSpread: number;
+  leftOffset: number;
+  topOffset: number;
+  draggedCardScale: number;
+  draggedCardWidth: number;
+  draggedCardzIndex: number;
+  tableCardzIndex: number;
+  rotation: number;
+  featuredCardScale: number;
+  zIndex: number;
+};
+
 
 type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";
 type LegalTargetPlaceStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "rearranging" | "enchantmentsRowRearranging";

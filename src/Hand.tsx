@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { handDimensions } from "./handDimensions";
 import HandCard from "./HandCard";
-import { myHandCards } from "./initialCards";
 import { Droppable } from "react-beautiful-dnd";
+import { getAllDimensions } from "./helperFunctions/getDimensions";
 interface HandProps {
   id: string;
+  handCards: GameCard[]
   // //children: React.ReactNode;
   // cards: GameCard[];
   // numCards: number;
@@ -17,14 +17,14 @@ interface HandProps {
   // removeCardTransition: (returnedCardId: string) => void;
 }
 
-const handCards = myHandCards;
-const dimensions = handDimensions;
+
 const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
   //const { numCards, dimensions, cards, gameSnapshot, legalTargets, removeCardTransition, transitionData } = props;
-  const { id } = props;
+  const { id, handCards } = props;
   const [spread, setSpread] = useState<number>(35);
+  const dimensions = getAllDimensions(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
@@ -63,7 +63,7 @@ const Hand = (props: HandProps) => {
                 image={card.image}
                 //spread={getSpreadOrNot(snapshot.isDraggingOver) ? 35: 125}
                 spread={35}
-                dimensions={handDimensions}
+                dimensions={dimensions}
                 transitionData={transitionData.find(trans => trans.card.id === card.id)}
                 numHandCards={handCards.length}
                 key={card.id}
