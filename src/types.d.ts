@@ -113,11 +113,6 @@ type GamePlace = {
   //numCards: number;
 };
 
-type GCZ = GamePlace & {
-  maxNumCards: number
-
-}
-
 type GamePlayer = {
   id: string;
   name: string;

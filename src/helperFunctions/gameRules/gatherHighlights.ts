@@ -1,39 +1,63 @@
 import store from "../../redux/store";
-import { canAddDragged, highlightFunctions} from "./highlightFunctions";
-import { HighlightFunctions } from "./highlightFunctionTypes";
+import { getAllCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
+import { getCardFunctions, getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
+import R from "ramda";
 
 export const getHighlights = (draggedCard: GameCard) => {
   const gameSnapshot = store.getState().gameSnapshot;
   const { action } = draggedCard;
-  const { highlightType, actionType } = action;
+  const { highlightType } = action;
 
-  // highlightFunctions is a nested object containing all highlight 
-  // functions indexed first by type ("card", "place" or "player") and then 
-  // by actionType ("addDragged", "steal", etc.)
-  const functions: HighlightFunctions = highlightFunctions[highlightType];
-  const highlightFunction = functions[actionType]
-  // const potentialHighlights: (GameCard | GamePlace | GamePlayer) [] = getPotentialHighlights(highlightType);
-  // const highlights: string [] = highlightFunction(potentialHighlights);
+  if (highlightType === "card") return getCardHighlights(draggedCard, gameSnapshot)
+  else if (highlightType === "place") return getPlaceHighlights(draggedCard, gameSnapshot)
+  else return getPlayerHighlights(draggedCard, gameSnapshot)
+
+
 };
 
-const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
+const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+  const { action } = draggedCard;
+  const { actionType } = action;
 
-const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
+  const highlightFunction = getCardFunctions(actionType);
+  const potentialHighlights = getAllCards(gameSnapshot)
+  const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
+  return highlights.map((e) => R.prop("id", e))
+};
 
-const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
+const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+  const { action } = draggedCard;
+  const { actionType } = action;
 
-//const getEntries = (id: string, obj: object) : any | [string, any] => typeof obj === "object" ? Array.isArray(obj) ? obj.getEntries(id, obj) : getEntries(id, Object.entries(obj)) :
+  const highlightFunction = getPlaceFunctions(actionType);
+  const potentialHighlights = getAllPlayerPlaces(gameSnapshot)
+  const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
+  return highlights.map((e) => R.prop("id", e))
+};
 
-export const getHighlightPlaces = (draggedCard: GameCard, gameSnapshot: any): string[] =>
-  gameSnapshot.players.reduce((player: GamePlayer) =>
-    Object.values(player.places).reduce((acc: any[], place) => (canAddDragged(place, draggedCard, gameSnapshot) ? acc.concat(place.id) : acc), [])
-  );
-export const getHighlightCards = (draggedCard: GameCard, gameSnapshot: GameSnapshot) => {};
-//highlightPlace.
+const getPlayerHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+  const { action } = draggedCard;
+  const { actionType } = action;
 
-//const locateRecursive = (id: string, obj: GameSnapshot | any[]) : string[] => typeof obj === "object" ? Array.isArray(obj) ? obj.reduce ((acc, value) => value.id === id ? acc.concat[] locateRecursive(id, obj) : Object.entries(obj).reduce((acc, [key, value])=> locateRecursive(id, value) : [] )
+  const highlightFunction = getPlayerFunctions(actionType);
+  const potentialHighlights = getAllPlayers(gameSnapshot)
+  const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
+  return highlights.map((e) => R.prop("id", e))
+};
 
-//export const getLegalTargets = (draggedCard: GameCard, gameSnapshot: GameSnapshot) => gameSnapshot.players.map(player=> (Object.keys(player.places)).forEach(place => player.places[place].cards.forEach(card=> draggedCard.action?.cardHighlightType === card.cardType? push card. )
+// export const getHighlights = (draggedCard: GameCard) => {
+//   const gameSnapshot = store.getState().gameSnapshot;
+//   const { action } = draggedCard;
+//   const { highlightType, actionType } = action;
 
-//if it finds one I want to do (draggedCard.action==="enchantBFF"? canEnchantWithBFF(draggedCard, higlightCard, gameSnaphot) ? return highlightCard.id)
-//export default checkPlace
+//   // highlightFunctions is a nested object containing all highlight
+//   // functions indexed first by type ("card", "place" or "player") and then
+//   // by actionType ("addDragged", "steal", etc.)
+//   const functions = highlightFunctions[highlightType];
+//   const highlightFunction = functions(actionType);
+
+//   const potentialHighlights: (GameCard | GamePlace | GamePlayer)[] = getAllOfType(highlightType, gameSnapshot);
+
+//   const highlights: (GameCard | GamePlace | GamePlayer)[] = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
+//   const highlightIds: string[] = highlights.map(e => R.prop("id", e));
+// };
