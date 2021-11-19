@@ -131,7 +131,7 @@ type GamePlayer = {
 type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
 
 type PlayerPlaces = {
-  [type: string]: GamePlace | GCZ;
+  [type: string]: GamePlace;
 };
 // type PlayerPlaces = {
 //  "GCZ" : GamePlace

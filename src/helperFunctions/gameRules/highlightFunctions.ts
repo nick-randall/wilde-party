@@ -1,4 +1,5 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
+import { locate3 } from "../locateFunctions";
 import { HighlightCardFunction, HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
 const allTrue =
@@ -11,15 +12,15 @@ const allTrue =
 //   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
 //     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
-
 const allTrueWithArgs =
-(...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot)  => boolean)[]) =>
-(highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
-  !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
-
+  (...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot) => boolean)[]) =>
+  (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
+    !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
 // add
-export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => true; //!highlightPlace.maxNumCards ? true : highlightPlace.maxNumCards > getNumCards(highlightPlace.id, gameSnapshot);
+export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
+  locate3(highlightPlace.id).place !== "GCZ" ? true : 
+  highlightPlace.cards.length < maxNumGuestCards; 
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
   draggedCard.cardType === highlightPlace.acceptedCardType;
@@ -28,11 +29,20 @@ export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: 
 export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType);
 
 // enchant
-export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => true;
+export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+};
 
-export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => true;
+export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+};
 
-export const highlightNeighborCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => true;
+export const highlightNeighborCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+};
 
 //canEnchantWithBFF
 export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardUnenchanted);
@@ -51,7 +61,10 @@ const pl0GCZenoughSpace = (highlightCard: GameCard, draggedCard: GameCard, gameS
 export const highlightCardIsOfAcceptedType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
   highlightCard.cardType === draggedCard.action.cardHighlightType;
 
-export const highlightCardIsNotMine = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => true; //locate(highlightCard.playerId).player !== 0;
+export const highlightCardIsNotMine = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+}; //locate(highlightCard.playerId).player !== 0;
 
 //canSteal
 export const canSteal = allTrueWithArgs(pl0GCZenoughSpace, highlightCardIsOfAcceptedType, highlightCardIsNotMine);
@@ -82,23 +95,23 @@ export const canProtectSelf: HighlightPlayerFunction = (highlightPlayer: GamePla
 // getMoreRolls
 // interrupt
 
-export const getCardFunctions = (actionType: ActionType) : HighlightCardFunction  => {
+export const getCardFunctions = (actionType: ActionType): HighlightCardFunction => {
   if (actionType === "destroy") return canDestroy;
   else if (actionType === "enchant") return canEnchant;
   else if (actionType === "enchantWithBff") return canEnchantWithBFF;
-  //else if (actionType === "swap") 
+  //else if (actionType === "swap")
   return canSwap;
-}
+};
 
-export const getPlayerFunctions = (actionType: ActionType) : HighlightPlayerFunction => {
-  //if (actionType === "protectSelf") 
+export const getPlayerFunctions = (actionType: ActionType): HighlightPlayerFunction => {
+  //if (actionType === "protectSelf")
   return canProtectSelf;
-}
+};
 
-export const getPlaceFunctions = (actionType: ActionType) : HighlightPlaceFunction => {
-  //if(actionType === "addDragged") 
+export const getPlaceFunctions = (actionType: ActionType): HighlightPlaceFunction => {
+  //if(actionType === "addDragged")
   return canAddDragged;
-}
+};
 
 export const highlightFunctions = {
   card: getCardFunctions,
@@ -111,4 +124,3 @@ export const highlightFunctions = {
 //   place: highlightPlaceFunctions,
 //   player: highlightPlayerFunctions,
 // };
-

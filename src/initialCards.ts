@@ -273,7 +273,6 @@ export const initialGamePlayers: GamePlayer[] = [
       GCZ: {
         id: "pd0s9fd",
         playerId: "l93fld9",
-        maxNumCards: 13,
         placeType: "GCZ",
         acceptedCardType: "guest",
         cards: myGCZCards,
@@ -332,7 +331,6 @@ export const initialGameSnapshot: GameSnapshot = {
         GCZ: {
           id: "pd0s9fd",
           playerId: "l93fld9",
-          maxNumCards: 13,
           placeType: "GCZ",
           acceptedCardType: "guest",
           cards: myGCZCards,
