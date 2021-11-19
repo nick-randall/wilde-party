@@ -52,6 +52,7 @@ const Hand = (props: HandProps) => {
               // container div for a card and its spacer
               style={{ height: dimensions.cardHeight, display: "flex", position: "relative",border: "thick red dotted"  }}
             >
+              {/* <div style={{position:"absolute", left:100  }}> */}
               <div
                 // card spacers
                 style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight, border: "thin black solid" }}

@@ -1,7 +1,9 @@
 import React, { CSSProperties, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 import useHoverStyles from "./hooks/useCardInspector";
+import { RootState } from "./redux/store";
 
 export interface HandCardProps {
   id: string;
@@ -60,7 +62,6 @@ const HandCard = (props: HandCardProps) => {
     width: cardWidth,
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
-    //position:"relative",
     position: "absolute",
     transform: `rotate(${10 * index - rotation}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
@@ -84,16 +85,21 @@ const HandCard = (props: HandCardProps) => {
         transition: `transform ${duration}ms ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
         zIndex: draggedCardzIndex,
       },
-    };
+    };  
   }
 
+  const dragged = useSelector((state: RootState) => state.draggedHandCard === id);
+  const draggedId = useSelector((state: RootState) => state.draggedHandCard)
+  //console.log(id, draggedId)
+  if(dragged)console.log("i am dragged")
   return (
     <Draggable draggableId={id} index={index} key={id}>
       {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
           <div 
           // This width causes cards to move aside and make room in other droppables.
-          style={{width:cardWidth, ...dragStyles(snapshot.isDragging)}} > 
+          // When not dragging it tucks cards together
+          style={{width: dragged? cardWidth : 0, ...dragStyles(snapshot.isDragging)}} > 
           <Transition
             in={true}
             timeout={transitionData != null ? transitionData.wait : 0}

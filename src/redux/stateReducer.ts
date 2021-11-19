@@ -6,6 +6,7 @@ export interface State {
   gameSnapshot: GameSnapshot;
   GCZRearrangingData: GCZRearrangingData | undefined;
   transitionData: TransitionData[];
+  draggedHandCard: string | undefined;
 }
 
 export const stateReducer = (
@@ -13,6 +14,7 @@ export const stateReducer = (
     gameSnapshot: initialGameSnapshot,
     GCZRearrangingData: undefined,
     transitionData: [],
+    draggedHandCard: undefined
   },
   action: Action
 ) =>
@@ -31,7 +33,11 @@ export const stateReducer = (
         break;
         case "END_GCZ_REARRANGE":
           draft.GCZRearrangingData = undefined;
-          break
+          break;
+        case "SET_HAND_CARD_DRAG" :
+          console.log("setting draggedhand card to " + action.payload)
+          draft.draggedHandCard = action.payload;
+          break;
       default:
         return state;
     }

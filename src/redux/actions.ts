@@ -18,4 +18,10 @@ export type EndGCZRearrange = {
   payload: { targetIndex: number },
 }
 
-export type Action =  RemoveTransition | StartGCZRearrangingData | UpdateGCZRearrangingIndex | EndGCZRearrange;
+export type SetHandCardDrag = {
+  type: "SET_HAND_CARD_DRAG",
+  payload: string | undefined;
+
+}
+
+export type Action =  RemoveTransition | StartGCZRearrangingData | UpdateGCZRearrangingIndex | EndGCZRearrange | SetHandCardDrag;

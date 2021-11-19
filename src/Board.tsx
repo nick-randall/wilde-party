@@ -16,7 +16,14 @@ export const Board = () => {
   const handleDragStart = (data: DragStart) => {
     const sourceId = data.source.droppableId;
     const { place } = locate3(sourceId);
+    console.log(place)
     switch (place) {
+      case "hand":
+        console.log("hand card dragging")
+        console.log(data.draggableId)
+        const cardId = data.draggableId;
+        dispatch({type: "SET_HAND_CARD_DRAG", payload: cardId})
+        break;
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         const sourceIndex = data.source.index;
@@ -85,7 +92,7 @@ export const Board = () => {
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
           GCZCards={gameSnapshot.players[0].places.GCZ.cards}
         />{" "}
-        <Hand id="pl0hand" />
+        <Hand id={ids.pl0hand} />
       </div>
     </DragDropContext>
   );

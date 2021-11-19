@@ -94,7 +94,7 @@ export const locate3 = (id: string) => {
     }
     if (id === nonPlayerPlaces[place].id) return { player: null, place: place };
   }
-  console.log("cardId" + id);
+  console.log("id " + id);
   return { player: null, place: "error" };
   
 };
