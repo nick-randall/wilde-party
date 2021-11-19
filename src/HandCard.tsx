@@ -120,7 +120,6 @@ const HandCard = (props: HandCardProps) => {
               {state => {
                 return (
                   <div >
-                    
                     <img
                       alt={image}
                       src={`./images/${image}.jpg`}

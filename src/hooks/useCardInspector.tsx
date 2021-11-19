@@ -24,7 +24,6 @@ const useHoverStyles = (dimensions: AllDimensions) => {
   };
 
   const setMousePosition = (event: React.MouseEvent, boundingBoxLeft: number, boundingBoxTop: number, boundingBoxBottom: number) => {
-
     const cardCenterX = dimensions.cardWidth / 2 + boundingBoxLeft;
     const cardCenterY = dimensions.cardHeight / 2 + boundingBoxTop;
 
@@ -33,9 +32,14 @@ const useHoverStyles = (dimensions: AllDimensions) => {
     const scale = 1;
     const windowHeight = window.innerHeight;
     const lowerbound = (dimensions.cardHeight + deltaY) * scale + boundingBoxBottom;
+    const upperbound = deltaY - boundingBoxTop;
     if (lowerbound > windowHeight) {
       deltaY = windowHeight - dimensions.cardHeight * scale * 0.7 - boundingBoxBottom;
     }
+    if (upperbound < 0) {
+      deltaY =  0;
+    }
+
     setMousePositionFromCenter({ x: deltaX, y: deltaY });
   };
   const [featuredCardOffset, setFeaturedCardOffset] = useState({ x: 0, y: 0 });
