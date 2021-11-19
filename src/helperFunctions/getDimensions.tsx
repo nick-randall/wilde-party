@@ -1,8 +1,7 @@
 import store from "../redux/store";
 import { getNumCards, locate } from "./locateFunctions";
 
-const scaleFactor = 2.2;
-const handToTableFactor = 200 / 160;
+const handToTableScaleFactor = 160 / 211;
 
 export const getAllDimensions = (placeId: string) => {
   const gameSnapshot = store.getState().gameSnapshot;
@@ -11,11 +10,13 @@ export const getAllDimensions = (placeId: string) => {
   const placeType = place;
   const numCards = getNumCards(placeId, gameSnapshot);
 
+  // ratio height to width is 1.6 
+
   const dimensions: AllDimensions = {
-    featuredCardScale: scaleFactor,
-    cardHeight: 160,
-    cardWidth: 102,
-    cardLeftSpread: (numCards < 7 ? 102 : 75),
+    featuredCardScale: 2,
+    cardHeight: 168,
+    cardWidth: 105,
+    cardLeftSpread: (numCards < 7 ? 105 : 75),
     cardTopSpread: place === "specialsZone" ? -30 : 0,
    zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
     draggedCardScale: 1.1,
@@ -23,14 +24,13 @@ export const getAllDimensions = (placeId: string) => {
     tableCardzIndex:  3,
     rotation: 0,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
-    //tableCardzIndex: place === "enchantmentsRow" ? 5 : place === "hand" ? 9 : 3,
      // leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
     // topOffset: placeType !== "enchantmentsRow" ? 0 : 65,
   };
 
   const handDimensions: AllDimensions = {
-    featuredCardScale: scaleFactor * handToTableFactor,
-    cardHeight: 200,
+    featuredCardScale: 2 * handToTableScaleFactor,
+    cardHeight: 224,
     cardWidth: 140,
     cardLeftSpread: (numCards / 2 - 0.5) * 1,
     cardTopSpread: 0,
