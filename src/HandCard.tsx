@@ -34,26 +34,19 @@ const HandCard = (props: HandCardProps) => {
   //const onDragStart = (clickEvent: React.MouseEvent) => props.onDragStart(card, cardRef, cardWidth, rotation);
   //dispatch({ type: "SET_DRAGGED_CARD", payload: card });
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
-  const [mousePoint, setMousePointer] = useState({ x: 0, y: 0 });
+
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const element = cardRef.current;
     if (element) {
-      const { left: boundingBoxLeft, top: boundingBoxTop } = element.getBoundingClientRect();
-      setMousePointer({ x: event.pageX - boundingBoxLeft - cardWidth / 2, y: event.pageY - boundingBoxTop - cardHeight / 2 });
+      const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom } = element.getBoundingClientRect();
+      setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
     }
   };
-  // const handleMouseMove = (event: React.MouseEvent) => {
-  //   const element = cardRef.current;
-  //   if (element) {
-  //     const { left: boundingBoxLeft, top: boundingBoxTop } = element.getBoundingClientRect();
-  //     setMousePosition(event, boundingBoxLeft, boundingBoxTop);
-  //   }
-  // };
 
   const hoverStyles = {
     longHover: {
-      transform: `scale(1.1) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
+      transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
       transition: "transform 800ms",
       zIndex: tableCardzIndex + 1,
       //  left: 125 * (index - (numHandCards / 2 - 0.5)),
@@ -126,8 +119,8 @@ const HandCard = (props: HandCardProps) => {
             >
               {state => {
                 return (
-                  <div style={{ height: 100, width: 200, backgroundColor: "black" }}>
-                    <FeaturedCardBox translateX={mousePoint.x} translateY={mousePoint.y} dimensions={dimensions} />
+                  <div >
+                    
                     <img
                       alt={image}
                       src={`./images/${image}.jpg`}

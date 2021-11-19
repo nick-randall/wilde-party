@@ -23,28 +23,22 @@ const useHoverStyles = (dimensions: AllDimensions) => {
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
   };
 
-  const setMousePosition = (event: React.MouseEvent, boundingBoxLeft: number, boundingBoxTop: number) => {
-    // const element = myRef.current;
-    // if (element) {
-    //   const { left: boundingBoxLeft, top: boundingBoxTop } = element.getBoundingClientRect();
+  const setMousePosition = (event: React.MouseEvent, boundingBoxLeft: number, boundingBoxTop: number, boundingBoxBottom: number) => {
 
     const cardCenterX = dimensions.cardWidth / 2 + boundingBoxLeft;
     const cardCenterY = dimensions.cardHeight / 2 + boundingBoxTop;
 
-    let deltaX = event.pageX -cardCenterX  ;
-    let deltaY = event.pageY -cardCenterY;
+    let deltaX = event.pageX - cardCenterX;
+    let deltaY = event.pageY - cardCenterY;
     const scale = 1;
-    const windowHeight = window.outerHeight;
-    const lowerbound = (dimensions.cardHeight + deltaY) * scale + boundingBoxTop;
+    const windowHeight = window.innerHeight;
+    const lowerbound = (dimensions.cardHeight + deltaY) * scale + boundingBoxBottom;
     if (lowerbound > windowHeight) {
-      console.log("too big");
-      deltaY = windowHeight - (dimensions.cardHeight * scale) - boundingBoxTop;
-      //console.log(deltaY)
+      deltaY = windowHeight - dimensions.cardHeight * scale * 0.7 - boundingBoxBottom;
     }
     setMousePositionFromCenter({ x: deltaX, y: deltaY });
-    // }
   };
-  const [featuredCardOffset, setFeaturedCardOffset] = useState({x:0, y:0})
+  const [featuredCardOffset, setFeaturedCardOffset] = useState({ x: 0, y: 0 });
 
   return { hover, setHoverStyles, clearHoverStyles, setMousePosition, inspectingCenterOffset, featuredCardOffset, setFeaturedCardOffset };
 };
