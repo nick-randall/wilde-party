@@ -34,7 +34,7 @@ const useHoverStyles = (dimensions: CardDimensions) => {
 
     let deltaX = event.pageX -cardCenterX  ;
     let deltaY = event.pageY -cardCenterY;
-    const scale = 2;
+    const scale = 1;
     const windowHeight = window.outerHeight;
     const lowerbound = (dimensions.cardHeight + deltaY) * scale + boundingBoxTop;
     if (lowerbound > windowHeight) {

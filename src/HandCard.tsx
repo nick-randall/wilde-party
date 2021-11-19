@@ -9,6 +9,7 @@ export interface HandCardProps {
   image: string;
   dimensions: CardDimensions;
   numHandCards: number;
+  
   spread: number;
   offsetLeft?: number;
   offsetTop?: number;
@@ -19,13 +20,10 @@ interface TransitionStyles {
   [status: string]: {};
 }
 
-//const HandCard = forwardRef((props: HandCardProps, forwardedRef: ForwardedRef<HTMLImageElement | null>) => {
 const HandCard = (props: HandCardProps) => {
   const { id, index, dimensions, image, numHandCards, spread, transitionData } = props;
   const { tableCardzIndex, cardWidth, cardHeight, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
-  //const [hover, setHover] = useState<Hover>("none");
-  // const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   //const dispatch = useDispatch();
 
@@ -43,10 +41,10 @@ const HandCard = (props: HandCardProps) => {
 
   const hoverStyles = {
     longHover: {
-      transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
+      transform: `scale(1.1) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
       transition: "transform 800ms",
       zIndex: tableCardzIndex + 1,
-      left: 125 * (index - (numHandCards / 2 - 0.5)),
+      //  left: 125 * (index - (numHandCards / 2 - 0.5)),
     },
     shortHover: {
       transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
@@ -60,15 +58,19 @@ const HandCard = (props: HandCardProps) => {
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
-    left: spread * (index - (numHandCards / 2 - 0.5)),
+    //left: spread * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
+    //position:"relative",
     position: "absolute",
     transform: `rotate(${10 * index - rotation}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
   const dragStyles = (isDragging: boolean): CSSProperties =>
-    isDragging ? { transform: `rotate(0deg)`, left: 125 * (index - (numHandCards / 2 - 0.5)) } : {};
+    isDragging ? { transform: `rotate(0deg)`
+    , 
+    //left: 125 * (index - (numHandCards / 2 - 0.5)) 
+  } : {};
 
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
@@ -89,9 +91,9 @@ const HandCard = (props: HandCardProps) => {
     <Draggable draggableId={id} index={index} key={id}>
       {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
-          <div style={{width:cardWidth, ...dragStyles(snapshot.isDragging)}} 
+          <div 
           // This width causes cards to move aside and make room in other droppables.
-          > 
+          style={{width:cardWidth, ...dragStyles(snapshot.isDragging)}} > 
           <Transition
             in={true}
             timeout={transitionData != null ? transitionData.wait : 0}
