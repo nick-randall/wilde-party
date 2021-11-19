@@ -5,7 +5,7 @@ export interface CardProps {
   id: string;
   index: number;
   image: string;
-  dimensions: CardDimensions;
+  dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
   cardGroupIndex: number;

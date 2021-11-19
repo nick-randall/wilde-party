@@ -4,7 +4,7 @@ import Card from "./Card";
 export interface CardGroupProps {
   cardGroup: CardGroupObj;
   index: number;
-  dimensions: CardDimensions;
+  dimensions: AllDimensions;
 }
 
 interface CardOffset {

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-const useHoverStyles = (dimensions: CardDimensions) => {
+const useHoverStyles = (dimensions: AllDimensions) => {
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const [, setMousePositionFromCenter] = useState({ x: 0, y: 0 });
   const [hover, setHover] = useState<Hover>("none");

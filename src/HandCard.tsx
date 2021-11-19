@@ -11,7 +11,7 @@ export interface HandCardProps {
   id: string;
   index: number;
   image: string;
-  dimensions: CardDimensions;
+  dimensions: AllDimensions;
   numHandCards: number;
   
   spread: number;

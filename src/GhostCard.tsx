@@ -3,7 +3,7 @@ interface GhostCardProps {
   image: string;
   offsetLeft?: number;
   offsetTop?: number;
-  dimensions: CardDimensions;
+  dimensions: AllDimensions;
   rotation?: number;
 }
 
@@ -23,7 +23,7 @@ export const GhostCard = (props: GhostCardProps) => {
             width: cardWidth,
             border: "thin solid",
             left: (index) * cardLeftSpread + (offsetLeft || 0),
-            top: dimensions.topOffset + (offsetTop || 0),
+            top: (offsetTop || 0),
             rotate: rotation + "deg" || "0deg",
             position: "absolute",
             transition: "left 250ms ease",

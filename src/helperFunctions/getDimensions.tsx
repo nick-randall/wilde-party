@@ -115,15 +115,15 @@ export const getAllDimensions = (placeId: string) => {
     cardWidth: 102,
     cardLeftSpread: (numCards < 7 ? 102 : 75),
     cardTopSpread: place === "specialsZone" ? -30 : 0,
-    leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
-    topOffset: placeType !== "enchantmentsRow" ? 0 : 65,
-    zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
+   zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
-    draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
-    //tableCardzIndex: place === "enchantmentsRow" ? 5 : place === "hand" ? 9 : 3,
     tableCardzIndex:  3,
     rotation: 0,
+    draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
+    //tableCardzIndex: place === "enchantmentsRow" ? 5 : place === "hand" ? 9 : 3,
+     // leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
+    // topOffset: placeType !== "enchantmentsRow" ? 0 : 65,
   };
 
   const handDimensions: AllDimensions = {
@@ -132,14 +132,14 @@ export const getAllDimensions = (placeId: string) => {
     cardWidth: 140,
     cardLeftSpread: (numCards / 2 - 0.5) * 1,
     cardTopSpread: 0,
-    leftOffset: 0,
-    topOffset: 65,
     zIndex: 5,
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
     draggedCardzIndex: 7,
     tableCardzIndex: 9,
     rotation: (numCards / 2 - 0.5) * 10,
+    // leftOffset: 0,
+    // topOffset: 65,
   };
   if (placeType === "hand") return handDimensions;
   return dimensions;

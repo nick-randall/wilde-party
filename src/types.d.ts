@@ -31,8 +31,6 @@ type AllDimensions = {
   cardWidth: number;
   cardLeftSpread: number;
   cardTopSpread: number;
-  leftOffset: number;
-  topOffset: number;
   draggedCardScale: number;
   draggedCardWidth: number;
   draggedCardzIndex: number;
@@ -40,6 +38,8 @@ type AllDimensions = {
   rotation: number;
   featuredCardScale: number;
   zIndex: number;
+  // leftOffset: number;
+  // topOffset: number;
 };
 
 

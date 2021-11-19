@@ -3,7 +3,7 @@ import GhostCard from "./GhostCard";
 export interface GhostCardGroupProps {
   index: number;
   ghostCardGroup: CardGroupObj;
-  dimensions: CardDimensions;
+  dimensions: AllDimensions;
 }
 
 interface CardOffset {
