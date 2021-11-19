@@ -101,7 +101,7 @@ const HandCard = (props: HandCardProps) => {
           <div 
           // This width causes cards to move aside and make room in other droppables.
           // When not dragging it tucks cards together
-          style={{width: dragged? cardWidth : 0, ...dragStyles(snapshot.isDragging)}} >
+          style={{width: dragged ? cardWidth : 0, ...dragStyles(snapshot.isDragging)}} >
             <FeaturedCardTool dimensions={dimensions} render={()=><div />}/> 
           <Transition
             in={true}

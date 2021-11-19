@@ -1,4 +1,4 @@
-import { DragDropContext, DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { BeforeCapture, DragDropContext, DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import GCZ from "./GCZ";
@@ -16,14 +16,8 @@ export const Board = () => {
   const handleDragStart = (data: DragStart) => {
     const sourceId = data.source.droppableId;
     const { place } = locate3(sourceId);
-    console.log(place)
+    console.log(place);
     switch (place) {
-      case "hand":
-        console.log("hand card dragging")
-        console.log(data.draggableId)
-        const cardId = data.draggableId;
-        dispatch({type: "SET_HAND_CARD_DRAG", payload: cardId})
-        break;
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         const sourceIndex = data.source.index;
@@ -73,9 +67,9 @@ export const Board = () => {
     const targetIndex = result.destination?.index;
     const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
-      // case "hand":
-      //   dispatch({type: "SET_HAND_CARD_DRAG", payload: undefined})
-      //   break;
+      case "hand":
+        dispatch({ type: "SET_HAND_CARD_DRAG", payload: undefined });
+        break;
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
         dispatch({
@@ -86,8 +80,10 @@ export const Board = () => {
     console.log(result.destination);
   };
 
+  const onBeforeCapture = (data: BeforeCapture) => dispatch({ type: "SET_HAND_CARD_DRAG", payload: data.draggableId });
+
   return (
-    <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd}>
+    <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={onBeforeCapture}>
       <div>
         {" "}
         <GCZ
@@ -95,7 +91,7 @@ export const Board = () => {
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
           GCZCards={gameSnapshot.players[0].places.GCZ.cards}
         />{" "}
-        <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards}/>
+        <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
     </DragDropContext>
   );
