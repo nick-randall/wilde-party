@@ -21,20 +21,17 @@ interface HandProps {
 const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
-  //const { numCards, dimensions, cards, gameSnapshot, legalTargets, removeCardTransition, transitionData } = props;
   const { id, handCards } = props;
   const [spread, setSpread] = useState<number>(35);
   const dimensions = getAllDimensions(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div
           id={props.id}
           onMouseEnter={() => setSpread(120)}
           onMouseLeave={() => setSpread(35)}
-          // onMouseEnter={() => setMouseEnteredHand(true)}
-          // onMouseLeave={() => setMouseEnteredHand(false)}
           style={{
             position: "absolute",
             display: "flex",
@@ -43,25 +40,22 @@ const Hand = (props: HandProps) => {
             width: handCards.length * dimensions.cardWidth,
             transition: "180ms",
             height: dimensions.cardHeight,
-            //pointerEvents: legalTargetStatus === "notAmongLegalTargets" || rearranging ? "none" : "auto",
           }}
           ref={provided.innerRef}
         >
           {handCards.map((card, index) => (
             <div
-              // container div for a card and its spacer
-              style={{ height: dimensions.cardHeight, display: "flex", position: "relative",border: "thick red dotted"  }}
+              // This is the container div for a card and its spacer
+              style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
             >
-              {/* <div style={{position:"absolute", left:100  }}> */}
               <div
-                // card spacers
-                style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight, border: "thin black solid" }}
+                // This is a card spacer div, responsible for growing and pushing the hand cards out.
+                style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight}}
               />
               <HandCard
                 id={card.id}
                 index={index}
                 image={card.image}
-                //spread={getSpreadOrNot(snapshot.isDraggingOver) ? 35: 125}
                 spread={35}
                 dimensions={dimensions}
                 transitionData={transitionData.find(trans => trans.card.id === card.id)}
@@ -69,12 +63,9 @@ const Hand = (props: HandProps) => {
                 key={card.id}
               />
             </div>
-            // </div>
           ))}
           {provided.placeholder}
         </div>
-
-        //<div/>
       )}
     </Droppable>
   );

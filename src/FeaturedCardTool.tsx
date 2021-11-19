@@ -13,10 +13,10 @@ interface FeaturedCardBoxProps {
   dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
-  render: () => JSX.Element;
+  //render: () => JSX.Element;
 }
 
-const FeaturedCardBox = (props: FeaturedCardBoxProps) => {
+export const FeaturedCardBox = (props: FeaturedCardBoxProps) => {
   const { dimensions, translateX, translateY } = props;
   const { cardHeight, cardWidth, featuredCardScale } = dimensions;
   return (
@@ -25,7 +25,7 @@ const FeaturedCardBox = (props: FeaturedCardBoxProps) => {
         border: "thin black solid",
         height: cardHeight,
         width: cardWidth,
-        transform: `scale(${featuredCardScale}) translateX(${translateX}) translateY(${translateY})`,
+        transform: `scale(${featuredCardScale}) translateX(${translateX}px) translateY(${translateY}px)`,
         position:"absolute",
         pointerEvents: "none"
       }}

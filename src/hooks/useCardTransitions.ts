@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getCardDimensions } from "../helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { DraggedCardData } from "./useDragEvents";
 
 const useCardTransitions = (gameSnapshot: GameSnapshot) => {
@@ -14,11 +14,11 @@ const useCardTransitions = (gameSnapshot: GameSnapshot) => {
 
       draggedCardsData.forEach((card) => {
         const { offsetLeft, offsetTop } = dropZoneElement;
-        const { cardHeight, cardWidth, draggedCardScale, topOffset } = getCardDimensions(card.card, gameSnapshot);
+        const { cardHeight, cardWidth, draggedCardScale } = getAllDimensions(card.card.placeId);
         newState.push({
           card: card.card,
           origin: {
-            top: dragEvent.clientY - card.offsetY - topOffset - offsetTop - 140,
+            top: dragEvent.clientY - card.offsetY - offsetTop - 140,
             left: dragEvent.clientX - card.offsetX - offsetLeft -8 ,
             height: cardHeight * draggedCardScale,
             width: cardWidth * draggedCardScale,
@@ -48,14 +48,14 @@ const useCardTransitions = (gameSnapshot: GameSnapshot) => {
         const minIndex = Math.min(...draggedCards.map(card => card.index))
       draggedCardsData.forEach((card) => {
         const { offsetTop } = dropZoneElement;
-        const { cardHeight, cardWidth, cardLeftSpread, draggedCardScale, topOffset } = getCardDimensions(card.card, gameSnapshot);
+        const { cardHeight, cardWidth, cardLeftSpread, draggedCardScale } = getAllDimensions(card.card.placeId);
         const draggedCard = draggedCards.find((draggedcard) => draggedcard.id === card.card.id);
         if (draggedCard) {
           const indexDelta = draggedCard.index === minIndex ?  newIndex - draggedCard.index : newIndex-draggedCard.index +1;
           newState.push({
             card: card.card,
             origin: {
-              top: dragEvent.clientY - card.offsetY - topOffset - offsetTop - 140, // why -140 ?
+              top: dragEvent.clientY - card.offsetY -  offsetTop - 140, // why -140 ?
               left: dragEvent.clientX - card.offsetX - indexDelta * cardLeftSpread -8,
               height: cardHeight * draggedCardScale,
               width: cardWidth * draggedCardScale,
