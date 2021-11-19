@@ -1,9 +1,8 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { handDimensions } from "./handDimensions";
 import HandCard from "./HandCard";
 import { myHandCards } from "./initialCards";
-import { DragDropContext, Draggable, DragStart, Droppable } from "react-beautiful-dnd";
-import CardGroup from "./CardGroup";
+import { Droppable } from "react-beautiful-dnd";
 interface HandProps {
   id: string;
   // //children: React.ReactNode;
@@ -26,9 +25,6 @@ const Hand = (props: HandProps) => {
   //const { numCards, dimensions, cards, gameSnapshot, legalTargets, removeCardTransition, transitionData } = props;
   const { id } = props;
   const [spread, setSpread] = useState<number>(35);
-  const [mouseEnteredHand, setMouseEnteredHand] = useState(false);
-
-  const dontSpread = (isDraggingOver: boolean) => !isDraggingOver && !mouseEnteredHand;
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
@@ -37,6 +33,8 @@ const Hand = (props: HandProps) => {
           id={props.id}
           onMouseEnter={() => setSpread(120)}
           onMouseLeave={() => setSpread(35)}
+          // onMouseEnter={() => setMouseEnteredHand(true)}
+          // onMouseLeave={() => setMouseEnteredHand(false)}
           style={{
             position: "absolute",
             display: "flex",
@@ -62,17 +60,20 @@ const Hand = (props: HandProps) => {
                 id={card.id}
                 index={index}
                 image={card.image}
-                spread={dontSpread(snapshot.isDraggingOver) ? 35: 125}
-                //spread={35}
+                //spread={getSpreadOrNot(snapshot.isDraggingOver) ? 35: 125}
+                spread={35}
                 dimensions={handDimensions}
                 transitionData={transitionData.find(trans => trans.card.id === card.id)}
                 numHandCards={handCards.length}
                 key={card.id}
               />
             </div>
+            // </div>
           ))}
           {provided.placeholder}
         </div>
+
+        //<div/>
       )}
     </Droppable>
   );

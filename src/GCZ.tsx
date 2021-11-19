@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Droppable, DragUpdate } from "react-beautiful-dnd";
+import { useMemo } from "react";
+import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import { dimensions } from "./dimensions";

@@ -21,8 +21,8 @@ interface TransitionStyles {
 }
 
 const HandCard = (props: HandCardProps) => {
-  const { id, index, dimensions, image, numHandCards, spread, transitionData } = props;
-  const { tableCardzIndex, cardWidth, cardHeight, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
+  const { id, index, dimensions, image, transitionData } = props;
+  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, draggedCardzIndex } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
 
   //const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const HandCard = (props: HandCardProps) => {
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
-    //left: spread * (index - (numHandCards / 2 - 0.5)),
+    //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     //position:"relative",
     position: "absolute",

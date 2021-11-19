@@ -42,6 +42,6 @@ const curriedGetCardRowShape = (sourceIndex: number) => (cardGroups: CardGroupOb
 
 export const getCardRowShapeOnRearrange = (cardGroups: CardGroupObj[], sourceIndex: number) => curriedGetCardRowShape(sourceIndex)(cardGroups);
 
-const compose = (x: any) => (f: any, g: any) => f(g(x));
+// const compose = (x: any) => (f: any, g: any) => f(g(x));
 
-const pipeCustom = (x: any) => (f: any, g: any) => g(f(x));
+// const pipeCustom = (x: any) => (f: any, g: any) => g(f(x));

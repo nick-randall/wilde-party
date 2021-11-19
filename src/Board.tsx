@@ -1,4 +1,3 @@
-import { useReducer } from "react";
 import { DragDropContext, DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
@@ -16,7 +15,7 @@ export const Board = () => {
 
   const handleDragStart = (data: DragStart) => {
     const sourceId = data.source.droppableId;
-    const { player, place } = locate3(sourceId);
+    const { place } = locate3(sourceId);
     switch (place) {
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
@@ -41,7 +40,7 @@ export const Board = () => {
 
   const handleDragUpdate = (data: DragUpdate) => {
     const sourceId = data.source.droppableId;
-    const { player, place:sourcePlace } = locate3(sourceId);
+    const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
@@ -54,10 +53,9 @@ export const Board = () => {
   };
 
   const handleDragEnd = (result: DropResult) => {
-    
     const sourceId = result.source.droppableId;
     if (result.destination) {
-      console.log(result.destination.index)
+      console.log(result.destination.index);
       const destinationId = result.destination.droppableId;
       if (destinationId === sourceId) {
       }
@@ -66,7 +64,7 @@ export const Board = () => {
     // and just droppping into nothing (destination === undefined)
 
     const targetIndex = result.destination?.index;
-    const { player, place: sourcePlace } = locate3(sourceId);
+    const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
