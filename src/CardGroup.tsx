@@ -43,7 +43,7 @@ const CardGroup = (props: CardGroupProps) => {
             >
               {cardGroup.cards.map((card, cardGroupIndex) => (
                 <Card
-                  offsetTop={getOffset(card, cardGroupIndex).top} //getDimensions COULD take care of this, but maybe not the best use of it...
+                  offsetTop={getOffset(card, cardGroupIndex).top} 
                   offsetLeft={getOffset(card, cardGroupIndex).left}
                   cardGroupIndex={cardGroupIndex}
                   id={cardGroup.id}

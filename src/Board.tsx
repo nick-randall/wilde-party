@@ -41,11 +41,21 @@ export const Board = () => {
 
   const handleDragUpdate = (data: DragUpdate) => {
     const sourceId = data.source.droppableId;
+    const newPlace = data.destination?.droppableId;
+    const newIndex = data.destination?.index;
+    if(data.destination?.droppableId === undefined) console.log("is undefined")
+    console.log(data.destination?.index)
     const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
+      case "hand":
+        if (newPlace && newIndex)
+          dispatch({
+            type: "SET_HAND_CARD_DRAGGED_OVER",
+            payload: { place: newPlace, index: newIndex },
+          });
+        break;
       // here assuming that it is player 0, since opponents' GCZ will be disabled
       case "GCZ":
-        const newIndex = data.destination?.index;
         dispatch({
           type: "UPDATE_GCZ_REARRANGING_INDEX",
           payload: newIndex,
@@ -62,9 +72,10 @@ export const Board = () => {
       }
     }
     // need to differentiate between dragging to new index
-    // and just droppping into nothing (destination === undefined)
+    // and just droppping into nothing (destination === null)
 
     const targetIndex = result.destination?.index;
+    console.log(targetIndex)
     const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
       case "hand":

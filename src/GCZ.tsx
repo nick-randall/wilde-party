@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
@@ -16,7 +16,20 @@ interface GCZProps {
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
   const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
-  const ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
+  let ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
+  const draggedHandCard = useSelector((state: RootState)=> state.draggedHandCard)
+  const handCardDraggedOver = useSelector((state: RootState) => state.draggedOverData)
+  
+  if(draggedHandCard && handCardDraggedOver)
+    { const cardGroupObj = {id: draggedHandCard.id, size: 1, cards: [draggedHandCard] }
+      const index = handCardDraggedOver.index;
+      const cardRowShape = getCardRowShapeOnDraggedOver(myGCZCardRow)
+      console.log(myGCZCardRow)
+      console.log(cardRowShape)
+      console.log(index, cardRowShape[index])
+     cardRowShape.forEach((e, i) => console.log(e))
+      ghostCardGroupData = {ghostCardsObject: cardGroupObj, index: cardRowShape[index], cardRowShape: cardRowShape}}
+      
   const dimensions = getAllDimensions(id)
 
   return (
@@ -30,6 +43,7 @@ function GCZ(props: GCZProps) {
             snapshot.isDraggingOver
               ? {
                   display: "flex",
+                  left:100,
                   top: 100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
@@ -40,6 +54,7 @@ function GCZ(props: GCZProps) {
               : {
                   display: "flex",
                   top: 100,
+                  left:100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
                   minWidth: dimensions.cardWidth,
@@ -55,6 +70,7 @@ function GCZ(props: GCZProps) {
           {ghostCardGroupData ? (
             <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardsObject} index={ghostCardGroupData.index} dimensions={dimensions} />
           ) : null}
+         
         </div>
       )}
     </Droppable>

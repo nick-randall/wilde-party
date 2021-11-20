@@ -92,7 +92,7 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  const dragged = useSelector((state: RootState) => state.draggedHandCard === id);
+  const dragged = useSelector((state: RootState) => state.draggedHandCard && state.draggedHandCard.id === id);
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
@@ -101,7 +101,7 @@ const HandCard = (props: HandCardProps) => {
           <div
             // This width causes cards to move aside and make room in other droppables.
             // When not dragging it tucks cards together
-            style={{ width: dragged ? cardWidth : 0, ...dragStyles(snapshot.isDragging) }}
+            style={{ width: dragged ? 105 : 0, ...dragStyles(snapshot.isDragging) }}
           >
             <Transition
               in={true}

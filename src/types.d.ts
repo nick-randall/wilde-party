@@ -258,3 +258,8 @@ type GCZRearrangingData = {
   ghostCardsObject: CardGroupObj
 
 }
+
+type DraggedOverData = {
+  placeId: string,
+  index: number
+}
