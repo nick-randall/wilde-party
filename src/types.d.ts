@@ -209,40 +209,6 @@ type Refs = {
   [id: string]: HTMLElement;
 };
 
-type NewDraggedCardData = {
-  card: GameCard;
-  translateX: number;
-  translateY: number;
-  offsetX: number;
-  offsetY: number;
-}
-
-type NewestRearrangingData  = {
-  draggedOverIndex: number;
-  cardGroupId: string;
-  cards: GameCard[];
-  initialDragData: {
-    offsetX: number;
-    offsetY: number;
-    translateX: number;
-    translateY: number;
-  };
-}
-
-type RearrangingDragGroupData = {
-  cards: GameCard[];
-  offsetX: number;
-  offsetY: number;
-  translateX: number;
-  translateY: number;
-}
-
-type DraggedData = {
-  offsetX: number;
-  offsetY: number;
-  translateX: number;
-  translateY: number;
-}
 
 type CardGroupObj = {
   id: string;
@@ -251,15 +217,3 @@ type CardGroupObj = {
 }
 
 type Hover = "shortHover" | "longHover" | "none";
-
-type GCZRearrangingData = {
-  cardRowShape: number[],
-  index: number,
-  ghostCardsObject: CardGroupObj
-
-}
-
-type DraggedOverData = {
-  placeId: string,
-  index: number
-}
