@@ -4,7 +4,7 @@ import { locate3 } from "../helperFunctions/locateFunctions";
 import { Action, StartDrag } from "./actions";
 import { RootState } from "./store";
 
-export const getStartDragFunction = (action: StartDrag) => {
+export const getStartDragAction = (action: StartDrag) => {
   const { place: sourcePlace } = locate3(action.payload.source.droppableId);
   if (sourcePlace === "GCZ") return startGCZRearrangeFunc;
   if (sourcePlace === "hand") return;

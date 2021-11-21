@@ -1,7 +1,7 @@
 import produce from "immer";
 import { locate3 } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
-import { getStartDragFunction } from "./actionFunctions";
+import { getStartDragAction } from "./actionFunctions";
 import { Action } from "./actions";
 
 export interface State {
@@ -27,13 +27,13 @@ export const stateReducer = (
   produce(state, draft => {
  
       if(action.type === "START_DRAG") {
-        const startDragFunction = getStartDragFunction(action)
-        if(startDragFunction)
-        draft = startDragFunction(state, action.payload)
+        const startDragAction = getStartDragAction(action)
+        if(startDragAction)
+        draft = startDragAction(state, action.payload)
       }
        
       if(action.type === "UPDATE_DRAG") 
-       
+       const updateDragFunction = getUpdateDragFunction(action)
       if(action.type === "END_DRAG") 
        
       
