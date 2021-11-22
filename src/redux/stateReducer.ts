@@ -1,8 +1,10 @@
 import produce from "immer";
 import { locate3 } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
-import { getStartDragAction } from "./actionFunctions";
+import { getStartDragAction } from "./startDragFunctions";
 import { Action } from "./actions";
+import getUpdateDragFunction, { getUpdateDragAction } from "./updateDragFunctions";
+import { getCardRowAndShape } from "../helperFunctions/groupGCZCards";
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -23,23 +25,30 @@ export const stateReducer = (
     draggedOverData: undefined,
   },
   action: Action
-) =>
-  produce(state, draft => {
- 
-      if(action.type === "START_DRAG") {
-        const startDragAction = getStartDragAction(action)
-        if(startDragAction)
-        draft = startDragAction(state, action.payload)
-      }
-       
-      if(action.type === "UPDATE_DRAG") 
-       const updateDragFunction = getUpdateDragFunction(action)
-      if(action.type === "END_DRAG") 
-       
-      
-      else return state;
-    }
-  });
+) => {
+  switch (action.type) {
+    case "START_DRAG":
+      let stateCopy = { ...state };
+      const startDragAction = getStartDragAction(state, action);
+      stateCopy = startDragAction(state, action.payload);
+      console.log(stateCopy.GCZRearrangingData)
+      return stateCopy;
+
+    case "UPDATE_DRAG":
+      const updateDragAction = getUpdateDragAction(state, action);
+      console.log(state.GCZRearrangingData)
+      let stateCopy2 = { ...state };
+      stateCopy2 = updateDragAction(state, action.payload);
+
+      return stateCopy2;
+
+    //  case "END_DRAG" :
+    //  const
+    default:
+      return state;
+  }
+};
+// });
 
 // export const stateReducer = (
 //   state: State = {

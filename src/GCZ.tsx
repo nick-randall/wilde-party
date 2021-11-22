@@ -1,40 +1,46 @@
-import { useMemo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
+import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
+  //GCZRearrangingData: GCZRearrangingData | undefined
 }
 
-function GCZ(props: GCZProps) {
+const GCZ = (props: GCZProps) => {
   const { id, enchantmentsRowCards, GCZCards } = props;
-  const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
+  console.log(props);
+  //console.log(props.GCZRearrangingData)
+  const myGCZCardRow = getCardGroupObjs(enchantmentsRowCards, GCZCards);
   let ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
-  const draggedHandCard = useSelector((state: RootState)=> state.draggedHandCard)
-  const handCardDraggedOver = useSelector((state: RootState) => state.draggedOverData)
-  
-  if(draggedHandCard && handCardDraggedOver)
-    { const cardGroupObj = {id: draggedHandCard.id, size: 1, cards: [draggedHandCard] }
-      const index = handCardDraggedOver.index;
-      const cardRowShape = getCardRowShapeOnDraggedOver(myGCZCardRow)
-      console.log(myGCZCardRow)
-      console.log(cardRowShape)
-      console.log(index, cardRowShape[index])
-     cardRowShape.forEach((e, i) => console.log(e))
-      ghostCardGroupData = {ghostCardsObject: cardGroupObj, index: cardRowShape[index], cardRowShape: cardRowShape}}
-      
-  const dimensions = getAllDimensions(id)
+  console.log(ghostCardGroupData?.index);
+  console.log("render");
+  const state = useSelector((state: RootState) => state);
+  console.log(state);
+  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const handCardDraggedOver = useSelector((state: RootState) => state.draggedOverData);
+
+  // if(draggedHandCard && handCardDraggedOver)
+  //   { const cardGroupObj = {id: draggedHandCard.id, size: 1, cards: [draggedHandCard] }
+  //     const index = handCardDraggedOver.index;
+  //     const cardRowShape = getCardRowShapeOnDraggedOver(myGCZCardRow)
+  //     console.log(myGCZCardRow)
+  //     console.log(cardRowShape)
+  //     console.log(index, cardRowShape[index])
+  //    cardRowShape.forEach((e, i) => console.log(e))
+  //     ghostCardGroupData = {ghostCardsObject: cardGroupObj, index: cardRowShape[index], cardRowShape: cardRowShape}}
+
+  const dimensions = getAllDimensions(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal">
-      {(provided, snapshot) => ( 
+      {(provided, snapshot) => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
@@ -43,7 +49,7 @@ function GCZ(props: GCZProps) {
             snapshot.isDraggingOver
               ? {
                   display: "flex",
-                  left:100,
+                  left: 100,
                   top: 100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
@@ -54,7 +60,7 @@ function GCZ(props: GCZProps) {
               : {
                   display: "flex",
                   top: 100,
-                  left:100,
+                  left: 100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
                   minWidth: dimensions.cardWidth,
@@ -70,12 +76,11 @@ function GCZ(props: GCZProps) {
           {ghostCardGroupData ? (
             <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardsObject} index={ghostCardGroupData.index} dimensions={dimensions} />
           ) : null}
-         
         </div>
       )}
     </Droppable>
   );
-}
+};
 
 export default GCZ;
 

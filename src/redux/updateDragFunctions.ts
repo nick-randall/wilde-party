@@ -1,34 +1,61 @@
 import { DragUpdate } from "react-beautiful-dnd";
-import { locate3 } from "../helperFunctions/locateFunctions";
+import { getCardRowAndShape } from "../helperFunctions/groupGCZCards";
+import { locate2 } from "../helperFunctions/locateFunctions";
 import { UpdateDrag } from "./actions";
 import { RootState } from "./store";
 
-export const getUpdateDragFunction = (state: RootState, action: UpdateDrag) => {
+export const getUpdateDragAction = (state: RootState, action: UpdateDrag) => {
   if (state.GCZRearrangingData !== undefined) return updateGCZRearrange;
-  if (state.draggedHandCard !== undefined) return updateDraggedHandCard;
+  if (state.rearrangingData !== undefined) return updatePlaceRearrange;
+  // If hand card is dragged over place that can accept it.
+  if (state.draggedHandCard !== undefined) return updateDraggedOver;
+  return doNothing;
 };
+
+const doNothing = (state: RootState, update: DragUpdate) => state;
 
 const updateGCZRearrange = (state: RootState, update: DragUpdate) => {
   if (state.GCZRearrangingData && update.destination) {
-    const cardRowShape = state.GCZRearrangingData.cardRowShape;
-    const newIndex = update.destination.index;
-    state.GCZRearrangingData.index = cardRowShape[newIndex];
+    const { cardRowShape } = state.GCZRearrangingData;
+    const { index } = update.destination;
+    state.GCZRearrangingData.index = cardRowShape[index];
   }
   return state;
 };
 
-// need to distinguish from updateGCZ
-const updateDraggedHandCard = (state:RootState, data: DragUpdate) => {
+const updatePlaceRearrange = (state: RootState, update: DragUpdate) => {
+  if (update.destination && state.rearrangingData) {
+    const { index } = update.destination;
+    state.rearrangingData.index = index;
+  }
+  return state;
+};
 
-  const sourceId = data.source.droppableId;
-  const newPlace = data.destination?.droppableId;
-  const newIndex = data.destination?.index;
-  const { place: sourcePlace } = locate3(sourceId);
-  switch (sourcePlace) {
-    case "hand":
-      if (newPlace && newIndex)
-        dispatch({
-          type: "SET_HAND_CARD_DRAGGED_OVER",
-          payload: { place: newPlace, index: newIndex },
-        });
-}
+const updateDraggedOver = (state: RootState, data: DragUpdate) => {
+  if (data.destination === undefined) return state;
+  else {
+    const { droppableId, index } = data.destination;
+    const { place } = locate2(droppableId, state.gameSnapshot);
+    if (place === "GCZ") return updateDraggedOverGCZ(state, droppableId, index);
+    else return updateDraggedOverPlace(state, droppableId, index);
+  }
+};
+
+const updateDraggedOverGCZ = (state: RootState, placeId: string, newIndex: number) => {
+  const { shape } = getCardRowAndShape(state.gameSnapshot, newIndex);
+  state.draggedOverData = {
+    index: shape[newIndex],
+    placeId: placeId,
+  };
+  return state;
+};
+
+const updateDraggedOverPlace = (state: RootState, placeId: string, newIndex: number) => {
+  state.draggedOverData = {
+    index: newIndex,
+    placeId: placeId,
+  };
+  return state;
+};
+
+export default getUpdateDragAction;
