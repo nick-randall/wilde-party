@@ -1,3 +1,5 @@
+import { DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
+
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
   payload: string;
@@ -28,10 +30,28 @@ export type SetHandCardDraggedOver = {
   payload: { placeId: string; index: number };
 };
 
+export type StartDrag = {
+  type: "START_DRAG";
+  payload: DragStart;
+};
+
+export type UpdateDrag = {
+  type: "UPDATE_DRAG";
+  payload: DragUpdate;
+};
+
+export type EndDrag = {
+  type: "END_DRAG";
+  payload: DropResult;
+};
+
 export type Action =
   | RemoveTransition
   | StartGCZRearrangingData
   | UpdateGCZRearrangingIndex
   | EndGCZRearrange
   | SetHandCardDrag
-  | SetHandCardDraggedOver;
+  | SetHandCardDraggedOver
+  | StartDrag
+  | UpdateDrag
+  | EndDrag;
