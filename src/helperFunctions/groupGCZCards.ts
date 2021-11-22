@@ -37,27 +37,13 @@ const getCumulativeSum = (indexArray: number[]) => indexArray.map(cumulativeSum(
 
 const addZeroAtFirstIndex = (indexArray: number[]) => [0].concat(indexArray);
 
-const removeLastIndex = (indexArray: number[]) => indexArray.filter((e, i) => i < indexArray.length-1 )
 
 const curriedGetCardRowShape = (sourceIndex: number) => (cardGroups: CardGroupObj[]) =>
   pipe(mapSizes, removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(cardGroups);
 
 export const getCardRowShapeOnRearrange = (cardGroups: CardGroupObj[], sourceIndex: number) => curriedGetCardRowShape(sourceIndex)(cardGroups);
 
-//const curriedGetCardRowShapeOnDraggedOver = (source)
-
-const addAtDraggedOverIndex = (sourceIndex: number) => (array: any[]) => array.slice(0, sourceIndex).concat(1).concat(array.slice(sourceIndex, array.length))
-
-const minusOneFromEach = (indexArray: number[]) => indexArray.map(e => e - 1)
-
-const curriedGetCardRowShapeOnDraggedOver = (draggedOverIndex: number) => (cardGroups: CardGroupObj[]) => 
-  pipe(mapSizes, addAtDraggedOverIndex(draggedOverIndex), getCumulativeSum)(cardGroups)
-
-
-
-export const getCardRowShapeOnDraggedOver = (cardGroups: CardGroupObj[]) => pipe(mapSizes, getCumulativeSum, minusOneFromEach)(cardGroups);
-
-//export const getCardRowShapeOnDraggedOver = (cardGroups: CardGroupObj[], draggedOverIndex: number) => curriedGetCardRowShapeOnDraggedOver(draggedOverIndex)(cardGroups);
+export const getCardRowShapeOnDraggedOver = (cardGroups: CardGroupObj[]) => pipe(mapSizes, addZeroAtFirstIndex, getCumulativeSum)(cardGroups);
 
 
 // const compose = (x: any) => (f: any, g: any) => f(g(x));
