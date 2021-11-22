@@ -8,9 +8,11 @@ import { RootState } from "./store";
 export const getStartDragAction = (stateCopy: RootState, action: StartDrag) => {
   const { droppableId } = action.payload.source;
   const { place: sourcePlace } = locate(droppableId, stateCopy.gameSnapshot);
+  console.log(sourcePlace)
   if (sourcePlace === "hand") return doNothing;
   if (sourcePlace === "GCZ") return startGCZRearrangeFunc;
-  else return startRearrangeFunc;
+ 
+   return startRearrangeFunc;
 };
 
 const doNothing = (state: RootState, action: DragStart) => state;

@@ -19,6 +19,7 @@ function GCZ(props: GCZProps) {
   let ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
   const draggedHandCard = useSelector((state: RootState)=> state.draggedHandCard)
   const handCardDraggedOver = useSelector((state: RootState) => state.draggedOverData)
+  console.log(ghostCardGroupData)
   
   if(draggedHandCard && handCardDraggedOver)
     { const cardGroupObj = {id: draggedHandCard.id, size: 1, cards: [draggedHandCard] }

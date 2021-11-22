@@ -10,6 +10,7 @@ export const getUpdateDragAction = (state: RootState, action: UpdateDrag) => {
   if (state.rearrangingData !== undefined) return updatePlaceRearrange;
   // If hand card is dragged over place that can accept it.
   if (state.draggedHandCard !== undefined) return updateDraggedOver;
+  console.log("nope")
   return doNothing;
 };
 

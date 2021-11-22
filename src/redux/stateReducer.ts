@@ -1,5 +1,6 @@
 import produce from "immer";
-import { locate3 } from "../helperFunctions/locateFunctions";
+import { getCardRowAndShape } from "../helperFunctions/groupGCZCards";
+import { locate, locate3 } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { getStartDragAction } from "./startDragFunctions";
@@ -8,43 +9,57 @@ import getUpdateDragAction from "./updateDragActions";
 export interface State {
   gameSnapshot: GameSnapshot;
   GCZRearrangingData: GCZRearrangingData | undefined;
+  rearrangingData: RearrangingData | undefined;
   transitionData: TransitionData[];
   draggedHandCard: GameCard | undefined;
-  draggedOverData: DraggedOverData | undefined
+  draggedOverData: DraggedOverData | undefined;
 }
 
 export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
     GCZRearrangingData: undefined,
+    rearrangingData: undefined,
     transitionData: [],
     draggedHandCard: undefined,
-    draggedOverData: undefined
+    draggedOverData: undefined,
   },
   action: Action
-) =>{
- 
-switch (action.type) {
-  case "START_DRAG":
-    let stateCopy = { ...state };
-    const startDragAction = getStartDragAction(state, action);
-    stateCopy = startDragAction(state, action.payload);
-    console.log(stateCopy.GCZRearrangingData)
-    return stateCopy;
+) => {
+  switch (action.type) {
+    case "START_DRAG":
+      let stateCopy = { ...state };
+      const { droppableId } = action.payload.source;
+      const { place: sourcePlace } = locate(droppableId, stateCopy.gameSnapshot);
+      console.log(sourcePlace)
+      if (sourcePlace === "GCZ") {
+        const { index } = action.payload.source;
+        const { draggableId } = action.payload;
+        const { GCZRow, shape } = getCardRowAndShape(stateCopy.gameSnapshot, index);
+        const GCZRearrangingData = {
+          cardRowShape: shape,
+          index: shape[index],
+          ghostCardsObject: GCZRow.filter(cardGroup => cardGroup.id === draggableId)[0],
+        };
+        console.log({ ...state, GCZRearrangingData });
 
-  case "UPDATE_DRAG":
-    const updateDragAction = getUpdateDragAction(state, action);
-    console.log(state.GCZRearrangingData)
-    let stateCopy2 = { ...state };
-    stateCopy2 = updateDragAction(state, action.payload);
+        return { ...state, GCZRearrangingData };
+      } else return state;
 
-    return stateCopy2;
+    case "UPDATE_DRAG":
+      const updateDragAction = getUpdateDragAction(state, action);
 
-  //  case "END_DRAG" :
-  //  const
-  default:
-    return state;
-}
+      let stateCopy2 = { ...state };
+      console.log(stateCopy2.GCZRearrangingData);
+      stateCopy2 = updateDragAction(state, action.payload);
+
+      return stateCopy2;
+
+    //  case "END_DRAG" :
+    //  const
+    default:
+      return state;
+  }
 };
 
 export default stateReducer;
