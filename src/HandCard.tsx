@@ -2,7 +2,6 @@ import React, { CSSProperties, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
-import { FeaturedCardBox } from "./FeaturedCardTool";
 import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 
@@ -12,8 +11,6 @@ export interface HandCardProps {
   image: string;
   dimensions: AllDimensions;
   numHandCards: number;
-
-  spread: number;
   offsetLeft?: number;
   offsetTop?: number;
   transitionData: TransitionData | undefined;
@@ -40,7 +37,7 @@ const HandCard = (props: HandCardProps) => {
     const element = cardRef.current;
     if (element) {
       const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom } = element.getBoundingClientRect();
-      setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
+      setMousePosition(event, boundingBoxLeft, boundingBoxTop);
     }
   };
 
