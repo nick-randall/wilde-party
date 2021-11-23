@@ -6,7 +6,7 @@ export type RemoveTransition = {
 };
 
 export type SetHandCardDrag = {
-  type: "SET_HAND_CARD_DRAG";
+  type: "SET_DRAGGED_HAND_CARD";
   payload: string | undefined;
 };
 

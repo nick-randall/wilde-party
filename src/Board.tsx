@@ -21,7 +21,7 @@ export const Board = () => {
 
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => 
    
-    dispatch({ type: "SET_HAND_CARD_DRAG", payload: draggableId});
+    dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId});
   
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>
@@ -32,6 +32,7 @@ export const Board = () => {
   const handleDragEnd = () => {
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
+    dispatch({type: "SET_DRAGGED_HAND_CARD", payload: undefined})
   };
 
   return (

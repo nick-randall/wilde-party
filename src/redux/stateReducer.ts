@@ -20,7 +20,7 @@ export const stateReducer = (
   action: Action
 ) => {
   switch (action.type) {
-    case "SET_HAND_CARD_DRAG":
+    case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId)
       console.log(draggedHandCard)
@@ -29,7 +29,7 @@ export const stateReducer = (
         return { ...state, draggedHandCard, highlights};
         //return {...state, draggedHandCard}
       }
-      return state;
+      return {...state, draggedHandCard: undefined};
     default:
       return state;
   }
