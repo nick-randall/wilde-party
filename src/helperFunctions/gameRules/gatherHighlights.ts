@@ -1,4 +1,3 @@
-import store from "../../redux/store";
 import { getAllCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
 import { getCardFunctions, getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
 import * as R from "ramda";
@@ -29,8 +28,6 @@ const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): 
 
   const highlightFunction = getPlaceFunctions(actionType);
   const potentialHighlights = getAllPlayerPlaces(gameSnapshot)
-
-  console.log(potentialHighlights)
   const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
   return highlights.map((e) => R.prop("id", e))
 };

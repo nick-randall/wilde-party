@@ -30,11 +30,12 @@ function GCZ(props: GCZProps) {
   const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
 
   const highlighted = useSelector((state: RootState) => state.highlights.includes(id))
+  console.log(highlighted)
 
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal">
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!highlighted}>
       {(provided) => (
         <div
           className="pl0GCZ"
@@ -48,7 +49,8 @@ function GCZ(props: GCZProps) {
             height: dimensions.cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: highlighted ? "yellowgreen" : "",
-            boxShadow: highlighted ? "0px 0px 20px 10px yellowgreen" : "", 
+            boxShadow: highlighted ? "0px 0px 30px 30px yellowgreen" : "", 
+            transition: "background-color 180ms box-shadow 180ms"
           }}
         >
           {myGCZCardRow.map((cardGroup, index) => (

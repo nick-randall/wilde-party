@@ -4,19 +4,6 @@ const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
 
-//const getEntries = (id: string, obj: object) : any | [string, any] => typeof obj === "object" ? Array.isArray(obj) ? obj.getEntries(id, obj) : getEntries(id, Object.entries(obj)) :
-
-// export const getAllOfType = (type: HighlightType, gameSnapshot:GameSnapshot): (GamePlace | GameCard | GamePlayer)[] => {
-//   if (type === "place") return getAllPlayerPlaces(gameSnapshot);
-//   else if (type === "player") return getAllPlayers(gameSnapshot);
-//   else return getHighlightCards(gameSnapshot);
-// };
-
-// export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] =>
-//   gameSnapshot.players.reduce((acc: GamePlace[], player: GamePlayer) =>
-//   Object.values(player.places));
-//   //acc.concat(Object.values(player.places)));
-
 export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] => {
   let places: GamePlace[] = [];
   gameSnapshot.players.forEach((p: GamePlayer) => Object.values(p.places).forEach(pl => places.push(pl)));
