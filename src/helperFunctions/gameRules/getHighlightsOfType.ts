@@ -12,13 +12,26 @@ const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnPropert
 //   else return getHighlightCards(gameSnapshot);
 // };
 
-export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] =>
-  gameSnapshot.players.reduce((acc: GamePlace[], player: GamePlayer) => Object.values(player.places).forEach(e => acc.push(e)));
+// export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] =>
+//   gameSnapshot.players.reduce((acc: GamePlace[], player: GamePlayer) =>
+//   Object.values(player.places));
+//   //acc.concat(Object.values(player.places)));
 
-export const getAllCards = (gameSnapshot: any): GameCard[] =>
-  gameSnapshot.players.reduce((acc: GameCard[], player: GamePlayer) =>
-    Object.values(player.places).forEach(e => e.cards.forEach((i: GameCard) => acc.concat(i)))
-  );
+export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] => {
+  let places: GamePlace[] = [];
+  gameSnapshot.players.forEach((p: GamePlayer) => Object.values(p.places).forEach(pl => places.push(pl)));
+  return places;
+};
+
+const getPlacesFromPlayer = (player: GamePlayer): GamePlace[] => Object.values(player.places);
+
+const getCardsFromPlace = (place: GamePlace): GameCard[] => place.cards;
+
+export const getAllCards = (gameSnapshot: any): GameCard[] => {
+  let cards: GameCard[] = [];
+  gameSnapshot.players.forEach((p: GamePlayer) => getPlacesFromPlayer(p).forEach(c => cards.concat(getCardsFromPlace(c))));
+  return cards;
+};
 
 export const getAllPlayers = (gameSnapshot: any): GamePlayer[] => gameSnapshot.players;
 

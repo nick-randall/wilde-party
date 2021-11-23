@@ -1,5 +1,5 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
-import { locate3 } from "../locateFunctions";
+import { locate } from "../locateFunctions";
 import { HighlightCardFunction, HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
 const allTrue =
@@ -19,7 +19,7 @@ const allTrueWithArgs =
 
 // add
 export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
-  locate3(highlightPlace.id).place !== "GCZ" ? true : 
+  locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : 
   highlightPlace.cards.length < maxNumGuestCards; 
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
