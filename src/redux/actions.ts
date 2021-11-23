@@ -22,7 +22,7 @@ export type EndGCZRearrange = {
 
 export type SetHandCardDrag = {
   type: "SET_HAND_CARD_DRAG";
-  payload: string | undefined;
+  payload: GameCard | undefined;
 };
 
 export type SetHandCardDraggedOver = {

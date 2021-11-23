@@ -20,8 +20,8 @@ type RearrangingData = {
 
 type SimpleRearrangingData = {
   placeId: string,
-  cardId: string,
-  index: number
+  draggableId: string,
+  sourceIndex: number
 }
 
 type DraggedOverData = {

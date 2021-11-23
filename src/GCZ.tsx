@@ -2,40 +2,38 @@ import { useMemo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
+import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
+import { getCardGroupObjs, getCardRowAndShape, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
+  rearrange: SimpleRearrangingData;
+  draggedOver: UpdateDragData | undefined;
 }
 
 function GCZ(props: GCZProps) {
-  const { id, enchantmentsRowCards, GCZCards } = props;
+  const { id, enchantmentsRowCards, GCZCards, rearrange, draggedOver } = props;
+
+  const index = draggedOver ? draggedOver.index : rearrange.sourceIndex;
+
+  const playingCard = useSelector((state: RootState) => state.draggedHandCard);
+  const ghostCard = playingCard && draggedOver ? playingCard : undefined;
+
   const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
-  let ghostCardGroupData = useSelector((state: RootState) => state.GCZRearrangingData);
-  const draggedHandCard = useSelector((state: RootState)=> state.draggedHandCard)
-  const handCardDraggedOver = useSelector((state: RootState) => state.draggedOverData)
-  console.log(ghostCardGroupData)
-  
-  if(draggedHandCard && handCardDraggedOver)
-    { const cardGroupObj = {id: draggedHandCard.id, size: 1, cards: [draggedHandCard] }
-      const index = handCardDraggedOver.index;
-      const cardRowShape = getCardRowShapeOnDraggedOver(myGCZCardRow)
-      console.log(myGCZCardRow)
-      console.log(cardRowShape)
-      console.log(index, cardRowShape[index])
-     cardRowShape.forEach((e, i) => console.log(e))
-      ghostCardGroupData = {ghostCardsObject: cardGroupObj, index: cardRowShape[index], cardRowShape: cardRowShape}}
-      
-  const dimensions = getAllDimensions(id)
+  const cardRowShape =
+    rearrange.placeId === id ? getCardRowShapeOnRearrange(myGCZCardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(myGCZCardRow);
+  const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
+
+  const dimensions = getAllDimensions(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal">
-      {(provided, snapshot) => ( 
+      {(provided, snapshot) => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
@@ -44,7 +42,7 @@ function GCZ(props: GCZProps) {
             snapshot.isDraggingOver
               ? {
                   display: "flex",
-                  left:100,
+                  left: 100,
                   top: 100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
@@ -55,7 +53,7 @@ function GCZ(props: GCZProps) {
               : {
                   display: "flex",
                   top: 100,
-                  left:100,
+                  left: 100,
                   position: "absolute",
                   height: dimensions.cardHeight * 1.5,
                   minWidth: dimensions.cardWidth,
@@ -68,10 +66,10 @@ function GCZ(props: GCZProps) {
           ))}
           {provided.placeholder}
 
-          {ghostCardGroupData ? (
-            <GhostCardGroup ghostCardGroup={ghostCardGroupData.ghostCardsObject} index={ghostCardGroupData.index} dimensions={dimensions} />
+          {ghostCardGroup ? (
+            <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[index]} dimensions={dimensions} />
           ) : null}
-         
+          {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} /> : null}
         </div>
       )}
     </Droppable>
