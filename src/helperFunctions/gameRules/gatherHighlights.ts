@@ -1,18 +1,16 @@
 import store from "../../redux/store";
 import { getAllCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
 import { getCardFunctions, getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
-import R from "ramda";
+import * as R from "ramda";
 
-export const getHighlights = (draggedCard: GameCard) => {
-  const gameSnapshot = store.getState().gameSnapshot;
+export const getHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  //const gameSnapshot = store.getState().gameSnapshot;
   const { action } = draggedCard;
   const { highlightType } = action;
 
   if (highlightType === "card") return getCardHighlights(draggedCard, gameSnapshot)
   else if (highlightType === "place") return getPlaceHighlights(draggedCard, gameSnapshot)
   else return getPlayerHighlights(draggedCard, gameSnapshot)
-
-
 };
 
 const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
@@ -44,20 +42,3 @@ const getPlayerHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot):
   const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
   return highlights.map((e) => R.prop("id", e))
 };
-
-// export const getHighlights = (draggedCard: GameCard) => {
-//   const gameSnapshot = store.getState().gameSnapshot;
-//   const { action } = draggedCard;
-//   const { highlightType, actionType } = action;
-
-//   // highlightFunctions is a nested object containing all highlight
-//   // functions indexed first by type ("card", "place" or "player") and then
-//   // by actionType ("addDragged", "steal", etc.)
-//   const functions = highlightFunctions[highlightType];
-//   const highlightFunction = functions(actionType);
-
-//   const potentialHighlights: (GameCard | GamePlace | GamePlayer)[] = getAllOfType(highlightType, gameSnapshot);
-
-//   const highlights: (GameCard | GamePlace | GamePlayer)[] = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
-//   const highlightIds: string[] = highlights.map(e => R.prop("id", e));
-// };

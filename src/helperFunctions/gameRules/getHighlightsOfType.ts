@@ -13,7 +13,7 @@ const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnPropert
 // };
 
 export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] =>
-  gameSnapshot.players.reduce((acc: GamePlace[], player: GamePlayer) => Object.values(player.places).forEach(e => acc.concat(e)));
+  gameSnapshot.players.reduce((acc: GamePlace[], player: GamePlayer) => Object.values(player.places).forEach(e => acc.push(e)));
 
 export const getAllCards = (gameSnapshot: any): GameCard[] =>
   gameSnapshot.players.reduce((acc: GameCard[], player: GamePlayer) =>

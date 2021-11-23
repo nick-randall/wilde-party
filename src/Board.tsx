@@ -15,11 +15,14 @@ export const Board = () => {
 
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
-  const state = useSelector((state: RootState)=>state)
+  const highlights = useSelector((state: RootState)=>state.highlights)
+  console.log(highlights)
   
 
-  const handleBeforeCapture = ({ draggableId }: { draggableId: string }) =>
-    dispatch({ type: "SET_HAND_CARD_DRAG", payload: gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) });
+  const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => 
+   
+    dispatch({ type: "SET_HAND_CARD_DRAG", payload: draggableId});
+  
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>
     setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });

@@ -1,12 +1,12 @@
+import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
-// import { getStartDragAction } from "./startDragFunctions";
-// import { onNewGCZRearrange } from "./updateDragActions";
 
 export interface State {
   gameSnapshot: GameSnapshot;
   transitionData: TransitionData[];
   draggedHandCard: GameCard | undefined;
+  highlights: string[];
 }
 
 export const stateReducer = (
@@ -15,13 +15,21 @@ export const stateReducer = (
     //rearrangingData: {placeId: "", index: -1, card: },
     transitionData: [],
     draggedHandCard: undefined,
+    highlights: [],
   },
   action: Action
 ) => {
   switch (action.type) {
-    case "SET_HAND_CARD_DRAG": 
-    return {...state, draggedHandCard: action.payload}
-   
+    case "SET_HAND_CARD_DRAG":
+      const draggableId = action.payload;
+      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId)
+      console.log(draggedHandCard)
+      if (draggedHandCard) {
+        const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
+        return { ...state, draggedHandCard, highlights};
+        //return {...state, draggedHandCard}
+      }
+      return state;
     default:
       return state;
   }
