@@ -21,12 +21,8 @@ export const Board = () => {
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>
     setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
-  //dispatch({ type: "START_DRAG", payload: start });
 
-  //const handleDragUpdate = (d:DragUpdate)({destination} : {destination: DraggableLocation | undefined}) => destination ? setDragUpdate(destination): ()=>{}
   const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
-
-  //(update.destination ? dispatch({ type: "UPDATE_DRAG", payload: update.destination }) : null);
 
   const handleDragEnd = () => {
     setDragUpdate({ droppableId: "", index: -1 });

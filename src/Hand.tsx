@@ -26,7 +26,7 @@ const Hand = (props: HandProps) => {
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled>
       {(provided) => (
         <div
           id={props.id}
