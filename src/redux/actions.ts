@@ -22,7 +22,7 @@ export type EndGCZRearrange = {
 
 export type SetHandCardDrag = {
   type: "SET_HAND_CARD_DRAG";
-  payload: string | undefined;
+  payload: GameCard | undefined;
 };
 
 export type SetHandCardDraggedOver = {
@@ -37,7 +37,7 @@ export type StartDrag = {
 
 export type UpdateDrag = {
   type: "UPDATE_DRAG";
-  payload: DragUpdate;
+  payload: UpdateDragData;
 };
 
 export type EndDrag = {
