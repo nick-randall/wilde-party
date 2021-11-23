@@ -24,8 +24,9 @@ export const Board = () => {
     dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId});
   
 
-  const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>
-    setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
+  const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>{
+    dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId});
+    setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });}
 
   const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
 

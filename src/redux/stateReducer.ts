@@ -24,10 +24,18 @@ export const stateReducer = (
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
       if (draggedHandCard) {
-        const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
-        return { ...state, draggedHandCard, highlights };
+        return { ...state, draggedHandCard };
       }
       return { ...state, draggedHandCard: undefined, highlights: [] };
+    case "SET_HIGHLIGHTS":
+      const draggableId2 = action.payload;
+      const draggedHandCard2 = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
+      if (draggedHandCard2) {
+        const highlights = getHighlights(draggedHandCard2, state.gameSnapshot);
+        console.log(highlights)
+        return { ...state, highlights };
+      } else return state;
+
     default:
       return state;
   }

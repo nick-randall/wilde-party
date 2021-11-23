@@ -35,6 +35,7 @@ export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCa
 };
 
 export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  //locate(highlightPlace.id, gameSnapshot).place
   console.log("warning: logic for this test not implemented");
   return true;
 };

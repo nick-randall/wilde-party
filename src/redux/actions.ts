@@ -12,7 +12,7 @@ export type SetHandCardDrag = {
 
 export type SetHighlights = {
   type: "SET_HIGHLIGHTS";
-  payload: GameCard | undefined;
+  payload: string | undefined;
 }
 
 export type EndDrag = {

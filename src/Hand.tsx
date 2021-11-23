@@ -19,7 +19,7 @@ const Hand = (props: HandProps) => {
   const spread = !handCardDragged && mouseOverHand ? 125 : 35;
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={false}>
       {provided => (
         <div
           id={props.id}
