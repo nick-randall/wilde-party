@@ -6,6 +6,11 @@ type GCZRearrangingData = {
 
 }
 
+type SimpleGCZRearrangingData = {
+  cardGroupId: string,
+  index: number,
+}
+
 
 type RearrangingData = {
   placeId: string,
@@ -13,7 +18,21 @@ type RearrangingData = {
   index: number
 }
 
+type SimpleRearrangingData = {
+  placeId: string,
+  cardId: string,
+  index: number
+}
+
 type DraggedOverData = {
   placeId: string,
+  index: number
+}
+
+
+
+
+type UpdateDragData = {
+  droppableId: string,
   index: number
 }

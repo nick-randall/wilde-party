@@ -10,18 +10,15 @@ import { getIdListObject } from "./helperFunctions/getIdList";
 export const Board = () => {
   const dispatch = useDispatch();
 
-  const g = useSelector((state:RootState) => state.GCZRearrangingData)
-  console.log(g)
+  const g = useSelector((state: RootState) => state.GCZRearrangingData);
+  console.log(g);
 
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
 
-  const handleDragStart = (start: DragStart) => dispatch({type: "START_DRAG", payload: start})
-   
+  const handleDragStart = (start: DragStart) => dispatch({ type: "START_DRAG", payload: start });
 
-  const handleDragUpdate = (update: DragUpdate) => 
-    dispatch({type: "UPDATE_DRAG", payload: update})
-  
+  const handleDragUpdate = (update: DragUpdate) => (update.destination ? dispatch({ type: "UPDATE_DRAG", payload: update.destination }) : null);
 
   const handleDragEnd = (result: DropResult) => {
     const sourceId = result.source.droppableId;
@@ -35,7 +32,7 @@ export const Board = () => {
     // and just droppping into nothing (destination === null)
 
     const targetIndex = result.destination?.index;
-    console.log(targetIndex)
+    console.log(targetIndex);
     const { place: sourcePlace } = locate3(sourceId);
     switch (sourcePlace) {
       case "hand":
@@ -51,7 +48,9 @@ export const Board = () => {
     console.log(result.destination);
   };
 
-  const onBeforeCapture = (data: BeforeCapture) => dispatch({ type: "SET_HAND_CARD_DRAG", payload: data.draggableId });
+  const onBeforeCapture = ({draggableId} : {draggableId: string}) => dispatch({ type: "SET_HAND_CARD_DRAG", payload: draggableId });
+
+  
 
   return (
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={onBeforeCapture}>

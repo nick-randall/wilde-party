@@ -29,6 +29,19 @@ const startGCZRearrangeFunc = (stateCopy: RootState, data: DragStart): RootState
   return stateCopy;
 };
 
+const onGCZRearrangeStart = (gameSnapshot: GameSnapshot, data: DragStart): GCZRearrangingData => {
+  const { index } = data.source;
+  const { draggableId } = data;
+  const { GCZRow, shape } = getCardRowAndShape(gameSnapshot, index);
+  return {
+    cardRowShape: shape,
+    index: shape[index],
+    ghostCardsObject: GCZRow.filter(cardGroup => cardGroup.id === draggableId)[0],
+  };
+};
+
+//const onRearrangeStart = (gameSnapshot: GameSnapshot, data: DragStart): RearrangingData =>{}
+
 const startRearrangeFunc = (stateCopy: RootState, data: DragStart): RootState => {
   const sourceIndex = data.source.index;
   const { draggableId } = data;

@@ -4,17 +4,26 @@ import { locate2 } from "../helperFunctions/locateFunctions";
 import { UpdateDrag } from "./actions";
 import { RootState } from "./store";
 
-
 export const getUpdateDragAction = (state: RootState, action: UpdateDrag) => {
   if (state.GCZRearrangingData !== undefined) return updateGCZRearrange;
   if (state.rearrangingData !== undefined) return updatePlaceRearrange;
   // If hand card is dragged over place that can accept it.
   if (state.draggedHandCard !== undefined) return updateDraggedOver;
-  console.log("nope")
+  console.log("nope");
   return doNothing;
 };
 
 const doNothing = (state: RootState, update: DragUpdate) => state;
+
+export const onNewGCZRearrange = (GCZRearrangingData: GCZRearrangingData, { index }: { index: number }): GCZRearrangingData => {
+  const { cardRowShape } = GCZRearrangingData;
+  const newIndex = cardRowShape[index];
+  return { ...GCZRearrangingData, index: newIndex };
+};
+
+const onNewRearrange = (placeId: string, index: number) => 
+
+//const onNewPlaceRearrange
 
 const updateGCZRearrange = (state: RootState, update: DragUpdate) => {
   if (state.GCZRearrangingData && update.destination) {

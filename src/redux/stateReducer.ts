@@ -4,12 +4,12 @@ import { locate, locate3 } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { getStartDragAction } from "./startDragFunctions";
-import getUpdateDragAction from "./updateDragActions";
+import getUpdateDragAction, { onNewGCZRearrange } from "./updateDragActions";
 
 export interface State {
   gameSnapshot: GameSnapshot;
-  GCZRearrangingData: GCZRearrangingData | undefined;
-  rearrangingData: RearrangingData | undefined;
+  GCZRearrangingData: GCZRearrangingData;
+  rearrangingData: RearrangingData;
   transitionData: TransitionData[];
   draggedHandCard: GameCard | undefined;
   draggedOverData: DraggedOverData | undefined;
@@ -18,8 +18,8 @@ export interface State {
 export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
-    GCZRearrangingData: undefined,
-    rearrangingData: undefined,
+    GCZRearrangingData: {ghostCardsObject: , index: -1},
+    rearrangingData: {placeId: "", index: -1, card: },
     transitionData: [],
     draggedHandCard: undefined,
     draggedOverData: undefined,
@@ -31,7 +31,7 @@ export const stateReducer = (
       let stateCopy = { ...state };
       const { droppableId } = action.payload.source;
       const { place: sourcePlace } = locate(droppableId, stateCopy.gameSnapshot);
-      console.log(sourcePlace)
+      console.log(sourcePlace);
       if (sourcePlace === "GCZ") {
         const { index } = action.payload.source;
         const { draggableId } = action.payload;
@@ -47,13 +47,12 @@ export const stateReducer = (
       } else return state;
 
     case "UPDATE_DRAG":
-      const updateDragAction = getUpdateDragAction(state, action);
+      const { droppableId: targetPlace, index } = action.payload;
+      if (locate(targetPlace, state.gameSnapshot).place === "GCZ") {
+        return onNewGCZRearrange(state.GCZRearrangingData, action.payload);
+      }
 
-      let stateCopy2 = { ...state };
-      console.log(stateCopy2.GCZRearrangingData);
-      stateCopy2 = updateDragAction(state, action.payload);
-
-      return stateCopy2;
+      else return {...state, ...action.payload}
 
     //  case "END_DRAG" :
     //  const

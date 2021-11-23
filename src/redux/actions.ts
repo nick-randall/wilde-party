@@ -37,7 +37,7 @@ export type StartDrag = {
 
 export type UpdateDrag = {
   type: "UPDATE_DRAG";
-  payload: DragUpdate;
+  payload: UpdateDragData;
 };
 
 export type EndDrag = {
