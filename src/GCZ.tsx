@@ -5,7 +5,7 @@ import CardGroup from "./CardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupObjs, getCardRowAndShape, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
@@ -21,54 +21,42 @@ function GCZ(props: GCZProps) {
 
   const index = draggedOver ? draggedOver.index : rearrange.sourceIndex;
 
-  const playingCard = useSelector((state: RootState) => state.draggedHandCard);
-  const ghostCard = playingCard && draggedOver ? playingCard : undefined;
+  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
   const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
   const cardRowShape =
     rearrange.placeId === id ? getCardRowShapeOnRearrange(myGCZCardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(myGCZCardRow);
   const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
 
+  const highlighted = useSelector((state: RootState) => state.highlights.includes(id))
+
   const dimensions = getAllDimensions(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal">
-      {(provided, snapshot) => (
+      {(provided) => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
           ref={provided.innerRef}
-          style={
-            snapshot.isDraggingOver
-              ? {
-                  display: "flex",
-                  left: 100,
-                  top: 100,
-                  position: "absolute",
-                  height: dimensions.cardHeight * 1.5,
-                  minWidth: dimensions.cardWidth,
-                  boxShadow: "4px 4px 4px",
-                  backgroundColor: "green",
-                }
-              : {
-                  display: "flex",
-                  top: 100,
-                  left: 100,
-                  position: "absolute",
-                  height: dimensions.cardHeight * 1.5,
-                  minWidth: dimensions.cardWidth,
-                  boxShadow: "4px 4px 4px",
-                }
-          }
+          style={{
+            display: "flex",
+            top: 100,
+            left: 100,
+            position: "absolute",
+            height: dimensions.cardHeight * 1.5,
+            minWidth: dimensions.cardWidth,
+            backgroundColor: highlighted ? "yellowgreen" : "",
+            boxShadow: highlighted ? "0px 0px 20px 10px yellowgreen" : "", 
+          }}
         >
           {myGCZCardRow.map((cardGroup, index) => (
             <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
           ))}
           {provided.placeholder}
 
-          {ghostCardGroup ? (
-            <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[index]} dimensions={dimensions} />
-          ) : null}
+          {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[index]} dimensions={dimensions} /> : null}
           {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} /> : null}
         </div>
       )}

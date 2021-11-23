@@ -37,7 +37,7 @@ const HandCard = (props: HandCardProps) => {
     const element = cardRef.current;
     if (element) {
       const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom } = element.getBoundingClientRect();
-      setMousePosition(event, boundingBoxLeft, boundingBoxTop);
+      setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
     }
   };
 

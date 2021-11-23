@@ -22,14 +22,14 @@ export const stateReducer = (
   switch (action.type) {
     case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
-      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId)
-      console.log(draggedHandCard)
+      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
+      console.log(draggedHandCard);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
-        return { ...state, draggedHandCard, highlights};
+        return { ...state, draggedHandCard, highlights };
         //return {...state, draggedHandCard}
       }
-      return {...state, draggedHandCard: undefined};
+      return { ...state, draggedHandCard: undefined, highlights: [] };
     default:
       return state;
   }

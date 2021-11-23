@@ -73,48 +73,48 @@ export const myGCZCards: GameCard[] = [
     guestCardType: "schleckermaul", //???
      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
-  {
-    id: "fffff",
-    name: "rumgroelerin2",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
-    index: 5,
-    image: "rumgroelerin2", //TODO change
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    cardType: "guest",
-    guestCardType: "rumgroelerin", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
-  {
-    id: "kkkkkkkkk",
-    name: "rumgroelerin",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
-    index: 6,
-    image: "rumgroelerin", //TODO change
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    cardType: "guest",
-    guestCardType: "rumgroelerin", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
-  {
-    id: "hosey",
-    name: "rumgroelerin3",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
-    index: 7,
-    image: "rumgroelerin3", 
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    cardType: "guest",
-    guestCardType: "rumgroelerin",
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
+  // {
+  //   id: "fffff",
+  //   name: "rumgroelerin2",
+  //   placeId: "pd0s9fd",
+  //   playerId: "l93fld9",
+  //   index: 5,
+  //   image: "rumgroelerin2", //TODO change
+  //   pointValue: 1,
+  //   bffs: false,
+  //   zwilling: false,
+  //   cardType: "guest",
+  //   guestCardType: "rumgroelerin", //???
+  //    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
+  // {
+  //   id: "kkkkkkkkk",
+  //   name: "rumgroelerin",
+  //   placeId: "pd0s9fd",
+  //   playerId: "l93fld9",
+  //   index: 6,
+  //   image: "rumgroelerin", //TODO change
+  //   pointValue: 1,
+  //   bffs: false,
+  //   zwilling: false,
+  //   cardType: "guest",
+  //   guestCardType: "rumgroelerin", //???
+  //    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
+  // {
+  //   id: "hosey",
+  //   name: "rumgroelerin3",
+  //   placeId: "pd0s9fd",
+  //   playerId: "l93fld9",
+  //   index: 7,
+  //   image: "rumgroelerin3", 
+  //   pointValue: 1,
+  //   bffs: false,
+  //   zwilling: false,
+  //   cardType: "guest",
+  //   guestCardType: "rumgroelerin",
+  //    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
 ];
 
 export const myHandCards: GameCard[] = [
