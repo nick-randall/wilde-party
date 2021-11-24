@@ -1,4 +1,4 @@
-import { DropResult } from "react-beautiful-dnd";
+import { DragStart, DropResult } from "react-beautiful-dnd";
 
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
@@ -15,6 +15,11 @@ export type SetHighlights = {
   payload: string | undefined;
 }
 
+export type AllowRearranging = {
+  type: "ALLOW_REARRANGING";
+  payload: string;
+}
+
 export type Rearrange = {
   type:"REARRANGE",
   payload: DropResult
@@ -29,4 +34,5 @@ export type Action =
   | RemoveTransition
   | SetHandCardDrag
   | SetHighlights
-  | Rearrange;
+  | Rearrange
+  | AllowRearranging;

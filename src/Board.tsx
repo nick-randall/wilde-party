@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
-import { locate3 } from "./helperFunctions/locateFunctions";
+import { locate, locate3 } from "./helperFunctions/locateFunctions";
 import { getCardGroupObjs, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
@@ -25,7 +25,7 @@ export const Board = () => {
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
-    dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+    locate3(source.droppableId).place === "hand" ? dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId }) : dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
     setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
   };
 

@@ -20,6 +20,8 @@ export const stateReducer = (
   action: Action
 ) => {
   switch (action.type) {
+    // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
+    // be altered
     case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
@@ -27,6 +29,10 @@ export const stateReducer = (
         return { ...state, draggedHandCard };
       }
       return { ...state, draggedHandCard: undefined, highlights: [] };
+    // Set rearranging place to "highlighted" to turn off isDropDisabled there
+    case "ALLOW_REARRANGING" :
+      const droppableId = action.payload;
+      return {...state, highlights: [droppableId]}
     case "SET_HIGHLIGHTS":
       const draggableId2 = action.payload;
       const draggedHandCard2 = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);

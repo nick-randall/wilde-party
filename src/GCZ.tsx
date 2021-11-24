@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
@@ -29,13 +29,16 @@ function GCZ(props: GCZProps) {
     rearrange.placeId === id ? getCardRowShapeOnRearrange(myGCZCardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(myGCZCardRow);
   const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
 
-  const highlighted = useSelector((state: RootState) => state.highlights.includes(id))
-  console.log(highlighted)
+  const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id))
+ 
+
+
+  console.log(isHighlighted)
 
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!highlighted}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!isHighlighted}>
       {(provided) => (
         <div
           className="pl0GCZ"
@@ -48,9 +51,9 @@ function GCZ(props: GCZProps) {
             position: "absolute",
             height: dimensions.cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
-            backgroundColor: highlighted ? "yellowgreen" : "",
-            boxShadow: highlighted ? "0px 0px 30px 30px yellowgreen" : "", 
-            transition: "background-color 180ms box-shadow 180ms"
+            backgroundColor: isHighlighted ? "yellowgreen" : "",
+            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "", 
+            transition: "180ms"
           }}
         >
           {myGCZCardRow.map((cardGroup, index) => (
