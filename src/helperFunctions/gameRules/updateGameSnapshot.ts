@@ -36,9 +36,7 @@ export const updateRearrange = (draggedCards: GameCard[], draggedOverIndex: numb
       draft.players[0].places[placeType].cards.forEach((card, index) => (card.index = index));
     });
 
-  const changeCardIndex = (card: GameCard, change: number) => ({ ...Object.entries(card), index : card.index += change})
-
-  //const rearrangeCards = (cardGroup: CardGroupObj, indexChange: number, gameSnapshot: GameSnapshot) => cardGroup.cards.map(c => changeCardIndex(c))
+   
   
   
     
@@ -52,5 +50,25 @@ export const updateRearrange = (draggedCards: GameCard[], draggedOverIndex: numb
      
     // });
   });
+
+  const changeCardIndex = (card: GameCard, change: number) => {
+    let cardCopy = { ...card };
+    cardCopy.index = card.index += change;
+    return card;
+  }
+export const rearrangeCards = (cardGroup: CardGroupObj, indexChange: number, gameSnapshot: GameSnapshot) => cardGroup.cards.map(c => changeCardIndex(c, indexChange))
+
+const extractCards = (cardGroups: CardGroupObj[]) => (cardGroups.map(g => g.cards));
+
+const filterByPlace = (cardGroup: CardGroupObj, placeId: string): CardGroupObj => ({...cardGroup, cards: cardGroup.cards.filter(card => card.placeId === placeId)})
+
+const filterAllByPlace = (placeId: string) => (cardGroups: CardGroupObj[]) => cardGroups.map(g => filterByPlace(g, placeId))
+
+const assignNewIndexes = (cardGroups: CardGroup[]) => cardGroups.map((cardGroup, index) => cardGroup.map((card, index2) => ({...card, index : index + index2})))
+
+const curriedNormalizePlaceCards = (gameSnapshot: GameSnapshot) => (placeId: string) => R.pipe(getCardGroupObjsFromSnapshot, filterAllByPlace(placeId), extractCards, assignNewIndexes, R.flatten)(gameSnapshot)
+
+export const normalizePlaceCards = (gameSnapshot: GameSnapshot, placeId: string) => curriedNormalizePlaceCards(gameSnapshot)(placeId)
+
 
 // this updates state only

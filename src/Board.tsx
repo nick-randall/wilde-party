@@ -7,6 +7,7 @@ import { locate, locate3 } from "./helperFunctions/locateFunctions";
 import { getCardGroupObjs, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
+import Card from "./Card";
 
 export const Board = () => {
   const dispatch = useDispatch();
@@ -17,15 +18,14 @@ export const Board = () => {
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState) => state.highlights);
 
-  
-  const changeCardIndex = (card: GameCard, change: number) => ({ ...Object.entries(card), index : card.index += change})
-  console.log(changeCardIndex(gameSnapshot.players[0].places.GCZ.cards[0], 2))
 
 
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
-    locate3(source.droppableId).place === "hand" ? dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId }) : dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
+    locate3(source.droppableId).place === "hand"
+      ? dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId })
+      : dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
     setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
   };
 

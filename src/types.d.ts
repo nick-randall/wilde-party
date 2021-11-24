@@ -55,7 +55,8 @@ type OriginalStyles = {
 
 type LegalTargetType = "player" | "place" | "card";
 
-type GameCard = {
+type GameCard =  {
+  [key: string]: value;
   id: string;
   name: string;
   playerId?: string; // player should be an id ??
@@ -72,6 +73,7 @@ type GameCard = {
   numGuestPlaces?:number
   action: CardAction;
 };
+
 
 type PlaceActionType = "addDragged" 
 
