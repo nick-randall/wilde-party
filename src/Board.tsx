@@ -15,23 +15,33 @@ export const Board = () => {
 
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
-  const highlights = useSelector((state: RootState)=>state.highlights)
+  const highlights = useSelector((state: RootState) => state.highlights);
 
-  const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => 
-   
-    dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId});
   
+  const changeCardIndex = (card: GameCard, change: number) => ({ ...Object.entries(card), index : card.index += change})
+  console.log(changeCardIndex(gameSnapshot.players[0].places.GCZ.cards[0], 2))
 
-  const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) =>{
-    dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId});
-    setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });}
+
+  const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
+
+  const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
+    dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+    setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
+  };
 
   const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
 
-  const handleDragEnd = () => {
+  const hasMoved = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
+
+  const movedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
+
+  const isRearrange = (d: DropResult) => hasMoved(d) && movedWithinOnePlace(d);
+
+  const handleDragEnd = (d: DropResult) => {
+    if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: d });
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
-    dispatch({type: "SET_DRAGGED_HAND_CARD", payload: undefined})
+    dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: undefined });
   };
 
   return (

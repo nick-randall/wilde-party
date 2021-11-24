@@ -55,7 +55,7 @@ const getCardGroupObjsFromGCZAndEnchantRow = ({
   GCZCards: GameCard[];
 }): CardGroupObj[] => pipe(getCardGroupsArray, filterOutDuplicates, convertCardGroupToObj)(enchantmentsCards, GCZCards);
 
-const getCardGroupObjsFromSnapshot = (gameSnapshot: GameSnapshot): CardGroupObj[] =>
+export const getCardGroupObjsFromSnapshot = (gameSnapshot: GameSnapshot): CardGroupObj[] =>
   pipe(getGCZAndEnchantRowFromSnapshot, getCardGroupsArrayFromSnapshot, filterOutDuplicates, convertCardGroupToObj)(gameSnapshot);
 
 const curriedGetCardRowShapeFromSnapshot = (sourceIndex: number) => (gameSnapshot: GameSnapshot) =>

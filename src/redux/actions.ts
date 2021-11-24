@@ -15,6 +15,11 @@ export type SetHighlights = {
   payload: string | undefined;
 }
 
+export type Rearrange = {
+  type:"REARRANGE",
+  payload: DropResult
+}
+
 export type EndDrag = {
   type: "END_DRAG";
   payload: DropResult;
@@ -23,4 +28,5 @@ export type EndDrag = {
 export type Action =
   | RemoveTransition
   | SetHandCardDrag
-  | SetHighlights;
+  | SetHighlights
+  | Rearrange;

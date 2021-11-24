@@ -309,7 +309,7 @@ export const initialGamePlayers: GamePlayer[] = [
   },
 ];
 
-const initialGameSnapshot: GameSnapshot = {
+export const initialGameSnapshot: GameSnapshot = {
   players: [
     {
       id: "l93fld9",
@@ -416,6 +416,7 @@ const initialGameSnapshot: GameSnapshot = {
 };
 
 // sorts cards into their correct order based on their index according to the DB
+// should probably be called "normaliseSnapshot"
 export const convertSnapshot = (gameSnapshot: GameSnapshot) => {
   gameSnapshot.players.forEach(p => Object.values(p.places).forEach(pl => pl.cards.sort((c, d) => c.index - d.index)));
   Object.values(gameSnapshot.nonPlayerPlaces).forEach(pl => pl.cards.sort((c, d) => c.index - d.index));

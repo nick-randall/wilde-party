@@ -1,5 +1,5 @@
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { convertedSnapshot } from "../initialCards";
+import { convertedSnapshot, initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 
 export interface State {
@@ -11,7 +11,7 @@ export interface State {
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: convertedSnapshot,
+    gameSnapshot: initialGameSnapshot,
     //rearrangingData: {placeId: "", index: -1, card: },
     transitionData: [],
     draggedHandCard: undefined,
@@ -35,8 +35,11 @@ export const stateReducer = (
         console.log(highlights)
         return { ...state, highlights };
       } else return state;
+      // case "REARRANGE":
+      // const { source, destination } = action.payload;
+      
 
-    default:
+    default:  
       return state;
   }
 };

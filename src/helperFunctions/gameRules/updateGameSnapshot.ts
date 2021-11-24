@@ -1,5 +1,7 @@
 import { locate } from "../locateFunctions";
 import { produce } from "immer";
+import { getCardGroupObjs, getCardGroupObjsFromSnapshot } from "../groupGCZCards";
+import * as R from "ramda"
 
 const addDraggedCard = (draggedCard: GameCard, placeId: string, index: number, gameSnapshot: GameSnapshot) => {
   const { place, player } = locate(placeId, gameSnapshot);
@@ -34,7 +36,11 @@ export const updateRearrange = (draggedCards: GameCard[], draggedOverIndex: numb
       draft.players[0].places[placeType].cards.forEach((card, index) => (card.index = index));
     });
 
-  const rearrangeCards = (dragGroup: CardGroupObj, indexChange: number, gameSnapshot: GameSnapshot) => dragGroup.cards.map(d => d.index)
+  const changeCardIndex = (card: GameCard, change: number) => ({ ...Object.entries(card), index : card.index += change})
+
+  //const rearrangeCards = (cardGroup: CardGroupObj, indexChange: number, gameSnapshot: GameSnapshot) => cardGroup.cards.map(c => changeCardIndex(c))
+  
+  
     
 
     // draggedCards.forEach((draggedCard) => {
