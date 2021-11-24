@@ -16,8 +16,6 @@ export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState)=>state.highlights)
-  console.log(highlights)
-  
 
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => 
    

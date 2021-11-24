@@ -33,6 +33,8 @@ export const updateRearrange = (draggedCards: GameCard[], draggedOverIndex: numb
       draft.players[0].places[placeType].cards.splice(draggedOverIndex + indexOffset, 0, ...splicedCards);
       draft.players[0].places[placeType].cards.forEach((card, index) => (card.index = index));
     });
+
+  const rearrangeCards = (dragGroup: CardGroupObj, indexChange: number, gameSnapshot: GameSnapshot) => dragGroup.cards.map(d => d.index)
     
 
     // draggedCards.forEach((draggedCard) => {

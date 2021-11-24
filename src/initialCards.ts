@@ -1,6 +1,5 @@
-
 // Sort Queries by index so the array structure reflects the
-export const myGCZCards: GameCard[] = [
+ const myGCZCards: GameCard[] = [
   {
     id: "092832908423",
     name: "saufnase1",
@@ -13,7 +12,7 @@ export const myGCZCards: GameCard[] = [
     bffs: false,
     zwilling: false,
     guestCardType: "saufnase", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
 
   {
@@ -28,7 +27,7 @@ export const myGCZCards: GameCard[] = [
     bffs: false,
     zwilling: false,
     guestCardType: "saufnase", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
 
   {
@@ -43,7 +42,7 @@ export const myGCZCards: GameCard[] = [
     bffs: false,
     zwilling: false,
     guestCardType: "taenzerin", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
   {
     id: "50340395343",
@@ -57,7 +56,7 @@ export const myGCZCards: GameCard[] = [
     zwilling: false,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
   {
     id: "a953433",
@@ -71,7 +70,7 @@ export const myGCZCards: GameCard[] = [
     zwilling: false,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
   // {
   //   id: "fffff",
@@ -107,7 +106,7 @@ export const myGCZCards: GameCard[] = [
   //   placeId: "pd0s9fd",
   //   playerId: "l93fld9",
   //   index: 7,
-  //   image: "rumgroelerin3", 
+  //   image: "rumgroelerin3",
   //   pointValue: 1,
   //   bffs: false,
   //   zwilling: false,
@@ -130,7 +129,7 @@ export const myHandCards: GameCard[] = [
     bffs: false,
     zwilling: false,
     guestCardType: "schleckermaul", //???
-     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
   {
     id: "123123",
@@ -144,7 +143,7 @@ export const myHandCards: GameCard[] = [
     image: "barkeeper",
     cardType: "special",
     specialsCardType: "saufnase",
-     action: { actionType: "addDragged", highlightType: "card", placeHighlightType: "specialsZone" },
+    action: { actionType: "addDragged", highlightType: "card", placeHighlightType: "specialsZone" },
   },
   {
     id: "sdvklmklm",
@@ -157,12 +156,10 @@ export const myHandCards: GameCard[] = [
     zwilling: false,
     image: "bffs1",
     cardType: "bff",
-     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
-  
 ];
-export const myEnchantmentsRowCards: GameCard[]  = [
-  
+export const myEnchantmentsRowCards: GameCard[] = [
   {
     id: "asdf2r42345",
     name: "zwilling2",
@@ -174,7 +171,7 @@ export const myEnchantmentsRowCards: GameCard[]  = [
     zwilling: false,
     image: "zwilling",
     cardType: "zwilling",
-     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
   // {
   //   id: "3w3323434",
@@ -191,7 +188,7 @@ export const myEnchantmentsRowCards: GameCard[]  = [
   // },
 ];
 
-const mySpecialsZoneCards: GameCard [] = [
+const mySpecialsZoneCards: GameCard[] = [
   {
     id: "9d2304jf",
     name: "partypizza",
@@ -262,8 +259,7 @@ const mySpecialsZoneCards: GameCard [] = [
     specialsCardType: "saufnase",
     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
-
-]
+];
 
 export const initialGamePlayers: GamePlayer[] = [
   {
@@ -313,8 +309,7 @@ export const initialGamePlayers: GamePlayer[] = [
   },
 ];
 
-
-export const initialGameSnapshot: GameSnapshot = {
+const initialGameSnapshot: GameSnapshot = {
   players: [
     {
       id: "l93fld9",
@@ -419,3 +414,12 @@ export const initialGameSnapshot: GameSnapshot = {
     },
   },
 };
+
+// sorts cards into their correct order based on their index according to the DB
+export const convertSnapshot = (gameSnapshot: GameSnapshot) => {
+  gameSnapshot.players.forEach(p => Object.values(p.places).forEach(pl => pl.cards.sort((c, d) => c.index - d.index)));
+  Object.values(gameSnapshot.nonPlayerPlaces).forEach(pl => pl.cards.sort((c, d) => c.index - d.index));
+  return gameSnapshot;
+};
+
+export const convertedSnapshot = convertSnapshot(initialGameSnapshot)

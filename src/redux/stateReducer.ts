@@ -1,5 +1,5 @@
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { initialGameSnapshot } from "../initialCards";
+import { convertedSnapshot } from "../initialCards";
 import { Action } from "./actions";
 
 export interface State {
@@ -11,7 +11,7 @@ export interface State {
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: initialGameSnapshot,
+    gameSnapshot: convertedSnapshot,
     //rearrangingData: {placeId: "", index: -1, card: },
     transitionData: [],
     draggedHandCard: undefined,
