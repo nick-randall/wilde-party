@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
-import { normalizePlaceCards } from "./helperFunctions/gameRules/updateGameSnapshot";
+import { normalizePlaceCards, updateGCZAfterRearrange } from "./helperFunctions/gameRules/updateGameSnapshot";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
@@ -25,18 +25,20 @@ function GCZ(props: GCZProps) {
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
-  const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
+  const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot)
+  const {updatedEnchantmentsRow, updatedGCZ } = updateGCZAfterRearrange(gameSnapshot, 2, 3)
+
+  const myGCZCardRow = useMemo(() => getCardGroupObjs(updatedEnchantmentsRow, updatedGCZ), [updatedGCZ, updatedEnchantmentsRow]);
   const cardRowShape =
     rearrange.placeId === id ? getCardRowShapeOnRearrange(myGCZCardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(myGCZCardRow);
   const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
 
   const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id))
- const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot)
-
-  console.log(normalizePlaceCards(gameSnapshot, "324562132300" ))
-  console.log(normalizePlaceCards(gameSnapshot, id))
 
   console.log(isHighlighted)
+
+
+
 
   const dimensions = getAllDimensions(id);
 

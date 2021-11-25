@@ -1,13 +1,13 @@
-import { BeforeCapture, DragDropContext, DraggableLocation, DragStart, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
-import { locate, locate3 } from "./helperFunctions/locateFunctions";
-import { getCardGroupObjs, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
+import { locate3 } from "./helperFunctions/locateFunctions";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
-import Card from "./Card";
+import { updateGCZAfterRearrange } from "./helperFunctions/gameRules/updateGameSnapshot";
+import { getCardGroupObjsFromSnapshot, getCardRowAndShape } from "./helperFunctions/groupGCZCards";
 
 export const Board = () => {
   const dispatch = useDispatch();
@@ -17,9 +17,7 @@ export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState) => state.highlights);
-
-
-
+  
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
