@@ -82,18 +82,18 @@ const normalizePlaceCardsFromCardGroups = (cardGroups: CardGroupObj[], placeId: 
 // const normalizePlaceCardsFromCardGroups = (cardGroups: CardGroupObj[], placeId: string): GameCard[] =>
 //   curriedNormalizePlaceCardsFromCardGroups(cardGroups)(placeId);
 
-const curriedReturnNormalizedCardGroups =   (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) =>{
+const curriedReturnNormalizedCardGroups = (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) => {
   const { pl0GCZ, pl0enchantmentsRow } = getIdListObject(gameSnapshot);
   return {
-    updatedGCZ: normalizePlaceCardsFromCardGroups(cardGroups, pl0GCZ),
-    updatedEnchantmentsRow: normalizePlaceCardsFromCardGroups(cardGroups, pl0enchantmentsRow),
+    updatedGCZCards: normalizePlaceCardsFromCardGroups(cardGroups, pl0GCZ),
+    updatedEnchantmentsRowCards: normalizePlaceCardsFromCardGroups(cardGroups, pl0enchantmentsRow),
   };
 };
 
 // const returnNormalizedCardGroups = (cardGroups: CardGroupObj[], gameSnapshot: GameSnapshot) =>
 //   curriedReturnNormalizedCardGroups(cardGroups)(gameSnapshot);
 
-/// my GOAL is to return an object with {updatedER: [,], updatedGCZ: [x,x,x] }
+/// my GOAL is to return an object with {updatedER: [,], updatedGCZCards: [x,x,x] }
 
 // const moveCardGroup = (currIndex: number, newIndex: number) : CardGroupObj[] => {
 //   const [splicedCard] = array.splice(currIndex, 1);
@@ -102,17 +102,33 @@ const curriedReturnNormalizedCardGroups =   (gameSnapshot: GameSnapshot) => (car
 //   return array;
 // };
 
-const curriedMoveCardGroup = (currIndex: number, newIndex: number) => (array: CardGroupObj[]) : CardGroupObj[]  => {
-  const [splicedCard] = array.splice(currIndex, 1);
-  array.splice(newIndex, 0, splicedCard);
-  // const splicedCard =  array.splice(array.indexOf(array.map((e: any) => e.id)), 1)
-  return array;
-};
+const curriedMoveCardGroup =
+  (currIndex: number, newIndex: number) =>
+  (array: CardGroupObj[]): CardGroupObj[] => {
+    const [splicedCard] = array.splice(currIndex, 1);
+    array.splice(newIndex, 0, splicedCard);
+    // const splicedCard =  array.splice(array.indexOf(array.map((e: any) => e.id)), 1)
+    return array;
+  };
 
-const partiallyAppliedUpdateAfterGCZRearrange =  (currIndex: number, newIndex: number) => (gameSnapshot: GameSnapshot)  =>
-  R.pipe(getCardGroupObjsFromSnapshot, curriedMoveCardGroup(currIndex, newIndex), curriedReturnNormalizedCardGroups(gameSnapshot))(gameSnapshot);
+const curriedUpdateGameSnapshotWithNewGCZAndEnchant = (gameSnapshot: GameSnapshot) =>  (
+  { updatedGCZCards, updatedEnchantmentsRowCards }: { updatedGCZCards: GameCard[]; updatedEnchantmentsRowCards: GameCard[] },
+ 
+) => {
+  
+    const enchantCards = R.lensPath(['players', 0, 'places', 'enchantmentsRow', 'cards'])
+    const snapshotWithUpdatedEnchantCards = R.set(enchantCards, updatedEnchantmentsRowCards, gameSnapshot)
+    const GCZCards = R.lensPath(['players', 0, 'places', 'GCZ', 'cards'])
+    const snapshotwithBothUpdated = R.set(GCZCards, updatedGCZCards, snapshotWithUpdatedEnchantCards)
+    return snapshotwithBothUpdated;
 
-export const updateGCZAfterRearrange = (gameSnapshot: GameSnapshot, currIndex: number, newIndex: number) => partiallyAppliedUpdateAfterGCZRearrange(currIndex, newIndex)(gameSnapshot)
+}
+
+const partiallyAppliedUpdateAfterGCZRearrange = (currIndex: number, newIndex: number) => (gameSnapshot: GameSnapshot) =>
+  R.pipe(getCardGroupObjsFromSnapshot, curriedMoveCardGroup(currIndex, newIndex), curriedReturnNormalizedCardGroups(gameSnapshot), curriedUpdateGameSnapshotWithNewGCZAndEnchant(gameSnapshot))(gameSnapshot);
+
+export const updateGCZAfterRearrange = (gameSnapshot: GameSnapshot, currIndex: number, newIndex: number) =>
+  partiallyAppliedUpdateAfterGCZRearrange(currIndex, newIndex)(gameSnapshot);
 
 const moveItem = (currIndex: number, newIndex: number, array: any) => {
   const splicedCard = array.splice(currIndex, 1);

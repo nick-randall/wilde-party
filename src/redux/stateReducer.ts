@@ -1,4 +1,7 @@
+import { DraggableLocation } from "react-beautiful-dnd";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
+import { updateGCZAfterRearrange } from "../helperFunctions/gameRules/updateGameSnapshot";
+import { locate } from "../helperFunctions/locateFunctions";
 import { convertedSnapshot, initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 
@@ -8,6 +11,8 @@ export interface State {
   draggedHandCard: GameCard | undefined;
   highlights: string[];
 }
+
+const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
 
 export const stateReducer = (
   state: State = {
@@ -30,22 +35,29 @@ export const stateReducer = (
       }
       return { ...state, draggedHandCard: undefined, highlights: [] };
     // Set rearranging place to "highlighted" to turn off isDropDisabled there
-    case "ALLOW_REARRANGING" :
+    case "ALLOW_REARRANGING":
       const droppableId = action.payload;
-      return {...state, highlights: [droppableId]}
+      return { ...state, highlights: [droppableId] };
     case "SET_HIGHLIGHTS":
       const draggableId2 = action.payload;
       const draggedHandCard2 = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
       if (draggedHandCard2) {
         const highlights = getHighlights(draggedHandCard2, state.gameSnapshot);
-        console.log(highlights)
+        console.log(highlights);
         return { ...state, highlights };
       } else return state;
-      // case "REARRANGE":
-      // const { source, destination } = action.payload;
-      
+    case "REARRANGE":
+      const { source, destination } = action.payload;
+      console.log("rearrange");
+      if (isGCZ(source, state.gameSnapshot)) {
+        console.log(" is gcz");
+        const gameSnapshot = updateGCZAfterRearrange(state.gameSnapshot, source.index, destination.index);
+        //console.log(newSnapshot.gameSnapshot.players[0].places.GCZ.cards)
+        return { ...state, gameSnapshot };
+      }
+      else return state;
 
-    default:  
+    default:
       return state;
   }
 };

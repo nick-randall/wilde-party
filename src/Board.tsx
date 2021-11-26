@@ -8,6 +8,7 @@ import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
 import { updateGCZAfterRearrange } from "./helperFunctions/gameRules/updateGameSnapshot";
 import { getCardGroupObjsFromSnapshot, getCardRowAndShape } from "./helperFunctions/groupGCZCards";
+import * as R from 'ramda'
 
 export const Board = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState) => state.highlights);
+
+
   
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
@@ -36,7 +39,7 @@ export const Board = () => {
   const isRearrange = (d: DropResult) => hasMoved(d) && movedWithinOnePlace(d);
 
   const handleDragEnd = (d: DropResult) => {
-    if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: d });
+    if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: {source: d.source, destination: d.destination} });
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
     dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: undefined });

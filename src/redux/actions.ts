@@ -1,4 +1,4 @@
-import { DragStart, DropResult } from "react-beautiful-dnd";
+import { DraggableLocation, DragStart, DropResult } from "react-beautiful-dnd";
 
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
@@ -22,7 +22,8 @@ export type AllowRearranging = {
 
 export type Rearrange = {
   type:"REARRANGE",
-  payload: DropResult
+  payload: 
+  {source: DraggableLocation, destination: DraggableLocation}
 }
 
 export type EndDrag = {
