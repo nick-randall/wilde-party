@@ -32,14 +32,21 @@ export const Board = () => {
 
   const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
 
-  const hasMoved = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
+  const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
-  const movedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
+  const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
 
-  const isRearrange = (d: DropResult) => hasMoved(d) && movedWithinOnePlace(d);
+  const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
+
+  const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId
+  
+  const cardPlayedToTable = (d: DropResult) => d.destination;
+
+  const isAddDrag = (d: DropResult) => cardLeftHand(d) && cardPlayedToTable(d);
 
   const handleDragEnd = (d: DropResult) => {
     if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: {source: d.source, destination: d.destination} });
+    if (isAddDrag(d)) dispatch({type: "ADD_DRAGGED", payload: {source: d.source, destination: d.destination}})
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
     dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: undefined });

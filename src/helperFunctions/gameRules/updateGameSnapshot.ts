@@ -3,6 +3,7 @@ import { produce } from "immer";
 import { getCardGroupObjs, getCardGroupObjsFromSnapshot } from "../groupGCZCards";
 import * as R from "ramda";
 import { getIdListObject } from "../getIdList";
+import { compareProps } from "../tests";
 
 const addDraggedCard = (draggedCard: GameCard, placeId: string, index: number, gameSnapshot: GameSnapshot) => {
   const { place, player } = locate(placeId, gameSnapshot);
@@ -79,9 +80,6 @@ export const normalizePlaceCards = (gameSnapshot: GameSnapshot, placeId: string)
 const normalizePlaceCardsFromCardGroups = (cardGroups: CardGroupObj[], placeId: string) =>
   R.pipe(filterAllByPlace(placeId), extractCards, assignNewIndexes, R.flatten)(cardGroups);
 
-// const normalizePlaceCardsFromCardGroups = (cardGroups: CardGroupObj[], placeId: string): GameCard[] =>
-//   curriedNormalizePlaceCardsFromCardGroups(cardGroups)(placeId);
-
 const curriedReturnNormalizedCardGroups = (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) => {
   const { pl0GCZ, pl0enchantmentsRow } = getIdListObject(gameSnapshot);
   return {
@@ -89,18 +87,6 @@ const curriedReturnNormalizedCardGroups = (gameSnapshot: GameSnapshot) => (cardG
     updatedEnchantmentsRowCards: normalizePlaceCardsFromCardGroups(cardGroups, pl0enchantmentsRow),
   };
 };
-
-// const returnNormalizedCardGroups = (cardGroups: CardGroupObj[], gameSnapshot: GameSnapshot) =>
-//   curriedReturnNormalizedCardGroups(cardGroups)(gameSnapshot);
-
-/// my GOAL is to return an object with {updatedER: [,], updatedGCZCards: [x,x,x] }
-
-// const moveCardGroup = (currIndex: number, newIndex: number) : CardGroupObj[] => {
-//   const [splicedCard] = array.splice(currIndex, 1);
-//   array.splice(newIndex, 0, splicedCard);
-//   // const splicedCard =  array.splice(array.indexOf(array.map((e: any) => e.id)), 1)
-//   return array;
-// };
 
 const curriedMoveCardGroup =
   (currIndex: number, newIndex: number) =>
@@ -111,21 +97,23 @@ const curriedMoveCardGroup =
     return array;
   };
 
-const curriedUpdateGameSnapshotWithNewGCZAndEnchant = (gameSnapshot: GameSnapshot) =>  (
-  { updatedGCZCards, updatedEnchantmentsRowCards }: { updatedGCZCards: GameCard[]; updatedEnchantmentsRowCards: GameCard[] },
- 
-) => {
-  
-    const enchantCards = R.lensPath(['players', 0, 'places', 'enchantmentsRow', 'cards'])
-    const snapshotWithUpdatedEnchantCards = R.set(enchantCards, updatedEnchantmentsRowCards, gameSnapshot)
-    const GCZCards = R.lensPath(['players', 0, 'places', 'GCZ', 'cards'])
-    const snapshotwithBothUpdated = R.set(GCZCards, updatedGCZCards, snapshotWithUpdatedEnchantCards)
+const curriedUpdateGameSnapshotWithNewGCZAndEnchant =
+  (gameSnapshot: GameSnapshot) =>
+  ({ updatedGCZCards, updatedEnchantmentsRowCards }: { updatedGCZCards: GameCard[]; updatedEnchantmentsRowCards: GameCard[] }) => {
+    const enchantCards = R.lensPath(["players", 0, "places", "enchantmentsRow", "cards"]);
+    const snapshotWithUpdatedEnchantCards = R.set(enchantCards, updatedEnchantmentsRowCards, gameSnapshot);
+    const GCZCards = R.lensPath(["players", 0, "places", "GCZ", "cards"]);
+    const snapshotwithBothUpdated = R.set(GCZCards, updatedGCZCards, snapshotWithUpdatedEnchantCards);
     return snapshotwithBothUpdated;
-
-}
+  };
 
 const partiallyAppliedUpdateAfterGCZRearrange = (currIndex: number, newIndex: number) => (gameSnapshot: GameSnapshot) =>
-  R.pipe(getCardGroupObjsFromSnapshot, curriedMoveCardGroup(currIndex, newIndex), curriedReturnNormalizedCardGroups(gameSnapshot), curriedUpdateGameSnapshotWithNewGCZAndEnchant(gameSnapshot))(gameSnapshot);
+  R.pipe(
+    getCardGroupObjsFromSnapshot,
+    curriedMoveCardGroup(currIndex, newIndex),
+    curriedReturnNormalizedCardGroups(gameSnapshot),
+    curriedUpdateGameSnapshotWithNewGCZAndEnchant(gameSnapshot)
+  )(gameSnapshot);
 
 export const updateGCZAfterRearrange = (gameSnapshot: GameSnapshot, currIndex: number, newIndex: number) =>
   partiallyAppliedUpdateAfterGCZRearrange(currIndex, newIndex)(gameSnapshot);
@@ -133,11 +121,41 @@ export const updateGCZAfterRearrange = (gameSnapshot: GameSnapshot, currIndex: n
 const moveItem = (currIndex: number, newIndex: number, array: any) => {
   const splicedCard = array.splice(currIndex, 1);
   array.splice(newIndex, 0, splicedCard);
-  // const splicedCard =  array.splice(array.indexOf(array.map((e: any) => e.id)), 1)
   return array;
 };
 
 export const rearrange = (currIndex: number, newIndex: number, gameSnapshot: GameSnapshot) =>
   R.pipe(getCardGroupObjsFromSnapshot, moveItem(currIndex, newIndex, gameSnapshot))(gameSnapshot);
+
+export const addDragged = (
+  gameSnapshot: GameSnapshot,
+  sourceIndex: number,
+  destinationPlaceId: string,
+  destinationIndex: number
+): GameSnapshot => {
+  const { player, place } = locate(destinationPlaceId, gameSnapshot);
+  console.log(destinationPlaceId);
+  if (player !== null) {
+    const handCardPlaceIDLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "placeId"])
+    const handCardPlayerIDLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "playerId"])
+    const handCardIndexLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "index"])
+    const snapshotWithHandCardPlaceIdUpdated = R.set(handCardPlaceIDLens, destinationPlaceId, gameSnapshot)
+    const snapshotWithHandCardPlayerIdUpdated = R.set(handCardPlayerIDLens, player, snapshotWithHandCardPlaceIdUpdated)
+    const snapshotWithHandCardIndexUpdated = R.set(handCardIndexLens, destinationIndex, snapshotWithHandCardPlayerIdUpdated)
+
+    const handCard = snapshotWithHandCardIndexUpdated.players[0].places.hand.cards[sourceIndex];
+    const destinationPlaceLens = R.lensPath(["players", player, "places", place, "cards"]);
+    const snapshotWithHandCardAdded = R.over(destinationPlaceLens, R.insert(destinationIndex, handCard), snapshotWithHandCardIndexUpdated);
+
+    const handCardsLens = R.lensPath(["players", 0, "places", "hand", "cards"]);
+    const snapshotWithHandCardRemoved = R.over(handCardsLens, R.remove(sourceIndex, 1), snapshotWithHandCardAdded);
+    compareProps(snapshotWithHandCardRemoved.players[0].places.GCZ.cards)
+    return snapshotWithHandCardRemoved;
+  } else {
+    console.log("place not found!")
+    return gameSnapshot;}
+};
+
+// const addDraggedImmer = ()
 
 // this updates state only

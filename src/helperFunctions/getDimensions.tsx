@@ -10,21 +10,21 @@ export const getAllDimensions = (placeId: string) => {
   const placeType = place;
   const numCards = getNumCards(placeId, gameSnapshot);
 
-  // ratio height to width is 1.6 
+  // ratio height to width is 1.6
 
   const dimensions: AllDimensions = {
     featuredCardScale: 2,
     cardHeight: 168,
     cardWidth: 105,
-    cardLeftSpread: (numCards < 7 ? 105 : 75),
+    cardLeftSpread: numCards < 6 ? 105 : 75,
     cardTopSpread: place === "specialsZone" ? -30 : 0,
-   zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
+    zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
-    tableCardzIndex:  3,
+    tableCardzIndex: 3,
     rotation: 0,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
-     // leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
+    // leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
     // topOffset: placeType !== "enchantmentsRow" ? 0 : 65,
   };
 

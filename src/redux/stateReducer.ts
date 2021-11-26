@@ -1,6 +1,6 @@
 import { DraggableLocation } from "react-beautiful-dnd";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { updateGCZAfterRearrange } from "../helperFunctions/gameRules/updateGameSnapshot";
+import { addDragged, updateGCZAfterRearrange } from "../helperFunctions/gameRules/updateGameSnapshot";
 import { locate } from "../helperFunctions/locateFunctions";
 import { convertedSnapshot, initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
@@ -46,17 +46,19 @@ export const stateReducer = (
         console.log(highlights);
         return { ...state, highlights };
       } else return state;
-    case "REARRANGE":
+    case "REARRANGE":{
       const { source, destination } = action.payload;
-      console.log("rearrange");
       if (isGCZ(source, state.gameSnapshot)) {
-        console.log(" is gcz");
         const gameSnapshot = updateGCZAfterRearrange(state.gameSnapshot, source.index, destination.index);
-        //console.log(newSnapshot.gameSnapshot.players[0].places.GCZ.cards)
         return { ...state, gameSnapshot };
       }
       else return state;
-
+    }
+    case "ADD_DRAGGED": {
+      const { source, destination } = action.payload;
+      const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index)
+      return { ...state, gameSnapshot };
+    }
     default:
       return state;
   }
