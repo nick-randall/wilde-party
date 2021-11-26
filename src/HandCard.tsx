@@ -71,6 +71,8 @@ const HandCard = (props: HandCardProps) => {
     isDragging
       ? {
           transform: `rotate(0deg)`,
+          // height: 168,
+          // width: 105,
           //left: 125 * (index - (numHandCards / 2 - 0.5))
         }
       : {};

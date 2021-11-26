@@ -44,13 +44,14 @@ function GCZ(props: GCZProps) {
           style={{
             display: "flex",
             top: 100,
+            //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
             left: 100,
             position: "absolute",
             height: dimensions.cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "", 
-            transition: "180ms"
+            transition: "background-color 180ms, box-shadow 180ms"
           }}
         >
           {myGCZCardRow.map((cardGroup, index) => (
