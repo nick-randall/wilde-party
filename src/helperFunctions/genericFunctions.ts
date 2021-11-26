@@ -1,3 +1,7 @@
+export const onlyUnique = (value: any, index: number, self: any[]) => {
+  return self.indexOf(value) === index;
+};
+
 export const arraysShareItems = (a: any[], b: any[]) => a.map(i => b.includes(i)).includes(true);
 
 export const arrayExistsIn3dArray = (twoD: any[], threeD: any[][]) => threeD.find(currArray => arraysShareItems(twoD, currArray));
@@ -9,3 +13,5 @@ export const filterOutDuplicates = (cardGroups: CardGroup[]) => {
   });
   return accumulator;
 };
+
+

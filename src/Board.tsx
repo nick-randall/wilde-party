@@ -6,9 +6,6 @@ import Hand from "./Hand";
 import { locate3 } from "./helperFunctions/locateFunctions";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
-import { updateGCZAfterRearrange } from "./helperFunctions/gameRules/updateGameSnapshot";
-import { getCardGroupObjsFromSnapshot, getCardRowAndShape } from "./helperFunctions/groupGCZCards";
-import * as R from 'ramda'
 
 export const Board = () => {
   const dispatch = useDispatch();
