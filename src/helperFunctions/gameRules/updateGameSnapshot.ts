@@ -127,35 +127,21 @@ const moveItem = (currIndex: number, newIndex: number, array: any) => {
 export const rearrange = (currIndex: number, newIndex: number, gameSnapshot: GameSnapshot) =>
   R.pipe(getCardGroupObjsFromSnapshot, moveItem(currIndex, newIndex, gameSnapshot))(gameSnapshot);
 
-export const addDragged = (
-  gameSnapshot: GameSnapshot,
-  sourceIndex: number,
-  destinationPlaceId: string,
-  destinationIndex: number
-): GameSnapshot => {
-  const { player, place } = locate(destinationPlaceId, gameSnapshot);
-  console.log(destinationPlaceId);
-  if (player !== null) {
-    const handCardPlaceIDLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "placeId"])
-    const handCardPlayerIDLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "playerId"])
-    const handCardIndexLens = R.lensPath(["players", 0, "places", "hand", "cards", sourceIndex, "index"])
-    const snapshotWithHandCardPlaceIdUpdated = R.set(handCardPlaceIDLens, destinationPlaceId, gameSnapshot)
-    const snapshotWithHandCardPlayerIdUpdated = R.set(handCardPlayerIDLens, player, snapshotWithHandCardPlaceIdUpdated)
-    const snapshotWithHandCardIndexUpdated = R.set(handCardIndexLens, destinationIndex, snapshotWithHandCardPlayerIdUpdated)
 
-    const handCard = snapshotWithHandCardIndexUpdated.players[0].places.hand.cards[sourceIndex];
-    const destinationPlaceLens = R.lensPath(["players", player, "places", place, "cards"]);
-    const snapshotWithHandCardAdded = R.over(destinationPlaceLens, R.insert(destinationIndex, handCard), snapshotWithHandCardIndexUpdated);
+function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
+  for (var key in attrs) {
+    card[key] = attrs[key];
+  }
+}
 
-    const handCardsLens = R.lensPath(["players", 0, "places", "hand", "cards"]);
-    const snapshotWithHandCardRemoved = R.over(handCardsLens, R.remove(sourceIndex, 1), snapshotWithHandCardAdded);
-    compareProps(snapshotWithHandCardRemoved.players[0].places.GCZ.cards)
-    return snapshotWithHandCardRemoved;
-  } else {
-    console.log("place not found!")
-    return gameSnapshot;}
-};
-
-// const addDraggedImmer = ()
-
-// this updates state only
+export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, destinationPlaceId: string, destinationIndex: number): GameSnapshot =>
+  produce(gameSnapshot, draft => {
+    const { player, place } = locate(destinationPlaceId, gameSnapshot);
+    if (player !== null) {
+        // this just changes playerid to 0!
+      setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: destinationPlaceId, playerId: player, index: destinationIndex });
+      const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
+      draft.players[player].places[place].cards.splice(destinationIndex, 0, handCard);
+      compareProps(draft.players[0].places.GCZ.cards);
+    }
+  });
