@@ -16,7 +16,8 @@ const getCardsFromPlace = (place: GamePlace): GameCard[] => place.cards;
 
 export const getAllCards = (gameSnapshot: any): GameCard[] => {
   let cards: GameCard[] = [];
-  gameSnapshot.players.forEach((p: GamePlayer) => getPlacesFromPlayer(p).forEach(c => cards.concat(getCardsFromPlace(c))));
+  gameSnapshot.players.forEach((p: GamePlayer) => getPlacesFromPlayer(p).forEach(place => place.cards.forEach(c => cards.push(c))));
+
   return cards;
 };
 

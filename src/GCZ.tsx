@@ -34,7 +34,7 @@ function GCZ(props: GCZProps) {
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!isHighlighted}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!isHighlighted} isCombineEnabled={true}>
       {(provided) => (
         <div
           className="pl0GCZ"
