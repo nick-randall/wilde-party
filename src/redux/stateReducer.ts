@@ -9,6 +9,7 @@ import { Action } from "./actions";
 export interface State {
   gameSnapshot: GameSnapshot;
   transitionData: TransitionData[];
+  rearrangingPlaceId: string;
   draggedHandCard: GameCard | undefined;
   highlights: string[];
 }
@@ -18,7 +19,7 @@ const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(
 export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
-    //rearrangingData: {placeId: "", index: -1, card: },
+    rearrangingPlaceId: "",
     transitionData: [],
     draggedHandCard: undefined,
     highlights: [],
@@ -38,7 +39,7 @@ export const stateReducer = (
     // Set rearranging place to "highlighted" to turn off isDropDisabled there
     case "ALLOW_REARRANGING":
       const droppableId = action.payload;
-      return { ...state, highlights: [droppableId] };
+      return { ...state, rearrangingPlaceId: droppableId };
     case "SET_HIGHLIGHTS":
       const draggableId2 = action.payload;
       const draggedHandCard2 = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
@@ -51,7 +52,7 @@ export const stateReducer = (
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
         const gameSnapshot = rearrangeGCZ(state.gameSnapshot, source.index, destination.index);
-        return { ...state, gameSnapshot };
+        return { ...state, gameSnapshot, rearrangingPlaceId: "" };
       }
       else return state;
     }

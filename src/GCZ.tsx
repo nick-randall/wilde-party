@@ -24,18 +24,22 @@ function GCZ(props: GCZProps) {
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
-  const myGCZCardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
+  const cardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
   const cardRowShape =
-    rearrange.placeId === id ? getCardRowShapeOnRearrange(myGCZCardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(myGCZCardRow);
-  const ghostCardGroup = myGCZCardRow.find(e => rearrange.draggableId === e.id);
+    rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
+  const ghostCardGroup = cardRow.find(e => rearrange.draggableId === e.id);
 
   const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id))
+
+  const rearranging = useSelector((state: RootState) => state.rearrangingPlaceId === id)
+
+  const allowDropping = isHighlighted || rearranging;
 
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!isHighlighted} isCombineEnabled={true}>
-      {(provided) => (
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping} isCombineEnabled={true}>
+      {(provided, s) => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
@@ -53,7 +57,7 @@ function GCZ(props: GCZProps) {
             transition: "background-color 180ms, box-shadow 180ms"
           }}
         >
-          {myGCZCardRow.map((cardGroup, index) => (
+          {cardRow.map((cardGroup, index) => (
             <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
           ))}
           {provided.placeholder}
@@ -67,37 +71,3 @@ function GCZ(props: GCZProps) {
 }
 
 export default GCZ;
-
-// <Droppable droppableId="GCZ" direction="horizontal">
-// {(provided) => (
-//   <div className="GCZ" {...provided.droppableProps} ref={provided.innerRef} style={{ padding: 6, display: "flex" }}>
-//     {myGCZCards.map((card, index) => (
-//       <Draggable draggableId={card.image} index={index} key={card.id}>
-//         {(provided) => (
-//           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-//             <div
-//               id={`card-container${card.id}`}
-//               style={{ width: index === 2 ? dimensions.cardLeftSpread * 2 : dimensions.cardLeftSpread }}
-//             >
-//               <div
-//                 id={`card-absolute-positioning-container${card.id}`}
-//                 style={{
-//                   position: "absolute",
-//                 }}
-//               />
-//               <Card id={card.id} image={card.image} index={index} dimensions={dimensions} />
-//             </div>
-//           </div>
-//         )}
-//       </Draggable>
-//     ))}
-//     {provided.placeholder}
-
-//     {ghostCardGroup ? (
-//       <div style={{ position: "absolute" }}>
-//         <GhostCard index={ghostCardGroup.index} image={ghostCardGroup.image} dimensions={dimensions} />
-//       </div>
-//     ) : null}
-//   </div>
-// )}
-// </Droppable>

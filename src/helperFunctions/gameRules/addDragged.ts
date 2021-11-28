@@ -12,8 +12,6 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
     const { player, place } = locate(destinationPlaceId, gameSnapshot);
     if (player !== null) {
       const newPlayerId = gameSnapshot.players[player].places[place].playerId; 
-      // TOD
-        // this just changes playerid to 0!
       setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: destinationPlaceId, playerId: newPlayerId, index: destinationIndex });
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
       draft.players[player].places[place].cards.splice(destinationIndex, 0, handCard);
