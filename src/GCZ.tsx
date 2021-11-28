@@ -25,20 +25,26 @@ function GCZ(props: GCZProps) {
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
   const cardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
-  const cardRowShape =
-    rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
+  const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
   const ghostCardGroup = cardRow.find(e => rearrange.draggableId === e.id);
 
-  const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id))
+  const highlights = useSelector((state: RootState) => state.highlights);
 
-  const rearranging = useSelector((state: RootState) => state.rearrangingPlaceId === id)
+  const isHighlighted = highlights.includes(id);
 
-  const allowDropping = isHighlighted || rearranging;
+  const rearranging = useSelector((state: RootState) => state.rearrangingPlaceId === id);
+
+  const containsTargetedCard =
+    highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
+
+  console.log(highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)))
+
+  const allowDropping = isHighlighted || rearranging || containsTargetedCard; // better name!°
 
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping} isCombineEnabled={true}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping} isCombineEnabled={containsTargetedCard}>
       {(provided, s) => (
         <div
           className="pl0GCZ"
@@ -53,8 +59,8 @@ function GCZ(props: GCZProps) {
             height: dimensions.cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
-            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "", 
-            transition: "background-color 180ms, box-shadow 180ms"
+            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+            transition: "background-color 180ms, box-shadow 180ms",
           }}
         >
           {cardRow.map((cardGroup, index) => (

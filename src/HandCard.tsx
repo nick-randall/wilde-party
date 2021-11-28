@@ -94,7 +94,6 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  console.log(dragged)
   
   //const noPointerEvents: CSSProperties = {pointerEvents: "none"}
   return (

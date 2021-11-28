@@ -32,22 +32,29 @@ export const stateReducer = (
     case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
+
+      // TODO: Improve readability
+
       if (draggedHandCard) {
-        return { ...state, draggedHandCard };
+        if (draggedHandCard.action.actionType === "enchant")
+          // causes dragged BFFs to not appear droppable--
+          /// --but still actually performs droppable animation...
+          return { ...state, draggedHandCard: undefined };
+        else return { ...state, draggedHandCard };
       }
       return { ...state, draggedHandCard: undefined, highlights: [] };
     // Set rearranging place to "highlighted" to turn off isDropDisabled there
     case "ALLOW_REARRANGING":
       const droppableId = action.payload;
       return { ...state, rearrangingPlaceId: droppableId };
-    case "SET_HIGHLIGHTS":
+    case "SET_HIGHLIGHTS": {
       const draggableId2 = action.payload;
-      const draggedHandCard2 = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
-      if (draggedHandCard2) {
-        const highlights = getHighlights(draggedHandCard2, state.gameSnapshot);
-        console.log(highlights);
+      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
+      if (draggedHandCard) {
+        const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
         return { ...state, highlights };
       } else return state;
+    }
     case "REARRANGE": {
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
@@ -62,7 +69,7 @@ export const stateReducer = (
     }
     case "END_DRAG_CLEANUP":
       return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [] };
-    
+
     default:
       return state;
   }
