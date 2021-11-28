@@ -48,19 +48,21 @@ export const stateReducer = (
         console.log(highlights);
         return { ...state, highlights };
       } else return state;
-    case "REARRANGE":{
+    case "REARRANGE": {
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
         const gameSnapshot = rearrangeGCZ(state.gameSnapshot, source.index, destination.index);
-        return { ...state, gameSnapshot, rearrangingPlaceId: "" };
-      }
-      else return state;
+        return { ...state, gameSnapshot };
+      } else return state;
     }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
-      const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index)
+      const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
       return { ...state, gameSnapshot };
     }
+    case "END_DRAG_CLEANUP":
+      return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [] };
+    
     default:
       return state;
   }

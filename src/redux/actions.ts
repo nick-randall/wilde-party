@@ -30,9 +30,8 @@ export type AddDragged = {
   payload :{ source: DraggableLocation; destination: DraggableLocation};
 };
 
-export type EndDrag = {
-  type: "END_DRAG";
-  payload: DropResult;
+export type EndDragCleanup = {
+  type: "END_DRAG_CLEANUP";
 };
 
-export type Action = RemoveTransition | SetHandCardDrag | SetHighlights | Rearrange | AllowRearranging | AddDragged;
+export type Action = RemoveTransition | SetHandCardDrag | SetHighlights | Rearrange | AllowRearranging | AddDragged | EndDragCleanup;

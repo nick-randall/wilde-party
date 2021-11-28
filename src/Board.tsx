@@ -46,7 +46,7 @@ export const Board = () => {
     if (isAddDrag(d)) dispatch({type: "ADD_DRAGGED", payload: {source: d.source, destination: d.destination}})
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
-    dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: undefined });
+    dispatch({type:"END_DRAG_CLEANUP"})
   };
 
   return (
