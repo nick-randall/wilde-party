@@ -1,10 +1,11 @@
 import { DraggableLocation } from "react-beautiful-dnd";
-import { addDragged } from "../helperFunctions/gameRules/addDragged";
+import { addDragged } from "../helperFunctions/gameSnapshotUpdates/addDragged";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { rearrangeGCZ } from "../helperFunctions/gameRules/rearrangeGCZ";
+import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { locate } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
+import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -15,6 +16,9 @@ export interface State {
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
+
+const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
+  draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
 export const stateReducer = (
   state: State = {
@@ -48,8 +52,8 @@ export const stateReducer = (
       const droppableId = action.payload;
       return { ...state, rearrangingPlaceId: droppableId };
     case "SET_HIGHLIGHTS": {
-      const draggableId2 = action.payload;
-      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId2);
+      const draggableId = action.payload;
+      const draggedHandCard = getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
         return { ...state, highlights };
@@ -67,6 +71,18 @@ export const stateReducer = (
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
       return { ...state, gameSnapshot };
     }
+    case "ENCHANT":
+      {
+        console.log("reducer enchant")
+        const { source, combine } = action.payload;
+        console.log("combine", combine)
+        if (combine) {
+          console.log(" calling enchant ")
+          const gameSnapshot = enchant(state.gameSnapshot, source.index, combine.droppableId, combine.draggableId);
+          return { ...state, gameSnapshot };
+        }
+      }
+      return state;
     case "END_DRAG_CLEANUP":
       return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [] };
 

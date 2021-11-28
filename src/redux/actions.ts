@@ -1,4 +1,4 @@
-import { DraggableLocation, DragStart, DropResult } from "react-beautiful-dnd";
+import { Combine, DraggableLocation, DragStart, DropResult } from "react-beautiful-dnd";
 
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
@@ -27,11 +27,16 @@ export type Rearrange = {
 
 export type AddDragged = {
   type: "ADD_DRAGGED";
-  payload :{ source: DraggableLocation; destination: DraggableLocation};
+  payload: { source: DraggableLocation; destination: DraggableLocation };
+};
+
+export type Enchant = {
+  type: "ENCHANT";
+  payload: DropResult;
 };
 
 export type EndDragCleanup = {
   type: "END_DRAG_CLEANUP";
 };
 
-export type Action = RemoveTransition | SetHandCardDrag | SetHighlights | Rearrange | AllowRearranging | AddDragged | EndDragCleanup;
+export type Action = RemoveTransition | SetHandCardDrag | SetHighlights | Rearrange | AllowRearranging | AddDragged | Enchant | EndDragCleanup;

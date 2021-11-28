@@ -16,8 +16,6 @@ export const Board = () => {
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState) => state.highlights);
 
-
-  
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
@@ -35,18 +33,21 @@ export const Board = () => {
 
   const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
-  const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId
-  
+  const isEnchant = (d: DropResult) => d.combine !== undefined;
+
+  const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
+
   const cardPlayedToTable = (d: DropResult) => d.destination;
 
   const isAddDrag = (d: DropResult) => cardLeftHand(d) && cardPlayedToTable(d);
 
   const handleDragEnd = (d: DropResult) => {
-    if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: {source: d.source, destination: d.destination} });
-    if (isAddDrag(d)) dispatch({type: "ADD_DRAGGED", payload: {source: d.source, destination: d.destination}})
+    if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
+    if (isEnchant(d)) dispatch({ type: "ENCHANT", payload: d });
+    if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
-    dispatch({type:"END_DRAG_CLEANUP"})
+    dispatch({ type: "END_DRAG_CLEANUP" });
   };
 
   return (
