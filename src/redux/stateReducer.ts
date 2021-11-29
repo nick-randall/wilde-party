@@ -39,13 +39,13 @@ export const stateReducer = (
 
       // TODO: Improve readability
 
-      if (draggedHandCard) {
-        if (draggedHandCard.action.actionType === "enchant")
-          // causes dragged BFFs to not appear droppable--
-          /// --but still actually performs droppable animation...
-          return { ...state, draggedHandCard: undefined };
-        else return { ...state, draggedHandCard };
-      }
+      // if (draggedHandCard) {
+      //   if (draggedHandCard.action.actionType === "enchant")
+      //     // causes dragged BFFs to not appear droppable--
+      //     /// --but still actually performs droppable animation...
+      //     return { ...state, draggedHandCard: undefined };
+      //   else return { ...state, draggedHandCard };
+      // }
       return { ...state, draggedHandCard: undefined, highlights: [] };
     // Set rearranging place to "highlighted" to turn off isDropDisabled there
     case "ALLOW_REARRANGING":
@@ -69,19 +69,22 @@ export const stateReducer = (
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
+      console.log(destination.droppableId)
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
-      {
-        console.log("reducer enchant")
-        const { source, combine } = action.payload;
-        console.log("combine", combine)
-        if (combine) {
-          console.log(" calling enchant ")
-          const gameSnapshot = enchant(state.gameSnapshot, source.index, combine.droppableId, combine.draggableId);
-          return { ...state, gameSnapshot };
-        }
-      }
+      // Currently doesn't do anything because logic no longer comes from combine, but 
+      // rather from a card being the Droppable and therefore droppableId returns the card Id
+      // {
+      //   console.log("reducer enchant")
+      //   const { source, combine } = action.payload;
+      //   console.log("combine", combine)
+      //   if (combine) {
+      //     console.log(" calling enchant ")
+      //     const gameSnapshot = enchant(state.gameSnapshot, source.index, combine.droppableId, combine.draggableId);
+      //     return { ...state, gameSnapshot };
+      //   }
+      // }
       return state;
     case "END_DRAG_CLEANUP":
       return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [] };

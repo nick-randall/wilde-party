@@ -18,9 +18,12 @@ export const enchant = (gameSnapshot: GameSnapshot, sourceIndex: number, destina
       // hmmm... a little bit dodgy to extract card of cardGroup this way
       // --- ie by using image
       // would be better to get card Id somehow...
-      const destinationIndex = gameSnapshot.players[player].places[place].cards.map(e => e.image).indexOf(targetCardId)      
+      const destinationIndex = gameSnapshot.players[player].places[place].cards.map(e => e.image).indexOf(targetCardId)  
+      console.log(destinationIndex)    
       setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: enchantmentsRowId, playerId: newPlayerId, index: destinationIndex });
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
       draft.players[player].places["enchantmentsRow"].cards.push(handCard);
+      console.log(draft.players[player].places["enchantmentsRow"].cards)
+
     }
   });

@@ -37,15 +37,15 @@ function GCZ(props: GCZProps) {
   const containsTargetedCard =
     highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
-  console.log(highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)))
+  //console.log(highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)))
 
-  const allowDropping = isHighlighted || rearranging || containsTargetedCard; // better name!°
-
+  const allowDropping = isHighlighted || rearranging // || containsTargetedCard; // better name!°
+  console.log(allowDropping)
   const dimensions = getAllDimensions(id);
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping} isCombineEnabled={containsTargetedCard}>
-      {(provided, s) => (
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
+      {(provided) => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
