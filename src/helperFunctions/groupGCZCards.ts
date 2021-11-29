@@ -16,15 +16,15 @@ const convertCardGroupToObj = (cardGroupArray: CardGroup[]): CardGroupObj[] =>
 export const getCardGroupObjs = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupObj[] =>
   pipe(getCardGroupsArray, filterOutDuplicates, convertCardGroupToObj)(enchantmentsCards, GCZCards);
 
-const mapSizes = (cardGroups: CardGroupObj[]): number[] => cardGroups.map(e => e.size);
+export const mapSizes = (cardGroups: CardGroupObj[]): number[] => cardGroups.map(e => e.size);
 
 const removeSourceIndex = (sourceIndex: number) => (array: any[]) => array.filter((_, index) => index !== sourceIndex);
 
 const cumulativeSum = (sum: number) => (value: number) => (sum += value);
 
-const getCumulativeSum = (indexArray: number[]) => indexArray.map(cumulativeSum(0));
+export const getCumulativeSum = (indexArray: number[]) => indexArray.map(cumulativeSum(0));
 
-const addZeroAtFirstIndex = (indexArray: number[]) => [0].concat(indexArray);
+export const addZeroAtFirstIndex = (indexArray: number[]) => [0].concat(indexArray);
 
 const curriedGetCardRowShape = (sourceIndex: number) => (cardGroups: CardGroupObj[]) =>
   pipe(mapSizes, removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(cardGroups);
