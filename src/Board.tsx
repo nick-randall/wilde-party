@@ -15,14 +15,16 @@ export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const highlights = useSelector((state: RootState) => state.highlights);
-
   const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
+  const isHandCard = (source: DraggableLocation) => locate3(source.droppableId).place === "hand";
+
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
-    locate3(source.droppableId).place === "hand"
-      ? dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId })
-      : dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
-    setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
+    if (isHandCard(source)) dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+    else {
+      dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
+      setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
+    }
   };
 
   const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
@@ -33,7 +35,10 @@ export const Board = () => {
 
   const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
-  const isEnchant = (d: DropResult) => d.combine !== undefined;
+  const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
+    const handCard = gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+    return handCard?.action.highlightType === "card";
+  };
 
   const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
 
@@ -43,7 +48,7 @@ export const Board = () => {
 
   const handleDragEnd = (d: DropResult) => {
     if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
-    if (isEnchant(d)) dispatch({ type: "ENCHANT", payload: d });
+    if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
     if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
     setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });

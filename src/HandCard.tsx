@@ -31,7 +31,7 @@ const HandCard = (props: HandCardProps) => {
   //const onDragStart = (clickEvent: React.MouseEvent) => props.onDragStart(card, cardRef, cardWidth, rotation);
   //dispatch({ type: "SET_DRAGGED_CARD", payload: card });
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
-  const dragged = useSelector((state: RootState) => state.draggedHandCard && state.draggedHandCard.id === id);
+  const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const element = cardRef.current;
@@ -61,15 +61,16 @@ const HandCard = (props: HandCardProps) => {
     isDragging
       ? {
           transform: `rotate(0deg)`,
-          pointerEvents: dragged ? "none" : "auto",
-          zIndex: 0
+           // This width causes cards to move aside and make room in other droppables.
+            // When not dragging it tucks cards together
+        
           // height: 168,
           // width: 105,
           //left: 125 * (index - (numHandCards / 2 - 0.5))
         }
       : {};
   const normalStyles: CSSProperties = {
-    zIndex: dragged ? 0:  tableCardzIndex,
+    zIndex: tableCardzIndex,
     width: cardWidth,
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
@@ -98,12 +99,14 @@ const HandCard = (props: HandCardProps) => {
   //const noPointerEvents: CSSProperties = {pointerEvents: "none"}
   return (
     <Draggable draggableId={id} index={index} key={id}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
           <div
-            // This width causes cards to move aside and make room in other droppables.
-            // When not dragging it tucks cards together
-            style={{ width: dragged ? 105 : 0, ...dragStyles(dragged) }}
+            // The width of this element determines how far cards 
+            // move aside and make room in other droppables.
+            // When not dragging it has a width of 0, which
+            // tucks hand cards together
+            style={{   width: isDragging ? 105 : 0, }}
           >
             <Transition
               in={true}
@@ -133,7 +136,7 @@ const HandCard = (props: HandCardProps) => {
                       ...normalStyles,
                       ...hoverStyles[hover],
                       ...transitionStyles[state],
-                      ...dragStyles(dragged),
+                      ...dragStyles(isDragging),
                     }}
                   />
                 );
