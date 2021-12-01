@@ -14,12 +14,19 @@ const getPlacesFromPlayer = (player: GamePlayer): GamePlace[] => Object.values(p
 
 const getCardsFromPlace = (place: GamePlace): GameCard[] => place.cards;
 
-export const getAllCards = (gameSnapshot: any): GameCard[] => {
+export const getAllGuestCards = (gameSnapshot: any): GameCard[] => {
   let cards: GameCard[] = [];
-  gameSnapshot.players.forEach((p: GamePlayer) => getPlacesFromPlayer(p).forEach(place => place.cards.forEach(c => cards.push(c))));
+  gameSnapshot.players.forEach((p: GamePlayer) => p.places.GCZ.cards.forEach(c => cards.push(c)));
 
   return cards;
 };
+
+// export const getAllCards = (gameSnapshot: any): GameCard[] => {
+//   let cards: GameCard[] = [];
+//   gameSnapshot.players.forEach((p: GamePlayer) => getPlacesFromPlayer(p).forEach(place => place.cards.forEach(c => cards.push(c))));
+
+//   return cards;
+// };
 
 export const getAllPlayers = (gameSnapshot: any): GamePlayer[] => gameSnapshot.players;
 

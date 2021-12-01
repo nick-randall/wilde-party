@@ -37,6 +37,8 @@ const Card = (props: CardProps) => {
     }
   };
   const highlights = useSelector((state: RootState) => state.highlights);
+  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card")
+  console.log(highlightTypeIsCard)
 
   const normalStyles: CSSProperties = {
     zIndex: dimensions.tableCardzIndex,
@@ -65,6 +67,7 @@ const Card = (props: CardProps) => {
     shortHover: {},
     none: {},
   };
+  
 
   return (
     <div>

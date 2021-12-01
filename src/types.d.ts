@@ -83,7 +83,7 @@ type PlayerActionType = "protectSelf"
 
 type ActionType =  PlaceActionType | CardActionType | PlayerActionType
 
-type HighlightType = "card" | "place" | "player";
+type HighlightType = "guestCard" | "place" | "player" | "";
 
 type CardAction = {
     actionType: ActionType,

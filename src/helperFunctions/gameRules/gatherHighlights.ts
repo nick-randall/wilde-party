@@ -1,4 +1,4 @@
-import { getAllCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
+import { getAllGuestCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
 import { getCardFunctions, getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
 import * as R from "ramda";
 
@@ -7,7 +7,7 @@ export const getHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot)
   const { action } = draggedCard;
   const { highlightType } = action;
 
-  if (highlightType === "card") return getCardHighlights(draggedCard, gameSnapshot)
+  if (highlightType === "guestCard") return getCardHighlights(draggedCard, gameSnapshot)
   else if (highlightType === "place") return getPlaceHighlights(draggedCard, gameSnapshot)
   else return getPlayerHighlights(draggedCard, gameSnapshot)
 };
@@ -17,7 +17,7 @@ const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): s
   const { actionType } = action;
 
   const highlightFunction = getCardFunctions(actionType);
-  const potentialHighlights: GameCard[] = getAllCards(gameSnapshot)
+  const potentialHighlights: GameCard[] = getAllGuestCards(gameSnapshot)
   const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
   return highlights.map((e) => R.prop("id", e))
 };

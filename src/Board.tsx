@@ -37,7 +37,7 @@ export const Board = () => {
 
   const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
     const handCard = gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
-    return handCard?.action.highlightType === "card";
+    return handCard?.action.highlightType === "guestCard";
   };
 
   const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;

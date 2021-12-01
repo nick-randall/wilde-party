@@ -13,6 +13,7 @@ export interface State {
   rearrangingPlaceId: string;
   draggedHandCard: GameCard | undefined;
   highlights: string[];
+  highlightType: string;
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
@@ -27,6 +28,7 @@ export const stateReducer = (
     transitionData: [],
     draggedHandCard: undefined,
     highlights: [],
+    highlightType: "",
   },
   action: Action
 ) => {
@@ -36,7 +38,6 @@ export const stateReducer = (
     case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
-      // TODO: Improve readability
       return { ...state, draggedHandCard: draggedHandCard };
     // Set rearranging place to "highlighted" to turn off isDropDisabled there
     case "ALLOW_REARRANGING":
@@ -47,7 +48,8 @@ export const stateReducer = (
       const draggedHandCard = getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
-        return { ...state, highlights };
+        const highlightType = draggedHandCard.action.highlightType;
+        return { ...state, highlights, highlightType };
       } else return state;
     }
     case "REARRANGE": {
@@ -60,11 +62,11 @@ export const stateReducer = (
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
-      console.log(destination.droppableId)
+      console.log(destination.droppableId);
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
-      // Currently doesn't do anything because logic no longer comes from combine, but 
+      // Currently doesn't do anything because logic no longer comes from combine, but
       // rather from a card being the Droppable and therefore droppableId returns the card Id
       // {
       //   console.log("reducer enchant")
@@ -76,16 +78,16 @@ export const stateReducer = (
       //     return { ...state, gameSnapshot };
       //   }
       // }
-    const {source, destination} = action.payload;
-    // here "destination.droppableId" is actually the card that is being enchanted
-    if (destination){
-      const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
-      return { ...state, gameSnapshot };
-    }
+      const { source, destination } = action.payload;
+      // here "destination.droppableId" is actually the card that is being enchanted
+      if (destination) {
+        const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
+        return { ...state, gameSnapshot };
+      }
 
       return state;
     case "END_DRAG_CLEANUP":
-      return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [] };
+      return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [], highlightType: "" };
 
     default:
       return state;
