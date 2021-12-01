@@ -1,3 +1,4 @@
+import { includes } from "ramda";
 import React, { CSSProperties, useRef, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
@@ -38,7 +39,10 @@ const Card = (props: CardProps) => {
     }
   };
   const highlights = useSelector((state: RootState) => state.highlights);
-  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
+  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
+
+  const highlightType = useSelector((state: RootState) => state.highlightType);
+
 
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
@@ -46,9 +50,7 @@ const Card = (props: CardProps) => {
 
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
-
-
-  if (BFFDraggedOverSide) console.log(BFFDraggedOverSide);
+  const notAmongHighlights = highlightTypeIsCard && !highlights.includes(id)
 
   //const ghostCard = BFFDraggedOverSide !== "" ? draggedOver
 
@@ -60,6 +62,8 @@ const Card = (props: CardProps) => {
     top: offsetTop || "",
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
+    transition: "300ms",
+    transitionDelay: "150ms"
   };
 
   const hoverStyles = {
@@ -72,6 +76,7 @@ const Card = (props: CardProps) => {
     shortHover: {},
     none: {},
   };
+
 
   return (
     <div>
@@ -94,8 +99,9 @@ const Card = (props: CardProps) => {
                 onMouseLeave={clearHoverStyles}
                 id={id}
                 style={{
-                  border: highlights.includes(id) ? "thick blue dotted" : "",
-                  boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
+                  WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                  //border: highlights.includes(id) ? "thick blue dotted" : "",
+                  //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
                   transition: "box-shadow 180ms",
                   ...normalStyles,
                   ...hoverStyles[hover],

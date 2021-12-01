@@ -52,7 +52,7 @@ export const stateReducer = (
       return { ...state, rearrangingPlaceId: droppableId };
     case "SET_HIGHLIGHTS": {
       const draggableId = action.payload;
-      const draggedHandCard = getDraggedHandCard(state, draggableId);
+      const draggedHandCard = state.draggedHandCard//getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
         const highlightType = draggedHandCard.action.highlightType;
