@@ -13,18 +13,20 @@ interface GCZProps {
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
   rearrange: SimpleRearrangingData;
-  draggedOver: UpdateDragData | undefined;
+  //draggedOver: UpdateDragData | undefined;
 }
 
 function GCZ(props: GCZProps) {
-  const { id, enchantmentsRowCards, GCZCards, rearrange, draggedOver } = props;
+  const { id, enchantmentsRowCards, GCZCards, rearrange } = props;
+
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate)
 
   const index = draggedOver ? draggedOver.index : rearrange.sourceIndex;
 
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
-  const cardRow = useMemo(() => getCardGroupObjs(enchantmentsRowCards, GCZCards), [GCZCards, enchantmentsRowCards]);
+  const cardRow = getCardGroupObjs(enchantmentsRowCards, GCZCards);
   const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
   const ghostCardGroup = cardRow.find(e => rearrange.draggableId === e.id);
 
@@ -69,7 +71,7 @@ function GCZ(props: GCZProps) {
           {provided.placeholder}
 
           {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[index]} dimensions={dimensions} /> : null}
-          {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} /> : null}
+          {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} zIndex={0}/> : null}
         </div>
       )}
     </Droppable>

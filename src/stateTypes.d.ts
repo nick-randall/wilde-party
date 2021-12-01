@@ -29,9 +29,6 @@ type DraggedOverData = {
   index: number
 }
 
-
-
-
 type UpdateDragData = {
   droppableId: string,
   index: number

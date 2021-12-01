@@ -5,10 +5,11 @@ interface GhostCardProps {
   offsetTop?: number;
   dimensions: AllDimensions;
   rotation?: number;
+  zIndex: number;
 }
 
 export const GhostCard = (props: GhostCardProps) => {
-  const { dimensions, rotation, image, index, offsetLeft, offsetTop } = props;
+  const { dimensions, rotation, image, index, offsetLeft, offsetTop, zIndex } = props;
   const {cardLeftSpread, cardWidth} = dimensions;
   const id = "ghostCard" + image;
 
@@ -27,7 +28,7 @@ export const GhostCard = (props: GhostCardProps) => {
             rotate: rotation + "deg" || "0deg",
             position: "absolute",
             transition: "left 250ms ease",
-            zIndex: 0,
+            zIndex: zIndex,
           }}
         />
   )

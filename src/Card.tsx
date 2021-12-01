@@ -2,6 +2,7 @@ import React, { CSSProperties, useRef, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { getSettings } from "./gameSettings/uiSettings";
+import GhostCard from "./GhostCard";
 import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 
@@ -17,7 +18,7 @@ export interface CardProps {
 
 const Card = (props: CardProps) => {
   const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
-  const { tableCardzIndex } = dimensions;
+  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const settings = getSettings();
   const cardRef = useRef<HTMLImageElement>(null);
@@ -37,24 +38,27 @@ const Card = (props: CardProps) => {
     }
   };
   const highlights = useSelector((state: RootState) => state.highlights);
-  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card")
-  console.log(highlightTypeIsCard)
+  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
+
+  const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
+  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+
+  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
+
+  if (ghostCard) console.log(ghostCard.image);
+
+  //const ghostCard = BFFDraggedOverSide !== "" ? draggedOver
 
   const normalStyles: CSSProperties = {
-    zIndex: dimensions.tableCardzIndex,
-    width: dimensions.cardWidth,
-    height: dimensions.cardHeight,
+    zIndex: tableCardzIndex,
+    width: cardWidth,
+    height: cardHeight,
     left: offsetLeft || "",
     top: offsetTop || "",
-    // left: index * dimensions.cardLeftSpread + dimensions.leftOffset,
-    // top: index * dimensions.cardTopSpread,
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
-    //transition: "left 250ms ease",
-    // pointerEvents:
-    //   legalTargetStatus === "notAmongLegalTargets" || legalTargetStatus === "placeIsLegalTarget" || legalTargetStatus === "placeIsRearranging"
-    //     ? "none"
-    //     : "auto",
   };
 
   const hoverStyles = {
@@ -67,41 +71,49 @@ const Card = (props: CardProps) => {
     shortHover: {},
     none: {},
   };
-  
 
   return (
     <div>
       <Droppable droppableId={id} isDropDisabled={!highlights.includes(id)}>
         {
-        // Here we use a droppable in an idomatic way, in order to allow
-        // dropping on individual cards for the "enchant" action. Of course
-        // no elements can actually be added to the droppable, but it allows
-        // us to use the API (eg. isDraggingOver, droppableId--which is now 
-        // the targeted card) just the same...
-        (provided, snapshot) => (
-          <div>
-          <img
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            alt={image}
-            src={`./images/${image}.jpg`}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={setHoverStyles}
-            onMouseLeave={clearHoverStyles}
-            id={id}
-            style={{
-              border: highlights.includes(id) ? "thick blue dotted" : "",
-              boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
-              transition: "box-shadow 180ms",
-              ...normalStyles,
-              ...hoverStyles[hover],
-            }}
-          />
-          {provided.placeholder}
-          </div>
-        )
+          // Here we use a droppable in an idomatic way, in order to allow
+          // dropping on individual cards for the "enchant" action. Of course
+          // no elements can actually be added to the droppable, but it allows
+          // us to use the API (eg. isDraggingOver, droppableId--which is now
+          // the targeted card) just the same...
+          (provided, snapshot) => (
+            <div style={{position: "relative"}}>
+              {ghostCard ? (
+                <GhostCard
+                  index={0}
+                  offsetLeft={cardLeftSpread * BFFOffset}
+                  offsetTop={cardHeight / 2}
+                  image={ghostCard.image}
+                  dimensions={dimensions}
+                  zIndex={5}
+                />
+              ) : null}
+              <img
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                alt={image}
+                src={`./images/${image}.jpg`}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={setHoverStyles}
+                onMouseLeave={clearHoverStyles}
+                id={id}
+                style={{
+                  border: highlights.includes(id) ? "thick blue dotted" : "",
+                  boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
+                  transition: "box-shadow 180ms",
+                  ...normalStyles,
+                  ...hoverStyles[hover],
+                }}
+              />
+              {provided.placeholder}
+            </div>
+          )
         }
-        
       </Droppable>
     </div>
   );

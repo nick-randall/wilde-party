@@ -11,7 +11,6 @@ import { doNothing } from "./helperFunctions/genericFunctions";
 export const Board = () => {
   const dispatch = useDispatch();
   const [rearrange, setRearrange] = useState<SimpleRearrangingData>({ placeId: "", draggableId: "", sourceIndex: -1 });
-  const [dragUpdate, setDragUpdate] = useState<UpdateDragData>({ droppableId: "", index: -1 });
 
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
@@ -28,7 +27,7 @@ export const Board = () => {
     }
   };
 
-  const handleDragUpdate = (d: DragUpdate) => d.destination ? dispatch({type:"UPDATE_DRAG", payload: d.destination}) : doNothing();
+  const handleDragUpdate = (d: DragUpdate) => (d.destination ? dispatch({ type: "UPDATE_DRAG", payload: d.destination }) : doNothing());
 
   //(d.destination ? setDragUpdate(d.destination) : () => {});
 
@@ -53,7 +52,6 @@ export const Board = () => {
     if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
     if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
     if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
-    setDragUpdate({ droppableId: "", index: -1 });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
     dispatch({ type: "END_DRAG_CLEANUP" });
   };
@@ -66,38 +64,9 @@ export const Board = () => {
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
           GCZCards={gameSnapshot.players[0].places.GCZ.cards}
           rearrange={rearrange}
-          draggedOver={dragUpdate.droppableId === ids.pl0GCZ ? dragUpdate : undefined}
         />{" "}
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
     </DragDropContext>
   );
 };
-
-// const handleDragEnd = (result: DropResult) => {
-//   const sourceId = result.source.droppableId;
-//   if (result.destination) {
-//     console.log(result.destination.index);
-//     const destinationId = result.destination.droppableId;
-//     if (destinationId === sourceId) {
-//     }
-//   }
-//   // need to differentiate between dragging to new index
-//   // and just droppping into nothing (destination === null)
-
-//   const targetIndex = result.destination?.index;
-//   console.log(targetIndex);
-//   const { place: sourcePlace } = locate3(sourceId);
-//   switch (sourcePlace) {
-//     case "hand":
-//       dispatch({ type: "SET_HAND_CARD_DRAG", payload: undefined });
-//       break;
-//     // here assuming that it is player 0, since opponents' GCZ will be disabled
-//     case "GCZ":
-//       dispatch({
-//         type: "END_GCZ_REARRANGE",
-//         payload: { targetIndex: targetIndex },
-//       });
-//   }
-//   console.log(result.destination);
-// };

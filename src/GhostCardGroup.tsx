@@ -33,6 +33,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
             key={ghostCard.id}
             offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}
             offsetTop={getOffset(ghostCard, ghostCardGroupIndex).top}
+            zIndex={5}
           />
         ))}
       </div>

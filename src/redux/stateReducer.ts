@@ -7,10 +7,12 @@ import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 
+
 export interface State {
   gameSnapshot: GameSnapshot;
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
+  BFFdraggedOverSide: string | undefined;
   rearrangingPlaceId: string;
   draggedHandCard: GameCard | undefined;
   highlights: string[];
@@ -26,6 +28,7 @@ export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
     dragUpdate: { droppableId: "", index: -1 },
+    BFFdraggedOverSide: undefined,
     rearrangingPlaceId: "",
     transitionData: [],
     draggedHandCard: undefined,
@@ -70,18 +73,6 @@ export const stateReducer = (
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
-      // Currently doesn't do anything because logic no longer comes from combine, but
-      // rather from a card being the Droppable and therefore droppableId returns the card Id
-      // {
-      //   console.log("reducer enchant")
-      //   const { source, combine } = action.payload;
-      //   console.log("combine", combine)
-      //   if (combine) {
-      //     console.log(" calling enchant ")
-      //     const gameSnapshot = enchant(state.gameSnapshot, source.index, combine.droppableId, combine.draggableId);
-      //     return { ...state, gameSnapshot };
-      //   }
-      // }
       const { source, destination } = action.payload;
       // here "destination.droppableId" is actually the card that is being enchanted
       if (destination) {
@@ -98,6 +89,7 @@ export const stateReducer = (
         highlights: [],
         highlightType: "",
         dragUpdate: { droppableId: "", index: -1 },
+        BFFdraggedOverSide: undefined
       };
 
     default:

@@ -90,10 +90,6 @@ type CardAction = {
     highlightType: HighlightType,
     cardHighlightType?: CardType,
     placeHighlightType?: PlaceType,
-
-
-
-  
 }
 
 // type TablePositionLocator = {
