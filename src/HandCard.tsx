@@ -26,10 +26,6 @@ const HandCard = (props: HandCardProps) => {
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, draggedCardzIndex, cardHeight } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
 
-  //const dispatch = useDispatch();
-
-  //const onDragStart = (clickEvent: React.MouseEvent) => props.onDragStart(card, cardRef, cardWidth, rotation);
-  //dispatch({ type: "SET_DRAGGED_CARD", payload: card });
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
 
@@ -96,7 +92,6 @@ const HandCard = (props: HandCardProps) => {
     };
   }
   
-  //const noPointerEvents: CSSProperties = {pointerEvents: "none"}
   return (
     <Draggable draggableId={id} index={index} key={id}>
       {(provided) => (

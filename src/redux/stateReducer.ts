@@ -1,4 +1,4 @@
-import { DraggableLocation } from "react-beautiful-dnd";
+import { DraggableLocation, DragUpdate } from "react-beautiful-dnd";
 import { addDragged } from "../helperFunctions/gameSnapshotUpdates/addDragged";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
@@ -6,7 +6,7 @@ import { locate } from "../helperFunctions/locateFunctions";
 import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
-
+import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -23,6 +23,8 @@ const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(
 
 const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
   draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
+
+const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
 
 export const stateReducer = (
   state: State = {
@@ -57,8 +59,15 @@ export const stateReducer = (
         return { ...state, highlights, highlightType };
       } else return state;
     }
-    case "UPDATE_DRAG":
+    case "UPDATE_DRAG": {
+      if (isEnchantWithBFF(state.draggedHandCard)) {
+        const { droppableId } = action.payload;
+        const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
+        console.log(BFFdraggedOverSide)
+        return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
+      }
       return { ...state, dragUpdate: action.payload };
+    }
     case "REARRANGE": {
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
@@ -89,7 +98,7 @@ export const stateReducer = (
         highlights: [],
         highlightType: "",
         dragUpdate: { droppableId: "", index: -1 },
-        BFFdraggedOverSide: undefined
+        BFFdraggedOverSide: undefined,
       };
 
     default:

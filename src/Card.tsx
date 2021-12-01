@@ -47,7 +47,8 @@ const Card = (props: CardProps) => {
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
 
-  if (ghostCard) console.log(ghostCard.image);
+
+  if (BFFDraggedOverSide) console.log(BFFDraggedOverSide);
 
   //const ghostCard = BFFDraggedOverSide !== "" ? draggedOver
 

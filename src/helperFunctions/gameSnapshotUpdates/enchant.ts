@@ -23,14 +23,15 @@ const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[],
 
 export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targetCardId: string): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    const { player, place } = locate(targetCardId, gameSnapshot);
+    const { player } = locate(targetCardId, gameSnapshot);
     if (player !== null) {
       const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
       const GCZ = gameSnapshot.players[player].places["GCZ"];
       const enchantmentsRowId = enchantmentsRow.id;
       const newPlayerId = enchantmentsRow.playerId;
 
-      let destinationIndex = gameSnapshot.players[player].places[place].cards.map(e => e.id).indexOf(targetCardId);
+      //let destinationIndex = gameSnapshot.players[player].places[place].cards.map(e => e.id).indexOf(targetCardId);
+      let destinationIndex = GCZ.cards.map(e => e.id).indexOf(targetCardId);
       if (!rightNeighbourIsEnchantable(destinationIndex, enchantmentsRow.cards, GCZ.cards)) destinationIndex -= 1;
       setAttributes(draft.players[0].places.hand.cards[handCardIndex], {
         placeId: enchantmentsRowId,

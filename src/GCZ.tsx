@@ -42,7 +42,6 @@ function GCZ(props: GCZProps) {
   //console.log(highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)))
 
   const allowDropping = isHighlighted || rearranging // || containsTargetedCard; // better name!°
-  console.log(allowDropping)
   const dimensions = getAllDimensions(id);
 
   return (
