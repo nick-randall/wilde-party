@@ -14,4 +14,5 @@ export const filterOutDuplicates = (cardGroups: CardGroup[]) => {
   return accumulator;
 };
 
+export const doNothing = () => {};
 

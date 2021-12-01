@@ -43,32 +43,35 @@ export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: G
   return false;
 };
 
-const cardLastInList = (index: number, array: GameCard[]) => index < array.length;
+const hasRightNeighbour = (index: number, array: GameCard[]) => index < array.length -1;
 
-const cardOnlyInList = (array: GameCard[]) => array.length < 1;
+const isOnlyCardInPlace = (array: GameCard[]) => array.length < 2;
 
-const rightNeighbourEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 1);
+const rightNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 1);
 
-const rightNeighbourUnavailable = (index: number, array: GameCard[]) => cardLastInList(index, array) || rightNeighbourEnchanted(index, array);
+const leftNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex - 1);
 
-const getPotentialNeighbourIndex = (index: number, array: GameCard[]) => rightNeighbourUnavailable(index, array) ? index - 1 : index + 1
+//const rightNeighbourIsUnenchantable = (index: number, array: GameCard[]) => hasRightNeighbour(index, array) || rightNeighbourIsEnchanted(index, array);
+const hasLeftNeighbour = (index: number) => index > 0;
 
-const neighbourEnchantable = (index: number, array: GameCard[]) => !array.map(e => e.index).includes(index)
+const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[], GCZ: GameCard[]) => hasRightNeighbour(index, GCZ) && !rightNeighbourIsEnchanted(index, enchantmentsRow);
 
-export const highlightNeighborCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+const leftNeighbourIsEnchantable = (index: number, array: GameCard[]) => hasLeftNeighbour(index) && !leftNeighbourIsEnchanted(index, array);
+
+export const highlightNeighborCardEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   const { player } = locate(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const GCZ = gameSnapshot.players[player].places["GCZ"].cards;
-    if (cardOnlyInList(GCZ)) return false;
-    const neighbourIndex = getPotentialNeighbourIndex(highlightCard.index, enchantmentsRow)
-    return neighbourEnchantable(neighbourIndex, enchantmentsRow);
+    if (isOnlyCardInPlace(GCZ)) return false;
+    if (rightNeighbourIsEnchantable(highlightCard.index, enchantmentsRow, GCZ)) return true;
+    else return leftNeighbourIsEnchantable(highlightCard.index, enchantmentsRow);
   }
   return false;
 };
 
 //canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardUnenchanted);
+export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable);
 
 //canEnchantWithZwilling Or With e.g. perplex
 export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted);

@@ -10,6 +10,7 @@ import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 export interface State {
   gameSnapshot: GameSnapshot;
   transitionData: TransitionData[];
+  dragUpdate: UpdateDragData;
   rearrangingPlaceId: string;
   draggedHandCard: GameCard | undefined;
   highlights: string[];
@@ -24,6 +25,7 @@ const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
 export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
+    dragUpdate: { droppableId: "", index: -1 },
     rearrangingPlaceId: "",
     transitionData: [],
     draggedHandCard: undefined,
@@ -52,6 +54,8 @@ export const stateReducer = (
         return { ...state, highlights, highlightType };
       } else return state;
     }
+    case "UPDATE_DRAG":
+      return { ...state, dragUpdate: action.payload };
     case "REARRANGE": {
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
@@ -87,7 +91,14 @@ export const stateReducer = (
 
       return state;
     case "END_DRAG_CLEANUP":
-      return { ...state, draggedHandCard: undefined, rearrangingPlaceId: "", highlights: [], highlightType: "" };
+      return {
+        ...state,
+        draggedHandCard: undefined,
+        rearrangingPlaceId: "",
+        highlights: [],
+        highlightType: "",
+        dragUpdate: { droppableId: "", index: -1 },
+      };
 
     default:
       return state;

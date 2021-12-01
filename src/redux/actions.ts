@@ -20,6 +20,11 @@ export type AllowRearranging = {
   payload: string;
 };
 
+export type UpdateDrag = {
+  type: "UPDATE_DRAG";
+  payload: DraggableLocation;
+};
+
 export type Rearrange = {
   type: "REARRANGE";
   payload: { source: DraggableLocation; destination: DraggableLocation };
@@ -39,4 +44,13 @@ export type EndDragCleanup = {
   type: "END_DRAG_CLEANUP";
 };
 
-export type Action = RemoveTransition | SetHandCardDrag | SetHighlights | Rearrange | AllowRearranging | AddDragged | Enchant | EndDragCleanup;
+export type Action =
+  | RemoveTransition
+  | SetHandCardDrag
+  | AllowRearranging
+  | UpdateDrag
+  | SetHighlights
+  | Rearrange
+  | AddDragged
+  | Enchant
+  | EndDragCleanup;

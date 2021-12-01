@@ -6,6 +6,7 @@ import Hand from "./Hand";
 import { locate3 } from "./helperFunctions/locateFunctions";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { useState } from "react";
+import { doNothing } from "./helperFunctions/genericFunctions";
 
 export const Board = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ export const Board = () => {
     }
   };
 
-  const handleDragUpdate = (d: DragUpdate) => (d.destination ? setDragUpdate(d.destination) : () => {});
+  const handleDragUpdate = (d: DragUpdate) => d.destination ? dispatch({type:"UPDATE_DRAG", payload: d.destination}) : doNothing();
+
+  //(d.destination ? setDragUpdate(d.destination) : () => {});
 
   const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
