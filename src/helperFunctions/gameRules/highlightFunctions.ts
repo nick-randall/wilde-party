@@ -19,8 +19,7 @@ const allTrueWithArgs =
 
 // add
 export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
-  locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : 
-  highlightPlace.cards.length < maxNumGuestCards; 
+  locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
   draggedCard.cardType === highlightPlace.acceptedCardType;
@@ -35,14 +34,37 @@ export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCa
 };
 
 export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  //locate(highlightPlace.id, gameSnapshot).place
-  console.log("warning: logic for this test not implemented");
-  return true;
+  const { player } = locate(highlightCard.id, gameSnapshot);
+  if (player !== null) {
+    const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
+    const enchantmentsRowIndexes = enchantmentsRow.map(e => e.index);
+    return !enchantmentsRowIndexes.includes(highlightCard.index);
+  }
+  return false;
 };
 
+const cardLastInList = (index: number, array: GameCard[]) => index < array.length;
+
+const cardOnlyInList = (array: GameCard[]) => array.length < 1;
+
+const rightNeighbourEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 1);
+
+const rightNeighbourUnavailable = (index: number, array: GameCard[]) => cardLastInList(index, array) || rightNeighbourEnchanted(index, array);
+
+const getPotentialNeighbourIndex = (index: number, array: GameCard[]) => rightNeighbourUnavailable(index, array) ? index - 1 : index + 1
+
+const neighbourEnchantable = (index: number, array: GameCard[]) => !array.map(e => e.index).includes(index)
+
 export const highlightNeighborCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  console.log("warning: logic for this test not implemented");
-  return true;
+  const { player } = locate(highlightCard.id, gameSnapshot);
+  if (player !== null) {
+    const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
+    const GCZ = gameSnapshot.players[player].places["GCZ"].cards;
+    if (cardOnlyInList(GCZ)) return false;
+    const neighbourIndex = getPotentialNeighbourIndex(highlightCard.index, enchantmentsRow)
+    return neighbourEnchantable(neighbourIndex, enchantmentsRow);
+  }
+  return false;
 };
 
 //canEnchantWithBFF

@@ -114,7 +114,7 @@ export const myHandCards: GameCard[] = [
     zwilling: false,
     image: "bffs1",
     cardType: "bff",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "enchantWithBff", highlightType: "guestCard", cardHighlightType: "guest" },
   },
   {
     id: "fffff",
@@ -201,7 +201,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "partypizza",
     cardType: "special",
     specialsCardType: "schleckermaul",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
   {
     id: "mnbvyxcv",
@@ -215,7 +215,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "nebelmaschine",
     cardType: "special",
     specialsCardType: "taenzerin",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
   {
     id: "pppppppf1",
@@ -229,7 +229,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "playlist",
     cardType: "special",
     specialsCardType: "taenzerin",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
   {
     id: "pppppppf1",
@@ -243,7 +243,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "megaphon",
     cardType: "special",
     specialsCardType: "rumgroelerin",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
   {
     id: "pppppppf1",
@@ -257,7 +257,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "prost",
     cardType: "special",
     specialsCardType: "saufnase",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
 ];
 
