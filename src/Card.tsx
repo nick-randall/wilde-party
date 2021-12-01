@@ -82,17 +82,7 @@ const Card = (props: CardProps) => {
           // us to use the API (eg. isDraggingOver, droppableId--which is now
           // the targeted card) just the same...
           (provided, snapshot) => (
-            <div style={{position: "relative"}}>
-              {ghostCard ? (
-                <GhostCard
-                  index={0}
-                  offsetLeft={cardLeftSpread * BFFOffset}
-                  offsetTop={cardHeight / 2}
-                  image={ghostCard.image}
-                  dimensions={dimensions}
-                  zIndex={5}
-                />
-              ) : null}
+            <div style={{ position: "relative" }}>
               <img
                 ref={provided.innerRef}
                 {...provided.droppableProps}
@@ -110,6 +100,16 @@ const Card = (props: CardProps) => {
                   ...hoverStyles[hover],
                 }}
               />
+              {ghostCard ? (
+                <GhostCard
+                  index={0}
+                  offsetLeft={cardLeftSpread * BFFOffset}
+                  offsetTop={cardHeight / 2}
+                  image={ghostCard.image}
+                  dimensions={dimensions}
+                  zIndex={5}
+                />
+              ) : null}
               {provided.placeholder}
             </div>
           )

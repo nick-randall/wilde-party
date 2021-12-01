@@ -38,8 +38,17 @@ export const Board = () => {
   const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
   const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-    const handCard = gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
-    return handCard?.action.highlightType === "guestCard";
+    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId)//gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+    return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
+  };
+
+  const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
+  draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
+
+
+  const isEnchantWithBFF = (d: DropResult, gameSnapshot: GameSnapshot) => {
+    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId) // gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+    return handCard?.action.actionType === "enchantWithBff";
   };
 
   const cardLeftHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
@@ -50,8 +59,9 @@ export const Board = () => {
 
   const handleDragEnd = (d: DropResult) => {
     if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
-    if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
-    if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
+    else if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
+    //if(isEnchantWithBFF(d, gameSnapshot)) dispatch({type: "ENCHANT"})
+    else if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
     setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
     dispatch({ type: "END_DRAG_CLEANUP" });
   };

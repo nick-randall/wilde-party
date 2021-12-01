@@ -69,7 +69,7 @@ export const stateReducer = (
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
-      console.log(destination.droppableId);
+      console.log("ADDED DRAGGED");
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
