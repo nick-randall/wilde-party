@@ -1,4 +1,5 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
+import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
 import { locate } from "../locateFunctions";
 import { ownerHighlightCardUnenchanted, highlightCardUnenchanted } from "./highlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
@@ -7,22 +8,6 @@ const allTrueWithArgs =
   (...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot) => boolean)[]) =>
   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
-
-
-const hasRightNeighbour = (index: number, array: GameCard[]) => index < array.length -1;
-
-const isOnlyCardInPlace = (array: GameCard[]) => array.length < 2;
-
-const rightNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 1);
-
-const leftNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex - 1);
-
-//const rightNeighbourIsUnenchantable = (index: number, array: GameCard[]) => hasRightNeighbour(index, array) || rightNeighbourIsEnchanted(index, array);
-const hasLeftNeighbour = (index: number) => index > 0;
-
-const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[], GCZ: GameCard[]) => hasRightNeighbour(index, GCZ) && !rightNeighbourIsEnchanted(index, enchantmentsRow);
-
-const leftNeighbourIsEnchantable = (index: number, array: GameCard[]) => hasLeftNeighbour(index) && !leftNeighbourIsEnchanted(index, array);
 
 export const highlightNeighborCardEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   const { player } = locate(highlightCard.id, gameSnapshot);
@@ -35,6 +20,11 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
   }
   return false;
 };
+
+export const highlightSecondToRightNeighbourIsEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  console.log("warning not yet implemented")
+
+}
 
 //canEnchantWithBFF
 export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable);

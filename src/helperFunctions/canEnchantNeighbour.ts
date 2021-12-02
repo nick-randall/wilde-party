@@ -2,17 +2,25 @@ import { locate } from "./locateFunctions";
 
 const hasRightNeighbour = (index: number, array: GameCard[]) => index < array.length - 1;
 
-const isOnlyCardInPlace = (array: GameCard[]) => array.length < 2;
+const hasSecondToRightNeighbour = (index: number, array: GameCard[]) => index < array.length - 2;
+
+const hasLeftNeighbour = (index: number) => index > 0;
+
+export const isOnlyCardInPlace = (array: GameCard[]) => array.length < 2;
 
 const rightNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 1);
 
 const leftNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex - 1);
-const hasLeftNeighbour = (index: number) => index > 0;
+
+const secondToRightNeighbourIsEnchanted = (cardIndex: number, enchantmentsRow: GameCard[]) => enchantmentsRow.map(e => e.index).includes(cardIndex + 2);
 
 export const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[], GCZ: GameCard[]) =>
   hasRightNeighbour(index, GCZ) && !rightNeighbourIsEnchanted(index, enchantmentsRow);
 
 export const leftNeighbourIsEnchantable = (index: number, array: GameCard[]) => hasLeftNeighbour(index) && !leftNeighbourIsEnchanted(index, array);
+
+export const secondToRightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[], GCZ: GameCard[]) =>
+hasSecondToRightNeighbour(index, GCZ) && !secondToRightNeighbourIsEnchanted(index, enchantmentsRow);
 
 export const getLeftOrRightNeighbour = (gameSnapshot: GameSnapshot, targetCardId: string) => {
   const { player } = locate(targetCardId, gameSnapshot);

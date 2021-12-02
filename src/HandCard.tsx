@@ -1,5 +1,5 @@
 import React, { CSSProperties, useRef, useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable, DraggableProps, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 import useHoverStyles from "./hooks/useCardInspector";
@@ -52,14 +52,14 @@ const HandCard = (props: HandCardProps) => {
     none: {},
   };
   let transitionStyles: TransitionStyles = { entering: {}, entered: {} };
-  
+
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
     isDragging
       ? {
           transform: `rotate(0deg)`,
-           // This width causes cards to move aside and make room in other droppables.
-            // When not dragging it tucks cards together
-        
+          // This width causes cards to move aside and make room in other droppables.
+          // When not dragging it tucks cards together
+
           // height: 168,
           // width: 105,
           //left: 125 * (index - (numHandCards / 2 - 0.5))
@@ -75,8 +75,6 @@ const HandCard = (props: HandCardProps) => {
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
-
-
   if (transitionData) {
     const { origin, duration, curve } = transitionData;
     transitionStyles = {
@@ -91,17 +89,19 @@ const HandCard = (props: HandCardProps) => {
       },
     };
   }
-  
+
+const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties => (snapshot.isDropAnimating && snapshot.dropAnimation ? { height: cardHeight / 2, transition: "900ms"/* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/} : {});
+
   return (
     <Draggable draggableId={id} index={index} key={id}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} >
+      {(provided, snapshot) => (
+        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <div
-            // The width of this element determines how far cards 
+            // The width of this element determines how far cards
             // move aside and make room in other droppables.
             // When not dragging it has a width of 0, which
             // tucks hand cards together
-            style={{   width: isDragging ? 105 : 0, }}
+            style={{ width: isDragging ? 105 : 0, position: "relative" }}
           >
             <Transition
               in={true}
@@ -128,6 +128,7 @@ const HandCard = (props: HandCardProps) => {
                     onMouseLeave={clearHoverStyles}
                     id={id}
                     style={{
+                      ...droppingStyles(snapshot, provided.draggableProps),
                       ...normalStyles,
                       ...hoverStyles[hover],
                       ...transitionStyles[state],
