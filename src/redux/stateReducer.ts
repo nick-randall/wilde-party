@@ -13,7 +13,7 @@ export interface State {
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide: string | undefined;
-  rearrangingPlaceId: string;
+  rearrangingData: SimpleRearrangingData;
   draggedHandCard: GameCard | undefined;
   highlights: string[];
   highlightType: string;
@@ -31,8 +31,8 @@ export const stateReducer = (
     gameSnapshot: initialGameSnapshot,
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
-    rearrangingPlaceId: "",
     transitionData: [],
+    rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
@@ -46,13 +46,11 @@ export const stateReducer = (
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
       return { ...state, draggedHandCard: draggedHandCard };
-    // Set rearranging place to "highlighted" to turn off isDropDisabled there
-    case "ALLOW_REARRANGING":
-      const droppableId = action.payload;
-      return { ...state, rearrangingPlaceId: droppableId };
+    case "START_REARRANGING": {
+      return { ...state, rearrangingData: action.payload}
+    }
     case "SET_HIGHLIGHTS": {
-      const draggableId = action.payload;
-      const draggedHandCard = state.draggedHandCard//getDraggedHandCard(state, draggableId);
+      const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
         const highlightType = draggedHandCard.action.highlightType;
@@ -63,7 +61,7 @@ export const stateReducer = (
       if (isEnchantWithBFF(state.draggedHandCard)) {
         const { droppableId } = action.payload;
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
-        console.log(BFFdraggedOverSide)
+        console.log(BFFdraggedOverSide);
         return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
       }
       return { ...state, dragUpdate: action.payload };
@@ -82,8 +80,8 @@ export const stateReducer = (
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
+      // Here "destination.droppableId" is actually the card that is being enchanted.
       const { source, destination } = action.payload;
-      // here "destination.droppableId" is actually the card that is being enchanted
       if (destination) {
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };
@@ -94,11 +92,11 @@ export const stateReducer = (
       return {
         ...state,
         draggedHandCard: undefined,
-        rearrangingPlaceId: "",
         highlights: [],
         highlightType: "",
         dragUpdate: { droppableId: "", index: -1 },
         BFFdraggedOverSide: undefined,
+        rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
 
     default:

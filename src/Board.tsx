@@ -10,7 +10,6 @@ import { doNothing } from "./helperFunctions/genericFunctions";
 
 export const Board = () => {
   const dispatch = useDispatch();
-  const [rearrange, setRearrange] = useState<SimpleRearrangingData>({ placeId: "", draggableId: "", sourceIndex: -1 });
 
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
@@ -22,12 +21,14 @@ export const Board = () => {
   const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
     if (isHandCard(source)) dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
     else {
-      dispatch({ type: "ALLOW_REARRANGING", payload: source.droppableId });
-      setRearrange({ placeId: source.droppableId, sourceIndex: source.index, draggableId });
+      dispatch({ type: "START_REARRANGING", payload: { placeId: source.droppableId, sourceIndex: source.index, draggableId: draggableId } });
     }
   };
 
-  const handleDragUpdate = (d: DragUpdate) => (d.destination ? dispatch({ type: "UPDATE_DRAG", payload: d.destination }) : dispatch({ type: "UPDATE_DRAG", payload: {droppableId: "", index: -1} }))
+  const handleDragUpdate = (d: DragUpdate) =>
+    d.destination
+      ? dispatch({ type: "UPDATE_DRAG", payload: d.destination })
+      : dispatch({ type: "UPDATE_DRAG", payload: { droppableId: "", index: -1 } });
 
   //(d.destination ? setDragUpdate(d.destination) : () => {});
 
@@ -38,16 +39,15 @@ export const Board = () => {
   const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
   const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId)//gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); //gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
     return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
   };
 
   const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
-  draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
-
+    draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
   const isEnchantWithBFF = (d: DropResult, gameSnapshot: GameSnapshot) => {
-    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId) // gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+    const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); // gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
     return handCard?.action.actionType === "enchantWithBff";
   };
 
@@ -62,7 +62,6 @@ export const Board = () => {
     else if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
     //if(isEnchantWithBFF(d, gameSnapshot)) dispatch({type: "ENCHANT"})
     else if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
-    setRearrange({ placeId: "", draggableId: "", sourceIndex: -1 });
     dispatch({ type: "END_DRAG_CLEANUP" });
   };
 
@@ -73,8 +72,7 @@ export const Board = () => {
           id={ids.pl0GCZ}
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
           GCZCards={gameSnapshot.players[0].places.GCZ.cards}
-          rearrange={rearrange}
-        />{" "}
+        />
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
     </DragDropContext>

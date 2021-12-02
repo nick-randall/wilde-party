@@ -15,10 +15,10 @@ export type SetHighlights = {
   payload: string | undefined;
 };
 
-export type AllowRearranging = {
-  type: "ALLOW_REARRANGING";
-  payload: string;
-};
+export type StartRearranging = {
+  type: "START_REARRANGING",
+  payload: SimpleRearrangingData;
+}
 
 export type UpdateDrag = {
   type: "UPDATE_DRAG";
@@ -47,7 +47,7 @@ export type EndDragCleanup = {
 export type Action =
   | RemoveTransition
   | SetHandCardDrag
-  | AllowRearranging
+  | StartRearranging
   | UpdateDrag
   | SetHighlights
   | Rearrange

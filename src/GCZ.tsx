@@ -12,17 +12,15 @@ interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
-  rearrange: SimpleRearrangingData;
-  //draggedOver: UpdateDragData | undefined;
-}
+}   
 
 function GCZ(props: GCZProps) {
-  const { id, enchantmentsRowCards, GCZCards, rearrange } = props;
+  const { id, enchantmentsRowCards, GCZCards } = props;
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate)
+  const rearrange = useSelector((state: RootState) => state.rearrangingData)
 
-  const index = draggedOver ? draggedOver.index : rearrange.sourceIndex;
-
+  const index = draggedOver.index !== -1 ? draggedOver.index : rearrange.sourceIndex;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
@@ -34,7 +32,7 @@ function GCZ(props: GCZProps) {
 
   const isHighlighted = highlights.includes(id);
 
-  const rearranging = useSelector((state: RootState) => state.rearrangingPlaceId === id);
+  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
 
   const containsTargetedCard =
     highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
