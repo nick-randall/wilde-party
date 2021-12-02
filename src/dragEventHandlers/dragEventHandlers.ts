@@ -1,48 +1,52 @@
-import { DraggableLocation } from "react-beautiful-dnd";
+import { DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { locate3 } from "../helperFunctions/locateFunctions";
+import store from "../redux/store";
 
-export const isHandCard = (source: DraggableLocation) => locate3(source.droppableId).place === "hand";
+const isHandCard = (source: DraggableLocation) => locate3(source.droppableId).place === "hand";
 
-// const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
-//   if (isHandCard(source)) dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
-//   else {
-//     dispatch({ type: "START_REARRANGING", payload: { placeId: source.droppableId, sourceIndex: source.index, draggableId: draggableId } });
-//   }
-// };
+//(d.destination ? setDragUpdate(d.destination) : () => {});
 
-// const handleDragUpdate = (d: DragUpdate) =>
-//   d.destination
-//     ? dispatch({ type: "UPDATE_DRAG", payload: d.destination })
-//     : dispatch({ type: "UPDATE_DRAG", payload: { droppableId: "", index: -1 } });
+const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
-// //(d.destination ? setDragUpdate(d.destination) : () => {});
+const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
 
-// const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
+const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
-// const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
+const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
+  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); //gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+  return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
+};
 
-// const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
+const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
+  draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
-// const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-//   const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); //gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
-//   return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
-// };
+const cardDidLeaveHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
 
-// const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
-//   draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
+const cardPlayedToTable = (d: DropResult) => d.destination;
 
-// const cardDidLeaveHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
+const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardPlayedToTable(d);
 
-// const cardPlayedToTable = (d: DropResult) => d.destination;
+export const handleBeforeCapture = ({ draggableId }: { draggableId: string }) =>
+  store.dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
-// const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardPlayedToTable(d);
+export const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
+  if (isHandCard(source)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+  else {
+    store.dispatch({ type: "START_REARRANGING", payload: { placeId: source.droppableId, sourceIndex: source.index, draggableId: draggableId } });
+  }
+};
 
-// export const handleBeforeCapture = ({ draggableId }: { draggableId: string }) => dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
+export const handleDragUpdate = (d: DragUpdate) =>
+  d.destination
+    ? store.dispatch({ type: "UPDATE_DRAG", payload: d.destination })
+    : store.dispatch({ type: "UPDATE_DRAG", payload: { droppableId: "", index: -1 } });
 
-
-// export const handleDragEnd = (d: DropResult) => {
-//   if (isRearrange(d)) dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
-//   else if (isEnchant(d, gameSnapshot)) dispatch({ type: "ENCHANT", payload: d });
-//   else if (isAddDrag(d)) dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
-//   dispatch({ type: "END_DRAG_CLEANUP" });
-// };
+export const handleDragEnd = (d: DropResult) => {
+  const gameSnapshot = store.getState().gameSnapshot;
+  if (d.destination) {
+    if (isRearrange(d)) store.dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
+    else if (isEnchant(d, gameSnapshot)) store.dispatch({ type: "ENCHANT", payload: d });
+    else if (isAddDrag(d)) store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
+  }
+  store.dispatch({ type: "END_DRAG_CLEANUP" });
+};
