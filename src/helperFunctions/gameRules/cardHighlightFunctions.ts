@@ -4,6 +4,11 @@ import { locate } from "../locateFunctions";
 //import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted } from "./cardHighlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
+export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+};
+
 const allTrueWithArgs =
   (...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot) => boolean)[]) =>
   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
@@ -21,11 +26,6 @@ export const highlightCardHasEnchantableNeighbour = (highlightCard: GameCard, dr
     else return leftNeighbourIsEnchantable(highlightCard.index, enchantmentsRow);
   }
   return false;
-};
-
-export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
-  console.log("warning: logic for this test not implemented");
-  return true;
 };
 
 export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
@@ -48,7 +48,6 @@ export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: Gam
   }
   return false;
 };
-
 
 
 //canEnchantWithBFF

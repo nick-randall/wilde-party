@@ -27,7 +27,7 @@ export const Board = () => {
     }
   };
 
-  const handleDragUpdate = (d: DragUpdate) => (d.destination ? dispatch({ type: "UPDATE_DRAG", payload: d.destination }) : doNothing());
+  const handleDragUpdate = (d: DragUpdate) => (d.destination ? dispatch({ type: "UPDATE_DRAG", payload: d.destination }) : dispatch({ type: "UPDATE_DRAG", payload: {droppableId: "", index: -1} }))
 
   //(d.destination ? setDragUpdate(d.destination) : () => {});
 

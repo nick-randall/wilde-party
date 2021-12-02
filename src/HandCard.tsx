@@ -90,7 +90,7 @@ const HandCard = (props: HandCardProps) => {
     };
   }
 
-const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties => (snapshot.isDropAnimating && snapshot.dropAnimation ? { height: cardHeight / 2, transition: "900ms"/* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/} : {});
+const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties => (snapshot.isDropAnimating && snapshot.dropAnimation ? { height: cardHeight / 2, transition: "9 s"/* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/} : {});
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
@@ -128,7 +128,7 @@ const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvid
                     onMouseLeave={clearHoverStyles}
                     id={id}
                     style={{
-                      ...droppingStyles(snapshot, provided.draggableProps),
+                     // ...droppingStyles(snapshot, provided.draggableProps),
                       ...normalStyles,
                       ...hoverStyles[hover],
                       ...transitionStyles[state],
