@@ -1,3 +1,4 @@
+import { off } from "process";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
@@ -11,17 +12,17 @@ interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
-}   
+}
 
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
 
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate)
-  const rearrange = useSelector((state: RootState) => state.rearrangingData)
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
+  const rearrange = useSelector((state: RootState) => state.rearrangingData);
 
   const index = draggedOver.index !== -1 ? draggedOver.index : rearrange.sourceIndex;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  const ghostCard = draggedHandCard && index !== -1 ? draggedHandCard : undefined;
 
   const cardRow = getCardGroupObjs(enchantmentsRowCards, GCZCards);
   const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
@@ -36,27 +37,35 @@ function GCZ(props: GCZProps) {
   // const containsTargetedCard =
   //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
-  const allowDropping = isHighlighted || rearranging // || containsTargetedCard; // better name!°
+  const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
+  const extraCard = draggedOver.droppableId === id && !rearranging ? 1 : 0; 
+  //const offsetToSetMiddle = window.innerWidth / 2 - dimensions.cardLeftSpread * GCZCards.length / 2;
+
+  // layout 
+  const offsetLeftToSetMiddle = window.innerWidth / 2 - dimensions.cardLeftSpread * (GCZCards.length + extraCard) / 2;
+  const offsetTopToSetMiddle = window.innerHeight / 2 - dimensions.cardHeight * 1.5 / 2;
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
-      {(provided) => (
+      {provided => (
         <div
           className="pl0GCZ"
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{
             display: "flex",
-            top: 100,
-            //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: 100,
+            //top: 100,
             position: "absolute",
+            margin: 0,
+            //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
+            left: offsetLeftToSetMiddle,
+            top: offsetTopToSetMiddle,
             height: dimensions.cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-            transition: "background-color 180ms, box-shadow 180ms",
+            transition: "background-color 180ms, box-shadow 180ms, left 180ms",
           }}
         >
           {cardRow.map((cardGroup, index) => (
@@ -65,7 +74,7 @@ function GCZ(props: GCZProps) {
           {provided.placeholder}
 
           {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[index]} dimensions={dimensions} /> : null}
-          {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} zIndex={0}/> : null}
+          {ghostCard ? <GhostCard index={cardRowShape[index]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null}
         </div>
       )}
     </Droppable>

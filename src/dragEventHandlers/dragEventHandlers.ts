@@ -4,8 +4,6 @@ import store from "../redux/store";
 
 const isHandCard = (source: DraggableLocation) => locate3(source.droppableId).place === "hand";
 
-//(d.destination ? setDragUpdate(d.destination) : () => {});
-
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
 const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destination.droppableId === d.source.droppableId;
@@ -13,7 +11,7 @@ const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destinatio
 const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
 const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); //gameSnapshot.players[0].places.hand.cards.find(c => c.id === d.draggableId);
+  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); 
   return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
 };
 
@@ -22,10 +20,12 @@ const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | un
 
 const cardDidLeaveHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
 
-const cardPlayedToTable = (d: DropResult) => d.destination;
+const cardDroppedElswhere = (d: DropResult) => d.destination;
 
-const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardPlayedToTable(d);
+const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(d);
 
+
+///
 export const handleBeforeCapture = ({ draggableId }: { draggableId: string }) =>
   store.dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
