@@ -1,6 +1,7 @@
 import { getAllGuestCards, getAllPlayerPlaces, getAllPlayers } from "./getHighlightsOfType";
-import { getCardFunctions, getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
+import {  getPlaceFunctions, getPlayerFunctions } from "./highlightFunctions";
 import * as R from "ramda";
+import { getCardFunctions } from "./cardHighlightFunctions";
 
 export const getHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   //const gameSnapshot = store.getState().gameSnapshot;

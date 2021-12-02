@@ -1,7 +1,7 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
 import { locate } from "../locateFunctions";
-import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightLeftNeighbourCardNotBFFEnchanted } from "./highlightFunctions";
+//import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted } from "./cardHighlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
 const allTrueWithArgs =
@@ -11,7 +11,7 @@ const allTrueWithArgs =
 
 // checks whether a BFF can target a particular card:
 // requirement = that card has an enchantable neighbour
-export const highlightNeighborCardEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+export const highlightCardHasEnchantableNeighbour = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   const { player } = locate(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
@@ -23,11 +23,39 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
   return false;
 };
 
+export const ownerHighlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+  console.log("warning: logic for this test not implemented");
+  return true;
+};
+
+export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  const { player } = locate(highlightCard.id, gameSnapshot);
+  if (player !== null) {
+    const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
+    const enchantmentsRowIndexes = enchantmentsRow.map(e => e.index);
+    return !enchantmentsRowIndexes.includes(highlightCard.index);
+  }
+  return false;
+};
+
+export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  const { player } = locate(highlightCard.id, gameSnapshot);
+  if (player !== null) {
+    const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
+    const leftNeighbourEnchantCard = enchantmentsRow.find(card => card.index === highlightCard.index - 1);
+    console.log(leftNeighbourEnchantCard?.image)
+    return leftNeighbourEnchantCard?.cardType !== "bff";
+  }
+  return false;
+};
+
+
+
 //canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, highlightLeftNeighbourCardNotBFFEnchanted);
+export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightCardHasEnchantableNeighbour, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
 //canEnchantWithZwilling Or With e.g. perplex
-export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightLeftNeighbourCardNotBFFEnchanted);
+export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
 // steal
 
@@ -67,7 +95,6 @@ export const canProtectSelf: HighlightPlayerFunction = (highlightPlayer: GamePla
   console.log("error: this function 'canProtectSelf' has not been created yet");
   return true;
 };
-
 
 export const getCardFunctions = (actionType: ActionType): HighlightCardFunction => {
   if (actionType === "destroy") return canDestroy;
