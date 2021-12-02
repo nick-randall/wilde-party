@@ -9,6 +9,8 @@ const allTrueWithArgs =
   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
+// checks whether a BFF can target a particular card:
+// requirement = that card has an enchantable neighbour
 export const highlightNeighborCardEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   const { player } = locate(highlightCard.id, gameSnapshot);
   if (player !== null) {
@@ -21,9 +23,10 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
   return false;
 };
 
+//export const highlightLeftNeighbourCardNotBFFEnchanted = ;
+
 export const highlightSecondToRightNeighbourIsEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   console.log("warning not yet implemented")
-
 }
 
 //canEnchantWithBFF
