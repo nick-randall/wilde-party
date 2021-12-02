@@ -1,6 +1,5 @@
-import { includes } from "ramda";
 import React, { CSSProperties, useRef, useState } from "react";
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";

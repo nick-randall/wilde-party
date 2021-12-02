@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
@@ -34,10 +33,8 @@ function GCZ(props: GCZProps) {
 
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
 
-  const containsTargetedCard =
-    highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
-
-  //console.log(highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)))
+  // const containsTargetedCard =
+  //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
   const allowDropping = isHighlighted || rearranging // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
