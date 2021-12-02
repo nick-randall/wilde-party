@@ -23,12 +23,6 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
   return false;
 };
 
-// export const highlightLeftNeighbourCardNotBFFEnchanted = ;
-
-// export const highlightSecondToRightNeighbourIsEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-//   console.log("warning not yet implemented")
-// }
-
 //canEnchantWithBFF
 export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, highlightLeftNeighbourCardNotBFFEnchanted);
 
