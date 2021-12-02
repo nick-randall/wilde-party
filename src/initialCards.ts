@@ -76,6 +76,19 @@
 
 export const myHandCards: GameCard[] = [
   {
+    id: "3w3323434",
+    name: "bffs5",
+    placeId: "324562132300",
+    playerId: "l93fld9",
+    index: 3,
+    pointValue: 1,
+    bffs: false,
+    zwilling: false,
+    image: "bffs2",
+    cardType: "bff",
+     action: { actionType: "enchantWithBff", highlightType: "guestCard", cardHighlightType: "guest" },
+  },
+  {
     id: "jadsif293jfnjskdnv",
     name: "schleckermaul4",
     playerId: "l93fld9",
@@ -173,19 +186,7 @@ export const myEnchantmentsRowCards: GameCard[] = [
   //   cardType: "zwilling",
   //   action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
   // },
-  {
-    id: "3w3323434",
-    name: "bffs5",
-    placeId: "324562132300",
-    playerId: "l93fld9",
-    index: 3,
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    image: "bffs2",
-    cardType: "bff",
-     action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
-  },
+  
   
 ];
 

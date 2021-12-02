@@ -44,6 +44,17 @@ export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: G
   return false;
 };
 
+export const highlightLeftNeighbourCardNotBFFEnchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+  const { player } = locate(highlightCard.id, gameSnapshot);
+  if (player !== null) {
+    const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
+    const leftNeighbourEnchantCard = enchantmentsRow.find(card => card.index === highlightCard.index - 1);
+    console.log(leftNeighbourEnchantCard?.image)
+    return leftNeighbourEnchantCard?.cardType !== "bff";
+  }
+  return false;
+};
+
 export const highlightNeighborCardEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   const { player } = locate(highlightCard.id, gameSnapshot);
   if (player !== null) {
@@ -57,10 +68,10 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
 };
 
 //canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable);
+export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, highlightLeftNeighbourCardNotBFFEnchanted);
 
 //canEnchantWithZwilling Or With e.g. perplex
-export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted);
+export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightLeftNeighbourCardNotBFFEnchanted);
 
 // steal
 

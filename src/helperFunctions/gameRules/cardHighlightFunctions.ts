@@ -1,7 +1,7 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
 import { locate } from "../locateFunctions";
-import { ownerHighlightCardUnenchanted, highlightCardUnenchanted } from "./highlightFunctions";
+import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightLeftNeighbourCardNotBFFEnchanted } from "./highlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
 const allTrueWithArgs =
@@ -23,17 +23,17 @@ export const highlightNeighborCardEnchantable = (highlightCard: GameCard, dragge
   return false;
 };
 
-//export const highlightLeftNeighbourCardNotBFFEnchanted = ;
+// export const highlightLeftNeighbourCardNotBFFEnchanted = ;
 
-export const highlightSecondToRightNeighbourIsEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  console.log("warning not yet implemented")
-}
+// export const highlightSecondToRightNeighbourIsEnchantable = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
+//   console.log("warning not yet implemented")
+// }
 
 //canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable);
+export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, highlightLeftNeighbourCardNotBFFEnchanted);
 
 //canEnchantWithZwilling Or With e.g. perplex
-export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted);
+export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightLeftNeighbourCardNotBFFEnchanted);
 
 // steal
 
