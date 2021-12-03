@@ -38,6 +38,7 @@ type AllDimensions = {
   rotation: number;
   featuredCardScale: number;
   zIndex: number;
+  GCZHeight: number;
   // leftOffset: number;
   // topOffset: number;
 };

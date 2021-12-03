@@ -8,8 +8,11 @@ import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 
+const getScreenSize = () => ({width: window.innerWidth, height: window.innerHeight})
+
 export interface State {
   gameSnapshot: GameSnapshot;
+  screenSize: {width: number, height: number}
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide: string | undefined;
@@ -29,6 +32,7 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 export const stateReducer = (
   state: State = {
     gameSnapshot: initialGameSnapshot,
+    screenSize: getScreenSize(),
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],

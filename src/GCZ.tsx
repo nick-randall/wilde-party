@@ -2,6 +2,7 @@ import { off } from "process";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
+import { getLayout } from "./dimensions/getLayout";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -39,12 +40,8 @@ function GCZ(props: GCZProps) {
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
-  const extraCard = draggedOver.droppableId === id && !rearranging ? 1 : 0; 
-  //const offsetToSetMiddle = window.innerWidth / 2 - dimensions.cardLeftSpread * GCZCards.length / 2;
-
-  // layout 
-  const offsetLeftToSetMiddle = window.innerWidth / 2 - dimensions.cardLeftSpread * (GCZCards.length + extraCard) / 2;
-  const offsetTopToSetMiddle = window.innerHeight / 2 - dimensions.cardHeight * 1.5 / 2;
+  const { GCZHeight } = dimensions;
+  const { x, y } = getLayout(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
@@ -59,9 +56,9 @@ function GCZ(props: GCZProps) {
             position: "absolute",
             margin: 0,
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: offsetLeftToSetMiddle,
-            top: offsetTopToSetMiddle,
-            height: dimensions.cardHeight * 1.5,
+            left: x,
+            top: y,
+            height: GCZHeight,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",

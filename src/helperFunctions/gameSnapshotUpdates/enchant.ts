@@ -1,4 +1,5 @@
 import produce from "immer";
+import { convertSnapshot } from "../../initialCards";
 import { locate } from "../locateFunctions";
 
 function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
@@ -40,5 +41,6 @@ export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targe
       });
       const [handCard] = draft.players[0].places.hand.cards.splice(handCardIndex, 1);
       draft.players[player].places["enchantmentsRow"].cards.push(handCard);
+      convertSnapshot(draft);
     }
   });

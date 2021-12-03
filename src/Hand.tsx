@@ -4,6 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
+import { getLayout } from "./dimensions/getLayout";
 interface HandProps {
   id: string;
   handCards: GameCard[];
@@ -17,6 +18,8 @@ const Hand = (props: HandProps) => {
   const dimensions = getAllDimensions(id);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const spread = !handCardDragged && mouseOverHand ? 125 : 35;
+  const { x, y } = getLayout(id);  
+
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
@@ -28,9 +31,10 @@ const Hand = (props: HandProps) => {
           style={{
             position: "absolute",
             display: "flex",
-            bottom: 200,
+            bottom: 30,
             // This causes whole card row to move left on spread
-            left: 700 - (spread / 2) * handCards.length,
+            left: x - (spread / 2) * handCards.length,
+            top: y,
             width: handCards.length * dimensions.cardWidth,
             transition: "180ms",
             height: dimensions.cardHeight,
