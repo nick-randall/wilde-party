@@ -7,6 +7,7 @@ import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
+import { compareProps } from "./helperFunctions/tests";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
@@ -42,6 +43,7 @@ function GCZ(props: GCZProps) {
   const dimensions = getAllDimensions(id);
   const { GCZHeight } = dimensions;
   const { x, y } = getLayout(id);
+  console.log(GCZCards.map(c => c.index));
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>

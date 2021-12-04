@@ -11,9 +11,10 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
   produce(gameSnapshot, draft => {
     const { player, place } = locate(destinationPlaceId, gameSnapshot);
     if (player !== null) {
-      const newPlayerId = gameSnapshot.players[player].places[place].playerId; 
-      setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: destinationPlaceId, playerId: newPlayerId, index: destinationIndex });
+      const newPlayerId = gameSnapshot.players[player].places[place].playerId;
+      setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: destinationPlaceId, playerId: newPlayerId });
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
       draft.players[player].places[place].cards.splice(destinationIndex, 0, handCard);
+      draft.players[player].places[place].cards = draft.players[player].places[place].cards.map((c, i) => ({ ...c, index: i }));
     }
   });

@@ -6,11 +6,11 @@ const handToTableScaleFactor = 160 / 211;
 export const getAllDimensions = (placeId: string) => {
   const gameSnapshot = store.getState().gameSnapshot;
   const { place, player } = locate(placeId, gameSnapshot);
-  const enchantmentsRowId = place === "GCZ" && player !== null ? gameSnapshot.players[player].places["enchantmentsRow"].id: "";
+  const enchantmentsRowId = place === "GCZ" && player !== null ? gameSnapshot.players[player].places["enchantmentsRow"].id : "";
 
   const placeType = place;
   const numCards = getNumCards(placeId, gameSnapshot);
-  const numEnchantmentsCards = getNumCards(enchantmentsRowId, gameSnapshot)
+  const numEnchantmentsCards = getNumCards(enchantmentsRowId, gameSnapshot);
 
   // ratio height to width is 1.6
 
@@ -35,7 +35,7 @@ export const getAllDimensions = (placeId: string) => {
     featuredCardScale: 2 * handToTableScaleFactor,
     cardHeight: 224,
     cardWidth: 140,
-    cardLeftSpread: (numCards / 2 - 0.5) * 1,
+    cardLeftSpread: 35,
     cardTopSpread: 0,
     zIndex: 5,
     draggedCardScale: 1.1,

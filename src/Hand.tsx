@@ -5,6 +5,7 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
+import { locate3 } from "./helperFunctions/locateFunctions";
 interface HandProps {
   id: string;
   handCards: GameCard[];
@@ -17,7 +18,8 @@ const Hand = (props: HandProps) => {
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
-  const spread = !handCardDragged && mouseOverHand ? 125 : 35;
+  const spread = !handCardDragged && mouseOverHand ? 125 : dimensions.cardLeftSpread;
+
   const { x, y } = getLayout(id);  
 
 
