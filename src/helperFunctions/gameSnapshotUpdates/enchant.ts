@@ -30,10 +30,10 @@ export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targe
       const GCZ = gameSnapshot.players[player].places["GCZ"];
       const enchantmentsRowId = enchantmentsRow.id;
       const newPlayerId = enchantmentsRow.playerId;
+      const playedCardType = gameSnapshot.players[0].places.hand.cards[handCardIndex].cardType;
 
-      //let destinationIndex = gameSnapshot.players[player].places[place].cards.map(e => e.id).indexOf(targetCardId);
       let destinationIndex = GCZ.cards.map(e => e.id).indexOf(targetCardId);
-      if (!rightNeighbourIsEnchantable(destinationIndex, enchantmentsRow.cards, GCZ.cards)) destinationIndex -= 1;
+      if (playedCardType === "bff" && !rightNeighbourIsEnchantable(destinationIndex, enchantmentsRow.cards, GCZ.cards)) destinationIndex -= 1;
       setAttributes(draft.players[0].places.hand.cards[handCardIndex], {
         placeId: enchantmentsRowId,
         playerId: newPlayerId,
