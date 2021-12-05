@@ -1,5 +1,9 @@
 import { Combine, DraggableLocation, DragStart, DropResult } from "react-beautiful-dnd";
 
+export type SetScreenSize = {
+  type: "SET_SCREEN_SIZE";
+};
+
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
   payload: string;
@@ -16,9 +20,9 @@ export type SetHighlights = {
 };
 
 export type StartRearranging = {
-  type: "START_REARRANGING",
+  type: "START_REARRANGING";
   payload: SimpleRearrangingData;
-}
+};
 
 export type UpdateDrag = {
   type: "UPDATE_DRAG";
@@ -45,6 +49,7 @@ export type EndDragCleanup = {
 };
 
 export type Action =
+  | SetScreenSize
   | RemoveTransition
   | SetHandCardDrag
   | StartRearranging

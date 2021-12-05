@@ -44,6 +44,8 @@ export const stateReducer = (
   action: Action
 ) => {
   switch (action.type) {
+    case "SET_SCREEN_SIZE" :
+      return { ...state, screenSize: getScreenSize() }    
     // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
     // be altered
     case "SET_DRAGGED_HAND_CARD":

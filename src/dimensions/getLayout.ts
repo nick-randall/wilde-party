@@ -1,4 +1,5 @@
 import { range } from "ramda";
+import { Store } from "redux";
 import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
@@ -6,7 +7,18 @@ import store from "../redux/store";
 
 //const centerWidth = ()
 
+// function toObservable(store: Store) {
+//   return {
+//     subscribe({ onNext } : {onNext: Function}) {
+//       let dispose = store.subscribe(() => onNext(store.getState()));
+//       onNext(store.getState());
+//       return { dispose };
+//     }
+//   }
+// }
+
 export const getLayout = (id: string): { x: number; y: number } => {
+  store.subscribe(() => store.getState())
   const { screenSize, gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
   const { player, place } = locate(id, gameSnapshot);
   const dimensions = getAllDimensions(id);
