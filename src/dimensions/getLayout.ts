@@ -50,7 +50,7 @@ export const getLayout = (id: string): { x: number; y: number } => {
       case "hand":
         return { x: handFromCenterWidth(0), y: fromCenterHeight(200) };
       case "specialsZone":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-150) };
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-125) };
     }
   }
   return { x: 0, y: 0 };
