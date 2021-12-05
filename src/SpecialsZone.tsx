@@ -8,7 +8,7 @@ interface SpecialsZoneProps {
   id: string;
 }
 
-export const SpecialsZone = (props: SpecialsZoneProps) => {
+export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZoneProps) => {
   const { specialsCards, id } = props;
   const dimensions = getAllDimensions(id);
   const { x, y } = getLayout(id);
@@ -16,8 +16,8 @@ export const SpecialsZone = (props: SpecialsZoneProps) => {
 
   return (
     <div style={{ display: "flex", position: "absolute", top: y, left: x, flexDirection: "row" }}>
-      {specialsCardsColumns.map(column => (
-        <SpecialsCardsColumn cards={column} dimensions={dimensions} key={column[0].id} specialsZoneId={id} />
+      {specialsCardsColumns.map(columnCards => (
+        <SpecialsCardsColumn cards={columnCards} dimensions={dimensions} key={columnCards[0].id} specialsZoneId={id} />
       ))}
       <div
       // { if specialsCardsColumns.length < 4}
