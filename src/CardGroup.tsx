@@ -46,7 +46,7 @@ const CardGroup = (props: CardGroupProps) => {
                 <Card
                   offsetTop={getOffset(card, cardGroupIndex).top} 
                   offsetLeft={getOffset(card, cardGroupIndex).left}
-                  cardGroupIndex={cardGroupIndex}
+                  //cardGroupIndex={cardGroupIndex}
                   id={card.id}
                   image={card.image}
                   index={index}

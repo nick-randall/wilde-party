@@ -104,7 +104,7 @@ const HandCard = (props: HandCardProps) => {
       let x = 0;
       let y = 0;
       if (highlightType === "guestCard") {
-        if (draggedHandCard && draggedHandCard.cardType === "bff") x = 40 * BFFDraggedOverSide;
+        if (draggedHandCard && draggedHandCard.cardType === "bff") x = 28 * BFFDraggedOverSide;
         else x = -15;
         y = 60;
       } else {

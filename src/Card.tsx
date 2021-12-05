@@ -13,7 +13,7 @@ export interface CardProps {
   dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
-  cardGroupIndex: number;
+  //cardGroupIndex: number;
 }
 
 const Card = (props: CardProps) => {

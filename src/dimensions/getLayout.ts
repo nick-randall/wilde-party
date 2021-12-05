@@ -46,9 +46,11 @@ export const getLayout = (id: string): { x: number; y: number } => {
   if (player === 0) {
     switch (place) {
       case "GCZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-100) };
+        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
         return { x: handFromCenterWidth(0), y: fromCenterHeight(200) };
+      case "specialsZone":
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-150) };
     }
   }
   return { x: 0, y: 0 };

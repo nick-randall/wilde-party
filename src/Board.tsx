@@ -6,6 +6,7 @@ import Hand from "./Hand";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
 import { useEffect } from "react";
+import { SpecialsZone } from "./SpecialsZone";
 
 export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -19,6 +20,9 @@ export const Board = () => {
   return (
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <div>
+        <SpecialsZone 
+        id={ids.pl0specialsZone}
+        specialsCards={gameSnapshot.players[0].places.specialsZone.cards}/>
         <GCZ
           id={ids.pl0GCZ}
           enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
