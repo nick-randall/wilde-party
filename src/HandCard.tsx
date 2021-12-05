@@ -30,6 +30,7 @@ const HandCard = (props: HandCardProps) => {
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => (state.BFFdraggedOverSide === "left" ? 0 : 1));
+  const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
 
@@ -94,8 +95,8 @@ const HandCard = (props: HandCardProps) => {
     };
   }
 
-  function getStyle(snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) {
-    if (!snapshot.isDropAnimating) {
+  const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
+    if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
       return style;
     }
     if (snapshot.dropAnimation) {
@@ -110,7 +111,6 @@ const HandCard = (props: HandCardProps) => {
         x = -75;
         y = -25;
       }
-
       const translate = `translate(${x}px, ${y}px)`;
       const scale = `scale(${dimensions.handToTableScaleFactor})`;
       return {
@@ -161,7 +161,7 @@ const HandCard = (props: HandCardProps) => {
                       ...hoverStyles[hover],
                       ...transitionStyles[state],
                       ...dragStyles(isDragging),
-                      ...getStyle(snapshot, provided.draggableProps),
+                      ...droppingStyles(snapshot, provided.draggableProps),
                     }}
                   />
                 );
