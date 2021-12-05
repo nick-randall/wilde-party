@@ -28,6 +28,10 @@ const HandCard = (props: HandCardProps) => {
 
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
+  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide === "left" ? 0 : 1)
+
+  const highlightType = useSelector((state: RootState) => state.highlightType);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const element = cardRef.current;
@@ -90,7 +94,36 @@ const HandCard = (props: HandCardProps) => {
     };
   }
 
-const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties => (snapshot.isDropAnimating && snapshot.dropAnimation ? { height: cardHeight / 2, transition: "9 s"/* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/} : {});
+  const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties =>
+    snapshot.isDropAnimating && snapshot.dropAnimation
+      ? { height: cardHeight / 2, transition: "9 s" /* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/ }
+      : {};
+
+  function getStyle(snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) {
+    if (!snapshot.isDropAnimating) {
+      return style;
+    }
+    if (snapshot.dropAnimation) {
+      const { moveTo, curve, duration } = snapshot.dropAnimation;
+      // move to the right spot
+      // const translate = `translate(${moveTo.x + 10}px, ${moveTo.y + 310}px)`;
+
+      const translate = ""; //`translate(${moveTo.x}px, ${moveTo.y}px)`;
+      const scale = `scale(${dimensions.handToTableScaleFactor})`;
+      // add a bit of turn for fun
+      const rotate = "";
+
+      // patching the existing style
+      return {
+        ...style,
+        transform: `${translate} ${rotate} ${scale}`,
+        top: highlightType === "guestCard" ? 60 : -25,
+        left: highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 35 * BFFDraggedOverSide : -35) : -75,
+        // slowing down the drop because we can
+        // transition: `all ${curve} ${duration + 1}s`,
+      };
+    }
+  }
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
@@ -128,11 +161,11 @@ const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvid
                     onMouseLeave={clearHoverStyles}
                     id={id}
                     style={{
-                     // ...droppingStyles(snapshot, provided.draggableProps),
                       ...normalStyles,
                       ...hoverStyles[hover],
                       ...transitionStyles[state],
                       ...dragStyles(isDragging),
+                      ...getStyle(snapshot, provided.draggableProps),
                     }}
                   />
                 );

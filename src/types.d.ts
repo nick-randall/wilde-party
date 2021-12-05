@@ -39,6 +39,7 @@ type AllDimensions = {
   featuredCardScale: number;
   zIndex: number;
   GCZHeight: number;
+  handToTableScaleFactor: number;
   // leftOffset: number;
   // topOffset: number;
 };

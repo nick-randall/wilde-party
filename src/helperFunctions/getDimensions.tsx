@@ -27,6 +27,8 @@ export const getAllDimensions = (placeId: string) => {
     rotation: 0,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     GCZHeight: numEnchantmentsCards === 0 ? 168 : 168 * 1.5,
+    handToTableScaleFactor: handToTableScaleFactor
+
     // leftOffset: placeType !== "enchantmentsRow" ? 0 : numCards < 7 ? 32.5 : 17.5,
     // topOffset: placeType !== "enchantmentsRow" ? 0 : 65,
   };
@@ -44,6 +46,7 @@ export const getAllDimensions = (placeId: string) => {
     tableCardzIndex: 9,
     rotation: (numCards / 2 - 0.5) * 10,
     GCZHeight: numEnchantmentsCards === 0 ? 168 : 168 * 1.5,
+    handToTableScaleFactor: handToTableScaleFactor
 
     // leftOffset: 0,
     // topOffset: 65,
