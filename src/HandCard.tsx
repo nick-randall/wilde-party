@@ -29,7 +29,7 @@ const HandCard = (props: HandCardProps) => {
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide === "left" ? 0 : 1)
+  const BFFDraggedOverSide = useSelector((state: RootState) => (state.BFFdraggedOverSide === "left" ? 0 : 1));
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
 
@@ -107,8 +107,10 @@ const HandCard = (props: HandCardProps) => {
       const { moveTo, curve, duration } = snapshot.dropAnimation;
       // move to the right spot
       // const translate = `translate(${moveTo.x + 10}px, ${moveTo.y + 310}px)`;
+      const top = highlightType === "guestCard" ? 60 : -25;
+      const left = highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 40 * BFFDraggedOverSide : -15) : -75;
 
-      const translate = ""; //`translate(${moveTo.x}px, ${moveTo.y}px)`;
+      const translate = `translate(${left}px, ${top}px)`;
       const scale = `scale(${dimensions.handToTableScaleFactor})`;
       // add a bit of turn for fun
       const rotate = "";
@@ -117,10 +119,10 @@ const HandCard = (props: HandCardProps) => {
       return {
         ...style,
         transform: `${translate} ${rotate} ${scale}`,
-        top: highlightType === "guestCard" ? 60 : -25,
-        left: highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 35 * BFFDraggedOverSide : -35) : -75,
+        // top: highlightType === "guestCard" ? 60 : -25,
+        // left: highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 35 * BFFDraggedOverSide : -35) : -75,
         // slowing down the drop because we can
-        // transition: `all ${curve} ${duration + 1}s`,
+        transition: `all ${curve} ${duration + 0.5}s`,
       };
     }
   }
