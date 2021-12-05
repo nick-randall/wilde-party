@@ -8,11 +8,11 @@ import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 
-const getScreenSize = () => ({width: window.innerWidth, height: window.innerHeight})
+const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
 export interface State {
   gameSnapshot: GameSnapshot;
-  screenSize: {width: number, height: number}
+  screenSize: { width: number; height: number };
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide: string | undefined;
@@ -44,8 +44,8 @@ export const stateReducer = (
   action: Action
 ) => {
   switch (action.type) {
-    case "SET_SCREEN_SIZE" :
-      return { ...state, screenSize: getScreenSize() }    
+    case "SET_SCREEN_SIZE":
+      return { ...state, screenSize: getScreenSize() };
     // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
     // be altered
     case "SET_DRAGGED_HAND_CARD":
@@ -53,7 +53,7 @@ export const stateReducer = (
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
       return { ...state, draggedHandCard: draggedHandCard };
     case "START_REARRANGING": {
-      return { ...state, rearrangingData: action.payload}
+      return { ...state, rearrangingData: action.payload };
     }
     case "SET_HIGHLIGHTS": {
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);

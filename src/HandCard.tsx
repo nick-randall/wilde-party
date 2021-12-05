@@ -94,34 +94,28 @@ const HandCard = (props: HandCardProps) => {
     };
   }
 
-  const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps): CSSProperties =>
-    snapshot.isDropAnimating && snapshot.dropAnimation
-      ? { height: cardHeight / 2, transition: "9 s" /* transform: `translateY(${snapshot.dropAnimation?.moveTo.y -200}px)`*/ }
-      : {};
-
   function getStyle(snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) {
     if (!snapshot.isDropAnimating) {
       return style;
     }
     if (snapshot.dropAnimation) {
-      const { moveTo, curve, duration } = snapshot.dropAnimation;
-      // move to the right spot
-      // const translate = `translate(${moveTo.x + 10}px, ${moveTo.y + 310}px)`;
-      const top = highlightType === "guestCard" ? 60 : -25;
-      const left = highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 40 * BFFDraggedOverSide : -15) : -75;
+      const { curve, duration } = snapshot.dropAnimation;
+      let x = 0;
+      let y = 0;
+      if (highlightType === "guestCard") {
+        if (draggedHandCard && draggedHandCard.cardType === "bff") x = 40 * BFFDraggedOverSide;
+        else x = -15;
+        y = 60;
+      } else {
+        x = -75;
+        y = -25;
+      }
 
-      const translate = `translate(${left}px, ${top}px)`;
+      const translate = `translate(${x}px, ${y}px)`;
       const scale = `scale(${dimensions.handToTableScaleFactor})`;
-      // add a bit of turn for fun
-      const rotate = "";
-
-      // patching the existing style
       return {
         ...style,
-        transform: `${translate} ${rotate} ${scale}`,
-        // top: highlightType === "guestCard" ? 60 : -25,
-        // left: highlightType === "guestCard" ? (draggedHandCard && draggedHandCard.cardType === "bff" ? 35 * BFFDraggedOverSide : -35) : -75,
-        // slowing down the drop because we can
+        transform: `${translate} ${scale}`,
         transition: `all ${curve} ${duration + 0.5}s`,
       };
     }
