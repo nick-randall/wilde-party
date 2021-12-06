@@ -1,12 +1,6 @@
 import { locate } from "../locateFunctions";
 import { produce } from "immer";
-import {
-  getCardGroupObjs,
-  getCardGroupObjsFromSnapshot,
-  getCardRowAndShape,
-  getCardRowShapeOnDraggedOver,
-  getCardRowShapeOnRearrange,
-} from "../groupGCZCards";
+import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 
 function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   for (var key in attrs) {
@@ -19,17 +13,15 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
     let { player, place } = locate(destinationPlaceId, gameSnapshot);
     let targetIndex = destinationIndex;
     let targetPlaceId = destinationPlaceId;
-    console.log(place);
     // if place is null check specialsZone
     if (place === null) {
-      targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length -1));
+      targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length - 1));
       const targetDestinationId = destinationPlaceId.slice(0, destinationPlaceId.length - 1);
       place = "specialsZone";
-      player = locate(targetDestinationId, gameSnapshot).player
+      player = locate(targetDestinationId, gameSnapshot).player;
     }
 
     if (player !== null && place !== null) {
-      
       if (place === "GCZ") {
         const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
         const GCZ = gameSnapshot.players[player].places["GCZ"];
