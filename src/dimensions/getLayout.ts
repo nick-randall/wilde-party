@@ -48,7 +48,7 @@ export const getLayout = (id: string): { x: number; y: number } => {
       case "GCZ":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
-        return { x: handFromCenterWidth(0), y: fromCenterHeight(200) };
+        return { x: handFromCenterWidth(0), y: fromCenterHeight(350) };
       case "specialsZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-125) };
     }

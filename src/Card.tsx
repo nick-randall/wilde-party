@@ -7,6 +7,7 @@ import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 
 export interface CardProps {
+  card: GameCard;
   id: string;
   index: number;
   image: string;
@@ -17,7 +18,7 @@ export interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-  const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
+  const { id, index, dimensions, offsetTop, offsetLeft, image, card } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const settings = getSettings();
@@ -42,16 +43,14 @@ const Card = (props: CardProps) => {
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
 
-
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const notOfSameSpecialsType = draggedHandCard && draggedHandCard.specialsCardType !== card.specialsCardType;
 
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
-  const notAmongHighlights = highlightTypeIsCard && !highlights.includes(id)
-
-  //const ghostCard = BFFDraggedOverSide !== "" ? draggedOver
+  const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || notOfSameSpecialsType;
 
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
@@ -62,7 +61,7 @@ const Card = (props: CardProps) => {
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
     transition: "300ms",
-    transitionDelay: "150ms"
+    transitionDelay: "150ms",
   };
 
   const hoverStyles = {
@@ -75,7 +74,6 @@ const Card = (props: CardProps) => {
     shortHover: {},
     none: {},
   };
-
 
   return (
     <div>

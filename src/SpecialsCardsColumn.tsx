@@ -30,7 +30,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
       <div style={{ height: 30, width: dimensions.cardWidth }}></div>
       {cards.map(card => (
         <div style={{ height: 30 }}>
-          <Card index={card.index} id={card.id} image={card.image} dimensions={dimensions} key={card.id} />
+          <Card index={card.index} id={card.id} image={card.image} dimensions={dimensions} key={card.id} card={card}/>
         </div>
       ))}
       <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>

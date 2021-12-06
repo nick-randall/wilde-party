@@ -18,5 +18,5 @@ export const getSpecialsOfType = (array: GameCard[], typeIndex: number): GameCar
 export const getTypeofSpecials = (array: GameCard[], typeIndex: number) =>
   getSpecialsOfType(array, typeIndex).length > 0 ? getSpecialsOfType(array, typeIndex)[0].specialsCardType : undefined;
 
-export const getNextIndexOfSpecialsType = (array: GameCard[], startIndex: number) =>
-  array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);
+// export const getNextIndexOfSpecialsType = (array: GameCard[], startIndex: number) =>
+//   array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);
