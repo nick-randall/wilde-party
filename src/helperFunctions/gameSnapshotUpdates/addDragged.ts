@@ -17,6 +17,11 @@ function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
 export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, destinationPlaceId: string, destinationIndex: number): GameSnapshot =>
   produce(gameSnapshot, draft => {
     const { player, place } = locate(destinationPlaceId, gameSnapshot);
+// if place is null check specialsZone
+    if (place === "specialsZone"){
+
+    }
+
     if (player !== null) {
       let targetIndex = destinationIndex;
       if (place === "GCZ") {
@@ -27,6 +32,7 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
         const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs)
         targetIndex = cardRowShape[destinationIndex];
       }
+      
       const newPlayerId = gameSnapshot.players[player].places[place].playerId;
       setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: destinationPlaceId, playerId: newPlayerId, index: targetIndex });
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
