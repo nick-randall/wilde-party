@@ -33,7 +33,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
           <Card index={card.index} id={card.id} image={card.image} dimensions={dimensions} key={card.id} />
         </div>
       ))}
-      <Droppable droppableId={specialsColumnId} >
+      <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>
         {(provided) => (
           <div
             ref={provided.innerRef}

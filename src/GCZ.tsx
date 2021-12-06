@@ -43,7 +43,6 @@ function GCZ(props: GCZProps) {
   const dimensions = getAllDimensions(id);
   const { GCZHeight } = dimensions;
   const { x, y } = getLayout(id);
-  console.log(GCZCards.map(c => c.index));
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
