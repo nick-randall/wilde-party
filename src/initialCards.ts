@@ -285,6 +285,8 @@ export const initialGamePlayers: GamePlayer[] = [
         id: "klsjfd",
         playerId: "l93fld9",
         placeType: "specialsZone",
+        acceptedCardType: "special",
+
         cards: mySpecialsZoneCards,
       },
       hand: {
@@ -343,6 +345,7 @@ export const initialGameSnapshot: GameSnapshot = {
           playerId: "l93fld9",
           placeType: "specialsZone",
           cards: mySpecialsZoneCards,
+          acceptedCardType: "special"
         },
         hand: {
           id: "pqewoi",

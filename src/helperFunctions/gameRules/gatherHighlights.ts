@@ -29,6 +29,7 @@ const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): 
 
   const highlightFunction = getPlaceFunctions(actionType);
   const potentialHighlights = getAllPlayerPlaces(gameSnapshot)
+  console.log(potentialHighlights)
   const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
   return highlights.map((e) => R.prop("id", e))
 };

@@ -17,14 +17,17 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth}}>
+    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
+      <div style={{height: 30,width: dimensions.cardWidth}}>
+
+      </div>
       {cards.map(card => (
         <div style={{ height: 30 }}>
           <Card index={card.index} id={card.id} image={card.image} dimensions={dimensions} key={card.id} />
         </div>
       ))}
       <div
-        style={{ height: 30 }}
+        //style={{ height: 30 }}
         // Container
       >
         <Droppable droppableId={specialsZoneId + cards[cards.length - 1].index}>
@@ -34,11 +37,11 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
               {...provided.droppableProps}
               style={{
                 zIndex: 9,
-                height: dimensions.cardHeight,
+                height: dimensions.cardHeight + (30 * cards.length - 1 ),
                 width: dimensions.cardWidth,
                 backgroundColor: snapshot.isDraggingOver ? "blue" : "",
-                //border: highlights.includes(specialsZoneId) ? "thin black solid": "",
-                border: isHighlighted ? "thin black solid": "",
+                //border: highlights.includes(specialsZoneId) ? "thick black solid" : "",
+                border: isHighlighted ? "thick black solid": "",
                 position: "absolute",
               }}
             >
