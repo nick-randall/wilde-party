@@ -25,11 +25,13 @@ const Card = (props: CardProps) => {
   const cardRef = useRef<HTMLImageElement>(null);
 
   const [rotation, setRotation] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   React.useEffect(() => {
     const rnd = Math.random() - 0.5;
     setRotation(rnd * settings.messiness);
-  }, [setRotation, index, settings.messiness]);
+    setOffset(rnd * settings.messiness)
+  }, [setRotation, setOffset, index, settings.messiness]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
     const element = cardRef.current;
@@ -56,8 +58,8 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft || "",
-    top: offsetTop || "",
+    left: offsetLeft? + offsetLeft + offset : offset,
+    top: offsetTop? offsetTop + offset : offset,
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
     transition: "300ms",
