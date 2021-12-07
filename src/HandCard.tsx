@@ -107,10 +107,15 @@ const HandCard = (props: HandCardProps) => {
         if (draggedHandCard && draggedHandCard.cardType === "bff") x = 28 * BFFDraggedOverSide;
         else x = -15;
         y = 60;
+      } else if (draggedHandCard && draggedHandCard.cardType === "special") {
+        x= -15
+        y = -25
+        
       } else {
         x = -75;
         y = -25;
       }
+
       const translate = `translate(${x}px, ${y}px)`;
       const scale = `scale(${dimensions.handToTableScaleFactor})`;
       return {
@@ -119,7 +124,7 @@ const HandCard = (props: HandCardProps) => {
         transition: `all ${curve} ${duration + 0.5}s`,
       };
     }
-  }
+  };
 
   return (
     <Draggable draggableId={id} index={index} key={id}>

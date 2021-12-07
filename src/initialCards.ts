@@ -76,6 +76,20 @@
 
 export const myHandCards: GameCard[] = [
   {
+    id: "pppppppf1",
+    name: "megaphon",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 3,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "megaphon",
+    cardType: "special",
+    specialsCardType: "rumgroelerin",
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
+  },
+  {
     id: "3w3323434",
     name: "bffs5",
     placeId: "324562132300",
@@ -87,6 +101,20 @@ export const myHandCards: GameCard[] = [
     image: "bffs2",
     cardType: "bff",
      action: { actionType: "enchantWithBff", highlightType: "guestCard", cardHighlightType: "guest" },
+  },
+  {
+    id: "9d2304jf",
+    name: "partypizza",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 0,
+    pointValue: 0,
+    bffs: false,
+    zwilling: false,
+    image: "partypizza",
+    cardType: "special",
+    specialsCardType: "schleckermaul",
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
   },
   {
     id: "jadsif293jfnjskdnv",
@@ -191,20 +219,7 @@ export const myEnchantmentsRowCards: GameCard[] = [
 ];
 
 const mySpecialsZoneCards: GameCard[] = [
-  {
-    id: "9d2304jf",
-    name: "partypizza",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
-    index: 0,
-    pointValue: 0,
-    bffs: false,
-    zwilling: false,
-    image: "partypizza",
-    cardType: "special",
-    specialsCardType: "schleckermaul",
-    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
-  },
+ 
   {
     id: "mnbvyxcv",
     name: "nebelmaschine",
@@ -233,20 +248,7 @@ const mySpecialsZoneCards: GameCard[] = [
     specialsCardType: "taenzerin",
     action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
   },
-  {
-    id: "pppppppf1",
-    name: "megaphon",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
-    index: 3,
-    pointValue: 0,
-    bffs: false,
-    zwilling: false,
-    image: "megaphon",
-    cardType: "special",
-    specialsCardType: "rumgroelerin",
-    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
-  },
+
   {
     id: "pppppppf1",
     name: "prost",

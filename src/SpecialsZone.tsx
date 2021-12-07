@@ -1,5 +1,7 @@
+import { flatten } from "ramda";
 import { useSelector } from "react-redux";
 import { getLayout } from "./dimensions/getLayout";
+import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
 import { RootState } from "./redux/store";
@@ -18,7 +20,12 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const highlights = useSelector((state: RootState) => state.highlights);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const specialsCardsColumns = sortSpecials2(specialsCards);
+  const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
+  const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
+  const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
   const isHighlighted = highlights.includes(id) && draggedHandCard;
+  console.log(missingSpecialsCardsTypes)
+  console.log(specialsCardsColumns)
 
   return (
     <div
@@ -33,18 +40,21 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
         // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
         width: specialsCardsColumns.length * cardWidth,
         height: cardHeight,
-
+        transition:"left 250ms"
       }}
     >
       {specialsCardsColumns.map(cardColumns => (
         <SpecialsCardsColumn cards={cardColumns} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
       ))}
-      <div
-      // { if specialsCardsColumns.length < 4}
-      // <SpecialsOfAllTypesDroppable
-      /// index={specialsCards.length}
-      //  >
-      ></div>
+
+      {specialsCardsColumns.length < 4 ? (
+        <EmptySpecialsColumn
+          index={specialsCards.length}
+          acceptedSpecialsTypes={missingSpecialsCardsTypes}
+          specialsZoneId={id}
+          dimensions={dimensions}
+        />
+      ) : null}
     </div>
   );
 };

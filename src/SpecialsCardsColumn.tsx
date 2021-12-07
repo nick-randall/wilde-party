@@ -27,7 +27,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const allowDropping = isHighlighted;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
+    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth}}>
       <div style={{ height: 30, width: dimensions.cardWidth }}></div>
       {cards.map(card => (
         <div style={{ height: 30 }}>
