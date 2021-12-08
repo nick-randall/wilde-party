@@ -1,4 +1,5 @@
 import { flatten } from "ramda";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { getLayout } from "./dimensions/getLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
@@ -24,37 +25,43 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
   const isHighlighted = highlights.includes(id) && draggedHandCard;
-  console.log(missingSpecialsCardsTypes)
-  console.log(specialsCardsColumns)
+  console.log(missingSpecialsCardsTypes);
+  console.log(specialsCardsColumns);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        position: "absolute",
-        // top: y,
-        // left: x,
-        flexDirection: "row",
-        // backgroundColor: isHighlighted ? "yellowgreen" : "",
-        // boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-        // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-        width: specialsCardsColumns.length * cardWidth,
-        height: cardHeight,
-        transition:"left 250ms"
-      }}
-    >
-      {specialsCardsColumns.map(cardColumns => (
-        <SpecialsCardsColumn cards={cardColumns} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
-      ))}
+    <Droppable droppableId={id} direction="horizontal">
+      {provided => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={{
+            display: "flex",
+            position: "absolute",
+            // top: y,
+            // left: x,
+            flexDirection: "row",
+            // backgroundColor: isHighlighted ? "yellowgreen" : "",
+            // boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+            // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+            width: specialsCardsColumns.length * cardWidth,
+            height: cardHeight,
+            transition: "left 250ms",
+          }}
+        >
+          {specialsCardsColumns.map((cardColumns, index ) => (
+            <SpecialsCardsColumn cards={cardColumns}columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
+          ))}
 
-      {specialsCardsColumns.length < 4 ? (
-        <EmptySpecialsColumn
-          index={specialsCards.length}
-          acceptedSpecialsTypes={missingSpecialsCardsTypes}
-          specialsZoneId={id}
-          dimensions={dimensions}
-        />
-      ) : null}
-    </div>
+          {specialsCardsColumns.length < 4 ? (
+            <EmptySpecialsColumn
+              index={specialsCards.length}
+              acceptedSpecialsTypes={missingSpecialsCardsTypes}
+              specialsZoneId={id}
+              dimensions={dimensions}
+            />
+          ) : null}
+        </div>
+      )}
+    </Droppable>
   );
 };
