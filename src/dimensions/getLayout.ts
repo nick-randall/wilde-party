@@ -2,6 +2,7 @@ import { range } from "ramda";
 import { Store } from "redux";
 import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 
@@ -28,6 +29,7 @@ export const getLayout = (id: string): { x: number; y: number } => {
   const draggedOverCard = draggedOver ? 1 : 0;
 
   const fromCenterWidth = (distance: number): number => distance + (screenSize.width / 2 - ((numCards + draggedOverCard) * dimensions.cardWidth) / 2);
+  //const specialsZoneFromCenterWidth =  (distance: number): number => distance + (screenSize.width / 2 - ((sortSpecials2() + draggedOverCard) * dimensions.cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + dimensions.GCZHeight;
   // TODO need a way to figure out how wide the cards are as they move outwards.
   const handFromCenterWidth = (distance: number): number => {

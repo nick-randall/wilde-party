@@ -11,23 +11,25 @@ import { SpecialsZone } from "./SpecialsZone";
 export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    window.addEventListener("resize", ()=> {dispatch({type: "SET_SCREEN_SIZE"})})
+    window.addEventListener("resize", () => {
+      dispatch({ type: "SET_SCREEN_SIZE" });
+    });
   });
 
   return (
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
-      <div>
-        <SpecialsZone 
-        id={ids.pl0specialsZone}
-        specialsCards={gameSnapshot.players[0].places.specialsZone.cards}/>
-        <GCZ
-          id={ids.pl0GCZ}
-          enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
-          GCZCards={gameSnapshot.players[0].places.GCZ.cards}
-        />
+      <div style={{ display: "flex" }}>
+        <SpecialsZone id={ids.pl0specialsZone} specialsCards={gameSnapshot.players[0].places.specialsZone.cards} />
+        <div style={{ position: "relative", marginLeft: "auto", marginRight: "auto"}}>
+          <GCZ
+            id={ids.pl0GCZ}
+            enchantmentsRowCards={gameSnapshot.players[0].places.enchantmentsRow.cards}
+            GCZCards={gameSnapshot.players[0].places.GCZ.cards}
+          />
+        </div>
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
     </DragDropContext>

@@ -31,7 +31,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
         {provided => (
           <div
             style={{
-              zIndex: 100,
+             
               height: cardHeight,
               width: cardWidth,
               position: "absolute",

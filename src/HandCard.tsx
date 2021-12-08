@@ -29,7 +29,7 @@ const HandCard = (props: HandCardProps) => {
   const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const BFFDraggedOverSide = useSelector((state: RootState) => (state.BFFdraggedOverSide === "left" ? 0 : 1));
+  const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
@@ -104,13 +104,13 @@ const HandCard = (props: HandCardProps) => {
       let x = 0;
       let y = 0;
       if (highlightType === "guestCard") {
-        if (draggedHandCard && draggedHandCard.cardType === "bff") x = 28 * BFFDraggedOverSide;
-        else x = -15;
+        if (draggedHandCard && draggedHandCard.cardType === "bff") {
+          x = BFFDraggedOverSide === "left" ? -65 : 40;
+        } else x = -15;
         y = 60;
       } else if (draggedHandCard && draggedHandCard.cardType === "special") {
-        x= -15
-        y = -25
-        
+        x = -15;
+        y = -25;
       } else {
         x = -75;
         y = -25;

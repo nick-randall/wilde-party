@@ -22,7 +22,7 @@ function GCZ(props: GCZProps) {
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const rearrange = useSelector((state: RootState) => state.rearrangingData);
 
-  const index = draggedOver.index !== -1 ? draggedOver.index : rearrange.sourceIndex;
+  const index = draggedOver.droppableId === id ? draggedOver.index : rearrange.sourceIndex;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const ghostCard = draggedHandCard && index !== -1 ? draggedHandCard : undefined;
 
@@ -42,7 +42,7 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { GCZHeight } = dimensions;
-  const { x, y } = getLayout(id);
+  //const { x, y } = getLayout(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
@@ -53,12 +53,12 @@ function GCZ(props: GCZProps) {
           ref={provided.innerRef}
           style={{
             display: "flex",
-            //top: 100,
+            top: 100,
             position: "absolute",
             margin: 0,
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: x,
-            top: y,
+            //left: x,
+            // top: y,
             height: GCZHeight,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",

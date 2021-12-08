@@ -21,7 +21,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   // Represents the next index where a new card of this special type will be inserted;
   const specialsColumnId = specialsZoneId + (specialsColumnLastIndex + 1);
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId);
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId && isHighlighted);
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const allowDropping = isHighlighted;
@@ -37,7 +37,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
             image={card.image}
             dimensions={dimensions}
             key={card.id}
-            showNotAmongHighlights={cardsNotAmongHighlights}
+            //showNotAmongHighlights={cardsNotAmongHighlights}
           />
         </div>
       ))}
@@ -49,9 +49,9 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
             style={{
               height: dimensions.cardHeight + 30 * cards.length + 30,
               width: dimensions.cardWidth,
-              // backgroundColor: isHighlighted ? "yellowgreen" : "",
-              // boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-              // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+              backgroundColor: isHighlighted ? "yellowgreen" : "",
+              boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+              transition: "background-color 180ms, box-shadow 180ms, left 180ms",
               position: "absolute",
               bottom: -dimensions.cardHeight + 30,
             }}
