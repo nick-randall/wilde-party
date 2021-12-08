@@ -36,7 +36,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div style={{ height: 30, width: dimensions.cardWidth }}></div>
+          <div style={{ height: 30, width: dimensions.cardWidth }} />
           {cards.map(card => (
             <div style={{ height: 30 }}>
               <Card

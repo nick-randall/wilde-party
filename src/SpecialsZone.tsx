@@ -20,16 +20,17 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   //const { x, y } = getLayout(id);
   const highlights = useSelector((state: RootState) => state.highlights);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);  
   const specialsCardsColumns = sortSpecials2(specialsCards);
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
-  const isHighlighted = highlights.includes(id) && draggedHandCard;
-  console.log(missingSpecialsCardsTypes);
-  console.log(specialsCardsColumns);
+
+  const allowDropping = rearranging;
+
 
   return (
-    <Droppable droppableId={id} direction="horizontal">
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
           ref={provided.innerRef}
@@ -48,9 +49,10 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
             transition: "left 250ms",
           }}
         >
-          {specialsCardsColumns.map((cardColumns, index ) => (
+          {specialsCardsColumns.map((cardColumns, index) => (
             <SpecialsCardsColumn cards={cardColumns}columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
           ))}
+          {provided.placeholder}
 
           {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn
