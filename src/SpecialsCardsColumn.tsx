@@ -28,6 +28,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const allowDropping = isHighlighted;
 
   return (
+    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth}} >
     <Draggable index={columnIndex} draggableId={specialsColumnId + "draggable" + columnIndex}>
       {provided => (
         <div
@@ -72,5 +73,6 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
         </div>
       )}
     </Draggable>
+    </div>
   );
 };
