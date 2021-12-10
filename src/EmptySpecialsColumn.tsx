@@ -12,7 +12,7 @@ interface EmptySpecialsColumnProps {
 
 export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
   const { index, acceptedSpecialsTypes, specialsZoneId, dimensions } = props;
-  const emptySpecialsColumnId = specialsZoneId + (index);
+  const emptySpecialsColumnId = specialsZoneId + "dropZone";
   const { cardHeight, cardWidth } = dimensions;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
 
@@ -27,7 +27,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
   const isHighlighted = specialsZoneHighlighted && specialsTypeAccepted;
   return (
     <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
-      <Droppable droppableId={emptySpecialsColumnId} isDropDisabled={!isHighlighted}>
+      <Droppable droppableId={specialsZoneId + "dropZone"} isDropDisabled={!isHighlighted}>
         {provided => (
           <div
             style={{

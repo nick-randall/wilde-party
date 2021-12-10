@@ -16,11 +16,20 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
     let targetPlaceId = destinationPlaceId;
     // if place is null check specialsZone
     if (place === null) {
-      targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length - 1));
-      const targetDestinationId = destinationPlaceId.slice(0, destinationPlaceId.length - 1);
-      targetPlaceId = targetDestinationId;
-      place = "specialsZone";
-      player = locate(targetDestinationId, gameSnapshot).player;
+      if (locate(destinationPlaceId.replace("dropZone", ""), gameSnapshot).place === "specialsZone") {
+        // targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length - 1));
+        // const targetDestinationId = destinationPlaceId.slice(0, destinationPlaceId.length - 1);
+        targetPlaceId = destinationPlaceId.replace("dropZone", " ");
+        place = "specialsZone";
+        player = 0;
+        targetIndex = gameSnapshot.players[0].places["specialsZone"].cards.length;
+      } else if (locate(destinationPlaceId.slice(0, destinationPlaceId.length - 1), gameSnapshot).place === "specialsZone") {
+        targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length - 1));
+        const targetDestinationId = destinationPlaceId.slice(0, destinationPlaceId.length - 1);
+        targetPlaceId = targetDestinationId;
+        place = "specialsZone";
+        player = locate(targetDestinationId, gameSnapshot).player;
+      } else return gameSnapshot;
     }
 
     if (player !== null && place !== null) {
@@ -38,6 +47,6 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
       draft.players[player].places[place].cards.splice(targetIndex, 0, handCard);
       draft.players[player].places[place].cards = draft.players[player].places[place].cards.map((c, i) => ({ ...c, index: i }));
-      compareProps( draft.players[player].places[place].cards)
+      compareProps(draft.players[player].places[place].cards);
     }
   });
