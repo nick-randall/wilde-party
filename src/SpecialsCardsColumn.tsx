@@ -33,12 +33,12 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
     <Draggable index={columnIndex} draggableId={"specialCardsColumn" + cards[0].id}>
       {provided => (
         <div
-          style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}
+          style={{  width: dimensions.cardWidth }}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div style={{ height: 30, width: dimensions.cardWidth }} />
+          <div style={{ height: 30, width: dimensions.cardWidth}} />
           {cards.map(card => (
             <div style={{ height: 30 }}>
               <Card
