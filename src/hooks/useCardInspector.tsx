@@ -9,7 +9,6 @@ const useHoverStyles = (dimensions: AllDimensions) => {
   const setHoverStyles = () => {
     setHover("shortHover");
     hoverTimerRef.current = setTimeout(() => {
-      console.log("set to longhover");
       setHover("longHover");
       setMousePositionFromCenter(mousePositionFromCenter => {
         setinspectingCenterOffset(mousePositionFromCenter);

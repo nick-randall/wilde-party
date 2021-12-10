@@ -1,6 +1,7 @@
 import { locate } from "../locateFunctions";
 import { produce } from "immer";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
+import { compareProps } from "../tests";
 
 export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   for (var key in attrs) {
@@ -34,9 +35,9 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
 
       const newPlayerId = gameSnapshot.players[player].places[place].playerId;
       setAttributes(draft.players[0].places.hand.cards[sourceIndex], { placeId: targetPlaceId, playerId: newPlayerId, index: targetIndex });
-      console.log(targetPlaceId)
       const [handCard] = draft.players[0].places.hand.cards.splice(sourceIndex, 1);
       draft.players[player].places[place].cards.splice(targetIndex, 0, handCard);
       draft.players[player].places[place].cards = draft.players[player].places[place].cards.map((c, i) => ({ ...c, index: i }));
+      compareProps( draft.players[player].places[place].cards)
     }
   });

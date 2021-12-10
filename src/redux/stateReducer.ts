@@ -70,7 +70,6 @@ export const stateReducer = (
       if (isEnchantWithBFF(state.draggedHandCard)) {
         const { droppableId } = action.payload;
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
-        console.log(BFFdraggedOverSide);
         return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
       }
       return { ...state, dragUpdate: action.payload };
