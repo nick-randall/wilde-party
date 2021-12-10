@@ -26,7 +26,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const allowDropping = isHighlighted;
-
+  
   return (
     <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth}} >
     <Draggable index={columnIndex} draggableId={specialsColumnId + "draggable" + columnIndex}>

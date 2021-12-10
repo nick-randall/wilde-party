@@ -232,7 +232,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "nebelmaschine",
     cardType: "special",
     specialsCardType: "taenzerin",
-    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
   },
   {
     id: "pppppppf1",
@@ -246,11 +246,11 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "playlist",
     cardType: "special",
     specialsCardType: "taenzerin",
-    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
   },
 
   {
-    id: "pppppppf1",
+    id: "pppppppf2",
     name: "prost",
     placeId: "klsjfd",
     playerId: "l93fld9",
@@ -261,7 +261,7 @@ const mySpecialsZoneCards: GameCard[] = [
     image: "prost",
     cardType: "special",
     specialsCardType: "saufnase",
-    action: { actionType: "addDragged", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
   },
 ];
 

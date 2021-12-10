@@ -12,23 +12,23 @@ interface EmptySpecialsColumnProps {
 
 export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
   const { index, acceptedSpecialsTypes, specialsZoneId, dimensions } = props;
-  const specialsColumnId = specialsZoneId + index;
+  const emptySpecialsColumnId = specialsZoneId + (index);
   const { cardHeight, cardWidth } = dimensions;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
 
   const specialsZoneHighlighted = useSelector((state: RootState) => state.highlights.includes(specialsZoneId));
   const handCardSpecialsType = useSelector((state: RootState) => state.draggedHandCard?.specialsCardType);
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId);
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === emptySpecialsColumnId);
 
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
   const specialsTypeAccepted = handCardSpecialsType && acceptedSpecialsTypes.includes(handCardSpecialsType);
 
   const isHighlighted = specialsZoneHighlighted && specialsTypeAccepted;
-  console.log(acceptedSpecialsTypes)
+  console.log(emptySpecialsColumnId)
   return (
     <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
-      <Droppable droppableId={specialsColumnId} isDropDisabled={!isHighlighted}>
+      <Droppable droppableId={emptySpecialsColumnId} isDropDisabled={!isHighlighted}>
         {provided => (
           <div
             style={{
