@@ -62,7 +62,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                   boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
                   transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                   position: "absolute",
-                  bottom: -dimensions.cardHeight + 30,
+                  bottom: -dimensions.cardHeight,
                 }}
               >
                 {provided.placeholder}

@@ -25,18 +25,19 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
   const specialsTypeAccepted = handCardSpecialsType && acceptedSpecialsTypes.includes(handCardSpecialsType);
 
   const isHighlighted = specialsZoneHighlighted && specialsTypeAccepted;
+  console.log(acceptedSpecialsTypes)
   return (
     <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
       <Droppable droppableId={specialsColumnId} isDropDisabled={!isHighlighted}>
         {provided => (
           <div
             style={{
-             
               height: cardHeight,
               width: cardWidth,
               position: "absolute",
               bottom: -cardWidth,
 
+              border: "thin black dotted",
               backgroundColor: isHighlighted ? "yellowgreen" : "",
               boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
               transition: "background-color 180ms, box-shadow 180ms, left 180ms",

@@ -2,7 +2,7 @@ import { locate } from "../locateFunctions";
 import { produce } from "immer";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 
-function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
+export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   for (var key in attrs) {
     card[key] = attrs[key];
   }

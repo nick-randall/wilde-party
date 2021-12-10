@@ -1,7 +1,6 @@
-import { addZeroAtFirstIndex, getCardGroupObjs, getCardGroupObjsFromSnapshot, getCumulativeSum, mapSizes } from "../groupGCZCards";
+import { addZeroAtFirstIndex, getCardGroupObjsFromSnapshot, getCumulativeSum, mapSizes } from "../groupGCZCards";
 import * as R from "ramda";
 import { getIdListObject } from "../getIdList";
-import { compareProps } from "../tests";
 
 const extractCards = (cardGroups: CardGroupObj[]) => cardGroups.map(g => g.cards);
 
@@ -22,21 +21,21 @@ const assignNewIndexes = (cardGroups: CardGroup[], indexArray: number[]) =>
 
 const getCardRowShape = (cardGroupObjs: CardGroupObj[]): number[] => R.pipe(mapSizes, addZeroAtFirstIndex, getCumulativeSum)(cardGroupObjs);
 
-const cardGroupsToCardsArray = (cardGroupObjs: CardGroupObj[], placeId: string): GameCard[] => {
+const cardGroupsToCardArray = (cardGroupObjs: CardGroupObj[], placeId: string): GameCard[] => {
   const shape = getCardRowShape(cardGroupObjs);
   const cardGroups = R.pipe(filterAllByPlace(placeId), extractCards)(cardGroupObjs);
   const cardArray = R.pipe(assignNewIndexes, R.flatten)(cardGroups, shape);
   return cardArray;
 };
 
-// const cardGroupsToCardsArray = (cardGroups: CardGroupObj[], placeId: string): GameCard[] =>
+// const cardGroupsToCardArray = (cardGroups: CardGroupObj[], placeId: string): GameCard[] =>
 //   R.pipe(filterAllByPlace(placeId), extractCards, assignNewIndexes, R.flatten)(cardGroups);
 
-const curriedNormalizeCardGroups = (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) => {
+const currieCardGroupsToCardArrays = (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) => {
   const { pl0GCZ, pl0enchantmentsRow } = getIdListObject(gameSnapshot);
   return {
-    updatedGCZCards: cardGroupsToCardsArray(cardGroups, pl0GCZ),
-    updatedEnchantmentsRowCards: cardGroupsToCardsArray(cardGroups, pl0enchantmentsRow),
+    updatedGCZCards: cardGroupsToCardArray(cardGroups, pl0GCZ),
+    updatedEnchantmentsRowCards: cardGroupsToCardArray(cardGroups, pl0enchantmentsRow),
   };
 };
 
@@ -55,8 +54,6 @@ const curriedUpdateGCZAndEnchant =
     const snapshotWithUpdatedEnchantCards = R.set(enchantCards, updatedEnchantmentsRowCards, gameSnapshot);
     const GCZCards = R.lensPath(["players", 0, "places", "GCZ", "cards"]);
     const snapshotwithBothUpdated = R.set(GCZCards, updatedGCZCards, snapshotWithUpdatedEnchantCards);
-    console.log(snapshotwithBothUpdated.players[0].places.enchantmentsRow.cards);
-    compareProps(updatedEnchantmentsRowCards);
     return snapshotwithBothUpdated;
   };
 
@@ -64,7 +61,7 @@ const partiallyAppliedRearrangeGCZ = (currIndex: number, newIndex: number) => (g
   R.pipe(
     getCardGroupObjsFromSnapshot,
     curriedMoveCardGroup(currIndex, newIndex),
-    curriedNormalizeCardGroups(gameSnapshot),
+    currieCardGroupsToCardArrays(gameSnapshot),
     curriedUpdateGCZAndEnchant(gameSnapshot)
   )(gameSnapshot);
 

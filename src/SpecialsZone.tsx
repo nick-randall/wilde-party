@@ -52,7 +52,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
           {specialsCardsColumns.map((cardColumns, index) => (
             <SpecialsCardsColumn cards={cardColumns}columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
           ))}
-          {provided.placeholder}
+          
 
           {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn
@@ -62,6 +62,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null}
+          {provided.placeholder}
         </div>
       )}
     </Droppable>

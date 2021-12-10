@@ -7,6 +7,7 @@ import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
+import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -23,6 +24,8 @@ export interface State {
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
+
+const isSpecialsZone = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "specialsZone";
 
 const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
   draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
@@ -76,6 +79,10 @@ export const stateReducer = (
       const { source, destination } = action.payload;
       if (isGCZ(source, state.gameSnapshot)) {
         const gameSnapshot = rearrangeGCZ(state.gameSnapshot, source.index, destination.index);
+        return { ...state, gameSnapshot };
+      } else if (isSpecialsZone(source, state.gameSnapshot)) {
+        const gameSnapshot = rearrangeSpecialsZone(state.gameSnapshot, source.index, destination.index);
+
         return { ...state, gameSnapshot };
       } else return state;
     }

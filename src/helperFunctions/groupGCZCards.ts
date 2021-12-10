@@ -1,6 +1,8 @@
 import { pipe } from "ramda";
 import { filterOutDuplicates } from "./genericFunctions";
 
+// TODO cleanup!!!
+
 const getCardGroupsArray = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroup[] =>
   GCZCards.map((card, index) =>
     !enchantmentsCards.find(cardB => cardB.index === index)
