@@ -26,21 +26,21 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const allowDropping = isHighlighted;
-  console.log(specialsColumnId + "draggable" + columnIndex)
-  
+
   return (
-    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth}} >
     <Draggable index={columnIndex} draggableId={"specialCardsColumn" + cards[0].id}>
       {provided => (
         <div
-          style={{  width: dimensions.cardWidth }}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          style={{ position: "relative", display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}
         >
-          <div style={{ height: 30, width: dimensions.cardWidth}} />
           {cards.map(card => (
-            <div style={{ height: 30 }}>
+            <div
+              // This is the card spacer
+              style={{ height: 30, width: dimensions.cardWidth }}
+            >
               <Card
                 index={card.index}
                 id={card.id}
@@ -51,19 +51,22 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
               />
             </div>
           ))}
+
           <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>
             {provided => (
               <div
+                // This is the drop box
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 style={{
-                  height: dimensions.cardHeight + 30 * cards.length + 30,
+                  height: dimensions.cardHeight,
                   width: dimensions.cardWidth,
+                  border: "thin black solid",
                   backgroundColor: isHighlighted ? "yellowgreen" : "",
                   boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
                   transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                   position: "absolute",
-                  bottom: -dimensions.cardHeight,
+                  bottom: -(dimensions.cardHeight - 60),
                 }}
               >
                 {provided.placeholder}
@@ -74,6 +77,5 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
         </div>
       )}
     </Draggable>
-    </div>
   );
 };
