@@ -32,9 +32,10 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
       {provided => (
         <div
           ref={provided.innerRef}
+          
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          style={{ position: "relative", display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}
+          style={{ position:"relative", display: "flex", flexDirection: "column-reverse"}}
         >
           {cards.map(card => (
             <div
@@ -61,7 +62,6 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                 style={{
                   height: dimensions.cardHeight,
                   width: dimensions.cardWidth,
-                  border: "thin black solid",
                   backgroundColor: isHighlighted ? "yellowgreen" : "",
                   boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
                   transition: "background-color 180ms, box-shadow 180ms, left 180ms",

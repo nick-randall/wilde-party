@@ -30,48 +30,48 @@
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
 
-  {
-    id: "01293219312832183",
-    name: "taenzerin2",
-    playerId: "l93fld9",
-    placeId: "pd0s9fd",
-    index: 2,
-    image: "taenzerin2", //TODO change
-    cardType: "guest",
-    pointValue: 2,
-    bffs: false,
-    zwilling: false,
-    guestCardType: "taenzerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
-  {
-    id: "50340395343",
-    name: "schleckermaul6",
-    playerId: "l93fld9",
-    placeId: "pd0s9fd",
-    index: 3,
-    image: "schleckermaul6", //TODO change
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    cardType: "guest",
-    guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
-  {
-    id: "a953433",
-    name: "schleckermaul",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
-    index: 4,
-    image: "schleckermaul3", //TODO change
-    pointValue: 1,
-    bffs: false,
-    zwilling: false,
-    cardType: "guest",
-    guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
-  },
+  // {
+  //   id: "01293219312832183",
+  //   name: "taenzerin2",
+  //   playerId: "l93fld9",
+  //   placeId: "pd0s9fd",
+  //   index: 2,
+  //   image: "taenzerin2", //TODO change
+  //   cardType: "guest",
+  //   pointValue: 2,
+  //   bffs: false,
+  //   zwilling: false,
+  //   guestCardType: "taenzerin", //???
+  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
+  // {
+  //   id: "50340395343",
+  //   name: "schleckermaul6",
+  //   playerId: "l93fld9",
+  //   placeId: "pd0s9fd",
+  //   index: 3,
+  //   image: "schleckermaul6", //TODO change
+  //   pointValue: 1,
+  //   bffs: false,
+  //   zwilling: false,
+  //   cardType: "guest",
+  //   guestCardType: "schleckermaul", //???
+  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
+  // {
+  //   id: "a953433",
+  //   name: "schleckermaul",
+  //   placeId: "pd0s9fd",
+  //   playerId: "l93fld9",
+  //   index: 4,
+  //   image: "schleckermaul3", //TODO change
+  //   pointValue: 1,
+  //   bffs: false,
+  //   zwilling: false,
+  //   cardType: "guest",
+  //   guestCardType: "schleckermaul", //???
+  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  // },
 ];
 
 export const myHandCards: GameCard[] = [

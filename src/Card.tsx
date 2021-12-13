@@ -25,12 +25,14 @@ const Card = (props: CardProps) => {
   const cardRef = useRef<HTMLImageElement>(null);
 
   const [rotation, setRotation] = useState(0);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState({x:0, y:0});
 
   React.useEffect(() => {
-    const rnd = Math.random() - 0.5;
-    setRotation(rnd * settings.messiness);
-    setOffset(rnd * settings.messiness)
+    const rndR = Math.random() - 0.5;
+    setRotation(rndR * settings.messiness);
+    const rndX = Math.random() - 0.5;
+    const rndY = Math.random() - 0.5;
+    setOffset({x: rndX * settings.messiness, y: rndY * settings.messiness})
   }, [setRotation, setOffset, index, settings.messiness]);
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -42,9 +44,7 @@ const Card = (props: CardProps) => {
   };
   const highlights = useSelector((state: RootState) => state.highlights);
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
-
-  const highlightType = useSelector((state: RootState) => state.highlightType);
-
+  
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
@@ -57,8 +57,8 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft? + offsetLeft + offset : offset,
-    top: offsetTop? offsetTop + offset : offset,
+    left: offsetLeft? + offsetLeft + offset.x : offset.x,
+    top: offsetTop? offsetTop + offset.y : offset.y,
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
     transition: "300ms",
