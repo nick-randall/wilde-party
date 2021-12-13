@@ -1,13 +1,10 @@
-import { off } from "process";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
-import { getLayout } from "./dimensions/getLayout";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
-import { compareProps } from "./helperFunctions/tests";
 import { RootState } from "./redux/store";
 
 interface GCZProps {
