@@ -112,7 +112,7 @@ const HandCard = (props: HandCardProps) => {
         x = -15;
         y = -25;
       } else {
-        x = -75;
+        x = -20;
         y = -25;
       }
 

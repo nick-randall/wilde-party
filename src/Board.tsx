@@ -20,6 +20,7 @@ export const Board = () => {
   });
 
   return (
+    <div style={{width: "100vw", height: "100vw", backgroundColor: "blue"}}>
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <div style={{ display: "flex" }}>
         <SpecialsZone id={ids.pl0specialsZone} specialsCards={gameSnapshot.players[0].places.specialsZone.cards} />
@@ -33,5 +34,6 @@ export const Board = () => {
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
     </DragDropContext>
+    </div>
   );
 };
