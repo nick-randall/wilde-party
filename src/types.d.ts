@@ -40,6 +40,8 @@ type AllDimensions = {
   zIndex: number;
   GCZHeight: number;
   handToTableScaleFactor: number;
+  tableCardHeight: number,
+    tableCardWidth: number,
   // leftOffset: number;
   // topOffset: number;
 };

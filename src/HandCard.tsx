@@ -135,7 +135,7 @@ const HandCard = (props: HandCardProps) => {
             // move aside and make room in other droppables.
             // When not dragging it has a width of 0, which
             // tucks hand cards together
-            style={{ width: isDragging ? 105 : 0, position: "relative" }}
+            style={{ width: isDragging ? dimensions.tableCardWidth : 0, position: "relative" }}
           >
             <Transition
               in={true}
