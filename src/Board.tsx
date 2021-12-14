@@ -20,9 +20,9 @@ export const Board = () => {
   });
 
   return (
-    <div style={{width: "100vw", height: "100vw", backgroundColor: "blue"}}>
+    <div style={{width: "100vw", height: "100vh", backgroundColor: "blue"}}>
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "block" }}>
         <SpecialsZone id={ids.pl0specialsZone} specialsCards={gameSnapshot.players[0].places.specialsZone.cards} />
         <div style={{ position: "relative", marginLeft: "auto", marginRight: "auto"}}>
           <GCZ

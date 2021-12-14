@@ -37,7 +37,6 @@ const Hand = (props: HandProps) => {
             // This causes whole card row to move left on spread
             left: x - (spread / 2) * handCards.length,
             top: y,
-            width: handCards.length * dimensions.cardWidth,
             transition: "180ms",
             height: dimensions.cardHeight,
           }}

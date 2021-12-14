@@ -1,2 +1,2 @@
 export const getSettings = () => settings;
-const settings = { messiness: 8 };
+const settings = { messiness: 4 };

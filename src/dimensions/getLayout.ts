@@ -19,11 +19,11 @@ import store from "../redux/store";
 // }
 
 export const getLayout = (id: string): { x: number; y: number } => {
-  store.subscribe(() => store.getState())
+  store.subscribe(() => store.getState());
   const { screenSize, gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
   const { player, place } = locate(id, gameSnapshot);
   const dimensions = getAllDimensions(id);
-  const { cardHeight, cardWidth,cardLeftSpread } = dimensions;
+  const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   const numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
   const draggedOverCard = draggedOver ? 1 : 0;
@@ -40,19 +40,20 @@ export const getLayout = (id: string): { x: number; y: number } => {
     // const widthsAfterRotation = rotations.map(deg => widthOfRotated(deg, cardWidth, cardHeight));
     // const handWidth = widthsAfterRotation.reduce((a, b) => a + b);
     const lastCardRotation = rotation(numCards - 1);
-    const lastCardWidth = widthOfRotated(lastCardRotation, cardWidth, cardHeight)
+    const lastCardWidth = widthOfRotated(lastCardRotation, cardWidth, cardHeight);
     const handWidth2 = cardLeftSpread * numHandCards + lastCardWidth;
     return distance + (screenSize.width / 2 - handWidth2 / 2);
   };
+  const handFromBottom = (distance: number) => screenSize.height - dimensions.cardHeight - distance;
 
   if (player === 0) {
     switch (place) {
-      case "GCZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
-      case "hand":
-        return { x: handFromCenterWidth(0), y: fromCenterHeight(350) };
       case "specialsZone":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-195) };
+        return { x: 400, y: fromCenterHeight(-dimensions.cardHeight -60) };
+      case "GCZ":
+        return { x: 400, y: fromCenterHeight(0) };
+      case "hand":
+        return { x: handFromCenterWidth(0), y: handFromBottom(30) };
     }
   }
   return { x: 0, y: 0 };
