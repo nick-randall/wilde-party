@@ -49,6 +49,7 @@ const handToTableScaleFactor = tableCardHeight / handCardHeight;
     tableCardHeight: tableCardHeight,
     tableCardWidth: tableCardWidth,
     cardLeftSpread: 35,
+    maxCardLeftSpread: 125,
     cardTopSpread: 0,
     zIndex: 5,
     draggedCardScale: 1.1,

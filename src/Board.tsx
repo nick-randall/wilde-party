@@ -7,6 +7,7 @@ import { getIdListObject } from "./helperFunctions/getIdList";
 import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
 import { useEffect } from "react";
 import { SpecialsZone } from "./SpecialsZone";
+import UWZ from "./UWZ";
 
 export const Board = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -33,6 +34,7 @@ export const Board = () => {
         </div>
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
+      <UWZ id={ids.pl0UWZ} unwantedCards={gameSnapshot.players[0].places.UWZ.cards} />
     </DragDropContext>
     </div>
   );

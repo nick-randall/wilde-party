@@ -31,6 +31,7 @@ type AllDimensions = {
   cardWidth: number;
   cardLeftSpread: number;
   cardTopSpread: number;
+  maxCardLeftSpread? : number
   draggedCardScale: number;
   draggedCardWidth: number;
   draggedCardzIndex: number;

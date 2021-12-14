@@ -17,8 +17,9 @@ const Hand = (props: HandProps) => {
   const { id, handCards } = props;
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
+  const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
-  const spread = !handCardDragged && mouseOverHand ? 125 : dimensions.cardLeftSpread;
+  const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
   const { x, y } = getLayout(id);  
 
@@ -36,7 +37,7 @@ const Hand = (props: HandProps) => {
             bottom: 30,
             // This causes whole card row to move left on spread
             left: x - (spread / 2) * handCards.length,
-            top: y,
+            top: y, 
             transition: "180ms",
             height: dimensions.cardHeight,
           }}

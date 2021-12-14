@@ -1,6 +1,7 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
+import { getLayout } from "./dimensions/getLayout";
 import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
@@ -30,7 +31,7 @@ export const UWZ = (props: UWZProps) => {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { GCZHeight } = dimensions;
-  //const { x, y } = getLayout(id);
+  const { x, y } = getLayout(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
@@ -41,13 +42,12 @@ export const UWZ = (props: UWZProps) => {
           ref={provided.innerRef}
           style={{
             display: "flex",
-            top: 100,
+            //top: 100,
             position: "absolute",
             margin: 0,
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            //left: x,
-            // top: y,
-            height: GCZHeight,
+            left: x,
+            top: y,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
@@ -55,7 +55,7 @@ export const UWZ = (props: UWZProps) => {
           }}
         >
           {unwantedCards.map((card, index) => (
-            <Card id={card.id} image={card.image} index={index} dimensions={dimensions} key={card.id} />
+            <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetLeft={index * -dimensions.cardLeftSpread} key={card.id} />
           ))}
           {provided.placeholder}
 

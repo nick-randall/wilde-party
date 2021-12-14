@@ -100,20 +100,21 @@ const HandCard = (props: HandCardProps) => {
       return style;
     }
     if (snapshot.dropAnimation) {
-      const { curve, duration } = snapshot.dropAnimation;
-      let x = 0;
-      let y = 0;
+      const { curve, duration, moveTo } = snapshot.dropAnimation;
+      let x = moveTo.x;
+      let y = moveTo.y;
+      console.log(moveTo)
       if (highlightType === "guestCard") {
         if (draggedHandCard && draggedHandCard.cardType === "bff") {
-          x = BFFDraggedOverSide === "left" ? -65 : 40;
+          x = BFFDraggedOverSide === "left" ? -60 : 40;
         } else x = -15;
         y = 60;
       } else if (draggedHandCard && draggedHandCard.cardType === "special") {
         x = -15;
         y = -25;
       } else {
-        x = -20;
-        y = -25;
+        x = cardHeight - 188;
+        y = cardHeight- 188;
       }
 
       const translate = `translate(${x}px, ${y}px)`;
