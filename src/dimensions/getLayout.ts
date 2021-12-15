@@ -1,4 +1,4 @@
-import { range } from "ramda";
+import { lte, range } from "ramda";
 import { Store } from "redux";
 import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
@@ -26,15 +26,17 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   const numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
-  const draggedOverCard = draggedOver ? 1 : 0;
+  let draggedOverCard = draggedOver ? 1 : 0;
 
   let numCardsWidth = numCards;
   if ((place === "specialsZone" || place === "UWZ") && player !== null) {
     const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
     const numSpecialsColumns = sortSpecials2(specialsZoneCards).length;
-    const numUWZColumns = gameSnapshot.players[player].places["specialsZone"].cards.length > 0 ? 1 : 0;
+    const numUWZColumns = 1//gameSnapshot.players[player].places["UWZ"].cards.length > 0 ? 0 : 1;
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
+  if (place ==="UWZ") draggedOverCard = 0
+
   // if (place === "UWZ" && player !== null) {
   //   const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
   //   const numColumns = sortSpecials2(specialsZoneCards).length;
@@ -50,17 +52,17 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
     const numHandCards = draggedHandCard ? numCards - 1 : numCards;
     const rotation = (index: number) => 10 * index - (numHandCards / 2 - 0.5) * 10;
     for (let i = 0; i < numCards; i++) {
-      console.log(widthOfRotated(rotation(i), cardWidth, cardHeight));
+        // console.log(widthOfRotated(rotation(i), cardWidth, cardHeight));
     }
     const firstCardRotation = rotation(1);
-    console.log(firstCardRotation);
+    // console.log(firstCardRotation);
     const firstCardWidth = widthOfRotated(-firstCardRotation, cardWidth, cardHeight);
-    console.log(cardHeight, cardLeftSpread);
+    // console.log(cardHeight, cardLeftSpread);
     const cardsWiderThanUnRotated = firstCardWidth - cardWidth;
-    console.log(firstCardWidth);
-    console.log(document.getElementById("3w3323434")?.getBoundingClientRect().left);
-    console.log(document.getElementById("gogogogo")?.getBoundingClientRect().right);
-    console.log(cardsWiderThanUnRotated);
+    // console.log(firstCardWidth);
+    // console.log(document.getElementById("3w3323434")?.getBoundingClientRect().left);
+    // console.log(document.getElementById("gogogogo")?.getBoundingClientRect().right);
+    // console.log(cardsWiderThanUnRotated);
     const handWidth = (numCards - 1) * cardLeftSpread - firstCardWidth;
     const hw = (numCards - 1) * cardLeftSpread - cardWidth;
 
@@ -71,9 +73,9 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: fromCenterWidth(100 + cardWidth), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
       case "UWZ":
-        return { x: fromCenterWidth(100), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
       case "GCZ":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":

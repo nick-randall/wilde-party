@@ -32,9 +32,9 @@ export const UWZ = (props: UWZProps) => {
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight, cardTopSpread } = dimensions;
   const { x, y } = getLayout(id, screenSize);
-
+  console.log(x)
   return (
-    <div style={{ position: "absolute", left: x, top: y }}>
+    <div style={{ position: "absolute", left: x, top: y, transition:"left 180ms" }}>
       {unwantedCards.map((card, index) => (
         <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} />
       ))}

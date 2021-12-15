@@ -26,7 +26,7 @@ const handToTableScaleFactor = tableCardHeight / handCardHeight;
     tableCardHeight: tableCardHeight,
     tableCardWidth: tableCardWidth,
     cardLeftSpread: numCards < 6 ? tableCardWidth : tableCardWidth - (numCards * 3),
-    cardTopSpread: place !== "specialsZone" ? place === "UWZ" ? -60 : 0 : -30,
+    cardTopSpread: place !== "specialsZone" ? place === "UWZ" ? -40 : 0 : -30,
     zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
