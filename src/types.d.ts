@@ -31,7 +31,7 @@ type AllDimensions = {
   cardWidth: number;
   cardLeftSpread: number;
   cardTopSpread: number;
-  maxCardLeftSpread? : number
+  maxCardLeftSpread?: number;
   draggedCardScale: number;
   draggedCardWidth: number;
   draggedCardzIndex: number;
@@ -40,12 +40,11 @@ type AllDimensions = {
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;
-  tableCardHeight: number,
-    tableCardWidth: number,
+  tableCardHeight: number;
+  tableCardWidth: number;
   // leftOffset: number;
   // topOffset: number;
 };
-
 
 type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";
 type LegalTargetPlaceStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "rearranging" | "enchantmentsRowRearranging";
@@ -59,7 +58,7 @@ type OriginalStyles = {
 
 type LegalTargetType = "player" | "place" | "card";
 
-type GameCard =  {
+type GameCard = {
   [key: string]: value;
   id: string;
   name: string;
@@ -71,30 +70,29 @@ type GameCard =  {
   pointValue: number;
   guestCardType?: GuestCardType;
   specialsCardType?: GuestCardType;
-  blitzAction?: BlitzActionType 
-  numGuestPlaces?: number
+  blitzAction?: BlitzActionType;
+  numGuestPlaces?: number;
   action: CardAction;
 };
 
+type PlaceActionType = "addDragged";
 
-type PlaceActionType = "addDragged" 
+type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap";
 
-type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap"
+type PlayerActionType = "protectSelf";
 
-type PlayerActionType = "protectSelf"
+type BlitzActionType = "";
 
-type BlitzActionType = ""
-
-type ActionType =  PlaceActionType | CardActionType | PlayerActionType
+type ActionType = PlaceActionType | CardActionType | PlayerActionType;
 
 type HighlightType = "guestCard" | "place" | "player" | "";
 
 type CardAction = {
-    actionType: ActionType,
-    highlightType: HighlightType,
-    cardHighlightType?: CardType,
-    placeHighlightType?: PlaceType,
-}
+  actionType: ActionType;
+  highlightType: HighlightType;
+  cardHighlightType?: CardType;
+  placeHighlightType?: PlaceType;
+};
 
 // type TablePositionLocator = {
 //   targetIndex: number;
@@ -211,11 +209,10 @@ type Refs = {
   [id: string]: HTMLElement;
 };
 
-
 type CardGroupObj = {
   id: string;
   size: number;
   cards: CardGroup;
-}
+};
 
 type Hover = "shortHover" | "longHover" | "none";

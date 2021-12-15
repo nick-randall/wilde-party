@@ -73,6 +73,7 @@ const HandCard = (props: HandCardProps) => {
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
+    height:cardHeight,
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     position: "absolute",
@@ -113,8 +114,8 @@ const HandCard = (props: HandCardProps) => {
         x = -15;
         y = -25;
       } else {
-        x = cardHeight - 188;
-        y = cardHeight- 188;
+        x = cardWidth - 175;
+        y = cardHeight- 195 ;
       }
 
       const translate = `translate(${x}px, ${y}px)`;

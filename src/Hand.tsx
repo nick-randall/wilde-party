@@ -5,7 +5,6 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
-import { locate3 } from "./helperFunctions/locateFunctions";
 interface HandProps {
   id: string;
   handCards: GameCard[];
