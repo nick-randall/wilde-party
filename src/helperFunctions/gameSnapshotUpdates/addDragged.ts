@@ -1,4 +1,4 @@
-import { locate } from "../locateFunctions";
+import { getNumCards, locate } from "../locateFunctions";
 import { produce } from "immer";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 import { compareProps } from "../tests";
@@ -40,6 +40,9 @@ export const addDragged = (gameSnapshot: GameSnapshot, sourceIndex: number, dest
         const cardGroupObjs = getCardGroupObjs(enchantmentsRow.cards, GCZ.cards);
         const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs);
         targetIndex = cardRowShape[destinationIndex];
+      }
+      else if (place === "UWZ") {
+        targetIndex = getNumCards(destinationPlaceId, gameSnapshot)
       }
 
       const newPlayerId = gameSnapshot.players[player].places[place].playerId;

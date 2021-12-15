@@ -71,9 +71,9 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: fromCenterWidth(cardWidth), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(100 + cardWidth), y: fromCenterHeight(-cardHeight) };
       case "UWZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(100), y: fromCenterHeight(-cardHeight) };
       case "GCZ":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
