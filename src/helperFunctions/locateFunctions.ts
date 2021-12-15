@@ -186,7 +186,7 @@ export const getCard = (cardId: string, gameSnapshot: GameSnapshot): GameCard =>
     zwilling: false,
     image: "bffs1.jpg",
     cardType: "bff",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest", targetPlayerType: "self" },
   };
   return card;
 };

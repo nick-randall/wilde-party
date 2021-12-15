@@ -12,7 +12,6 @@ interface UWZProps {
 }
 
 export const UWZ = (props: UWZProps) => {
-
   const { id, unwantedCards } = props;
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
@@ -32,41 +31,37 @@ export const UWZ = (props: UWZProps) => {
   const dimensions = getAllDimensions(id);
   const { cardWidth } = dimensions;
   const { x, y } = getLayout(id);
+  console.log(highlights)
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
-      {provided => (
-        <div
-          className="pl0GCZ"
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          style={{
-            display: "flex",
-            //top: 100,
-            position: "absolute",
-            margin: 0,
-            //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: x,
-            top: y,
-            minWidth: cardWidth,
-            backgroundColor: isHighlighted ? "yellowgreen" : "",
-            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-            transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-          }}
-        >
-          {unwantedCards.map((card, index) => (
-            <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={index * dimensions.cardTopSpread} key={card.id} />
-          ))}
-          {provided.placeholder}
-
-         
-          {ghostCard ? <GhostCard index={ghostCardIndex} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null}
-        </div>
-      )}
-    </Droppable>
+    <div style={{ position: "absolute", left: x, top: y }}>
+      {unwantedCards.map((card, index) => (
+        <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={index * dimensions.cardTopSpread} key={card.id} />
+      ))}
+      <Droppable droppableId={id} isDropDisabled={!allowDropping}>
+        {provided => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={{
+              display: "flex",
+              position: "absolute",
+              margin: 0,
+              left: x,
+              top: y,
+              minWidth: cardWidth,
+              backgroundColor: isHighlighted ? "yellowgreen" : "",
+              boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+              transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+            }}
+          >
+            {provided.placeholder}
+            {ghostCard ? <GhostCard index={ghostCardIndex} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null}
+          </div>
+        )}
+      </Droppable>
+    </div>
   );
-}
+};
 
 export default UWZ;
-
-

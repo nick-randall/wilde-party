@@ -26,6 +26,8 @@ export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedC
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
   draggedCard.cardType === highlightPlace.acceptedCardType;
 
+export const highlightPlacePlayerIsOfRightType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => true;
+
 //canAddDragged
 export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType);
 

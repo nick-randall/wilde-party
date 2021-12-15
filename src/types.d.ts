@@ -87,9 +87,12 @@ type ActionType = PlaceActionType | CardActionType | PlayerActionType;
 
 type HighlightType = "guestCard" | "place" | "player" | "";
 
+type TargetPlayerType = "enemy" | "self"
+
 type CardAction = {
   actionType: ActionType;
   highlightType: HighlightType;
+  targetPlayerType: TargetPlayerType;
   cardHighlightType?: CardType;
   placeHighlightType?: PlaceType;
 };
