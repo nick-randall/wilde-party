@@ -26,7 +26,9 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
 
   const isHighlighted = specialsZoneHighlighted && specialsTypeAccepted;
   return (
-    <div style={{ display: "flex", flexDirection: "column-reverse", width: dimensions.cardWidth }}>
+    <div style={{ position: "relative", 
+    //display: "flex", flexDirection: "column-reverse", 
+    width: dimensions.cardWidth }}>
       <Droppable droppableId={specialsZoneId + "dropZone"} isDropDisabled={!isHighlighted}>
         {provided => (
           <div
@@ -34,7 +36,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
               height: cardHeight,
               width: cardWidth,
               position: "absolute",
-              bottom: -cardWidth -30,
+              //bottom: -cardWidth -30,
 
               backgroundColor: isHighlighted ? "yellowgreen" : "",
               boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",

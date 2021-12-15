@@ -49,9 +49,9 @@ export const getLayout = (id: string): { x: number; y: number } => {
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: 400, y: fromCenterHeight(-dimensions.cardHeight-38) };
-        case "UWZ":
-          return { x: 690, y: fromCenterHeight(-64) };
+        return { x: 200, y: fromCenterHeight(-64) };
+      case "UWZ":
+        return { x: 690, y: fromCenterHeight(-64) };
       case "GCZ":
         return { x: 400, y: fromCenterHeight(0) };
       case "hand":

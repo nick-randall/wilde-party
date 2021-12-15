@@ -55,7 +55,7 @@ export const UWZ = (props: UWZProps) => {
           }}
         >
           {unwantedCards.map((card, index) => (
-            <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetLeft={index * -dimensions.cardLeftSpread} key={card.id} />
+            <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={index * dimensions.cardTopSpread} key={card.id} />
           ))}
           {provided.placeholder}
 
