@@ -16,6 +16,7 @@ interface GCZProps {
 
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
+  const screenSize = useSelector((state: RootState) => state.screenSize)
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const rearrange = useSelector((state: RootState) => state.rearrangingData);
@@ -40,7 +41,7 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  const { x, y } = getLayout(id);
+  const { x, y } = getLayout(id, screenSize);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>

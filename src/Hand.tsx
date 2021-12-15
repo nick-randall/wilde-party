@@ -14,13 +14,14 @@ const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
   const { id, handCards } = props;
+  const screenSize = useSelector((state: RootState) => state.screenSize)
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
-  const { x, y } = getLayout(id);
+  const { x, y } = getLayout(id, screenSize);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>

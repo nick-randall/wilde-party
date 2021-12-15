@@ -17,7 +17,8 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const { specialsCards, id } = props;
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight } = dimensions;
-  const { x, y } = getLayout(id);
+  const screenSize = useSelector((state: RootState) => state.screenSize)
+  const { x, y } = getLayout(id, screenSize);
   const highlights = useSelector((state: RootState) => state.highlights);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);  

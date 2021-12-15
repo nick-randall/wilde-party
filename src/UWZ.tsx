@@ -13,6 +13,7 @@ interface UWZProps {
 
 export const UWZ = (props: UWZProps) => {
   const { id, unwantedCards } = props;
+  const screenSize = useSelector((state: RootState) => state.screenSize)
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const rearrange = useSelector((state: RootState) => state.rearrangingData);
@@ -30,8 +31,7 @@ export const UWZ = (props: UWZProps) => {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardWidth } = dimensions;
-  const { x, y } = getLayout(id);
-  console.log(highlights)
+  const { x, y } = getLayout(id, screenSize);
 
   return (
     <div style={{ position: "absolute", left: x, top: y }}>
@@ -44,7 +44,7 @@ export const UWZ = (props: UWZProps) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
-              display: "flex",
+             
               position: "absolute",
               margin: 0,
               left: x,

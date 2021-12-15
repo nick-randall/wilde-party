@@ -18,9 +18,9 @@ import store from "../redux/store";
 //   }
 // }
 
-export const getLayout = (id: string): { x: number; y: number } => {
+export const getLayout = (id: string, screenSize: {width: number, height: number}): { x: number; y: number } => {
   store.subscribe(() => store.getState());
-  const { screenSize, gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
+  const { gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
   const { player, place } = locate(id, gameSnapshot);
   const dimensions = getAllDimensions(id);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
