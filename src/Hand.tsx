@@ -17,12 +17,11 @@ const Hand = (props: HandProps) => {
   const { id, handCards } = props;
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
-  const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0
+  const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
-  const { x, y } = getLayout(id);  
-
+  const { x, y } = getLayout(id);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
@@ -37,7 +36,7 @@ const Hand = (props: HandProps) => {
             bottom: 30,
             // This causes whole card row to move left on spread
             left: x - (spread / 2) * handCards.length,
-            top: y, 
+            top: y,
             transition: "180ms",
             height: dimensions.cardHeight,
           }}
@@ -47,11 +46,12 @@ const Hand = (props: HandProps) => {
             <div
               // This is a container div for one card and one spacer
               style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
-            >
+            > {index > 0 ? (
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
-                style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight }}
+                style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight}}
               />
+            ) : null}
               <HandCard
                 id={card.id}
                 index={index}
@@ -61,6 +61,7 @@ const Hand = (props: HandProps) => {
                 numHandCards={handCards.length}
                 key={card.id}
               />
+             
             </div>
           ))}
           {provided.placeholder}

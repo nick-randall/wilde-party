@@ -39,7 +39,6 @@ type AllDimensions = {
   rotation: number;
   featuredCardScale: number;
   zIndex: number;
-  GCZHeight: number;
   handToTableScaleFactor: number;
   tableCardHeight: number,
     tableCardWidth: number,
@@ -65,17 +64,15 @@ type GameCard =  {
   id: string;
   name: string;
   playerId?: string; // player should be an id ??
-  placeId: string; // place should be an id ???
-  ghostCardType?: CardType;
+  placeId: string; // place should be an id ??
   index: number;
   image: string;
   cardType: CardType;
   pointValue: number;
-  bffs: boolean;
-  zwilling: boolean;
   guestCardType?: GuestCardType;
   specialsCardType?: GuestCardType;
-  numGuestPlaces?:number
+  blitzAction?: BlitzActionType 
+  numGuestPlaces?: number
   action: CardAction;
 };
 
@@ -85,6 +82,8 @@ type PlaceActionType = "addDragged"
 type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap"
 
 type PlayerActionType = "protectSelf"
+
+type BlitzActionType = ""
 
 type ActionType =  PlaceActionType | CardActionType | PlayerActionType
 

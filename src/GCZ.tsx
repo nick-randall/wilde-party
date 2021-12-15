@@ -39,7 +39,7 @@ function GCZ(props: GCZProps) {
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
-  const { GCZHeight } = dimensions;
+  const { cardHeight } = dimensions;
   const { x, y } = getLayout(id);
 
   return (
@@ -57,7 +57,7 @@ function GCZ(props: GCZProps) {
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
             left: x,
             top: y,
-            height: GCZHeight,
+            height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",

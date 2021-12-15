@@ -30,7 +30,7 @@ export const getLayout = (id: string): { x: number; y: number } => {
 
   const fromCenterWidth = (distance: number): number => distance + (screenSize.width / 2 - ((numCards + draggedOverCard) * dimensions.cardWidth) / 2);
   //const specialsZoneFromCenterWidth =  (distance: number): number => distance + (screenSize.width / 2 - ((sortSpecials2() + draggedOverCard) * dimensions.cardWidth) / 2);
-  const fromCenterHeight = (distance: number): number => distance + dimensions.GCZHeight;
+  const fromCenterHeight = (distance: number): number => distance + (screenSize.height / 2 - (dimensions.cardHeight / 2));
   // TODO need a way to figure out how wide the cards are as they move outwards.
   const handFromCenterWidth = (distance: number): number => {
     const numHandCards = draggedHandCard ? numCards - 1 : numCards;
@@ -49,9 +49,9 @@ export const getLayout = (id: string): { x: number; y: number } => {
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: 200, y: fromCenterHeight(-64) };
+        return { x: 200, y: fromCenterHeight(-cardHeight) };
       case "UWZ":
-        return { x: 690, y: fromCenterHeight(-64) };
+        return { x: 690, y: fromCenterHeight(-cardHeight) };
       case "GCZ":
         return { x: 400, y: fromCenterHeight(0) };
       case "hand":

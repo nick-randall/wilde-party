@@ -9,8 +9,6 @@ const myGCZCards: GameCard[] = [
     image: "saufnase0",
     cardType: "guest",
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     guestCardType: "saufnase", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
@@ -24,8 +22,6 @@ const myGCZCards: GameCard[] = [
     image: "saufnase2",
     cardType: "guest",
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     guestCardType: "saufnase", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
@@ -39,8 +35,6 @@ const myGCZCards: GameCard[] = [
   //   image: "taenzerin2", //TODO change
   //   cardType: "guest",
   //   pointValue: 2,
-  //   bffs: false,
-  //   zwilling: false,
   //   guestCardType: "taenzerin", //???
   //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   // },
@@ -52,8 +46,6 @@ const myGCZCards: GameCard[] = [
   //   index: 3,
   //   image: "schleckermaul6", //TODO change
   //   pointValue: 1,
-  //   bffs: false,
-  //   zwilling: false,
   //   cardType: "guest",
   //   guestCardType: "schleckermaul", //???
   //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
@@ -66,8 +58,6 @@ const myGCZCards: GameCard[] = [
   //   index: 4,
   //   image: "schleckermaul3", //TODO change
   //   pointValue: 1,
-  //   bffs: false,
-  //   zwilling: false,
   //   cardType: "guest",
   //   guestCardType: "schleckermaul", //???
   //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
@@ -75,20 +65,7 @@ const myGCZCards: GameCard[] = [
 ];
 
 export const myHandCards: GameCard[] = [
-  {
-    id: "gogogogo",
-    name: "megaphon",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
-    index: 3,
-    pointValue: 8,
-    bffs: false,
-    zwilling: false,
-    image: "megaphon",
-    cardType: "special",
-    specialsCardType: "rumgroelerin",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
-  },
+  
   {
     id: "3w3323434",
     name: "bffs5",
@@ -96,8 +73,6 @@ export const myHandCards: GameCard[] = [
     playerId: "l93fld9",
     index: 0,
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     image: "bffs",
     cardType: "bff",
     action: { actionType: "enchantWithBff", highlightType: "guestCard", cardHighlightType: "guest" },
@@ -109,8 +84,6 @@ export const myHandCards: GameCard[] = [
     playerId: "l93fld9",
     index: 1,
     pointValue: 0,
-    bffs: false,
-    zwilling: false,
     image: "partypizza",
     cardType: "special",
     specialsCardType: "schleckermaul",
@@ -125,8 +98,6 @@ export const myHandCards: GameCard[] = [
     image: "schleckermaul4",
     cardType: "guest",
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     guestCardType: "schleckermaul", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
   },
@@ -137,8 +108,6 @@ export const myHandCards: GameCard[] = [
     playerId: "l93fld9",
     index: 3,
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     image: "barkeeperin",
     cardType: "special",
     specialsCardType: "saufnase",
@@ -151,8 +120,6 @@ export const myHandCards: GameCard[] = [
     playerId: "l93fld9",
     index: 4,
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     image: "zwilling",
     cardType: "zwilling",
     action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
@@ -165,8 +132,6 @@ export const myHandCards: GameCard[] = [
     index: 5,
     image: "rumgroelerin2", //TODO change
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
@@ -179,8 +144,6 @@ export const myHandCards: GameCard[] = [
     index: 6,
     image: "rumgroelerin0", //TODO change
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
@@ -193,11 +156,21 @@ export const myHandCards: GameCard[] = [
     index: 7,
     image: "rumgroelerin3",
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     cardType: "guest",
     guestCardType: "rumgroelerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ" },
+  },
+  {
+    id: "gogogogo",
+    name: "megaphon",
+    placeId: "klsjfd",
+    playerId: "l93fld9",
+    index: 8,
+    pointValue: 0,
+    image: "megaphon",
+    cardType: "special",
+    specialsCardType: "rumgroelerin",
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone" },
   },
 ];
 export const myEnchantmentsRowCards: GameCard[] = [
@@ -208,8 +181,6 @@ export const myEnchantmentsRowCards: GameCard[] = [
   //   playerId: "l93fld9",
   //   index: 1,
   //   pointValue: 1,
-  //   bffs: false,
-  //   zwilling: false,
   //   image: "zwilling",
   //   cardType: "zwilling",
   //   action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
@@ -224,8 +195,6 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: "l93fld9",
     index: 1,
     pointValue: 0,
-    bffs: false,
-    zwilling: false,
     image: "nebelmaschine",
     cardType: "special",
     specialsCardType: "taenzerin",
@@ -238,8 +207,6 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: "l93fld9",
     index: 2,
     pointValue: 0,
-    bffs: false,
-    zwilling: false,
     image: "playlist",
     cardType: "special",
     specialsCardType: "taenzerin",
@@ -253,8 +220,6 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: "l93fld9",
     index: 4,
     pointValue: 0,
-    bffs: false,
-    zwilling: false,
     image: "prost",
     cardType: "special",
     specialsCardType: "saufnase",
@@ -269,8 +234,6 @@ const myUWZCards : GameCard [] = [{
   playerId: "l93fld9",
   index: 0,
   pointValue: 0,
-  bffs: false,
-  zwilling: false,
   image: "quasselstrippe",
   cardType: "unwanted",
   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ" },
@@ -281,8 +244,6 @@ const myUWZCards : GameCard [] = [{
   playerId: "l93fld9",
   index: 1,
   pointValue: 0,
-  bffs: false,
-  zwilling: false,
   image: "musikfuersichalleinebeansprucherin",
   cardType: "unwanted",
   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ" },

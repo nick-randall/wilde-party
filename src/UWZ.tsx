@@ -30,7 +30,7 @@ export const UWZ = (props: UWZProps) => {
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
-  const { GCZHeight } = dimensions;
+  const { cardWidth } = dimensions;
   const { x, y } = getLayout(id);
 
   return (
@@ -48,7 +48,7 @@ export const UWZ = (props: UWZProps) => {
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
             left: x,
             top: y,
-            minWidth: dimensions.cardWidth,
+            minWidth: cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",
             boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
             transition: "background-color 180ms, box-shadow 180ms, left 180ms",
