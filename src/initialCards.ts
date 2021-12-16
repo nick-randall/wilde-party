@@ -375,6 +375,7 @@ export const initialGameSnapshot: GameSnapshot = {
           id: "aqu2389uh234rj",
           playerId: "enemy",
           placeType: "UWZ",
+          acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {

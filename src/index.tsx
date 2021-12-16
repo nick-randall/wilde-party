@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Board } from "./Board";
+import { Table } from "./Table";
 import store from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Board />
+      <Table />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

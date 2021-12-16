@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { SpecialsZone } from "./SpecialsZone";
 import UWZ from "./UWZ";
 
-export const Board = () => {
+export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const dispatch = useDispatch();
@@ -23,6 +23,9 @@ export const Board = () => {
   return (
     <div style={{width: "100vw", height: "100vh", backgroundColor: "blue"}}>
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
+      <div>
+        <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} />
+      </div>
       <div style={{ display: "block" }}>
         <SpecialsZone id={ids.pl0specialsZone} specialsCards={gameSnapshot.players[0].places.specialsZone.cards} />
         <div style={{ position: "relative", marginLeft: "auto", marginRight: "auto"}}>

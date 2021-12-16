@@ -26,11 +26,12 @@ export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedC
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
   draggedCard.cardType === highlightPlace.acceptedCardType;
 
-export const highlightPlacePlayerIsOfRightType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
-draggedCard.cardType !== "unwanted";
+export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
+(draggedCard.action.targetPlayerType === "enemy" && locate(highlightPlace.id, gameSnapshot).player !== 0 ) || 
+(draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === 0 )
 
 //canAddDragged
-export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType);
+export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType, highlightPlacePlayerIsOfCorrectType);
 
 // enchant
 
