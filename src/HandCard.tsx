@@ -26,10 +26,11 @@ const HandCard = (props: HandCardProps) => {
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, draggedCardzIndex, cardHeight } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
-  const [centerOfCard, setCenterOfCard] = useState({ x: 40, y: 40 });
-  const [touched, setTouched] = useState({ x: 40, y: 40 });
+  const [featuredOffset, setFeaturedOffset] = useState({ x: 40, y: 40 });
+  const [featured, setFeatured] = useState(false);
+  const scale = 2;
 
-  const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset, setHover } = useHoverStyles(dimensions);
+  //const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset, setHover } = useHoverStyles(dimensions);
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -45,58 +46,81 @@ const HandCard = (props: HandCardProps) => {
   //   }
   // };
   const handleClick = (event: React.MouseEvent) => {
+    if (featured) {
+      setFeatured(false);
+      return;
+    }
     const element = cardRef.current;
     if (element) {
       const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom, width, height } = element.getBoundingClientRect();
-      setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
 
-     
+      const clicked = { x: event.pageX - boundingBoxLeft, y: event.pageY - boundingBoxTop };
       const cardRotation = 10 * index - rotation;
 
-      // this works! gets me the point where user clicked
       // Difference in dimensions of the card (cardWidth,cardHeight) to the Bounding Box
-      // allows me to measure from topleft corner of card instead of from top left corner of Bounding Box
-      const offsetOfTopLeftFromBoundingBox = { x: (width - cardWidth) / 2, y: (height - cardHeight) / 2 };
+      // allows me to measure from top left corner of card instead of from top left corner of Bounding Box
+      const offset = { x: (width - cardWidth) / 2, y: (height - cardHeight) / 2 };
+
       //  A<->B
       //  -------------|
       //  |  \-----\   |
       //  |   \     \  | X
       //  |    \-----\ | |
       //  |------------| Y
-      
-      // also gets me the offset center
-      const unrotatedCenter = { x: cardWidth / 2, y: cardHeight / 2 };
+      let adjusted: { [prop: string]: { x: number; y: number } | number } = {};
+      adjusted.center = { x: cardWidth / 2, y: cardHeight / 2 };
+      adjusted.clicked = {
+        x: clicked.x - offset.x,
+        y: clicked.y - offset.y,
+      };
+      adjusted.top = boundingBoxTop - offset.y;
+      adjusted.bottom = boundingBoxBottom - offset.y;
 
-      const touchedPointInBoundingBox = {x: event.pageX - boundingBoxLeft, y: event.pageY - boundingBoxTop}
+      const rotatedAdjustedClicked: { x: number; y: number } = rotate(
+        adjusted.center.x,
+        adjusted.center.y,
+        adjusted.clicked.x,
+        adjusted.clicked.y,
+        cardRotation
+      );
 
-      const touchedPointOffsetFromTopLeft = { x: touchedPointInBoundingBox.x - offsetOfTopLeftFromBoundingBox.x, y: touchedPointInBoundingBox.y - offsetOfTopLeftFromBoundingBox.y };
-      
-      const rotatedTouchedPoint = rotate(unrotatedCenter.x, unrotatedCenter.y, touchedPointOffsetFromTopLeft.x, touchedPointOffsetFromTopLeft.y, cardRotation);
-     
-      const delta = { x: unrotatedCenter.x - rotatedTouchedPoint.x, y: unrotatedCenter.y - rotatedTouchedPoint.y };
+      const delta = { x: adjusted.center.x - rotatedAdjustedClicked.x, y: adjusted.center.y - rotatedAdjustedClicked.y };
 
-      setTouched({ x: event.pageX - boundingBoxLeft - offsetOfTopLeftFromBoundingBox.x, y: event.pageY - boundingBoxTop - offsetOfTopLeftFromBoundingBox.y});
-      //setTouched({ x: rotatedCenter.x,y: rotatedCenter.y });
-      console.log( delta);
+      const scaledDelta = { x: delta.x / scale, y: delta.y / scale };
+
+      //const newTop = rotatedAdjustedClicked.x - (cardHeight / 2) * scale;
+      const newTop = adjusted.top + delta.y / scale;
+      const newBottom = (adjusted.bottom + delta.y )* scale; //+ off
+      const screenbottom = window.innerHeight;
+      console.log(newBottom, screenbottom);
+      setFeaturedOffset(scaledDelta);
+      setFeatured(true);
     }
-    setHover("longHover");
+    //setHover("longHover");
   };
 
-  const hoverStyles = {
-    longHover: {
-      // transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
-      transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
-      transition: "transform 800ms",
-      zIndex: tableCardzIndex + 1,
-      //  left: 125 * (index - (numHandCards / 2 - 0.5)),
-    },
-    shortHover: {
-      transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
-      transition: "transform 300ms, left 180ms, width 180ms",
-      zIndex: tableCardzIndex + 1,
-    },
-    none: {},
-  };
+  const featuredStyle = featured
+    ? {
+        transform: `scale(2) translateX(${featuredOffset.x}px) translateY(${featuredOffset.y}px)`,
+        zIndex: 15
+      }
+    : {};
+
+  // const hoverStyles = {
+  //   longHover: {
+  //     // transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
+  //     transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
+  //     transition: "transform 800ms",
+  //     zIndex: tableCardzIndex + 1,
+  //     //  left: 125 * (index - (numHandCards / 2 - 0.5)),
+  //   },
+  //   shortHover: {
+  //     transform: `scale(1.1) rotate(${10 * index - rotation}deg)`,
+  //     transition: "transform 300ms, left 180ms, width 180ms",
+  //     zIndex: tableCardzIndex + 1,
+  //   },
+  //   none: {},
+  // };
   let transitionStyles: TransitionStyles = { entering: {}, entered: {} };
 
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
@@ -196,25 +220,23 @@ const HandCard = (props: HandCardProps) => {
             >
               {state => {
                 return (
-              
-                  
-                    <img
-                      alt={image}
-                      src={`./images/${image}.jpg`}
-                      ref={cardRef}
-                      onClick={handleClick}
-                      onMouseEnter={setHoverStyles}
-                      onMouseLeave={clearHoverStyles}
-                      id={id}
-                      style={{
-                        ...normalStyles,
-                        ...hoverStyles[hover],
-                        ...transitionStyles[state],
-                        ...dragStyles(isDragging),
-                        ...droppingStyles(snapshot, provided.draggableProps),
-                      }}
-                    />
-                   
+                  <img
+                    alt={image}
+                    src={`./images/${image}.jpg`}
+                    ref={cardRef}
+                    onClick={handleClick}
+                    //onMouseEnter={setHoverStyles}
+                    onMouseLeave={() => setFeatured(false)}
+                    id={id}
+                    style={{
+                      ...normalStyles,
+                      //...hoverStyles[hover],
+                      ...featuredStyle,
+                      ...transitionStyles[state],
+                      ...dragStyles(isDragging),
+                      ...droppingStyles(snapshot, provided.draggableProps),
+                    }}
+                  />
                 );
               }}
             </Transition>
