@@ -31,7 +31,7 @@ const handToTableScaleFactor = tableCardHeight / handCardHeight;
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
     tableCardzIndex: 3,
-    rotation:  (index: number) => 10 * index - (numCards / 2 - 0.5 * 10),
+    rotation:  (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     //GCZHeight: numEnchantmentsCards === 0 ? tableCardHeight : tableCardHeight * 1.5,
     handToTableScaleFactor: handToTableScaleFactor
