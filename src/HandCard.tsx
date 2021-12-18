@@ -84,7 +84,7 @@ const HandCard = (props: HandCardProps) => {
         cardRotation
       );
 
-      const delta = { x: adjusted.center.x - rotatedAdjustedClicked.x, y: adjusted.center.y - rotatedAdjustedClicked.y };
+      const delta = { x: rotatedAdjustedClicked.x - adjusted.center.x,  y:  rotatedAdjustedClicked.y - adjusted.center.y  };
 
       const scaledDelta = { x: delta.x / scale, y: delta.y / scale };
 
