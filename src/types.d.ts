@@ -36,7 +36,7 @@ type AllDimensions = {
   draggedCardWidth: number;
   draggedCardzIndex: number;
   tableCardzIndex: number;
-  rotation: number;
+  rotation: (index: number) => number;
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;
@@ -87,7 +87,7 @@ type ActionType = PlaceActionType | CardActionType | PlayerActionType;
 
 type HighlightType = "guestCard" | "place" | "player" | "";
 
-type TargetPlayerType = "enemy" | "self"
+type TargetPlayerType = "enemy" | "self";
 
 type CardAction = {
   actionType: ActionType;

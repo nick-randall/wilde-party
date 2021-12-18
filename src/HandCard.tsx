@@ -55,7 +55,7 @@ const HandCard = (props: HandCardProps) => {
       const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom, width, height } = element.getBoundingClientRect();
 
       const clicked = { x: event.pageX - boundingBoxLeft, y: event.pageY - boundingBoxTop };
-      const cardRotation = 10 * index - rotation;
+      const cardRotation = rotation(index);
 
       // Difference in dimensions of the card (cardWidth,cardHeight) to the Bounding Box
       // allows me to measure from top left corner of card instead of from top left corner of Bounding Box
@@ -84,15 +84,18 @@ const HandCard = (props: HandCardProps) => {
         cardRotation
       );
 
-      const delta = { x: rotatedAdjustedClicked.x - adjusted.center.x,  y:  rotatedAdjustedClicked.y - adjusted.center.y  };
+      let delta = { x: rotatedAdjustedClicked.x - adjusted.center.x, y: rotatedAdjustedClicked.y - adjusted.center.y };
 
+      const newTop = adjusted.top -cardHeight /2 + delta.y;
+      const newBottom2 = adjusted.bottom + cardHeight / 2 + delta.y; //+ off
+      const margin = 20;
+      const screenbottom = window.innerHeight - margin;
+      if (newBottom2 > screenbottom) {
+        const diff = newBottom2 - screenbottom;
+        delta = { x: delta.x, y: delta.y - diff };
+      }
       const scaledDelta = { x: delta.x / scale, y: delta.y / scale };
 
-      //const newTop = rotatedAdjustedClicked.x - (cardHeight / 2) * scale;
-      const newTop = adjusted.top + delta.y / scale;
-      const newBottom = (adjusted.bottom + delta.y )* scale; //+ off
-      const screenbottom = window.innerHeight;
-      console.log(newBottom, screenbottom);
       setFeaturedOffset(scaledDelta);
       setFeatured(true);
     }
@@ -101,8 +104,8 @@ const HandCard = (props: HandCardProps) => {
 
   const featuredStyle = featured
     ? {
-        transform: `scale(2) translateX(${featuredOffset.x}px) translateY(${featuredOffset.y}px)`,
-        zIndex: 15
+        transform: `scale(${scale}) translateX(${featuredOffset.x}px) translateY(${featuredOffset.y}px)`,
+        zIndex: 15,
       }
     : {};
 
@@ -142,7 +145,7 @@ const HandCard = (props: HandCardProps) => {
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     position: "relative",
-    transform: `rotate(${10 * index - rotation}deg)`,
+    transform: `rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
