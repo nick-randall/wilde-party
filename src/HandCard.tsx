@@ -45,6 +45,8 @@ const HandCard = (props: HandCardProps) => {
   //     setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
   //   }
   // };
+  console.log(cardRef.current?.getBoundingClientRect().left, cardWidth /2  , index)
+
   const handleClick = (event: React.MouseEvent) => {
     if (featured) {
       setFeatured(false);

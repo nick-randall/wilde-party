@@ -48,6 +48,11 @@ export type EndDragCleanup = {
   type: "END_DRAG_CLEANUP";
 };
 
+export type DrawCard = {
+  type: "DRAW_CARD";
+  payload: string;
+}
+
 export type Action =
   | SetScreenSize
   | RemoveTransition
@@ -58,4 +63,5 @@ export type Action =
   | Rearrange
   | AddDragged
   | Enchant
-  | EndDragCleanup;
+  | EndDragCleanup
+  | DrawCard
