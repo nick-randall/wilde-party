@@ -45,7 +45,7 @@ const HandCard = (props: HandCardProps) => {
   //     setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
   //   }
   // };
-  console.log(cardRef.current?.getBoundingClientRect().left, cardWidth /2  , index)
+  console.log(cardRef.current?.getBoundingClientRect().left  , index)
 
   const handleClick = (event: React.MouseEvent) => {
     if (featured) {
@@ -147,7 +147,7 @@ const HandCard = (props: HandCardProps) => {
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     position: "relative",
-    transform: `rotate(${rotation(index)}deg)`,
+    transform: "",//`rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
 
@@ -225,6 +225,7 @@ const HandCard = (props: HandCardProps) => {
             >
               {state => {
                 return (
+                  <div>
                   <img
                     alt={image}
                     src={`./images/${image}.jpg`}
@@ -242,8 +243,11 @@ const HandCard = (props: HandCardProps) => {
                       ...droppingStyles(snapshot, provided.draggableProps),
                     }}
                   />
-                );
+                        <div style={{width:3, height: 3, backgroundColor: "blue", zIndex:100, top:0, left:0, position:"absolute"}}/>
+
+                </div>);
               }}
+              
             </Transition>
           </div>
         </div>

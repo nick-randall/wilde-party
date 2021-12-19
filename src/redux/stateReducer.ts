@@ -107,8 +107,8 @@ export const stateReducer = (
       const handId = state.gameSnapshot.players[0].places.hand.id;
       const handIndex = 0;
       const transition = buildTransition(deckId, originIndex, handId, handIndex, state.screenSize, state.gameSnapshot);
-     // state.transitionData[0].card =
-      console.log(transition)
+      // state.transitionData[0]. =
+      console.log(transition);
       return state;
     case "END_DRAG_CLEANUP":
       return {

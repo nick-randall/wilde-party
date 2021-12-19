@@ -1,6 +1,6 @@
 import { lte, range } from "ramda";
 import { Store } from "redux";
-import { widthOfRotated, widthOfRotated2 } from "../helperFunctions/equations";
+import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";

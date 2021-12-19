@@ -14,7 +14,7 @@ const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
   const { id, handCards } = props;
-  const screenSize = useSelector((state: RootState) => state.screenSize)
+  const screenSize = useSelector((state: RootState) => state.screenSize);
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
@@ -44,14 +44,17 @@ const Hand = (props: HandProps) => {
         >
           {handCards.map((card, index) => (
             <div
-              // This is a container div for one card and one spacer
+              // This is a container div for one card and two spacers
               style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
-            > {index > 0 ? (
-              <div
+            >
+               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
-                style={{ width: spread, transition: "all 180ms", height: dimensions.cardHeight}}
+                style={{
+                  width: spread / 2,
+                  transition: "all 180ms",
+                  height: dimensions.cardHeight,
+                }}
               />
-            ) : null}
               <HandCard
                 id={card.id}
                 index={index}
@@ -61,7 +64,15 @@ const Hand = (props: HandProps) => {
                 numHandCards={handCards.length}
                 key={card.id}
               />
-             
+
+              <div
+                // This is a card spacer div, responsible for growing and pushing the hand cards apart.
+                style={{
+                  width: spread / 2,
+                  transition: "all 180ms",
+                  height: dimensions.cardHeight,
+                }}
+              />
             </div>
           ))}
           {provided.placeholder}

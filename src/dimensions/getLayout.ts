@@ -1,6 +1,6 @@
 import { lte, range } from "ramda";
 import { Store } from "redux";
-import { widthOfRotated, widthOfRotated2 } from "../helperFunctions/equations";
+import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
@@ -52,7 +52,7 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
     const numHandCards = draggedHandCard ? numCards - 1 : numCards;
     const rotation = (index: number) => 10 * index - (numHandCards / 2 - 0.5) * 10;
     for (let i = 0; i < numCards; i++) {
-    //    console.log(widthOfRotated2(rotation(i), cardWidth, cardHeight));
+  //  console.log(widthOfRotated(rotation(i), cardWidth, cardHeight));
     }
     const firstCardRotation = rotation(1);
     // console.log(firstCardRotation);
@@ -65,8 +65,10 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
     // console.log(cardsWiderThanUnRotated);
     const handWidth = (numCards - 1) * cardLeftSpread - firstCardWidth;
     const hw = (numCards - 1) * cardLeftSpread - cardWidth;
+    const hww =  (cardLeftSpread / 2) * numCards - cardLeftSpread
 
-    return distance + (screenSize.width / 2 - handWidth / 2);
+
+    return distance + (screenSize.width / 2 - hww / 2);
   };
   const handFromBottom = (distance: number) => screenSize.height - dimensions.cardHeight - distance;
 

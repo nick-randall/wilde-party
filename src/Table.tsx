@@ -23,6 +23,7 @@ export const Table = () => {
 
   return (
     <div style={{width: "100vw", height: "100vh", backgroundColor: "blue"}}>
+      <div style={{width:3, height: 3, backgroundColor: "red", zIndex:100, left: 438.0585630729355, top: 485, position:"absolute"}}/>
       <Deck id={ids.deck} cards={gameSnapshot.nonPlayerPlaces.deck.cards}/>
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <div>
