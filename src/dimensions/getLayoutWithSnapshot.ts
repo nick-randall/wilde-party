@@ -5,12 +5,10 @@ import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
-import { getDimensionsFromSnapshot } from "./getDimensionsFromSnapshot";
-
 
 export const getLayoutWithSnapshot = (id: string, gameSnapshot: GameSnapshot, screenSize: {width: number, height: number}): { x: number; y: number } => {
   const { player, place } = locate(id, gameSnapshot);
-  const dimensions = getDimensionsFromSnapshot(id, gameSnapshot);
+  const dimensions = getAllDimensions(id, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   const numCards = getNumCards(id, gameSnapshot);
 

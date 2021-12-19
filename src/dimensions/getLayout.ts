@@ -6,18 +6,6 @@ import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecials
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 
-//const centerWidth = ()
-
-// function toObservable(store: Store) {
-//   return {
-//     subscribe({ onNext } : {onNext: Function}) {
-//       let dispose = store.subscribe(() => onNext(store.getState()));
-//       onNext(store.getState());
-//       return { dispose };
-//     }
-//   }
-// }
-
 export const getLayout = (id: string, screenSize: {width: number, height: number}): { x: number; y: number } => {
   store.subscribe(() => store.getState());
   const { gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
