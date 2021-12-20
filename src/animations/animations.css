@@ -1,0 +1,6 @@
+@keyframes flip-grow {
+  0%   {scale: 1;}
+  25% {scale: 1.5;z-index: 2;}
+  50%  {scale: 1.5; z-index: 2; transform: rotate3d(0,1,0,179deg)}
+  100% {scale: 1;}
+}

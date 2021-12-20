@@ -5,6 +5,7 @@ import { Transition } from "react-transition-group";
 import { rotate } from "./helperFunctions/equations";
 import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
+import "./animations/animations.css"
 
 export interface HandCardProps {
   id: string;
@@ -103,6 +104,8 @@ const HandCard = (props: HandCardProps) => {
     //setHover("longHover");
   };
 
+  //const removeCardTransition = (id) => 
+
   const featuredStyle = featured
     ? {
         transform: `scale(${scale}) translateX(${featuredOffset.x}px) translateY(${featuredOffset.y}px)`,
@@ -148,22 +151,30 @@ const HandCard = (props: HandCardProps) => {
     position: "relative",
     transform: "",//`rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
+    pointerEvents: "auto"
   };
   
 
   if (transitionData) {
-    const { originDelta, duration, curve } = transitionData;
+    const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
     transitionStyles = {
       entering: {
         transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
         //transition: `transform ${duration}s, ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`
-        // height: originDelta.top,
-        // width: originDelta.width,
+        animationName: startAnimation,
+        animationDuration: `${startAnimationDuration}ms`,
+        height: originDimensions.cardHeight,
+        width: originDimensions.cardWidth,
+        pointerEvents: "none",
+
       },
       entered: {
-        transition: `transform ${duration}s ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
-       
+        transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
+        // animationName: startAnimation,
+        // animationDuration: `${startAnimationDuration}ms`,
         zIndex: draggedCardzIndex,
+        pointerEvents: "none",
+
        
       },
     };
@@ -216,13 +227,13 @@ const HandCard = (props: HandCardProps) => {
           >
             <Transition
               in={true}
-              timeout={0}
+              timeout={transitionData !== undefined ? transitionData.startAnimationDuration : 0}
               appear={true}
               addEndListener={(node: HTMLElement) => {
                 node.addEventListener(
                   "transitionend",
                   () => {
-                    // removeCardTransition(id);
+                    //removeCardTransition(id);
                   },
                   false
                 );

@@ -34,7 +34,7 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-const durationConstant = (distance: number) => distance < 0 ? -0.1 : 0.1;
+const durationConstant = (distance: number) => distance < 0 ? -100 : 100;
 
 const getOriginDelta = (
   originPlaceId: string,
@@ -65,12 +65,13 @@ const getTransitionData = (transitionType: string, distance: number) => {
   let cardInitialrotation = 0;
   switch (transitionType) {
     case "drawCard":
-      startAnimation = "flipGrow";
+      startAnimation = "flip-grow";
       cardInitialrotation = 0;
-      startAnimationDuration = 1;
+      startAnimationDuration = 0.5;
       curve = "";
   }
   const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
+  console.log(calculatedAnimationDuration)
   return {
     curve: curve,
     startAnimation: startAnimation,
