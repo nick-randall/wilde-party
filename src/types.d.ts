@@ -184,12 +184,15 @@ type CardTransitionData = {
 };
 
 type TransitionData = {
-  card: GameCard;
+  cardId: string;
   origin: TopLeftCoordinates;
   wait: number; // if transition is not first in the queue
   duration: number;
   curve: string;
-  animation: AnimationData;
+  originDimensions: AllDimensions;
+  rotation: number;
+  startAnimationDuration: number
+  startAnimation: string;
 };
 
 type TransitionDataEvents = {

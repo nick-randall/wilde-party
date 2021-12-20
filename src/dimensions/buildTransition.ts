@@ -4,10 +4,9 @@ import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import { getLayout } from "./getLayout";
 import { getLayoutWithSnapshot } from "./getLayoutWithSnapshot";
 
-
 const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: GameSnapshot): { x: number; y: number } => {
   const { player, place } = locate(placeId, gameSnapshot);
-  const { cardLeftSpread } = getAllDimensions(placeId, gameSnapshot);
+  const { cardLeftSpread, cardWidth } = getAllDimensions(placeId, gameSnapshot);
   const numCards = getNumCards(placeId, gameSnapshot);
   if (player === 0) {
     switch (place) {
@@ -21,8 +20,8 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
         // console.log(cardWidth);
         // const rotationOffset = (widthAfterRotation - cardWidth) / 2;
         // console.log(35 * index - (numCards / 2 - 0.5) * 35, rotationOffset);
-        return { x: - (cardLeftSpread / 2) * numCards, y: 0 };
-        // return { x: offsetWithoutRotation + rotationOffset, y: 0 };
+        return { x: -(cardLeftSpread / 2 - 0.5) * numCards, y: 0 };
+      // return { x: offsetWithoutRotation + rotationOffset, y: 0 };
     }
   } else if (player === 1) {
   } else {

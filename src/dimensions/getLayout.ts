@@ -6,7 +6,7 @@ import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecials
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 
-export const getLayout = (id: string, screenSize: {width: number, height: number}): { x: number; y: number } => {
+export const getLayout = (id: string, screenSize: { width: number; height: number }): { x: number; y: number } => {
   store.subscribe(() => store.getState());
   const { gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
   const { player, place } = locate(id, gameSnapshot);
@@ -20,10 +20,10 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
   if ((place === "specialsZone" || place === "UWZ") && player !== null) {
     const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
     const numSpecialsColumns = sortSpecials2(specialsZoneCards).length;
-    const numUWZColumns = 1//gameSnapshot.players[player].places["UWZ"].cards.length > 0 ? 0 : 1;
+    const numUWZColumns = 1; //gameSnapshot.players[player].places["UWZ"].cards.length > 0 ? 0 : 1;
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
-  if (place ==="UWZ") draggedOverCard = 0
+  if (place === "UWZ") draggedOverCard = 0;
 
   // if (place === "UWZ" && player !== null) {
   //   const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
@@ -40,7 +40,7 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
     const numHandCards = draggedHandCard ? numCards - 1 : numCards;
     const rotation = (index: number) => 10 * index - (numHandCards / 2 - 0.5) * 10;
     for (let i = 0; i < numCards; i++) {
-  //  console.log(widthOfRotated(rotation(i), cardWidth, cardHeight));
+      //  console.log(widthOfRotated(rotation(i), cardWidth, cardHeight));
     }
     const firstCardRotation = rotation(1);
     // console.log(firstCardRotation);
@@ -53,8 +53,7 @@ export const getLayout = (id: string, screenSize: {width: number, height: number
     // console.log(cardsWiderThanUnRotated);
     const handWidth = (numCards - 1) * cardLeftSpread - firstCardWidth;
     const hw = (numCards - 1) * cardLeftSpread - cardWidth;
-    const hww =  (cardLeftSpread / 2) * numCards - cardLeftSpread
-
+    const hww =  (cardLeftSpread / 2 - 0.5) * numCards; //(numCards - 1)
 
     return distance + (screenSize.width / 2 - hww / 2);
   };

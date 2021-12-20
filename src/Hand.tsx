@@ -53,6 +53,9 @@ const Hand = (props: HandProps) => {
                   width: spread / 2,
                   transition: "all 180ms",
                   height: dimensions.cardHeight,
+                  // border:"thin green solid",
+                  // zIndex: 100
+                  
                 }}
               />
               <HandCard
@@ -60,7 +63,7 @@ const Hand = (props: HandProps) => {
                 index={index}
                 image={card.image}
                 dimensions={dimensions}
-                transitionData={transitionData.find(trans => trans.card.id === card.id)}
+                transitionData={transitionData.find(trans => trans.cardId === card.id)}
                 numHandCards={handCards.length}
                 key={card.id}
               />
@@ -71,6 +74,10 @@ const Hand = (props: HandProps) => {
                   width: spread / 2,
                   transition: "all 180ms",
                   height: dimensions.cardHeight,
+                  // border:"thin red solid",
+                  // zIndex: 100
+
+
                 }}
               />
             </div>

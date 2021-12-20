@@ -14,6 +14,7 @@ export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const ids = getIdListObject(gameSnapshot);
   const dispatch = useDispatch();
+  const test = useSelector((state: RootState) => state.test)
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -23,7 +24,7 @@ export const Table = () => {
 
   return (
     <div style={{width: "100vw", height: "100vh", backgroundColor: "blue"}}>
-      <div style={{width:3, height: 3, backgroundColor: "red", zIndex:100, left: 498.1410681007915, top: 485, position:"absolute"}}/>
+      <div style={{width:3, height: 3, backgroundColor: "red", zIndex:100, left: -test.x, top: -test.y, position:"absolute"}}/>
       <Deck id={ids.deck} cards={gameSnapshot.nonPlayerPlaces.deck.cards}/>
     <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <div>

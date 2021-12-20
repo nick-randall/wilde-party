@@ -53,6 +53,8 @@ export type DrawCard = {
   payload: string;
 }
 
+export type Test = {type:"TEST"}
+
 export type Action =
   | SetScreenSize
   | RemoveTransition
@@ -65,3 +67,4 @@ export type Action =
   | Enchant
   | EndDragCleanup
   | DrawCard
+  | Test
