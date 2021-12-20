@@ -1,6 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getLayout } from "./dimensions/getLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { RootState } from "./redux/store";
 
 interface DeckProps {
   id: string;
@@ -9,6 +11,8 @@ interface DeckProps {
 
 export const Deck = (props: DeckProps) => {
   const { id } = props;
+  const screenSize = useSelector((state:RootState)=> state.screenSize)
+  const {x,y} = getLayout(id, screenSize)
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
   const handleClick = (e: React.MouseEvent) => {
@@ -17,7 +21,8 @@ export const Deck = (props: DeckProps) => {
   };
 
   return(
+    <div style={{left: x, top: y, position: "absolute"}}>
   <button onMouseOver={handleClick}>
     <img src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }}  />
-  </button>)
+  </button></div>)
 };

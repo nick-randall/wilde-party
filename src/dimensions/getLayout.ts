@@ -4,13 +4,14 @@ import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
-import store from "../redux/store";
+import store, { RootState } from "../redux/store";
 
-export const getLayout = (id: string, screenSize: { width: number; height: number }): { x: number; y: number } => {
-  store.subscribe(() => store.getState());
-  const { gameSnapshot, dragUpdate, draggedHandCard } = store.getState();
+export const getLayout = (id: string, screenSize: { width: number; height: number }, state: RootState | null = null): { x: number; y: number } => {
+  if (state === null) 
+  state =  store.getState();
+  const { gameSnapshot, dragUpdate, draggedHandCard } = state;
   const { player, place } = locate(id, gameSnapshot);
-  const dimensions = getAllDimensions(id);
+  const dimensions = getAllDimensions(id, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   const numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
@@ -53,7 +54,7 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
     // console.log(cardsWiderThanUnRotated);
     const handWidth = (numCards - 1) * cardLeftSpread - firstCardWidth;
     const hw = (numCards - 1) * cardLeftSpread - cardWidth;
-    const hww =  (cardLeftSpread / 2 - 0.5) * numCards; //(numCards - 1)
+    const hww = (cardLeftSpread / 2 - 0.5) * numCards; //(numCards - 1)
 
     return distance + (screenSize.width / 2 - hww / 2);
   };
@@ -69,6 +70,12 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
         return { x: handFromCenterWidth(0), y: handFromBottom(30) };
+    }
+  }
+  if (player === null) {
+    switch (place) {
+      case "deck":
+        return { x: fromCenterWidth(-200), y: fromCenterHeight(0) };
     }
   }
   return { x: 0, y: 0 };

@@ -160,7 +160,7 @@ const HandCard = (props: HandCardProps) => {
     transitionStyles = {
       entering: {
         //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
-        left: originDelta.x +30,
+        left: originDelta.x,
         top: originDelta.y,
         //transition: `transform ${duration}s, ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`
         animationName: startAnimation,
@@ -173,7 +173,7 @@ const HandCard = (props: HandCardProps) => {
         left:0,
         top: 0,
         //transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
-        transition: `all ${startAnimationDuration}ms`,
+        transition: `all ${duration}ms`,
         zIndex: draggedCardzIndex,
         pointerEvents: "none",
       },

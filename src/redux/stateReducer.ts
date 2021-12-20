@@ -112,7 +112,7 @@ export const stateReducer = (
       const cardId = state.gameSnapshot.nonPlayerPlaces["deck"].cards[0].id;
       const handIndex = 0;
       const transitionType = "drawCard";
-      const newTransition = buildTransition(cardId, transitionType, deckId, originIndex, handId, handIndex, state.screenSize, state.gameSnapshot);
+      const newTransition = buildTransition(cardId, transitionType, deckId, originIndex, handId, handIndex, state.screenSize, state);
       const gameSnapshot = drawCard(state.gameSnapshot)
       // state.transitionData[0]. =
       console.log(newTransition);
