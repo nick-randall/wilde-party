@@ -28,3 +28,7 @@ export function rotate(cx: number, cy: number, x: number, y: number, angle: numb
     ny = cos * (y - cy) - sin * (x - cx) + cy;
   return { x: nx, y: ny };
 }
+
+export const measureDistance = (a: number, b: number, x: number, y: number) => {
+  return Math.sqrt((x - a) ^ (2 + (y - b)) ^ 2);
+};

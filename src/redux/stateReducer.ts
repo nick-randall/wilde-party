@@ -22,7 +22,7 @@ export interface State {
   draggedHandCard: GameCard | undefined;
   highlights: string[];
   highlightType: string;
-  test: {x:number, y: number}
+  test: { x: number; y: number };
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
@@ -45,7 +45,7 @@ export const stateReducer = (
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
-    test: {x:0, y:0}
+    test: { x: 0, y: 0 },
   },
   action: Action
 ) => {
@@ -107,12 +107,14 @@ export const stateReducer = (
       const deckId = action.payload;
       const originIndex = 0;
       const handId = state.gameSnapshot.players[0].places.hand.id;
+      const cardId = state.gameSnapshot.players[0].places.hand.cards[0].id;
       const handIndex = 0;
-      const transition = buildTransition(deckId, originIndex, handId, handIndex, state.screenSize, state.gameSnapshot);
+      const transitionType = "drawCard";
+      const transition = buildTransition(cardId, transitionType, deckId, originIndex, handId, handIndex, state.screenSize, state.gameSnapshot);
       // state.transitionData[0]. =
       console.log(transition);
 
-      return {...state, test: transition};
+      return { ...state, test: transition };
     case "END_DRAG_CLEANUP":
       return {
         ...state,

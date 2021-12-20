@@ -185,12 +185,12 @@ type CardTransitionData = {
 
 type TransitionData = {
   cardId: string;
-  origin: TopLeftCoordinates;
+  originDelta: TopLeftCoordinates;
   wait: number; // if transition is not first in the queue
   duration: number;
   curve: string;
   originDimensions: AllDimensions;
-  rotation: number;
+  cardInitialrotation: number;
   startAnimationDuration: number
   startAnimation: string;
 };

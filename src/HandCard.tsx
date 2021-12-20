@@ -151,12 +151,12 @@ const HandCard = (props: HandCardProps) => {
   };
 
   if (transitionData) {
-    const { origin, duration, curve } = transitionData;
+    const { originDelta, duration, curve } = transitionData;
     transitionStyles = {
       entering: {
-        transform: `translateY(${origin.top}px) translateX(${origin.left}px)`,
-        height: origin.height,
-        width: origin.width,
+        transform: `translateY(${originDelta.top}px) translateX(${originDelta.left}px)`,
+        height: originDelta.height,
+        width: originDelta.width,
       },
       entered: {
         transition: `transform ${duration}ms ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`,

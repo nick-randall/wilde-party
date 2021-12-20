@@ -1,4 +1,4 @@
-import { widthOfRotated } from "../helperFunctions/equations";
+import { measureDistance, widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import { getLayout } from "./getLayout";
@@ -34,7 +34,14 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-export const buildTransition = (
+const durationConstant = (distance: number) => distance < 0 ? -0.0025 : 0.0025;
+
+// const calculateDuration = (originX: number, originY: number, destinationX: number, destinationY: number) =>
+//   measureDistance(originX, originY, destinationX, destinationY) * durationConstant(distance);
+
+const measureDistanceFromDeltas = (deltaX: number, deltaY: number) => Math.sqrt(deltaX) ^ ((2 + deltaY) ^ 2);
+
+const getOriginDelta = (
   originPlaceId: string,
   originIndex: number,
   destinationPlaceId: string,
@@ -49,7 +56,63 @@ export const buildTransition = (
   const { x: destinationPlaceX, y: destinationPlaceY } = getLayoutWithSnapshot(destinationPlaceId, gameSnapshot, screenSize);
   const { x: destinationCardOffsetX, y: destinationCardOffsetY } = getCardOffsetWithinPlace(destinationIndex, destinationPlaceId, gameSnapshot);
   const destination = { x: destinationPlaceX + destinationCardOffsetX, y: destinationPlaceY + destinationCardOffsetY };
-  console.log(destinationCardOffsetX);
-  const delta = { x: origin.x - destination.x, y: origin.y - destination.y };
-  return delta;
+  const translate = { x: origin.x - destination.x, y: origin.y - destination.y };
+
+  return translate;
+};
+
+const getTransitionData = (transitionType: string, distance: number) => {
+  let curve = "";
+  let startAnimation = "";
+  let startAnimationDuration = 0;
+  let cardInitialrotation = 0;
+  switch (transitionType) {
+    case "drawCard":
+      startAnimation = "flipGrow";
+      cardInitialrotation = 0;
+      startAnimationDuration = 1;
+      curve = "";
+  }
+  const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
+  return {
+    curve: curve,
+    startAnimation: startAnimation,
+    startAnimationDuration: calculatedAnimationDuration,
+    cardInitialrotation: cardInitialrotation,
+  };
+};
+
+export const buildTransition = (
+  cardId: string,
+  transitionType: string,
+  originPlaceId: string,
+  originIndex: number,
+  destinationPlaceId: string,
+  destinationIndex: number,
+  screenSize: { width: number; height: number },
+  gameSnapshot: GameSnapshot
+) => {
+  const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
+
+  const originDelta = getOriginDelta(originPlaceId, originIndex, destinationPlaceId, destinationIndex, screenSize, gameSnapshot);
+
+  const distance = measureDistanceFromDeltas(originDelta.x, originDelta.y);
+
+  const transitionDuration = distance * durationConstant(distance);
+
+  const { curve, cardInitialrotation, startAnimation, startAnimationDuration } = getTransitionData(transitionType, distance);
+
+  const transition: TransitionData = {
+    cardId: cardId,
+    originDelta: originDelta,
+    originDimensions: originDimensions,
+    duration: transitionDuration,
+    startAnimation: startAnimation,
+    startAnimationDuration: startAnimationDuration,
+    cardInitialrotation: cardInitialrotation,
+    wait: 0,
+    curve: curve,
+  };
+  console.log(transition)
+  return originDelta;
 };
