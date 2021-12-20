@@ -34,7 +34,7 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-const durationConstant = (distance: number) => distance < 0 ? -100 : 100;
+const durationConstant = (distance: number) => distance < 0 ? -2.5 : 2.5;
 
 const getOriginDelta = (
   originPlaceId: string,
@@ -52,8 +52,8 @@ const getOriginDelta = (
   const { x: destinationCardOffsetX, y: destinationCardOffsetY } = getCardOffsetWithinPlace(destinationIndex, destinationPlaceId, gameSnapshot);
   const destination = { x: destinationPlaceX + destinationCardOffsetX, y: destinationPlaceY + destinationCardOffsetY };
   const originDelta = { x: origin.x - destination.x, y: origin.y - destination.y };
-  
-  const distance = measureDistance(origin.x, destination.x, origin.y, destination.y)
+  console.log(origin.x, destination.x, origin.y, destination.y)
+  const distance = measureDistance(origin.x, origin.y, destination.x,  destination.y)
 
   return {originDelta: originDelta, distance: distance};
 };
@@ -71,7 +71,6 @@ const getTransitionData = (transitionType: string, distance: number) => {
       curve = "";
   }
   const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
-  console.log(calculatedAnimationDuration)
   return {
     curve: curve,
     startAnimation: startAnimation,
@@ -109,6 +108,7 @@ export const buildTransition = (
     wait: 0,
     curve: curve,
   };
+  console.log(startAnimationDuration)
   //console.log(transition)
   //return originDelta;
   return transition;

@@ -5,7 +5,7 @@ import { Transition } from "react-transition-group";
 import { rotate } from "./helperFunctions/equations";
 import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
-import "./animations/animations.css"
+import "./animations/animations.css";
 
 export interface HandCardProps {
   id: string;
@@ -104,7 +104,7 @@ const HandCard = (props: HandCardProps) => {
     //setHover("longHover");
   };
 
-  //const removeCardTransition = (id) => 
+  //const removeCardTransition = (id) =>
 
   const featuredStyle = featured
     ? {
@@ -148,37 +148,37 @@ const HandCard = (props: HandCardProps) => {
     height: cardHeight,
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
+    left: 0,
     position: "relative",
-    transform: "",//`rotate(${rotation(index)}deg)`,
+    transform: "", //`rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
-    pointerEvents: "auto"
+    pointerEvents: "auto",
   };
-  
 
   if (transitionData) {
     const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
     transitionStyles = {
       entering: {
-        transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
+        //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
+        left: originDelta.x +30,
+        top: originDelta.y,
         //transition: `transform ${duration}s, ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`
         animationName: startAnimation,
         animationDuration: `${startAnimationDuration}ms`,
         height: originDimensions.cardHeight,
         width: originDimensions.cardWidth,
         pointerEvents: "none",
-
       },
       entered: {
-        transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
-        // animationName: startAnimation,
-        // animationDuration: `${startAnimationDuration}ms`,
+        left:0,
+        top: 0,
+        //transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
+        transition: `all ${startAnimationDuration}ms`,
         zIndex: draggedCardzIndex,
         pointerEvents: "none",
-
-       
       },
     };
-    console.log(transitionStyles)
+    console.log(transitionStyles);
   }
 
   const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
@@ -212,7 +212,10 @@ const HandCard = (props: HandCardProps) => {
       };
     }
   };
-  const getTransition=(state: string) =>{if(state === "entered") console.log(transitionStyles[state]); return {}}
+  const getTransition = (state: string) => {
+    if (state === "entered") console.log(transitionStyles[state]);
+    return {};
+  };
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
