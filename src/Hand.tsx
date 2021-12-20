@@ -64,7 +64,6 @@ const Hand = (props: HandProps) => {
                 index={index}
                 image={card.image}
                 dimensions={dimensions}
-                transitionData={transitionData.find(trans => trans.cardId === card.id)}
                 numHandCards={handCards.length}
                 key={card.id}
               />

@@ -253,6 +253,21 @@ const myUWZCards: GameCard[] = [
  
 ];
 
+const deckCards : GameCard[] = [
+  {
+      id: "hosey",
+      name: "rumgroelerin3",
+      placeId: "pd0s9fd",
+      playerId: "l93fld9",
+      index: 7,
+      image: "rumgroelerin3",
+      pointValue: 1,
+      cardType: "guest",
+      guestCardType: "rumgroelerin",
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    },
+] 
+
 export const initialGamePlayers: GamePlayer[] = [
   {
     id: "l93fld9",
@@ -403,7 +418,7 @@ export const initialGameSnapshot: GameSnapshot = {
     deck: {
       id: "klasdf",
       placeType: "deck",
-      cards: [],
+      cards: deckCards,
     },
     discardPile: {
       id: "klasd02mcvdlw",

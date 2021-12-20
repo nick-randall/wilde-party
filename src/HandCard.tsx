@@ -14,7 +14,6 @@ export interface HandCardProps {
   numHandCards: number;
   offsetLeft?: number;
   offsetTop?: number;
-  transitionData: TransitionData | undefined;
 }
 
 interface TransitionStyles {
@@ -22,7 +21,7 @@ interface TransitionStyles {
 }
 
 const HandCard = (props: HandCardProps) => {
-  const { id, index, image, transitionData, dimensions } = props;
+  const { id, index, image, dimensions } = props;
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, draggedCardzIndex, cardHeight } = dimensions;
   const cardRef = useRef<HTMLImageElement>(null);
@@ -37,6 +36,7 @@ const HandCard = (props: HandCardProps) => {
   const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
+  const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
 
   // const handleMouseMove = (event: React.MouseEvent) => {
   //   const element = cardRef.current;
@@ -149,20 +149,25 @@ const HandCard = (props: HandCardProps) => {
     transform: "",//`rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
   };
+  
 
   if (transitionData) {
     const { originDelta, duration, curve } = transitionData;
     transitionStyles = {
       entering: {
-        transform: `translateY(${originDelta.top}px) translateX(${originDelta.left}px)`,
-        height: originDelta.height,
-        width: originDelta.width,
+        transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
+        //transition: `transform ${duration}s, ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`
+        // height: originDelta.top,
+        // width: originDelta.width,
       },
       entered: {
-        transition: `transform ${duration}ms ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
+        transition: `transform ${duration}s ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
+       
         zIndex: draggedCardzIndex,
+       
       },
     };
+    console.log(transitionStyles)
   }
 
   const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
@@ -196,6 +201,7 @@ const HandCard = (props: HandCardProps) => {
       };
     }
   };
+  const getTransition=(state: string) =>{if(state === "entered") console.log(transitionStyles[state]); return {}}
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
@@ -210,7 +216,7 @@ const HandCard = (props: HandCardProps) => {
           >
             <Transition
               in={true}
-              timeout={transitionData != null ? transitionData.wait : 0}
+              timeout={0}
               appear={true}
               addEndListener={(node: HTMLElement) => {
                 node.addEventListener(
@@ -238,6 +244,7 @@ const HandCard = (props: HandCardProps) => {
                       ...featuredStyle,
                       ...transitionStyles[state],
                       ...dragStyles(isDragging),
+                      ...getTransition(state),
                       ...droppingStyles(snapshot, provided.draggableProps),
                     }}
                   />

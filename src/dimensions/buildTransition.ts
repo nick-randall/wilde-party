@@ -34,12 +34,7 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-const durationConstant = (distance: number) => distance < 0 ? -0.0025 : 0.0025;
-
-// const calculateDuration = (originX: number, originY: number, destinationX: number, destinationY: number) =>
-//   measureDistance(originX, originY, destinationX, destinationY) * durationConstant(distance);
-
-const measureDistanceFromDeltas = (deltaX: number, deltaY: number) => Math.sqrt(deltaX) ^ ((2 + deltaY) ^ 2);
+const durationConstant = (distance: number) => distance < 0 ? -0.1 : 0.1;
 
 const getOriginDelta = (
   originPlaceId: string,
@@ -56,9 +51,11 @@ const getOriginDelta = (
   const { x: destinationPlaceX, y: destinationPlaceY } = getLayoutWithSnapshot(destinationPlaceId, gameSnapshot, screenSize);
   const { x: destinationCardOffsetX, y: destinationCardOffsetY } = getCardOffsetWithinPlace(destinationIndex, destinationPlaceId, gameSnapshot);
   const destination = { x: destinationPlaceX + destinationCardOffsetX, y: destinationPlaceY + destinationCardOffsetY };
-  const translate = { x: origin.x - destination.x, y: origin.y - destination.y };
+  const originDelta = { x: origin.x - destination.x, y: origin.y - destination.y };
+  
+  const distance = measureDistance(origin.x, destination.x, origin.y, destination.y)
 
-  return translate;
+  return {originDelta: originDelta, distance: distance};
 };
 
 const getTransitionData = (transitionType: string, distance: number) => {
@@ -94,9 +91,7 @@ export const buildTransition = (
 ) => {
   const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
 
-  const originDelta = getOriginDelta(originPlaceId, originIndex, destinationPlaceId, destinationIndex, screenSize, gameSnapshot);
-
-  const distance = measureDistanceFromDeltas(originDelta.x, originDelta.y);
+  const {originDelta, distance} = getOriginDelta(originPlaceId, originIndex, destinationPlaceId, destinationIndex, screenSize, gameSnapshot);
 
   const transitionDuration = distance * durationConstant(distance);
 
@@ -113,6 +108,7 @@ export const buildTransition = (
     wait: 0,
     curve: curve,
   };
-  console.log(transition)
-  return originDelta;
+  //console.log(transition)
+  //return originDelta;
+  return transition;
 };
