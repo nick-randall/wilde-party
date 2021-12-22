@@ -13,7 +13,7 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
   const { player, place } = locate(id, gameSnapshot);
   const dimensions = getAllDimensions(id, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
-  const numCards = getNumCards(id, gameSnapshot);
+  let numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
   let draggedOverCard = draggedOver ? 1 : 0;
 
@@ -25,18 +25,12 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
   if (place === "UWZ") draggedOverCard = 0;
-
-  // if (place === "UWZ" && player !== null) {
-  //   const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
-  //   const numColumns = sortSpecials2(specialsZoneCards).length;
-  //   numCardsWidth = numColumns
-  // }
+  if(place === "deck") numCards = 0;
 
   const fromCenterWidth = (distance: number): number =>
     distance + (screenSize.width / 2 - ((numCardsWidth + draggedOverCard) * dimensions.cardWidth) / 2);
-  //const specialsZoneFromCenterWidth =  (distance: number): number => distance + (screenSize.width / 2 - ((sortSpecials2() + draggedOverCard) * dimensions.cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + (screenSize.height / 2 - dimensions.cardHeight / 2);
-  // TODO need a way to figure out how wide the cards are as they move outwards.
+  const fromRight = (distance: number) => screenSize.width - distance 
   const handFromCenterWidth = (distance: number): number => {
     const numHandCards = draggedHandCard ? numCards - 1 : numCards;
     const rotation = (index: number) => 10 * index - (numHandCards / 2 - 0.5) * 10;
@@ -60,6 +54,7 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
   };
   const handFromBottom = (distance: number) => screenSize.height - dimensions.cardHeight - distance;
 
+
   if (player === 0) {
     switch (place) {
       case "specialsZone":
@@ -75,7 +70,7 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
   if (player === null) {
     switch (place) {
       case "deck":
-        return { x: fromCenterWidth(-200), y: fromCenterHeight(0) };
+        return { x: fromRight(200), y: fromCenterHeight(0) };
     }
   }
   return { x: 0, y: 0 };

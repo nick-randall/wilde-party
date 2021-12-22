@@ -23,16 +23,16 @@ const Card = (props: CardProps) => {
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
-  const [rotation, setRotation] = useState(0);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [messinessRotation, setMessinessRotation] = useState(0);
+  const [messinessOffset, setMessinessOffset] = useState({ x: 0, y: 0 });
 
   React.useEffect(() => {
     const rndR = Math.random() - 0.5;
-    setRotation(rndR * settings.messiness);
+    setMessinessRotation(rndR * settings.messiness);
     const rndX = Math.random() - 0.5;
     const rndY = Math.random() - 0.5;
-    setOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
-  }, [setRotation, setOffset, index, settings.messiness]);
+    setMessinessOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
+  }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
 
 
   const highlights = useSelector((state: RootState) => state.highlights);
@@ -50,10 +50,10 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft ? +offsetLeft + offset.x : offset.x,
-    top: offsetTop ? offsetTop + offset.y : offset.y,
+    left: offsetLeft ? +offsetLeft + messinessOffset.x : messinessOffset.x,
+    top: offsetTop ? offsetTop + messinessOffset.y : messinessOffset.y,
     position: "absolute",
-    transform: `rotate(${rotation}deg)`,
+    transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",
     transitionDelay: "150ms",
   };
@@ -71,7 +71,7 @@ const Card = (props: CardProps) => {
             <div style={{ position: "relative" }}>
               <CardInspector
                 dimensions={dimensions}
-                cardRotation={rotation}
+                cardRotation={messinessRotation}
                 render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
                   <div ref={cardRef}>
                   <img

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { SpecialsZone } from "./SpecialsZone";
 import UWZ from "./UWZ";
 import { Deck } from "./Deck";
+import Player from "./Player";
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -42,6 +43,7 @@ export const Table = () => {
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
       <UWZ id={ids.pl0UWZ} unwantedCards={gameSnapshot.players[0].places.UWZ.cards} />
+      <Player player = {gameSnapshot.players[0]}/>
     </DragDropContext>
     </div>
   );

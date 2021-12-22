@@ -22,7 +22,6 @@ export const Deck = (props: DeckProps) => {
 
   return(
     <div style={{left: x, top: y, position: "absolute"}}>
-  <button onMouseOver={handleClick}>
-    <img src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }}  />
-  </button></div>)
+    <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} onClick={handleClick}  />
+</div>)
 };
