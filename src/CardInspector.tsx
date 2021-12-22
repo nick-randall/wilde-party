@@ -7,7 +7,7 @@ interface CardInspectorProps {
   dimensions: AllDimensions;
   rotation: number;
   scale: number;
-  render: (ref: React.Ref<HTMLElement>, style: CSSProperties)=>JSX.Element
+  render: (ref: React.Ref<HTMLImageElement>, handleClick: (event: React.MouseEvent) => void, handleMouseLeave: () => void, style: CSSProperties)=>JSX.Element
 }
 
 export const CardInspector = (props: CardInspectorProps) => {
@@ -16,7 +16,7 @@ export const CardInspector = (props: CardInspectorProps) => {
 
   const [isInspected, setIsInspected] = useState(false);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
-  const cardRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLImageElement>(null);
 
   const handleClick = (event: React.MouseEvent) => {
     if (isInspected) {
@@ -75,6 +75,8 @@ export const CardInspector = (props: CardInspectorProps) => {
     //setHover("longHover");
   };
 
+  const handleMouseLeave = ()=> setIsInspected(false);
+
   const inspectedStyle = isInspected
     ? {
         transform: `scale(${scale}) translateX(${translate.x}px) translateY(${translate.y}px)`,
@@ -82,6 +84,6 @@ export const CardInspector = (props: CardInspectorProps) => {
       }
     : {};
 
-      return <div>{props.render(cardRef, inspectedStyle)}</div>
+      return <div>{props.render(cardRef, handleClick, handleMouseLeave, inspectedStyle)}</div>
 
 };
