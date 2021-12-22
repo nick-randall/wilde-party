@@ -31,6 +31,7 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
     draggedCardWidth: 112,
     tableCardzIndex: 3,
     rotation: (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
+    scale : 2.4,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     //GCZHeight: numEnchantmentsCards === 0 ? tableCardHeight : tableCardHeight * 1.5,
     handToTableScaleFactor: handToTableScaleFactor,
@@ -54,6 +55,7 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
     draggedCardzIndex: 7,
     tableCardzIndex: 9,
     rotation: (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
+    scale: 2,
     //GCZHeight: numEnchantmentsCards === 0 ? 168 : 168 * 1.5,
     handToTableScaleFactor: handToTableScaleFactor,
 

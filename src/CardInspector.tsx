@@ -5,13 +5,12 @@ import { rotate } from "./helperFunctions/equations";
 interface CardInspectorProps {
   dimensions: AllDimensions;
   cardRotation: number;
-  scale: number;
   render: (ref: React.Ref<HTMLImageElement>, handleClick: (event: React.MouseEvent) => void, handleMouseLeave: () => void, style: CSSProperties)=>JSX.Element
 }
 
 export const CardInspector = (props: CardInspectorProps) => {
-  const { dimensions, cardRotation, scale } = props;
-  const { cardHeight, cardWidth } = dimensions;
+  const { dimensions, cardRotation } = props;
+  const { cardHeight, cardWidth, scale } = dimensions;
 
   const [isInspected, setIsInspected] = useState(false);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });

@@ -1,6 +1,7 @@
 import React, { CSSProperties, useRef, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
+import { CardInspector } from "./CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import useHoverStyles from "./hooks/useCardInspector";
@@ -20,31 +21,23 @@ export interface CardProps {
 const Card = (props: CardProps) => {
   const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
-  const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset } = useHoverStyles(dimensions);
   const settings = getSettings();
-  const cardRef = useRef<HTMLImageElement>(null);
 
   const [rotation, setRotation] = useState(0);
-  const [offset, setOffset] = useState({x:0, y:0});
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   React.useEffect(() => {
     const rndR = Math.random() - 0.5;
     setRotation(rndR * settings.messiness);
     const rndX = Math.random() - 0.5;
     const rndY = Math.random() - 0.5;
-    setOffset({x: rndX * settings.messiness, y: rndY * settings.messiness})
+    setOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
   }, [setRotation, setOffset, index, settings.messiness]);
 
-  const handleMouseMove = (event: React.MouseEvent) => {
-    const element = cardRef.current;
-    if (element) {
-      const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom } = element.getBoundingClientRect();
-      setMousePosition(event, boundingBoxLeft, boundingBoxTop, boundingBoxBottom);
-    }
-  };
+
   const highlights = useSelector((state: RootState) => state.highlights);
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
-  
+
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
@@ -57,23 +50,12 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft? + offsetLeft + offset.x : offset.x,
-    top: offsetTop? offsetTop + offset.y : offset.y,
+    left: offsetLeft ? +offsetLeft + offset.x : offset.x,
+    top: offsetTop ? offsetTop + offset.y : offset.y,
     position: "absolute",
     transform: `rotate(${rotation}deg)`,
     transition: "300ms",
     transitionDelay: "150ms",
-  };
-
-  const hoverStyles = {
-    longHover: {
-      transform: `scale(2) translateX(${inspectingCenterOffset.x}px) translateY(${inspectingCenterOffset.y}px)`,
-      transition: "transform 800ms",
-      zIndex: tableCardzIndex + 1,
-      //  left: 125 * (index - (numHandCards / 2 - 0.5)),
-    },
-    shortHover: {},
-    none: {},
   };
 
   return (
@@ -87,23 +69,30 @@ const Card = (props: CardProps) => {
           // the targeted card) just the same...
           (provided, snapshot) => (
             <div style={{ position: "relative" }}>
-              <img
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                alt={image}
-                src={`./images/${image}.jpg`}
-                onMouseMove={handleMouseMove}
-                onMouseEnter={setHoverStyles}
-                onMouseLeave={clearHoverStyles}
-                id={id}
-                style={{
-                  WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                  //border: highlights.includes(id) ? "thick blue dotted" : "",
-                  //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
-                  transition: "box-shadow 180ms",
-                  ...normalStyles,
-                  ...hoverStyles[hover],
-                }}
+              <CardInspector
+                dimensions={dimensions}
+                cardRotation={rotation}
+                render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
+                  <div ref={cardRef}>
+                  <img
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    alt={image}
+                    src={`./images/${image}.jpg`}
+                    onClick = {handleClick}
+                    onMouseLeave={handleMouseLeave}
+                    id={id}
+                    style={{
+                      WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                      //border: highlights.includes(id) ? "thick blue dotted" : "",
+                      //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
+                      transition: "box-shadow 180ms",
+                      ...normalStyles,
+                      ...inspectingStyles
+                    }}
+                  />
+                  </div>
+                )}
               />
               {ghostCard ? (
                 <GhostCard

@@ -37,6 +37,7 @@ type AllDimensions = {
   draggedCardzIndex: number;
   tableCardzIndex: number;
   rotation: (index: number) => number;
+  scale: number
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;

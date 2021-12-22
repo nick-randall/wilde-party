@@ -138,7 +138,6 @@ const HandCard = (props: HandCardProps) => {
             <CardInspector
               dimensions={dimensions}
               cardRotation={10 * index - rotation(index)}
-              scale={scale}
               render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
                 <Transition
                   in={true}
