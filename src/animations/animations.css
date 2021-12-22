@@ -8,19 +8,60 @@
   0% {
     scale: 1;
     transform: rotate3d(0, 1, 0, 179deg);
+    opacity: 0;
+   
   }
   25% {
-    scale: 1.5;
-    z-index: 2;
-    ;
+    scale: 2;
+   
+    transform: rotate3d(0, 1, 0, 90deg);
+   opacity: 0
+  }
+  26%{
+    scale: 2;
+   
+    transform: rotate3d(0, 1, 0, 90deg);
+   opacity: 1
   }
   50% {
-    scale: 1.5;
+    scale: 2;
+  
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+  100% {
+    scale: 2;
+   
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+}
+
+@keyframes back-of-card-flip-grow {
+  0% {
+    z-index: 30;
+    scale: 1;
+    transform: rotate3d(0, 1, 0, 179deg);
+   
+  }
+
+  25%{
+    -webkit-animation-timing-function: steps(1, end);
+    -moz-animation-timing-function: steps(1, end);
+    -ms-animation-timing-function: steps(1, end);
+    -o-animation-timing-function: steps(1, end);
+    animation-timing-function: steps(1, end);
+    opacity: 1;
+    scale: 2;
+    z-index: 30;
+    transform: rotate3d(0, 1, 0, 90deg);
+
+  }
+  50% {
+    scale: 2;
     z-index: 2;
     transform: rotate3d(0, 1, 0, 0deg);
   }
   100% {
-    scale: 1.5;
+    scale: 2;
     z-index: 2;
     transform: rotate3d(0, 1, 0, 0deg);
   }

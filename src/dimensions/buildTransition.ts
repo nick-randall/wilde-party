@@ -68,9 +68,9 @@ const getTransitionData = (transitionType: string, distance: number) => {
     case "drawCard":
       startAnimation = "flip-grow";
       cardInitialrotation = 0;
-      startAnimationDuration = 1;
+      startAnimationDuration = 2;
       transitionDuration = 1
-      curve = "";
+      curve = "ease";
   }
   const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
   const calculatedTransitionDuration = transitionDuration * distance * durationConstant(distance);

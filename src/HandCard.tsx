@@ -1,11 +1,12 @@
 import React, { CSSProperties, useRef, useState } from "react";
 import { Draggable, DraggableProps, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { Transition } from "react-transition-group";
+import { Transition, TransitionStatus } from "react-transition-group";
 import { rotate } from "./helperFunctions/equations";
 import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
+import { relative } from "path";
 
 export interface HandCardProps {
   id: string;
@@ -104,7 +105,9 @@ const HandCard = (props: HandCardProps) => {
     //setHover("longHover");
   };
 
-  //const removeCardTransition = (id) =>
+  const removeCardTransition = () => {
+    console.log("transition end");
+  };
 
   const featuredStyle = featured
     ? {
@@ -146,40 +149,15 @@ const HandCard = (props: HandCardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
+
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     left: 0,
-    position: "relative",
-    transform: "", //`rotate(${rotation(index)}deg)`,
+    position: "absolute",
+    transform: `rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
     pointerEvents: "auto",
   };
-
-  if (transitionData) {
-    const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
-    transitionStyles = {
-      entering: {
-        //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
-        left: originDelta.x,
-        top: originDelta.y,
-        //transition: `transform ${duration}s, ${curve}, height ${duration}ms ${curve}, width ${duration}ms ${curve}`
-        animationName: startAnimation,
-        animationDuration: `${startAnimationDuration}ms`,
-        height: originDimensions.cardHeight,
-        width: originDimensions.cardWidth,
-        pointerEvents: "none",
-      },
-      entered: {
-        left:0,
-        top: 0,
-        //transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}`,
-        transition: `all ${duration}ms`,
-        zIndex: draggedCardzIndex,
-        pointerEvents: "none",
-      },
-    };
-    console.log(transitionStyles);
-  }
 
   const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
     if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
@@ -212,9 +190,31 @@ const HandCard = (props: HandCardProps) => {
       };
     }
   };
-  const getTransition = (state: string) => {
-    if (state === "entered") console.log(transitionStyles[state]);
-    return {};
+  const getTransition = (state: TransitionStatus, sideOfCard: string) => {
+    if (transitionData) {
+      const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
+
+      if (state === "entering") {
+        transitionStyles = {
+          //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
+          left: originDelta.x,
+          top: originDelta.y,
+          transform:"",
+          animationName: sideOfCard === "front" ? startAnimation : "back-of-card-" + startAnimation,
+          animationDuration: `${startAnimationDuration + 20}ms`,
+          height: originDimensions.cardHeight,
+          width: originDimensions.cardWidth,
+          pointerEvents: "none",
+        };
+      } else if (state === "entered") {
+        transitionStyles = {
+          transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
+        };
+        console.log("entered", transitionStyles);
+      }
+
+      return transitionStyles;
+    }
   };
 
   return (
@@ -236,7 +236,7 @@ const HandCard = (props: HandCardProps) => {
                 node.addEventListener(
                   "transitionend",
                   () => {
-                    //removeCardTransition(id);
+                    removeCardTransition();
                   },
                   false
                 );
@@ -244,24 +244,33 @@ const HandCard = (props: HandCardProps) => {
             >
               {state => {
                 return (
-                  <img
-                    alt={image}
-                    src={`./images/${image}.jpg`}
-                    ref={cardRef}
-                    onClick={handleClick}
-                    //onMouseEnter={setHoverStyles}
-                    onMouseLeave={() => setFeatured(false)}
-                    id={id}
-                    style={{
-                      ...normalStyles,
-                      //...hoverStyles[hover],
-                      ...featuredStyle,
-                      ...transitionStyles[state],
-                      ...dragStyles(isDragging),
-                      ...getTransition(state),
-                      ...droppingStyles(snapshot, provided.draggableProps),
-                    }}
-                  />
+                  <div style={{ display: "relative" }}>
+                    <img
+                      src="./images/back.jpg"
+                      alt="deck"
+                      style={{
+                        ...normalStyles,
+                        ...getTransition(state, "back"),
+                      }}
+                    />
+                    <img
+                      alt={image}
+                      src={`./images/${image}.jpg`}
+                      ref={cardRef}
+                      onClick={handleClick}
+                      //onMouseEnter={setHoverStyles}
+                      onMouseLeave={() => setFeatured(false)}
+                      id={id}
+                      style={{
+                        ...normalStyles,
+                        ...featuredStyle,
+                        //...transitionStyles[state],
+                        ...dragStyles(isDragging),
+                        ...getTransition(state, "front"),
+                        ...droppingStyles(snapshot, provided.draggableProps),
+                      }}
+                    />
+                  </div>
                 );
               }}
             </Transition>
