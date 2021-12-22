@@ -160,6 +160,7 @@ const HandCard = (props: HandCardProps) => {
                           src="./images/back.jpg"
                           alt="deck"
                           style={{
+                            opacity:  0,
                             ...normalStyles,
                             ...getTransition(state, "back"),
                           }}
