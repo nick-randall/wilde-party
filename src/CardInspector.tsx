@@ -3,15 +3,14 @@ import React, { CSSProperties, useRef, useState } from "react";
 import { rotate } from "./helperFunctions/equations";
 
 interface CardInspectorProps {
-  index: number;
   dimensions: AllDimensions;
-  rotation: number;
+  cardRotation: number;
   scale: number;
   render: (ref: React.Ref<HTMLImageElement>, handleClick: (event: React.MouseEvent) => void, handleMouseLeave: () => void, style: CSSProperties)=>JSX.Element
 }
 
 export const CardInspector = (props: CardInspectorProps) => {
-  const { index, dimensions, rotation, scale } = props;
+  const { dimensions, cardRotation, scale } = props;
   const { cardHeight, cardWidth } = dimensions;
 
   const [isInspected, setIsInspected] = useState(false);
@@ -28,8 +27,7 @@ export const CardInspector = (props: CardInspectorProps) => {
       const { left: boundingBoxLeft, top: boundingBoxTop, bottom: boundingBoxBottom, width, height } = element.getBoundingClientRect();
 
       const clicked = { x: event.pageX - boundingBoxLeft, y: event.pageY - boundingBoxTop };
-      const cardRotation = 10 * index - rotation;
-
+      
       // Difference in dimensions of the card (cardWidth,cardHeight) to the Bounding Box
       // allows me to measure from top left corner of card instead of from top left corner of Bounding Box
       const offset = { x: (width - cardWidth) / 2, y: (height - cardHeight) / 2 };
@@ -72,7 +70,6 @@ export const CardInspector = (props: CardInspectorProps) => {
       setTranslate(scaledDelta);
       setIsInspected(true);
     }
-    //setHover("longHover");
   };
 
   const handleMouseLeave = ()=> setIsInspected(false);

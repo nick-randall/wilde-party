@@ -136,9 +136,8 @@ const HandCard = (props: HandCardProps) => {
             style={{ width: isDragging ? dimensions.tableCardWidth : 0, position: "relative" }}
           >
             <CardInspector
-              index={index}
               dimensions={dimensions}
-              rotation={rotation(index)}
+              cardRotation={10 * index - rotation(index)}
               scale={scale}
               render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
                 <Transition
