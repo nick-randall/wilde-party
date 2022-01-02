@@ -8,6 +8,7 @@ import { RootState } from "./redux/store";
 import "./animations/animations.css";
 import { relative } from "path";
 import { CardInspector } from "./CardInspector";
+import { css, keyframes } from "styled-components";
 
 export interface HandCardProps {
   id: string;
@@ -22,6 +23,37 @@ export interface HandCardProps {
 interface TransitionStyles {
   [status: string]: {};
 }
+
+const flipGrow = keyframes`
+0% {
+  scale: 1;
+  transform: rotate3d(0, 1, 0, 179deg);
+  opacity: 0;
+ 
+}
+25% {
+  scale: 2;
+ 
+  transform: rotate3d(0, 1, 0, 90deg);
+ opacity: 0
+}
+26%{
+  scale: 2;
+ 
+  transform: rotate3d(0, 1, 0, 90deg);
+ opacity: 1
+}
+50% {
+  scale: 2;
+
+  transform: rotate3d(0, 1, 0, 0deg);
+}
+100% {
+  scale: 2;
+ 
+  transform: rotate3d(0, 1, 0, 0deg);
+}
+`;
 
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, dimensions } = props;
@@ -102,23 +134,34 @@ const HandCard = (props: HandCardProps) => {
       const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
 
       if (state === "entering") {
-        transitionStyles = {
-          //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
-          left: originDelta.x,
-          top: originDelta.y,
-          transform: "",
-          animationName: sideOfCard === "front" ? startAnimation : "back-of-card-" + startAnimation,
-          animationDuration: `${startAnimationDuration + 20}ms`,
-          height: originDimensions.cardHeight,
-          width: originDimensions.cardWidth,
-          pointerEvents: "none",
+         const transitionStyles = css`
+          transform: translateX(${originDelta.x}px) translateY(${originDelta.y}px);
+          left: originDelta.x;
+          top: originDelta.y;
+          transform: "";
+          animationName: ${sideOfCard === "front" ? flipGrow : "back-of-card-" + startAnimation};
+          animationDuration: ${startAnimationDuration + 20}ms;
+          height: originDimensions.cardHeight;
+          width: originDimensions.cardWidth;
+          pointerEvents: "none";`
         };
-      } else if (state === "entered") {
-        transitionStyles = {
-          transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
-        };
-        console.log("entered", transitionStyles);
-      }
+        // transitionStyles = {
+        //   //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
+        //   left: originDelta.x,
+        //   top: originDelta.y,
+        //   transform: "",
+        //   animationName: sideOfCard === "front" ?  : "back-of-card-" + startAnimation,
+        //   animationDuration: `${startAnimationDuration + 20}ms`,
+        //   height: originDimensions.cardHeight,
+        //   width: originDimensions.cardWidth,
+        //   pointerEvents: "none",
+        // };
+      // } else if (state === "entered") {
+      //   transitionStyles = {
+      //     transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
+      //   };
+      //   console.log("entered", transitionStyles);
+      // }
 
       return transitionStyles;
     }
@@ -160,7 +203,7 @@ const HandCard = (props: HandCardProps) => {
                           src="./images/back.jpg"
                           alt="deck"
                           style={{
-                            opacity:  0,
+                            opacity: 0,
                             ...normalStyles,
                             ...getTransition(state, "back"),
                           }}

@@ -43,7 +43,7 @@ export const Table = () => {
         <Hand id={ids.pl0hand} handCards={gameSnapshot.players[0].places.hand.cards} />
       </div>
       <UWZ id={ids.pl0UWZ} unwantedCards={gameSnapshot.players[0].places.UWZ.cards} />
-      <Player player = {gameSnapshot.players[0]}/>
+      <Player player = {gameSnapshot.players[0]} />
     </DragDropContext>
     </div>
   );
