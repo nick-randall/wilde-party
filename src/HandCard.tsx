@@ -1,12 +1,9 @@
-import React, { CSSProperties, useRef, useState } from "react";
-import { Draggable, DraggableProps, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
+import { CSSProperties } from "react";
+import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { Transition, TransitionStatus } from "react-transition-group";
-import { rotate } from "./helperFunctions/equations";
-import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
-import { relative } from "path";
 import { CardInspector } from "./CardInspector";
 
 export interface HandCardProps {
@@ -38,7 +35,11 @@ const HandCard = (props: HandCardProps) => {
   const highlightType = useSelector((state: RootState) => state.highlightType);
   const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
 
-  let transitionStyles: TransitionStyles = { entering: {}, entered: {} };
+  let transitionStyles: TransitionStyles = 
+  transitionData ? 
+  
+  { 
+    entering: {}, entered: {} }:{};
 
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
     isDragging
@@ -97,18 +98,13 @@ const HandCard = (props: HandCardProps) => {
       };
     }
   };
-  const getTransition = (state: TransitionStatus, sideOfCard: string) => {
+  const getTransition = (state: TransitionStatus) => {
     if (transitionData) {
       const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
 
       if (state === "entering") {
         transitionStyles = {
-          //transform: `translateX(${originDelta.x}px) translateY(${originDelta.y}px)`,
-          left: originDelta.x,
-          top: originDelta.y,
-          transform: "",
-          animationName: sideOfCard === "front" ? startAnimation : "back-of-card-" + startAnimation,
-          animationDuration: `${startAnimationDuration + 20}ms`,
+          transform: `rotate(${originDimensions.rotation(index)}deg) translateX(${originDelta.x}px) translateY(${originDelta.y}px`,
           height: originDimensions.cardHeight,
           width: originDimensions.cardWidth,
           pointerEvents: "none",
@@ -117,7 +113,6 @@ const HandCard = (props: HandCardProps) => {
         transitionStyles = {
           transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
         };
-        console.log("entered", transitionStyles);
       }
 
       return transitionStyles;
@@ -140,8 +135,8 @@ const HandCard = (props: HandCardProps) => {
               cardRotation={10 * index - rotation(index)}
               render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
                 <Transition
-                  in={true}
-                  timeout={transitionData !== undefined ? transitionData.startAnimationDuration : 0}
+                  in={true}timeout={0}
+                  //timeout={transitionData !== undefined ? transitionData.startAnimationDuration : 0}
                   appear={true}
                   addEndListener={(node: HTMLElement) => {
                     node.addEventListener(
@@ -155,16 +150,6 @@ const HandCard = (props: HandCardProps) => {
                 >
                   {state => {
                     return (
-                      <div style={{ display: "relative" }}>
-                        <img
-                          src="./images/back.jpg"
-                          alt="deck"
-                          style={{
-                            opacity:  0,
-                            ...normalStyles,
-                            ...getTransition(state, "back"),
-                          }}
-                        />
                         <img
                           alt={image}
                           src={`./images/${image}.jpg`}
@@ -177,11 +162,10 @@ const HandCard = (props: HandCardProps) => {
                             ...inspectedStyles,
                             //...transitionStyles[state],
                             ...dragStyles(isDragging),
-                            ...getTransition(state, "front"),
+                            ...getTransition(state),
                             ...droppingStyles(snapshot, provided.draggableProps),
                           }}
                         />
-                      </div>
                     );
                   }}
                 </Transition>
