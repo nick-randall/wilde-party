@@ -434,7 +434,54 @@ export const initialGameSnapshot: GameSnapshot = {
         },
       },
     },
+    {
+      id: "enemy2",
+      name: "string2",
+      current: false,
+      currentPhase: "normalDrawPhase",
+      draws: 1,
+      plays: 1,
+      rolls: 1,
+      //points:number,//??????
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        GCZ: {
+          id: "vvv",
+          playerId: "enemy2",
+          placeType: "GCZ",
+          cards: [],
+        },
+        UWZ: {
+          id: "mmm",
+          playerId: "enemy2",
+          placeType: "UWZ",
+          acceptedCardType: "unwanted",
+          cards: [],
+        },
+        specialsZone: {
+          id: "jjjjj",
+          playerId: "enemy2",
+          placeType: "specialsZone",
+          cards: [],
+        },
+        hand: {
+          id: "qqqqqwww",
+          playerId: "enemy2",
+          placeType: "hand",
+          cards: [],
+        },
+        enchantmentsRow: {
+          id: "yyyyy",
+          playerId: "enemy2",
+          placeType: "enchantmentsRow",
+          cards: [],
+        },
+      },
+    },
   ],
+
+  
   nonPlayerPlaces: {
     deck: {
       id: "klasdf",
