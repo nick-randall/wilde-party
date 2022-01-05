@@ -2,6 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
 import { getLayout } from "./dimensions/getLayout";
+import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
@@ -9,11 +10,11 @@ import { RootState } from "./redux/store";
 interface UWZProps {
   id: string;
   unwantedCards: GameCard[];
+  playerZoneSize: {width: number, height: number}
 }
 
 export const UWZ = (props: UWZProps) => {
-  const { id, unwantedCards } = props;
-  const screenSize = useSelector((state: RootState) => state.screenSize);
+  const { id, unwantedCards, playerZoneSize } = props;
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const rearrange = useSelector((state: RootState) => state.rearrangingData);
@@ -31,7 +32,7 @@ export const UWZ = (props: UWZProps) => {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight, cardTopSpread } = dimensions;
-  const { x, y } = getLayout(id, screenSize);
+  const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
     <div style={{ position: "absolute", left: x, top: y, transition:"left 180ms" }}>
       {unwantedCards.map((card, index) => (

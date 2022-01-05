@@ -5,23 +5,25 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
+import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 interface HandProps {
   id: string;
   handCards: GameCard[];
+  playerZoneSize: {width: number, height: number}
+
 }
 
 const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
-  const { id, handCards } = props;
-  const screenSize = useSelector((state: RootState) => state.screenSize);
+  const { id, handCards, playerZoneSize } = props;
   const [mouseOverHand, setMouseOverHand] = useState(false);
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
-  const { x, y } = getLayout(id, screenSize);
+  const { x, y } = getPlacesLayout(id, playerZoneSize);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>

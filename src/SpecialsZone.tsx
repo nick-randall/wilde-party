@@ -2,6 +2,7 @@ import { flatten } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { getLayout } from "./dimensions/getLayout";
+import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
@@ -11,24 +12,24 @@ import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 interface SpecialsZoneProps {
   specialsCards: GameCard[];
   id: string;
+  playerZoneSize: { width: number; height: number };
 }
 
 export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZoneProps) => {
-  const { specialsCards, id } = props;
+  const { specialsCards, id, playerZoneSize } = props;
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight } = dimensions;
-  const screenSize = useSelector((state: RootState) => state.screenSize)
-  const { x, y } = getLayout(id, screenSize);
+  const screenSize = useSelector((state: RootState) => state.screenSize);
+  const { x, y } = getPlacesLayout(id, playerZoneSize);
   const highlights = useSelector((state: RootState) => state.highlights);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);  
+  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
   const specialsCardsColumns = sortSpecials2(specialsCards);
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
 
   const allowDropping = rearranging;
-
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
@@ -51,9 +52,8 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
           }}
         >
           {specialsCardsColumns.map((cardColumns, index) => (
-            <SpecialsCardsColumn cards={cardColumns}columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
+            <SpecialsCardsColumn cards={cardColumns} columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
           ))}
-          
 
           {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn

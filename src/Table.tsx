@@ -17,7 +17,7 @@ export const Table = () => {
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const ids = getIdListObject(gameSnapshot);
   const dispatch = useDispatch();
-  const test = useSelector((state: RootState) => state.test)
+  const test = useSelector((state: RootState) => state.test);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -25,15 +25,14 @@ export const Table = () => {
     });
   });
 
-
   return (
-    <div style={{width: "100vw", height: "100vh", backgroundColor: "blue"}}>
-      <div style={{width:3, height: 3, backgroundColor: "red", zIndex:100, left: -test.x, top: -test.y, position:"absolute"}}/>
-      <Deck id={ids.deck} cards={gameSnapshot.nonPlayerPlaces.deck.cards}/>
-    <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
-     <Player id = {gameSnapshot.players[0].id} screenSize ={screenSize} places ={gameSnapshot.players[0].places}/>
-     <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} />
-    </DragDropContext>
+    <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
+      <div style={{ width: 3, height: 3, backgroundColor: "red", zIndex: 100, left: -test.x, top: -test.y, position: "absolute" }} />
+      <Deck id={ids.deck} cards={gameSnapshot.nonPlayerPlaces.deck.cards} />
+      <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
+        <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} />
+        {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
+      </DragDropContext>
     </div>
   );
 };

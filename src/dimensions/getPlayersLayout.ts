@@ -2,11 +2,18 @@ import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
 
+export interface PlayerLayout {
+  height: number,
+  width: number,
+  x: number,
+  y: number
+}
+
 const getPlayersLayout = (
   screenSize: { width: number; height: number },
   playerId: string,
   state: RootState | null = null
-): { x: number; y: number; width: number; height: number } => {
+): PlayerLayout => {
   if (state === null) state = store.getState();
   const { gameSnapshot, dragUpdate, draggedHandCard } = state;
   const player = gameSnapshot.players.map(p => p.id).indexOf(playerId)
@@ -26,11 +33,14 @@ const getPlayersLayout = (
   let playerZonePosition = { x: 0, y: 0 };
 
   switch (player) {
+    case null:
+      playerZonePosition = {x: 0, y: 0}
+      break;
     case 0:
-      playerZonePosition = { x: fromCenterWidth(300), y: 200 };
+      playerZonePosition = { x: fromCenterWidth(300), y: 0 };
       break;
     case 1:
-      playerZonePosition = { x: 200, y: 200 };
+      playerZonePosition = { x: 200, y: -200 };
       break;
     case 2:
       playerZonePosition = { x: 200, y: 500 };

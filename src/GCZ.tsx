@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
+import { PlayerLayout } from "./dimensions/getPlayersLayout";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -13,11 +14,11 @@ interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
+  playerZoneSize: {width: number, height: number}
 }
 
 function GCZ(props: GCZProps) {
-  const { id, enchantmentsRowCards, GCZCards } = props;
-  const screenSize = useSelector((state: RootState) => state.screenSize)
+  const { id, enchantmentsRowCards, GCZCards, playerZoneSize } = props;
 
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const rearrange = useSelector((state: RootState) => state.rearrangingData);
@@ -42,7 +43,7 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  const { x, y } = getPlacesLayout(id, screenSize);
+  const { x, y } = getPlacesLayout(id, playerZoneSize);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
