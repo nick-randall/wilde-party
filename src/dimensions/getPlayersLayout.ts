@@ -4,12 +4,13 @@ import store, { RootState } from "../redux/store";
 
 const getPlayersLayout = (
   screenSize: { width: number; height: number },
-  state: RootState | null = null,
-  playerId: string
+  playerId: string,
+  state: RootState | null = null
 ): { x: number; y: number; width: number; height: number } => {
   if (state === null) state = store.getState();
   const { gameSnapshot, dragUpdate, draggedHandCard } = state;
-  const { player } = locate(playerId, gameSnapshot);
+  const player = gameSnapshot.players.map(p => p.id).indexOf(playerId)
+  console.log(player)
   const dimensions = getAllDimensions(playerId, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
 
@@ -38,6 +39,7 @@ const getPlayersLayout = (
       playerZonePosition = { x: 0, y: 0 };
       break;
   }
+  console.log(playerZonePosition)
   return { ...playerZonePosition, height: playerZoneHeight, width: playerZoneWidth };
 };
 

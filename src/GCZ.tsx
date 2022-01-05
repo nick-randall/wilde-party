@@ -2,6 +2,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import { getLayout } from "./dimensions/getLayout";
+import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -41,7 +42,7 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  const { x, y } = getLayout(id, screenSize);
+  const { x, y } = getPlacesLayout(id, screenSize);
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>

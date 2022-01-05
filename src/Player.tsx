@@ -1,28 +1,35 @@
-import { Droppable } from "react-beautiful-dnd";
-import styled from 'styled-components'
+import getPlayersLayout from "./dimensions/getPlayersLayout";
+import GCZ from "./GCZ";
+import Hand from "./Hand";
+import { SpecialsZone } from "./SpecialsZone";
+import UWZ from "./UWZ";
 
 interface PlayerProps {
-  player: GamePlayer;
+  id: string;
+  screenSize: { width: number; height: number };
+  places: PlayerPlaces;
 }
 
-const Avatar = styled.img`
-height: 100px
-`
-
-
 const Player = (props: PlayerProps) => {
-  const { player } = props;
-  const { id, name, current, currentPhase, draws, plays, rolls, places, glitzaglitza, skipNextTurn } = player;
+  const { screenSize, id, places } = props;
 
+  const {width, height, x, y} = getPlayersLayout(screenSize, id)
   return (
-    <Droppable droppableId={id}>
-      {provided => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          <img src="./images/player_avatar.png" alt="you" />
+    <div style = {{position: "relative", left:x, top: y}}>
+      <div style={{ display: "block" }}>
+        <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} />
+        <div>
+          <GCZ
+            id={places.GCZ.id}
+            enchantmentsRowCards={places.enchantmentsRow.cards}
+            GCZCards={places.GCZ.cards}
+          />
         </div>
-      )}
-    </Droppable>
+        <Hand id={places.hand.id} handCards={places.hand.cards} />
+      </div>
+      <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} />
+      {/* <Player player = {gameSnapshot.players[0]}/> */}
+    </div>
   );
 };
-
 export default Player;
