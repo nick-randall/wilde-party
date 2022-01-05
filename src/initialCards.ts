@@ -274,6 +274,20 @@ const deckCards : GameCard[] = [
       action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
     },
 ] 
+const discardPileCards:GameCard[] = [
+  {
+    id: "alsvdknnakvos",
+    name: "discokugel",
+    playerId: "",
+    placeId: "klasd02mcvdlw",
+    index: 0,
+    image: "discokugel", //TODO change
+    cardType: "special",
+    pointValue: 0,
+    guestCardType: "taenzerin", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
+  },
+]
 
 export const initialGamePlayers: GamePlayer[] = [
   {
@@ -430,7 +444,7 @@ export const initialGameSnapshot: GameSnapshot = {
     discardPile: {
       id: "klasd02mcvdlw",
       placeType: "discardPile",
-      cards: [],
+      cards: discardPileCards,
     },
   },
 };

@@ -46,7 +46,10 @@ export const getPlacesLayout = (
     case "hand":
       return { x: handFromCenterWidth(0), y: handFromBottom(30) };
     case "deck":
-      return { x: fromCenterWidth(cardWidth/2), y: fromCenterHeight(0) };
+      return { x: fromCenterWidth(cardWidth / 2), y: fromCenterHeight(0) };
+    case "discardPile": {
+      return { x: fromCenterWidth(-cardWidth / 2), y: fromCenterHeight(0) };
+    }
   }
 
   return { x: 0, y: 0 };
