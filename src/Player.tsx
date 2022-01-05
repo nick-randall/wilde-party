@@ -12,11 +12,11 @@ interface PlayerProps {
 
 const Player = (props: PlayerProps) => {
   const { screenSize, id, places } = props;
-
   const { width, height, x, y } = getPlayersLayout(screenSize, id);
+
+
   return (
-    <div style={{ position: "relative", left: x, top: y }}>
-    
+    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, border: "thin black solid", display:"block"}}>
         <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
         <div>
           <GCZ

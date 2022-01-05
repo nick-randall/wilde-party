@@ -26,42 +26,7 @@ const myGCZCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
 
-  // {
-  //   id: "01293219312832183",
-  //   name: "taenzerin2",
-  //   playerId: "l93fld9",
-  //   placeId: "pd0s9fd",
-  //   index: 2,
-  //   image: "taenzerin2", //TODO change
-  //   cardType: "guest",
-  //   pointValue: 2,
-  //   guestCardType: "taenzerin", //???
-  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  // },
-  // {
-  //   id: "50340395343",
-  //   name: "schleckermaul6",
-  //   playerId: "l93fld9",
-  //   placeId: "pd0s9fd",
-  //   index: 3,
-  //   image: "schleckermaul6", //TODO change
-  //   pointValue: 1,
-  //   cardType: "guest",
-  //   guestCardType: "schleckermaul", //???
-  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  // },
-  // {
-  //   id: "a953433",
-  //   name: "schleckermaul",
-  //   placeId: "pd0s9fd",
-  //   playerId: "l93fld9",
-  //   index: 4,
-  //   image: "schleckermaul3", //TODO change
-  //   pointValue: 1,
-  //   cardType: "guest",
-  //   guestCardType: "schleckermaul", //???
-  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  // },
+ 
 ];
 
 export const myHandCards: GameCard[] = [
@@ -157,31 +122,7 @@ export const myHandCards: GameCard[] = [
     cardType: "unwanted",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
   },
-  // {
-  //   id: "kkkkkkkkk",
-  //   name: "rumgroelerin0",
-  //   placeId: "pd0s9fd",
-  //   playerId: "l93fld9",
-  //   index: 6,
-  //   image: "rumgroelerin0", //TODO change
-  //   pointValue: 1,
-  //   cardType: "guest",
-  //   guestCardType: "rumgroelerin", //???
-  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  // },
   
-  // {
-  //   id: "hosey",
-  //   name: "rumgroelerin3",
-  //   placeId: "pd0s9fd",
-  //   playerId: "l93fld9",
-  //   index: 7,
-  //   image: "rumgroelerin3",
-  //   pointValue: 1,
-  //   cardType: "guest",
-  //   guestCardType: "rumgroelerin",
-  //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  // },
   // {
   //   id: "gogogogo",
   //   name: "megaphon",
@@ -252,6 +193,72 @@ const mySpecialsZoneCards: GameCard[] = [
 const myUWZCards: GameCard[] = [
  
 ];
+
+const player1HandCards : GameCard [] =[
+  {
+    id: "kkkkkkkkk",
+    name: "rumgroelerin0",
+    placeId: "2kopvjops",
+    playerId: "enemy",
+    index: 0,
+    image: "rumgroelerin0", //TODO change
+    pointValue: 1,
+    cardType: "guest",
+    guestCardType: "rumgroelerin", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+   {
+    id: "01293219312832183",
+    name: "taenzerin2",
+    playerId: "enemy",
+    placeId: "2kopvjops",
+    index: 1,
+    image: "taenzerin2", //TODO change
+    cardType: "guest",
+    pointValue: 2,
+    guestCardType: "taenzerin", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+  {
+    id: "50340395343",
+    name: "schleckermaul2",
+    playerId: "enemy",
+    placeId: "2kopvjops",
+    index: 2,
+    image: "schleckermaul2", //TODO change
+    pointValue: 1,
+    cardType: "guest",
+    guestCardType: "schleckermaul", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+  {
+    id: "a953433",
+    name: "schleckermaul",
+    placeId: "2kopvjops",
+    playerId: "enemy",
+    index: 3,
+    image: "schleckermaul3", //TODO change
+    pointValue: 1,
+    cardType: "guest",
+    guestCardType: "schleckermaul", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+]
+
+const player1GCZCards: GameCard[] = [
+   {
+    id: "hosey",
+    name: "rumgroelerin3",
+    placeId: "2kopvjops",
+    playerId: "enemy",
+    index: 0,
+    image: "rumgroelerin3",
+    pointValue: 1,
+    cardType: "guest",
+    guestCardType: "rumgroelerin",
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+]
 
 const deckCards : GameCard[] = [
   {
@@ -384,7 +391,7 @@ export const initialGameSnapshot: GameSnapshot = {
           id: "jr2034jrpdsf",
           playerId: "enemy",
           placeType: "GCZ",
-          cards: [],
+          cards: player1GCZCards,
         },
         UWZ: {
           id: "aqu2389uh234rj",
@@ -403,7 +410,7 @@ export const initialGameSnapshot: GameSnapshot = {
           id: "2kopvjops",
           playerId: "enemy",
           placeType: "hand",
-          cards: [],
+          cards: player1HandCards,
         },
         enchantmentsRow: {
           id: "jfw3o90jvskd",

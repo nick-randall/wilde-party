@@ -1,5 +1,3 @@
-import { getAllDimensions } from "../helperFunctions/getDimensions";
-import { locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
 
 export interface PlayerLayout {
@@ -15,11 +13,8 @@ const getPlayersLayout = (
   state: RootState | null = null
 ): PlayerLayout => {
   if (state === null) state = store.getState();
-  const { gameSnapshot, dragUpdate, draggedHandCard } = state;
+  const { gameSnapshot } = state;
   const player = gameSnapshot.players.map(p => p.id).indexOf(playerId)
-  console.log(player)
-  const dimensions = getAllDimensions(playerId, gameSnapshot);
-  const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
 
   const playerZoneWidth = player === 0 ? 400 : 250;
   const playerZoneHeight = player === 0 ? 700 : 450;
@@ -40,7 +35,7 @@ const getPlayersLayout = (
       playerZonePosition = { x: fromCenterWidth(300), y: 0 };
       break;
     case 1:
-      playerZonePosition = { x: 200, y: -200 };
+      playerZonePosition = { x: 200, y: 200 };
       break;
     case 2:
       playerZonePosition = { x: 200, y: 500 };

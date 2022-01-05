@@ -1,4 +1,3 @@
-import { widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
@@ -12,8 +11,7 @@ export const getPlacesLayout = (
   if (state === null) state = store.getState();
   const { gameSnapshot, dragUpdate, draggedHandCard } = state;
   const { player, place } = locate(id, gameSnapshot);
-  const dimensions = getAllDimensions(id, gameSnapshot);
-  const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
+  const { cardHeight, cardWidth, cardLeftSpread } = getAllDimensions(id, gameSnapshot);
   let numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
   let draggedOverCard = draggedOver ? 1 : 0;
@@ -30,16 +28,16 @@ export const getPlacesLayout = (
   if (place === "deck") numCards = 0;
 
   const fromCenterWidth = (distance: number): number =>
-    distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * dimensions.cardWidth) / 2);
-  const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - dimensions.cardHeight / 2);
+    distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
+  const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - cardHeight / 2);
   const fromRight = (distance: number) => playerZoneSize.width - distance;
   const handFromCenterWidth = (distance: number): number => {
     const handWidth = (cardLeftSpread / 2 - 0.5) * numCards;
     return distance + (playerZoneSize.width / 2 - handWidth / 2);
   };
-  const handFromBottom = (distance: number) => playerZoneSize.height - dimensions.cardHeight - distance;
+  const handFromBottom = (distance: number) => playerZoneSize.height - cardHeight - distance;
 
-  if (player === 0) {
+  if (player !== null) {
     switch (place) {
       case "specialsZone":
         return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };

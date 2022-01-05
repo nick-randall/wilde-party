@@ -15,7 +15,7 @@ export const Deck = (props: DeckProps) => {
   const {x,y} = getLayout(id, screenSize)
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = () => {
     console.log("clicked on deck");
     dispatch({ type: "DRAW_CARD", payload: id });
   };
