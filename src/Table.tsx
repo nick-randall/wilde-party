@@ -11,6 +11,7 @@ import UWZ from "./UWZ";
 import { Deck } from "./Deck";
 import Player from "./Player";
 import getPlayersLayout from "./dimensions/getPlayersLayout";
+import NonPlayerPlaces from "./NonPlayerPlaces";
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -28,7 +29,8 @@ export const Table = () => {
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
       <div style={{ width: 3, height: 3, backgroundColor: "red", zIndex: 100, left: -test.x, top: -test.y, position: "absolute" }} />
-      <Deck id={ids.deck} cards={gameSnapshot.nonPlayerPlaces.deck.cards} />
+      <NonPlayerPlaces places = {gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
+      
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} />
         <Player id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} />

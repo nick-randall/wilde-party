@@ -1,23 +1,21 @@
 import store, { RootState } from "../redux/store";
 
 export interface PlayerLayout {
-  height: number,
-  width: number,
-  x: number,
-  y: number
+  height: number;
+  width: number;
+  x: number;
+  y: number;
 }
 
-const getPlayersLayout = (
-  screenSize: { width: number; height: number },
-  playerId: string,
-  state: RootState | null = null
-): PlayerLayout => {
+const getPlayersLayout = (screenSize: { width: number; height: number }, playerId: string | null, state: RootState | null = null): PlayerLayout => {
   if (state === null) state = store.getState();
   const { gameSnapshot } = state;
-  const player = gameSnapshot.players.map(p => p.id).indexOf(playerId)
+  let player: number | null;
+  if (playerId === null) player = null;
+  else player = gameSnapshot.players.map(p => p.id).indexOf(playerId);
 
   const playerZoneWidth = player === 0 ? 400 : 250;
-  const playerZoneHeight = player === 0 ? 700 : 450;
+  const playerZoneHeight = player === 0 ? 700 : 500;
   // need null case for deck and discardpile
 
   const fromCenterWidth = (distance: number): number => distance + (screenSize.width / 2 - playerZoneWidth / 2);
@@ -29,22 +27,21 @@ const getPlayersLayout = (
 
   switch (player) {
     case null:
-      playerZonePosition = {x: 0, y: 0}
+      playerZonePosition = { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       break;
     case 0:
       playerZonePosition = { x: fromCenterWidth(300), y: 0 };
       break;
     case 1:
-      playerZonePosition = { x: 200, y: 200 };
+      playerZonePosition = { x: 200, y: fromCenterHeight(200) };
       break;
     case 2:
-      playerZonePosition = { x: 200, y: 500 };
+      playerZonePosition = { x: 200, y: fromCenterHeight(200) };
       break;
     default:
       playerZonePosition = { x: 0, y: 0 };
       break;
   }
-  console.log(playerZonePosition)
   return { ...playerZonePosition, height: playerZoneHeight, width: playerZoneWidth };
 };
 

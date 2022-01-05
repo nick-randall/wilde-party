@@ -27,8 +27,7 @@ export const getPlacesLayout = (
   if (place === "UWZ") draggedOverCard = 0;
   if (place === "deck") numCards = 0;
 
-  const fromCenterWidth = (distance: number): number =>
-    distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
+  const fromCenterWidth = (distance: number): number => distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - cardHeight / 2);
   const fromRight = (distance: number) => playerZoneSize.width - distance;
   const handFromCenterWidth = (distance: number): number => {
@@ -37,23 +36,18 @@ export const getPlacesLayout = (
   };
   const handFromBottom = (distance: number) => playerZoneSize.height - cardHeight - distance;
 
-  if (player !== null) {
-    switch (place) {
-      case "specialsZone":
-        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
-      case "UWZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
-      case "GCZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
-      case "hand":
-        return { x: handFromCenterWidth(0), y: handFromBottom(30) };
-    }
+  switch (place) {
+    case "specialsZone":
+      return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
+    case "UWZ":
+      return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
+    case "GCZ":
+      return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
+    case "hand":
+      return { x: handFromCenterWidth(0), y: handFromBottom(30) };
+    case "deck":
+      return { x: fromCenterWidth(cardWidth/2), y: fromCenterHeight(0) };
   }
-  if (player === null) {
-    switch (place) {
-      case "deck":
-        return { x: fromRight(200), y: fromCenterHeight(0) };
-    }
-  }
+
   return { x: 0, y: 0 };
 };
