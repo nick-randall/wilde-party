@@ -1,9 +1,6 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getLayout } from "./dimensions/getLayout";
+import { useDispatch } from "react-redux";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { RootState } from "./redux/store";
 
 interface DeckProps {
   id: string;
@@ -13,7 +10,7 @@ interface DeckProps {
 }
 
 export const Deck = (props: DeckProps) => {
-  const { id, zoneSize } = props;
+  const { id, zoneSize, cards } = props;
   const {x,y} = getPlacesLayout(id, zoneSize)
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
@@ -21,9 +18,10 @@ export const Deck = (props: DeckProps) => {
     console.log("clicked on deck");
     dispatch({ type: "DRAW_CARD", payload: id });
   };
-
+console.log(x)
   return(
-    <div style={{left: x, top: y, position: "absolute"}}>
+    <div style={{left: x, top: y, position: "absolute"}} onClick={handleClick} >
+      {/* <Card id={""} index={0} image= "back" dimensions={dimensions} /> */}
     <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} onClick={handleClick}  />
 </div>)
 };

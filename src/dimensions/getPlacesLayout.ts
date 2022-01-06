@@ -25,7 +25,7 @@ export const getPlacesLayout = (
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
   if (place === "UWZ") draggedOverCard = 0;
-  if (place === "deck") numCards = 0;
+  if (place === "deck") numCards = 1;
 
   const fromCenterWidth = (distance: number): number => distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - cardHeight / 2);
@@ -35,22 +35,38 @@ export const getPlacesLayout = (
     return distance + (playerZoneSize.width / 2 - handWidth / 2);
   };
   const handFromBottom = (distance: number) => playerZoneSize.height - cardHeight - distance;
-
-  switch (place) {
-    case "specialsZone":
-      return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
-    case "UWZ":
-      return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
-    case "GCZ":
-      return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
-    case "hand":
-      return { x: handFromCenterWidth(0), y: handFromBottom(30) };
-    case "deck":
-      return { x: fromCenterWidth(cardWidth / 2), y: fromCenterHeight(0) };
-    case "discardPile": {
-      return { x: fromCenterWidth(-cardWidth / 2), y: fromCenterHeight(0) };
+  if (player === 0) {
+    switch (place) {
+      case "specialsZone":
+        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
+      case "UWZ":
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
+      case "GCZ":
+        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
+      case "hand":
+        return { x: handFromCenterWidth(-200), y: handFromBottom(30) };
+      case "deck":
+        return { x: fromCenterWidth(cardWidth / 2), y: fromCenterHeight(0) };
+      case "discardPile": {
+        return { x: fromCenterWidth(-cardWidth / 2), y: fromCenterHeight(0) };
+      }
+    }
+  } else {
+    switch (place) {
+      case "specialsZone":
+        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
+      case "UWZ":
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
+      case "GCZ":
+        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
+      case "hand":
+        return { x: handFromCenterWidth(0), y: handFromBottom(80) };
+      case "deck":
+        return { x: fromCenterWidth(cardWidth / 2), y: fromCenterHeight(0) };
+      case "discardPile": {
+        return { x: fromCenterWidth(-cardWidth / 2), y: fromCenterHeight(0) };
+      }
     }
   }
-
   return { x: 0, y: 0 };
 };

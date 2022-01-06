@@ -23,10 +23,7 @@ interface TransitionStyles {
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, dimensions } = props;
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, draggedCardzIndex, cardHeight } = dimensions;
-  const scale = 2;
-
-  //const { setMousePosition, setHoverStyles, clearHoverStyles, hover, inspectingCenterOffset, setHover } = useHoverStyles(dimensions);
+  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -34,6 +31,11 @@ const HandCard = (props: HandCardProps) => {
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
   const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
+
+  const currentPlayer = 0 // gameSnapshot.current.player
+  const currentPhase = "play" // "play" "roll" "counter"
+
+  const canPlay = currentPlayer === 0 && currentPhase === "play";
 
   let transitionStyles: TransitionStyles = 
   transitionData ? 
