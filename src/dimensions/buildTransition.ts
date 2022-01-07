@@ -94,6 +94,17 @@ const getTransitionData = (transitionType: string, distance: number) => {
   };
 };
 
+export interface TransitionInputs {
+  cardId: string,
+  transitionType: string,
+  originPlaceId: string,
+  originIndex: number,
+  destinationPlaceId: string,
+  destinationIndex: number,
+  state: RootState
+}
+
+
 export const buildTransition: (
   a: string,
   t: string,
@@ -101,7 +112,6 @@ export const buildTransition: (
   i: number,
   d: string,
   di: number,
-  ss: { width: number; height: number },
   s: RootState
 ) => TransitionData = (
   cardId: string,
@@ -110,10 +120,9 @@ export const buildTransition: (
   originIndex: number,
   destinationPlaceId: string,
   destinationIndex: number,
-  screenSize: { width: number; height: number },
   state: RootState
 ) => {
-  const { gameSnapshot } = state;
+  const { gameSnapshot, screenSize } = state;
   const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
   const destinationPlayer = locatePlayer(destinationPlaceId, gameSnapshot);
   const originPlayer = locatePlayer(originPlaceId, gameSnapshot);

@@ -9,7 +9,7 @@ import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { buildTransition } from "../dimensions/buildTransition";
-import { drawCard } from "../helperFunctions/gameSnapshotUpdates/drawCard";
+import {  drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { findChanges } from "../animations/findChanges.ts/findChanges";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -102,18 +102,11 @@ export const stateReducer = (
       else return state;
     case "DRAW_CARD":
       if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
-      const deckId = action.payload;
-      const originIndex = 0;
-      const handId = state.gameSnapshot.players[0].places.hand.id;
-      const cardId = state.gameSnapshot.nonPlayerPlaces["deck"].cards[0].id;
-      const handIndex = 0;
-      const transitionType = "drawCard";
-      const newTransition = buildTransition(cardId, transitionType, deckId, originIndex, handId, handIndex, state.screenSize, state);
-      const gameSnapshot = drawCard(state.gameSnapshot)
-      // state.transitionData[0]. =
-      console.log(newTransition);
+      const player = action.payload;
+      const gameSnapshot = drawCardUpdateSnapshot(player, state.gameSnapshot)
+      return { ...state, gameSnapshot };
 
-      return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
+      // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
     case "END_DRAG_CLEANUP":
       return {
         ...state,

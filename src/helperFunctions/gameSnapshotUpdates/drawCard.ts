@@ -1,6 +1,4 @@
-import { getNumCards, locate } from "../locateFunctions";
 import { produce } from "immer";
-import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 import { compareProps } from "../tests";
 
 export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
@@ -9,12 +7,8 @@ export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
-export const drawCard = (gameSnapshot: GameSnapshot): GameSnapshot =>
+export const drawCardUpdateSnapshot = ( destinationPlayer: number, gameSnapshot: GameSnapshot): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    //let { player: destinationPlayer } = locate(destinationPlaceId, gameSnapshot);
-
-    // currently hardwired, will need to change.
-    const destinationPlayer = 0;
     const destinationPlaceId = gameSnapshot.players[destinationPlayer].places.hand.id;
 
     if (destinationPlayer !== null) {

@@ -50,7 +50,12 @@ export type EndDragCleanup = {
 
 export type DrawCard = {
   type: "DRAW_CARD";
-  payload: string;
+  payload: number;
+}
+
+export type AddTranstion = {
+  type: "ADD_TRANSITION";
+  payload: TransitionData
 }
 
 export type Test = {type:"TEST"}
