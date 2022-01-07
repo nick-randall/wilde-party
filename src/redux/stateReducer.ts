@@ -90,8 +90,6 @@ export const stateReducer = (
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
-      const prevGameSnapshot = state.gameSnapshot
-      findChanges({prevSnapshot: prevGameSnapshot, newSnapshot: gameSnapshot});
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
