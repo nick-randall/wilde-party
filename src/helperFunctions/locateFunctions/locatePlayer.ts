@@ -9,9 +9,8 @@ export const locatePlayer = (id: string, gameSnapshot: GameSnapshot | null = nul
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
-  let playerId = (gameSnapshot.players.map(p => p.id).indexOf(id));
-  if(playerId !== -1) return playerId;
-
+  let playerId = gameSnapshot.players.map(p => p.id).indexOf(id);
+  if (playerId !== -1) return playerId;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];

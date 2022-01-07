@@ -1,6 +1,7 @@
 import { measureDistance, widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
+import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";
 import { getLayout } from "./getLayout";
 import { getPlacesLayout } from "./getPlacesLayout";
@@ -116,8 +117,8 @@ export const buildTransition: (
 ) => {
   const { gameSnapshot } = state;
   const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
-  const { player: destinationPlayer, place: destinationPlace } = locate(destinationPlaceId, gameSnapshot);
-  const { player: originPlayer, place: originPlace } = locate(originPlaceId, gameSnapshot);
+  const destinationPlayer = locatePlayer(destinationPlaceId, gameSnapshot);
+  const originPlayer = locatePlayer(originPlaceId, gameSnapshot);
   
   //const destinationPlayerId = gameSnapshot.players[destinationPlayer]
 

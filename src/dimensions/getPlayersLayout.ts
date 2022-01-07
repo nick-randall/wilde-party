@@ -1,3 +1,4 @@
+import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import store, { RootState } from "../redux/store";
 
 export interface PlayerLayout {
@@ -12,7 +13,8 @@ const getPlayersLayout = (screenSize: { width: number; height: number }, playerI
   const { gameSnapshot } = state;
   let player: number | null;
   if (playerId === null) player = null;
-  else player = gameSnapshot.players.map(p => p.id).indexOf(playerId);
+  // else player = gameSnapshot.players.map(p => p.id).indexOf(playerId);
+  else player = locatePlayer(playerId, gameSnapshot)
 
   const playerZoneWidth = player === 0 ? 500 : 250;
   const playerZoneHeight = player === 0 ? 700 : 400;

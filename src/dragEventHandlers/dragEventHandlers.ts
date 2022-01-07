@@ -1,8 +1,8 @@
 import { DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locate3 } from "../helperFunctions/locateFunctions";
+import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 
-const isHandCard = (source: DraggableLocation) => locate3(source.droppableId).place === "hand";
+const isHandCard = (source: DraggableLocation) => locate(source.droppableId).place === "hand";
 
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
