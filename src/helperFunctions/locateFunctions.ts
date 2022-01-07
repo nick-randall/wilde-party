@@ -8,7 +8,7 @@ export interface Locator {
 
 export const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
 
-const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
+export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 // working!
 export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number => {
