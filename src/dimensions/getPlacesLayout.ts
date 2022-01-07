@@ -44,7 +44,7 @@ export const getPlacesLayout = (
       case "GCZ":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
-        return { x: handFromCenterWidth(-200), y: handFromBottom(-300) };
+        return { x: handFromCenterWidth(-200), y: handFromBottom(100) };
       case "deck":
         return { x: fromCenterWidth(cardWidth / 2), y: fromCenterHeight(0) };
       case "discardPile": {

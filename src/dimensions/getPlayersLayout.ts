@@ -17,7 +17,7 @@ const getPlayersLayout = (screenSize: { width: number; height: number }, playerI
   else player = locatePlayer(playerId, gameSnapshot)
 
   const playerZoneWidth = player === 0 ? 500 : 250;
-  const playerZoneHeight = player === 0 ? 700 : 400;
+  const playerZoneHeight = player === 0 ? screenSize.height : screenSize.height /2 ;
   // need null case for deck and discardpile
 
   const fromCenterWidth = (distance: number): number => distance + (screenSize.width / 2 - playerZoneWidth / 2);

@@ -47,17 +47,15 @@ const getOriginDelta = (
   screenSize: { width: number; height: number },
   state: RootState
 ) => {
-  const { x: originPlaceX, y: originPlaceY } = getPlacesLayout(originPlaceId, screenSize, state);
-  const { x: originPlayerX, y: originPlayerY } = getPlayersLayout(screenSize, originPlaceId, state);
-  //const { x: originPlaceX, y: originPlaceY } = getLayout(originPlaceId, screenSize, state);
-  console.log(originPlayerX, originPlayerY);
+  const { x: originPlayerX, y: originPlayerY, width: destPlayerWidth, height: destPlayerHeight } = getPlayersLayout(screenSize, originPlaceId, state);
+
+  const { x: originPlaceX, y: originPlaceY } = getPlacesLayout(originPlaceId, {width: destPlayerWidth, height: destPlayerHeight}, state);
   const { x: originCardOffsetX, y: originCardOffsetY } = getCardOffsetWithinPlace(originIndex, originPlaceId, state.gameSnapshot);
   const origin = { x: originPlayerX + originPlaceX + originCardOffsetX, y: originPlayerY + originPlaceY + originCardOffsetY };
+  
+  const { x: destinationPlayerX, y: destinationPlayerY, width: originPlayerWidth, height: originPlayerHeight } = getPlayersLayout(screenSize, destinationPlaceId, state);
+  const { x: destinationPlaceX, y: destinationPlaceY } = getPlacesLayout(destinationPlaceId, {width: originPlayerWidth, height: originPlayerHeight}, state);
 
-  const { x: destinationPlaceX, y: destinationPlaceY } = getPlacesLayout(destinationPlaceId, screenSize, state);
-  const { x: destinationPlayerX, y: destinationPlayerY } = getPlayersLayout(screenSize, destinationPlaceId, state);
-
-  //const { x: destinationPlaceX, y: destinationPlaceY } = getLayout(destinationPlaceId, screenSize, state);
   const { x: destinationCardOffsetX, y: destinationCardOffsetY } = getCardOffsetWithinPlace(destinationIndex, destinationPlaceId, state.gameSnapshot);
   const destination = {
     x: destinationPlayerX + destinationPlaceX + destinationCardOffsetX,
