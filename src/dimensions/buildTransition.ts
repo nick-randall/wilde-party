@@ -3,6 +3,8 @@ import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import { RootState } from "../redux/store";
 import { getLayout } from "./getLayout";
+import { getPlacesLayout } from "./getPlacesLayout";
+import getPlayersLayout from "./getPlayersLayout";
 
 const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: GameSnapshot): { x: number; y: number } => {
   const { player, place } = locate(placeId, gameSnapshot);
@@ -44,13 +46,22 @@ const getOriginDelta = (
   screenSize: { width: number; height: number },
   state: RootState
 ) => {
-  const { x: originPlaceX, y: originPlaceY } = getLayout(originPlaceId, screenSize, state);
+  const { x: originPlaceX, y: originPlaceY } = getPlacesLayout(originPlaceId, screenSize, state);
+  const { x: originPlayerX, y: originPlayerY } = getPlayersLayout(screenSize, originPlaceId, state);
+  //const { x: originPlaceX, y: originPlaceY } = getLayout(originPlaceId, screenSize, state);
+  console.log(originPlayerX, originPlayerY);
   const { x: originCardOffsetX, y: originCardOffsetY } = getCardOffsetWithinPlace(originIndex, originPlaceId, state.gameSnapshot);
-  const origin = { x: originPlaceX + originCardOffsetX, y: originPlaceY + originCardOffsetY };
+  const origin = { x: originPlayerX + originPlaceX + originCardOffsetX, y: originPlayerY + originPlaceY + originCardOffsetY };
 
-  const { x: destinationPlaceX, y: destinationPlaceY } = getLayout(destinationPlaceId, screenSize, state);
+  const { x: destinationPlaceX, y: destinationPlaceY } = getPlacesLayout(destinationPlaceId, screenSize, state);
+  const { x: destinationPlayerX, y: destinationPlayerY } = getPlayersLayout(screenSize, destinationPlaceId, state);
+
+  //const { x: destinationPlaceX, y: destinationPlaceY } = getLayout(destinationPlaceId, screenSize, state);
   const { x: destinationCardOffsetX, y: destinationCardOffsetY } = getCardOffsetWithinPlace(destinationIndex, destinationPlaceId, state.gameSnapshot);
-  const destination = { x: destinationPlaceX + destinationCardOffsetX, y: destinationPlaceY + destinationCardOffsetY };
+  const destination = {
+    x: destinationPlayerX + destinationPlaceX + destinationCardOffsetX,
+    y: destinationPlayerY + destinationPlaceY + destinationCardOffsetY,
+  };
   const originDelta = { x: origin.x - destination.x, y: origin.y - destination.y };
   console.log(origin.x, destination.x, origin.y, destination.y);
   const distance = measureDistance(origin.x, origin.y, destination.x, destination.y);
@@ -69,7 +80,7 @@ const getTransitionData = (transitionType: string, distance: number) => {
       startAnimation = "flip-grow";
       cardInitialrotation = 0;
       startAnimationDuration = 2;
-      transitionDuration = 1
+      transitionDuration = 1;
       curve = "ease";
   }
   const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
@@ -105,12 +116,14 @@ export const buildTransition: (
 ) => {
   const { gameSnapshot } = state;
   const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
+  const { player: destinationPlayer, place: destinationPlace } = locate(destinationPlaceId, gameSnapshot);
+  const { player: originPlayer, place: originPlace } = locate(originPlaceId, gameSnapshot);
+  
+  //const destinationPlayerId = gameSnapshot.players[destinationPlayer]
 
   const { originDelta, distance } = getOriginDelta(originPlaceId, originIndex, destinationPlaceId, destinationIndex, screenSize, state);
 
   const { transitionDuration, curve, cardInitialrotation, startAnimation, startAnimationDuration } = getTransitionData(transitionType, distance);
-
-
 
   const transition: TransitionData = {
     cardId: cardId,

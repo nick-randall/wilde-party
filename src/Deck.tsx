@@ -15,6 +15,9 @@ export const Deck = (props: DeckProps) => {
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
   const handleClick = () => {
+    const originIndex = 0;
+    const cardId = cards[0].id;
+    const handIndex = 0;
     console.log("clicked on deck");
     dispatch({ type: "DRAW_CARD", payload: id });
   };

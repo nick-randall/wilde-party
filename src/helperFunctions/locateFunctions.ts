@@ -1,6 +1,7 @@
+import { isNonNullChain } from "typescript";
 import store from "../redux/store";
 
-interface Locator {
+export interface Locator {
   player: number | null;
   place: PlaceType | null;
 }
@@ -16,7 +17,7 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];
       if (placeId === players[i]["places"][place].id) {
-        if(place === "enchantmentsRow")return players[i]["places"]["GCZ"].cards.length; 
+        if (place === "enchantmentsRow") return players[i]["places"]["GCZ"].cards.length;
         return players[i]["places"][place].cards.length;
       }
     }
@@ -29,7 +30,9 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
   return 0;
 };
 
-export const locate = (id: string, gameSnapshot: GameSnapshot): Locator => {
+export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): Locator => {
+  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
+
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -56,17 +59,17 @@ export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlaye
 export const getNonPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.nonPlayerPlaces);
 
 export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
-  const player: GamePlayer | undefined = gameSnapshot.players.find((player) =>
-    getPlayerPlaceKeys(gameSnapshot, player).map((placeKey) => player.places[placeKey].cards.find((card) => card.id === id))
+  const player: GamePlayer | undefined = gameSnapshot.players.find(player =>
+    getPlayerPlaceKeys(gameSnapshot, player).map(placeKey => player.places[placeKey].cards.find(card => card.id === id))
   );
   if (player) {
-    const place: string | undefined = getPlayerPlaceKeys(gameSnapshot, player).find((placeKey) =>
-      player.places[placeKey].cards.find((card) => card.id === id)
+    const place: string | undefined = getPlayerPlaceKeys(gameSnapshot, player).find(placeKey =>
+      player.places[placeKey].cards.find(card => card.id === id)
     );
     return { player: gameSnapshot.players.indexOf(player), place: place || "place" };
   } else {
-    const place: string | undefined = getNonPlayerPlaceKeys(gameSnapshot).find((placeKey) =>
-      gameSnapshot.nonPlayerPlaces[placeKey].cards.find((card) => card.id)
+    const place: string | undefined = getNonPlayerPlaceKeys(gameSnapshot).find(placeKey =>
+      gameSnapshot.nonPlayerPlaces[placeKey].cards.find(card => card.id)
     );
     if (!place) console.log("place for " + id + " not found");
     return { player: null, place: "place" };
@@ -74,9 +77,8 @@ export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
 };
 
 export const locate3 = (id: string) => {
-
   const gameSnapshot = store.getState().gameSnapshot;
-  
+
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -96,9 +98,7 @@ export const locate3 = (id: string) => {
   }
   console.log("id " + id);
   return { player: null, place: "error" };
-  
 };
-
 
 // const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.players.map((player) => player.places));
 // const getNonPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.nonPlayerPlaces);

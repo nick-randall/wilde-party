@@ -18,7 +18,6 @@ export const Table = () => {
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const ids = getIdListObject(gameSnapshot);
   const dispatch = useDispatch();
-  const test = useSelector((state: RootState) => state.test);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -28,7 +27,6 @@ export const Table = () => {
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
-      <div style={{ width: 3, height: 3, backgroundColor: "red", zIndex: 100, left: -test.x, top: -test.y, position: "absolute" }} />
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <NonPlayerPlaces places = {gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
       

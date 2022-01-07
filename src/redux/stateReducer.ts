@@ -1,4 +1,4 @@
-import { DraggableLocation, DragUpdate } from "react-beautiful-dnd";
+import { DraggableLocation } from "react-beautiful-dnd";
 import { addDragged } from "../helperFunctions/gameSnapshotUpdates/addDragged";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
@@ -23,7 +23,6 @@ export interface State {
   draggedHandCard: GameCard | undefined;
   highlights: string[];
   highlightType: string;
-  test: { x: number; y: number };
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
@@ -46,7 +45,6 @@ export const stateReducer = (
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
-    test: { x: 0, y: 0 },
   },
   action: Action
 ) => {
@@ -76,7 +74,7 @@ export const stateReducer = (
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
         return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
       }
-      return { ...state, dragUpdate: action.payload };
+      else return { ...state, dragUpdate: action.payload };
     }
     case "REARRANGE": {
       const { source, destination } = action.payload;
@@ -85,14 +83,12 @@ export const stateReducer = (
         return { ...state, gameSnapshot };
       } else if (isSpecialsZone(source, state.gameSnapshot)) {
         const gameSnapshot = rearrangeSpecialsZone(state.gameSnapshot, source.index, destination.index);
-
         return { ...state, gameSnapshot };
       } else return state;
     }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
-      console.log("ADDED DRAGGED");
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
@@ -102,8 +98,7 @@ export const stateReducer = (
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };
       }
-
-      return state;
+      else return state;
     case "DRAW_CARD":
       if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
       const deckId = action.payload;
