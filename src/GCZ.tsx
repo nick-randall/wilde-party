@@ -45,7 +45,6 @@ function GCZ(props: GCZProps) {
   const { cardHeight } = dimensions;
   const { x, y } = getPlacesLayout(id, playerZoneSize);
 
-  console.log(GCZCards)
 
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>

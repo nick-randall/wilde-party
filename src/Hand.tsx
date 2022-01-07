@@ -24,7 +24,6 @@ const Hand = (props: HandProps) => {
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
-  console.log(x, y)
   return (
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
       {provided => (
