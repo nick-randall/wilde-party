@@ -16,7 +16,7 @@ export interface HandCardProps {
   offsetTop?: number;
 }
 
-interface TransitionStyles {
+export interface TransitionStyles {
   [status: string]: {};
 }
 

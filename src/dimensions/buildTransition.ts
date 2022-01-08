@@ -106,14 +106,6 @@ export interface TransitionInputs {
 
 
 export const buildTransition: (
-  a: string,
-  t: string,
-  tt: string,
-  i: number,
-  d: string,
-  di: number,
-  s: RootState
-) => TransitionData = (
   cardId: string,
   transitionType: string,
   originPlaceId: string,
@@ -121,6 +113,17 @@ export const buildTransition: (
   destinationPlaceId: string,
   destinationIndex: number,
   state: RootState
+
+) => TransitionData = (
+  
+  cardId: string,
+  transitionType: string,
+  originPlaceId: string,
+  originIndex: number,
+  destinationPlaceId: string,
+  destinationIndex: number,
+  state: RootState
+
 ) => {
   const { gameSnapshot, screenSize } = state;
   const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);

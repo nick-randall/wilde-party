@@ -4,6 +4,7 @@ import EnemyCard from "./EnemyCard";
 interface EnemyHandProps {
   id: string;
   handCards: GameCard[];
+  playerZoneSize: {width: number, height: number}
 }
 
 export const EnemyHand = (props: EnemyHandProps) => {
@@ -12,7 +13,7 @@ export const EnemyHand = (props: EnemyHandProps) => {
   return (
     <div>
       {handCards.map((card, index) => (
-        <EnemyCard id={card.id} index={index} image={"../images/back.jpg"} dimensions={dimensions} numHandCards={handCards.length} />
+        <EnemyCard id={card.id} index={index} image="./images/back.jpg" dimensions={dimensions} numHandCards={handCards.length} />
       ))}
     </div>
   );

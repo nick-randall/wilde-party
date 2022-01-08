@@ -6,6 +6,7 @@ import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate }
 import { useEffect } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
+import EnemyPlayer from "./EnemyPlayer";
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);

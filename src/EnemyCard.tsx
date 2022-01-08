@@ -1,7 +1,8 @@
 import { CSSProperties, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getSettings } from "./gameSettings/uiSettings";
+import { Transition, TransitionStatus } from "react-transition-group";
 
 
 export interface EnemyCardProps {
@@ -27,7 +28,12 @@ const EnemyCard = (props: EnemyCardProps) => {
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
-
+  const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
+  console.log("transitionData")
+  const dispatch = useDispatch();
+  interface TransitionStyles {
+    [status: string]: {};
+  }
   const settings = getSettings();
   const [rotation, setRotation] = useState(0);
   const [rndOffset, setRndOffset] = useState({x:0, y:0});
@@ -51,18 +57,61 @@ const EnemyCard = (props: EnemyCardProps) => {
     transition: "300ms",
     transitionDelay: "150ms",
   };
+  let transitionStyles: TransitionStyles = 
+  transitionData ? 
+  
+  { 
+    entering: {}, entered: {} }:{};
+  const getTransition = (state: TransitionStatus) => {
+    if (transitionData) {
+      const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
+
+      if (state === "entering") {
+        transitionStyles = {
+          transform: `rotate(${originDimensions.rotation(index)}deg) translateX(${originDelta.x}px) translateY(${originDelta.y}px`,
+          height: originDimensions.cardHeight,
+          width: originDimensions.cardWidth,
+          pointerEvents: "none",
+        };
+      } else if (state === "entered") {
+        transitionStyles = {
+          transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
+        };
+      }
+
+      return transitionStyles;
+    }
+  };
 
   return (
+      <Transition
+        in={true}timeout={0}
+        //timeout={transitionData !== undefined ? transitionData.startAnimationDuration : 0}
+        appear={true}
+        addEndListener={(node: HTMLElement) => {
+          node.addEventListener(
+            "transitionend",
+            () => 
+              dispatch({type:"REMOVE_TRANSITION", payload: id})
+            ,
+            false
+          );
+        }}
+      >
+  {(state)=>
     <img
       alt={image}
-      src={`./images/${image}.jpg`}
+      // src={`./images/${image}.jpg`}
+      src="./images/back.jpg"
       id={id}
       style={{
         WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
         transition: "box-shadow 180ms",
         ...normalStyles,
+        ...getTransition(state)
       }}
-    />
+    />}
+    </Transition>
   );
 };
 

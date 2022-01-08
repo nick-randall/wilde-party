@@ -1,8 +1,11 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
 import { DropResult } from "react-beautiful-dnd";
+import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
+import { findChanges } from "../animations/findChanges.ts/findChanges";
 import { buildTransition } from "../dimensions/buildTransition";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
+import { locate } from "../helperFunctions/locateFunctions";
 import { addTransition } from "./actionCreators";
 import { LocationData } from "./actions";
 import { cleverGetNextAiCard } from "./ai/getNextAiCard";
@@ -30,16 +33,25 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
-export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: Function) => {
-  dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
-  console.log("addDraggedThunk ", source, destination)
-  dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
-  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
-};
-
-export const aIaddDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: Function) => {
+export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: ()=>RootState) => {
+  const state = getState();
+  const { gameSnapshot } = state;
+  const { place: originPlace, player: originPlayer } = locate(source.droppableId, gameSnapshot);
+  
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
+  const newSnapshot = getState().gameSnapshot;
+  if (originPlayer !== 0) {
+    const newTransition = buildTransitionFromChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot}, "drawCard", state)
+    dispatch(addTransition(newTransition));
+    // console.log(originPlayer)
+    // if (originPlayer !== null && originPlace !== null) {
+    //   const cardId = gameSnaphot.players[originPlayer].places[originPlace].cards[source.index];
+    //   const newTransition = buildTransition(cardId, "drawCard", source.droppableId, source.index, destination.droppableId, destination.index, state);
+    //   dispatch(addTransition(newTransition));
+    // }
+    
+  }
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
@@ -62,12 +74,12 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   let { draws } = gameSnapshot.current;
   let numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
   // setTimeout(() => {
-    while (draws > 0 && numCardsInDeck > 0) {
-      dispatch(drawCardThunk(player));
-      const { gameSnapshot } = getState();
-      draws = gameSnapshot.current.draws;
-      numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
-    }
+  while (draws > 0 && numCardsInDeck > 0) {
+    dispatch(drawCardThunk(player));
+    const { gameSnapshot } = getState();
+    draws = gameSnapshot.current.draws;
+    numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
+  }
   // }, 1000);
   gameSnapshot = getState().gameSnapshot;
   const randomCard = cleverGetNextAiCard(player, gameSnapshot);
