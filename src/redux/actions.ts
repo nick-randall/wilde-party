@@ -1,12 +1,7 @@
-import { Combine, DraggableLocation, DragStart, DropResult } from "react-beautiful-dnd";
+import { DraggableLocation, DropResult } from "react-beautiful-dnd";
 
 export type SetScreenSize = {
   type: "SET_SCREEN_SIZE";
-};
-
-export type RemoveTransition = {
-  type: "REMOVE_TRANSITION";
-  payload: string;
 };
 
 export type SetHandCardDrag = {
@@ -58,6 +53,11 @@ export type AddTranstion = {
   payload: TransitionData;
 };
 
+export type RemoveTransition = {
+  type: "REMOVE_TRANSITION";
+  payload: string;
+};
+
 export type ChangeNumDraws = {
   type: "CHANGE_NUM_DRAWS",
   payload: number;
@@ -90,4 +90,5 @@ export type Action =
   | ChangeNumPlays
   | ChangeNumDraws
   | ChangeNumRolls
-  | AddTranstion;
+  | AddTranstion
+  | RemoveTransition;

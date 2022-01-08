@@ -118,6 +118,9 @@ export const stateReducer = (
       };
     case "ADD_TRANSITION":
       return { ...state, transitionData: [...state.transitionData, action.payload] };
+    case "REMOVE_TRANSITION":
+      const transitionData = state.transitionData.filter(td => td.cardId !== action.payload);
+      return { ...state, transitionData };
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {
@@ -126,7 +129,6 @@ export const stateReducer = (
       return { ...state, gameSnapshot: newSnapshot };
     }
     case "CHANGE_NUM_PLAYS": {
-      
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {
         draft.current.plays += change;

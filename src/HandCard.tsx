@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
@@ -24,6 +24,8 @@ const HandCard = (props: HandCardProps) => {
   const { id, index, image, dimensions } = props;
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
+  const dispatch = useDispatch();
+
   const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -143,9 +145,9 @@ const HandCard = (props: HandCardProps) => {
                   addEndListener={(node: HTMLElement) => {
                     node.addEventListener(
                       "transitionend",
-                      () => {
-                        //removeCardTransition();
-                      },
+                      () => 
+                        dispatch({type:"REMOVE_TRANSITION", payload: id})
+                      ,
                       false
                     );
                   }}
