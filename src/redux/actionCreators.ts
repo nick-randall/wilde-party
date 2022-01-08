@@ -3,7 +3,7 @@ import { AddTranstion, DrawCard } from "./actions";
 
 export const addTransition = (transitionData: TransitionData): AddTranstion => ({ type: "ADD_TRANSITION", payload: transitionData });
 
-export const enactDrawCardEvent = (player: number): DrawCard => ({
+export const enactDrawCardEvent = (player: number, handId: string): DrawCard => ({
   type: "DRAW_CARD",
-  payload: player,
+  payload: {player: player, handId: handId},
 });

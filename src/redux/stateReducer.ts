@@ -102,8 +102,8 @@ export const stateReducer = (
       else return state;
     case "DRAW_CARD":
       if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
-      const player = action.payload;
-      const gameSnapshot = drawCardUpdateSnapshot(player, state.gameSnapshot)
+      const {player, handId} = action.payload;
+      const gameSnapshot = drawCardUpdateSnapshot(handId, player, state.gameSnapshot)
       return { ...state, gameSnapshot };
 
       // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };

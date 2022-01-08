@@ -7,20 +7,15 @@ export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
-
-export const drawCardUpdateSnapshot = ( destinationPlayer: number, gameSnapshot: GameSnapshot): GameSnapshot =>
+export const drawCardUpdateSnapshot = (handId: string, player: number, gameSnapshot: GameSnapshot): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    const destinationPlaceId = gameSnapshot.players[destinationPlayer].places.hand.id;
-
-    if (destinationPlayer !== null) {
-      const newPlayerId = gameSnapshot.players[destinationPlayer].places["hand"].playerId;
-      setAttributes(draft.nonPlayerPlaces["deck"].cards[0], { placeId: destinationPlaceId, playerId: newPlayerId, index: 0 });
-      const [deckCard] = draft.nonPlayerPlaces["deck"].cards.splice(0, 1);
-      draft.players[destinationPlayer].places["hand"].cards.splice(0, 0, deckCard);
-      draft.players[destinationPlayer].places["hand"].cards = draft.players[destinationPlayer].places["hand"].cards.map((card, i) => ({
-        ...card,
-        index: i,
-      }));
-      compareProps(draft.players[destinationPlayer].places["hand"].cards);
-    }
+    const newPlayerId = gameSnapshot.players[player].places["hand"].playerId;
+    setAttributes(draft.nonPlayerPlaces["deck"].cards[0], { placeId: handId, playerId: newPlayerId, index: 0 });
+    const [deckCard] = draft.nonPlayerPlaces["deck"].cards.splice(0, 1);
+    draft.players[player].places["hand"].cards.splice(0, 0, deckCard);
+    draft.players[player].places["hand"].cards = draft.players[player].places["hand"].cards.map((card, i) => ({
+      ...card,
+      index: i,
+    }));
+    compareProps(draft.players[player].places["hand"].cards);
   });
