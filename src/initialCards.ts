@@ -325,7 +325,7 @@ export const initialGamePlayers: GamePlayer[] = [
       },
     },
     current: true,
-    currentPhase: "normalActionPhase",
+    currentPhase: "normalPhase",
     draws: 1,
     plays: 1,
     rolls: 1,
@@ -336,12 +336,19 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
+  current: {
+    player: 0,
+    phase: "normalPhase",
+    draws: 2,
+    plays: 1,
+    rolls: 1,
+  },
   players: [
     {
       id: "l93fld9",
       name: "Nick",
       current: true,
-      currentPhase: "normalDrawPhase",
+      currentPhase: "normalPhase",
       draws: 1,
       plays: 1,
       rolls: 1,
@@ -388,7 +395,7 @@ export const initialGameSnapshot: GameSnapshot = {
       id: "enemy",
       name: "string",
       current: false,
-      currentPhase: "normalDrawPhase",
+      currentPhase: "normalPhase",
       draws: 1,
       plays: 1,
       rolls: 1,
@@ -433,7 +440,7 @@ export const initialGameSnapshot: GameSnapshot = {
       id: "enemy2",
       name: "string2",
       current: false,
-      currentPhase: "normalDrawPhase",
+      currentPhase: "normalPhase",
       draws: 1,
       plays: 1,
       rolls: 1,

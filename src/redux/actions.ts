@@ -58,6 +58,21 @@ export type AddTranstion = {
   payload: TransitionData;
 };
 
+export type ChangeNumDraws = {
+  type: "CHANGE_NUM_DRAWS",
+  payload: number;
+}
+
+export type ChangeNumPlays = {
+  type: "CHANGE_NUM_PLAYS",
+  payload: number;
+}
+
+export type ChangeNumRolls = {
+  type: "CHANGE_NUM_ROLLS",
+  payload: number;
+}
+
 export type Test = { type: "TEST" };
 
 export type Action =
@@ -72,5 +87,7 @@ export type Action =
   | Enchant
   | EndDragCleanup
   | DrawCard
-  | Test
+  | ChangeNumPlays
+  | ChangeNumDraws
+  | ChangeNumRolls
   | AddTranstion;

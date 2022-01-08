@@ -1,5 +1,5 @@
 import { buildTransition } from "../dimensions/buildTransition";
-import { addTransition, enactDrawCardEvent } from "./actionCreators";
+import { addTransition } from "./actionCreators";
 
 export const drawCard = (player: number) => (dispatch: Function, getState: Function) => {
   const state = getState();

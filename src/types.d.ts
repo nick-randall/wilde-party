@@ -151,7 +151,9 @@ type GamePlayer = {
   glitzaglitza: boolean;
   skipNextTurn: boolean;
 };
-type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
+// type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
+type Phase = "normalPhase" |  "rollPhase" |"counterPhase" ;
+
 
 type PlayerPlaces = {
   [type: string]: GamePlace;
@@ -172,7 +174,18 @@ type NonPlayerPlaces = {
 //   discardPile: GamePlace;
 // };
 
+// type Phase = "normal" | "roll" | "counter";
+
+type Current = {
+  player: number,
+  phase: Phase,
+  plays: number,
+  draws: number,
+  rolls: number, 
+}
+
 type GameSnapshot = {
+  current: Current;
   players: GamePlayer[];
   nonPlayerPlaces: NonPlayerPlaces;
 };

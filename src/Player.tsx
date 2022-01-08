@@ -8,10 +8,11 @@ interface PlayerProps {
   id: string;
   screenSize: { width: number; height: number };
   places: PlayerPlaces;
+  current: boolean
 }
 
 const Player = (props: PlayerProps) => {
-  const { screenSize, id, places } = props;
+  const { screenSize, id, places, current } = props;
   const { width, height, x, y } = getPlayersLayout(screenSize, id);
 
 

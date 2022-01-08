@@ -9,8 +9,9 @@ import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { buildTransition } from "../dimensions/buildTransition";
-import {  drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
+import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { findChanges } from "../animations/findChanges.ts/findChanges";
+import { produce } from "immer";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -74,8 +75,7 @@ export const stateReducer = (
         const { droppableId } = action.payload;
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
         return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
-      }
-      else return { ...state, dragUpdate: action.payload };
+      } else return { ...state, dragUpdate: action.payload };
     }
     case "REARRANGE": {
       const { source, destination } = action.payload;
@@ -98,15 +98,14 @@ export const stateReducer = (
       if (destination) {
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };
-      }
-      else return state;
+      } else return state;
     case "DRAW_CARD":
       if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
-      const {player, handId} = action.payload;
-      const gameSnapshot = drawCardUpdateSnapshot(handId, player, state.gameSnapshot)
+      const { player, handId } = action.payload;
+      const gameSnapshot = drawCardUpdateSnapshot(handId, player, state.gameSnapshot);
       return { ...state, gameSnapshot };
 
-      // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
+    // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
     case "END_DRAG_CLEANUP":
       return {
         ...state,
@@ -118,8 +117,29 @@ export const stateReducer = (
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
     case "ADD_TRANSITION":
-        return { ...state, transitionData: [...state.transitionData, action.payload] };
-
+      return { ...state, transitionData: [...state.transitionData, action.payload] };
+    case "CHANGE_NUM_DRAWS": {
+      const change = action.payload;
+      const newSnapshot = produce(state.gameSnapshot, draft => {
+        draft.current.draws += change;
+      });
+      return { ...state, gameSnapshot: newSnapshot };
+    }
+    case "CHANGE_NUM_PLAYS": {
+      
+      const change = action.payload;
+      const newSnapshot = produce(state.gameSnapshot, draft => {
+        draft.current.plays += change;
+      });
+      return { ...state, gameSnapshot: newSnapshot };
+    }
+    case "CHANGE_NUM_ROLLS": {
+      const change = action.payload;
+      const newSnapshot = produce(state.gameSnapshot, draft => {
+        draft.current.draws += change;
+      });
+      return { ...state, gameSnapshot: newSnapshot };
+    }
     default:
       return state;
   }
