@@ -17,15 +17,14 @@ export const Deck = (props: DeckProps) => {
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
   const { player, draws } = useSelector((state: RootState) => state.gameSnapshot.current);
-  const canDraw = player === 0 && draws > 0;
+  const canDraw = player === 0 && draws > 0 && cards.length > 0;
   const handleClick = () => {
     if (canDraw) dispatch(drawCardThunk(0));
   };
   console.log(x);
   return (
     <div style={{ left: x, top: y, position: "absolute" }} onClick={handleClick}>
-      {/* <Card id={""} index={0} image= "back" dimensions={dimensions} /> */}
-      <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} />
+      {cards.length > 0 ? <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} /> : null}
     </div>
   );
 };

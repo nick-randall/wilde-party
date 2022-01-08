@@ -4,9 +4,7 @@ import { Transition, TransitionStatus } from "react-transition-group";
 import { rotate } from "../helperFunctions/equations";
 import { RootState } from "../redux/store";
 
-interface TransitionStylesProps {
-  //data: TransitionData | undefined;
-  // dimensions: AllDimensions;
+interface TransitionHandlerProps {
   index: number;
   id: string;
   render: (style: CSSProperties) => JSX.Element;
@@ -16,9 +14,8 @@ interface TransitionStylesObj {
   [status: string]: {};
 }
 
-export const TransitionStyles = (props: TransitionStylesProps) => {
+export const TransitionHandler = (props: TransitionHandlerProps) => {
   const { index, id } = props;
-  //const { cardHeight, cardWidth, scale } = dimensions;
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
 
@@ -52,4 +49,4 @@ export const TransitionStyles = (props: TransitionStylesProps) => {
 
   // <div>{props.render(cardRef, handleClick, handleMouseLeave, inspectedStyle)}</div>;
 };
-export default TransitionStyles;
+export default TransitionHandler;

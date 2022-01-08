@@ -5,7 +5,7 @@ import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
-import TransitionStyles from "./renderPropsComponents/TransitionStyles";
+import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
 export interface CardProps {
   id: string;
@@ -72,8 +72,8 @@ const Card = (props: CardProps) => {
                 dimensions={dimensions}
                 cardRotation={messinessRotation}
                 render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
-                  <TransitionStyles
-                    index={0}
+                  <TransitionHandler
+                    index={index}
                     id={id}
                     render={(transitionStyles: CSSProperties) => (
                       <div ref={cardRef}>
