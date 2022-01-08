@@ -117,6 +117,8 @@ export const stateReducer = (
         BFFdraggedOverSide: undefined,
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
+    case "ADD_TRANSITION":
+        return { ...state, transitionData: [...state.transitionData, action.payload] };
 
     default:
       return state;

@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
+import { drawCard } from "./redux/thunks";
 
 interface DeckProps {
   id: string;
@@ -14,7 +15,7 @@ export const Deck = (props: DeckProps) => {
   const { x, y } = getPlacesLayout(id, zoneSize);
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
-  const handleClick = () => dispatch(enactDrawCardEvent(0));
+  const handleClick = () => dispatch(drawCard(0));
   console.log(x);
   return (
     <div style={{ left: x, top: y, position: "absolute" }} onClick={handleClick}>

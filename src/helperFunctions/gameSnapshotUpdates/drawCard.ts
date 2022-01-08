@@ -7,6 +7,7 @@ export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
+
 export const drawCardUpdateSnapshot = ( destinationPlayer: number, gameSnapshot: GameSnapshot): GameSnapshot =>
   produce(gameSnapshot, draft => {
     const destinationPlaceId = gameSnapshot.players[destinationPlayer].places.hand.id;
@@ -16,8 +17,8 @@ export const drawCardUpdateSnapshot = ( destinationPlayer: number, gameSnapshot:
       setAttributes(draft.nonPlayerPlaces["deck"].cards[0], { placeId: destinationPlaceId, playerId: newPlayerId, index: 0 });
       const [deckCard] = draft.nonPlayerPlaces["deck"].cards.splice(0, 1);
       draft.players[destinationPlayer].places["hand"].cards.splice(0, 0, deckCard);
-      draft.players[destinationPlayer].places["hand"].cards = draft.players[destinationPlayer].places["hand"].cards.map((c, i) => ({
-        ...c,
+      draft.players[destinationPlayer].places["hand"].cards = draft.players[destinationPlayer].places["hand"].cards.map((card, i) => ({
+        ...card,
         index: i,
       }));
       compareProps(draft.players[destinationPlayer].places["hand"].cards);

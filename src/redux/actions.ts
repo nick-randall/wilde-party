@@ -51,14 +51,14 @@ export type EndDragCleanup = {
 export type DrawCard = {
   type: "DRAW_CARD";
   payload: number;
-}
+};
 
 export type AddTranstion = {
   type: "ADD_TRANSITION";
-  payload: TransitionData
-}
+  payload: TransitionData;
+};
 
-export type Test = {type:"TEST"}
+export type Test = { type: "TEST" };
 
 export type Action =
   | SetScreenSize
@@ -73,3 +73,4 @@ export type Action =
   | EndDragCleanup
   | DrawCard
   | Test
+  | AddTranstion;

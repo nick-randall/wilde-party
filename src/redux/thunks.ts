@@ -4,7 +4,10 @@ import { addTransition, enactDrawCardEvent } from "./actionCreators";
 export const drawCard = (player: number) => (dispatch: Function, getState: Function) => {
   const state = getState();
   const { gameSnapshot } = state;
-  dispatch(enactDrawCardEvent(player))
+  dispatch({
+    type: "DRAW_CARD",
+    payload: player,
+  });
   const deckId = gameSnapshot.nonPlayerPlaces["deck"].id;
   const originIndex = 0;
   const handId = gameSnapshot.players[player].places.hand.id;
