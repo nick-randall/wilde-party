@@ -1,7 +1,7 @@
 import React, { CSSProperties, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { CardInspector } from "./CardInspector";
+import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";

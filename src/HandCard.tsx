@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
-import { CardInspector } from "./CardInspector";
+import { CardInspector } from "./renderPropsComponents/CardInspector";
 
 export interface HandCardProps {
   id: string;
@@ -38,9 +38,10 @@ const HandCard = (props: HandCardProps) => {
   const currentPhase = "play" // "play" "roll" "counter"
 
   const canPlay = currentPlayer === 0 && currentPhase === "play";
-
+  console.log(transitionData)
   let transitionStyles: TransitionStyles = 
   transitionData ? 
+
   
   { 
     entering: {}, entered: {} }:{};

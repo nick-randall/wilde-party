@@ -33,16 +33,17 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
-export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: ()=>RootState) => {
+export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: () => RootState) => {
   const state = getState();
   const { gameSnapshot } = state;
   const { place: originPlace, player: originPlayer } = locate(source.droppableId, gameSnapshot);
-  
+
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
   const newSnapshot = getState().gameSnapshot;
   if (originPlayer !== 0) {
-    const newTransition = buildTransitionFromChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot}, "drawCard", state)
+    const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", state);
+    console.log(newTransition)
     dispatch(addTransition(newTransition));
     // console.log(originPlayer)
     // if (originPlayer !== null && originPlace !== null) {
@@ -50,7 +51,6 @@ export const addDraggedThunk = (source: LocationData, destination: LocationData)
     //   const newTransition = buildTransition(cardId, "drawCard", source.droppableId, source.index, destination.droppableId, destination.index, state);
     //   dispatch(addTransition(newTransition));
     // }
-    
   }
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };

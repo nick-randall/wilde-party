@@ -1,6 +1,6 @@
 
 import React, { CSSProperties, useRef, useState } from "react";
-import { rotate } from "./helperFunctions/equations";
+import { rotate } from "../helperFunctions/equations";
 
 interface CardInspectorProps {
   dimensions: AllDimensions;
