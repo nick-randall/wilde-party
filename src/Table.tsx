@@ -11,7 +11,7 @@ export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const ids = getIdListObject(gameSnapshot);
-  const currentPlayer = useSelector((state: RootState) => state.gameSnapshot.current.player);
+  const {player, plays, draws, rolls } = useSelector((state: RootState) => state.gameSnapshot.current);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,13 +22,19 @@ export const Table = () => {
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
+      <div style={{marginLeft:"50%", marginRight:"50%"}}>
+        <div> current player: {player}</div>
+        <div> plays left: {plays}</div>
+        <div> draws left: {draws}</div>
+        {/* <div> rolls left: {rolls}</div> */}
+      </div>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <NonPlayerPlaces places = {gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
       
      
-        <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current = {currentPlayer === 0}/>
-        <Player id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current = {currentPlayer === 1}/>
-        <Player id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current = {currentPlayer === 2}/>
+        <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current = {player === 0}/>
+        <Player id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current = {player === 1}/>
+        <Player id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current = {player === 2}/>
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>

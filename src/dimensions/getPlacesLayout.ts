@@ -25,7 +25,7 @@ export const getPlacesLayout = (
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
   if (place === "UWZ") draggedOverCard = 0;
-  if (place === "deck") numCards = 1;
+  if (place === "deck") numCardsWidth = 0;
 
   const fromCenterWidth = (distance: number): number => distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - cardHeight / 2);
