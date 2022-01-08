@@ -1,5 +1,5 @@
 import { DraggableLocation } from "react-beautiful-dnd";
-import { addDragged } from "../helperFunctions/gameSnapshotUpdates/addDragged";
+import { addDraggedUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/addDragged";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { locate } from "../helperFunctions/locateFunctions";
@@ -8,18 +8,15 @@ import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
-import { buildTransition } from "../dimensions/buildTransition";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
-import { findChanges } from "../animations/findChanges.ts/findChanges";
 import { produce } from "immer";
-import { Console } from "console";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
 const nextPlayer = (gameSnapshot: GameSnapshot) => {
   const currentPlayer = gameSnapshot.current.player;
   const numPlayers = gameSnapshot.players.length;
-  return currentPlayer < numPlayers - 2 ? currentPlayer + 1 : 0  
+  return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0  
 }
 
 export interface State {
@@ -96,7 +93,10 @@ export const stateReducer = (
     }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
-      const gameSnapshot = addDragged(state.gameSnapshot, source.index, destination.droppableId, destination.index);
+      console.log((destination.droppableId.slice(0,5)))
+      // if(destination.droppableId.slice(4))
+
+      const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":

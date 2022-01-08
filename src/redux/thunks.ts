@@ -1,12 +1,14 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
-import { DraggableLocation, DropResult } from "react-beautiful-dnd";
+import { DropResult } from "react-beautiful-dnd";
 import { buildTransition } from "../dimensions/buildTransition";
+import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { addTransition } from "./actionCreators";
+import { LocationData } from "./actions";
+import { cleverGetNextAiCard } from "./ai/getNextAiCard";
 import { RootState } from "./store";
 
 const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
-
 
 export const drawCardThunk = (player: number) => (dispatch: Function, getState: Function) => {
   const state: RootState = getState();
@@ -25,23 +27,72 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   });
   dispatch({ type: "CHANGE_NUM_DRAWS", payload: -1 });
   dispatch(addTransition(newTransition));
-  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk())
+  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
-export const addDraggedThunk = (source: DraggableLocation, destination: DraggableLocation) => (dispatch: Function, getState: Function) => {
+export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: Function) => {
+  dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
+  console.log("addDraggedThunk ", source, destination)
+  dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
+  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
+};
+
+export const aIaddDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: Function) => {
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
-  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk())
+  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
 export const enchantThunk = (dropResult: DropResult) => (dispatch: Function, getState: () => RootState) => {
   dispatch({ type: "ENCHANT", payload: dropResult });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
-  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk())
+  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
 export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => RootState) => {
+  dispatch({ type: "END_CURRENT_TURN" });
   const { gameSnapshot } = getState();
-  dispatch({type: "END_CURRENT_TURN"})
- 
+  if (gameSnapshot.current.player !== 0)
+    //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
+    dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
+};
+
+export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState: () => RootState) => {
+  let { gameSnapshot } = getState();
+  let { draws } = gameSnapshot.current;
+  let numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
+  // setTimeout(() => {
+    while (draws > 0 && numCardsInDeck > 0) {
+      dispatch(drawCardThunk(player));
+      const { gameSnapshot } = getState();
+      draws = gameSnapshot.current.draws;
+      numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
+    }
+  // }, 1000);
+  gameSnapshot = getState().gameSnapshot;
+  const randomCard = cleverGetNextAiCard(player, gameSnapshot);
+  if (randomCard === undefined) dispatch(endCurrentTurnThunk());
+  else {
+    const potentialTargets = getHighlights(randomCard, gameSnapshot);
+    if (potentialTargets.length > 0) {
+      const hand = gameSnapshot.players[player].places.hand;
+
+      // should choose a random target, currently just getting target[0]
+
+      const action = randomCard.action;
+      switch (action.actionType) {
+        case "addDragged": {
+          console.log(hand.id, randomCard);
+          dispatch(
+            addDraggedThunk(
+              { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+              { droppableId: potentialTargets[0], index: 0 }
+            )
+          );
+        }
+      }
+    }
+    console.log(potentialTargets);
+  }
+  console.log(randomCard);
 };

@@ -1,4 +1,9 @@
-import { DraggableLocation, DropResult } from "react-beautiful-dnd";
+import {  DropResult } from "react-beautiful-dnd";
+
+export type LocationData = {
+  index: number,
+  droppableId: string
+}
 
 export type SetScreenSize = {
   type: "SET_SCREEN_SIZE";
@@ -21,17 +26,17 @@ export type StartRearranging = {
 
 export type UpdateDrag = {
   type: "UPDATE_DRAG";
-  payload: DraggableLocation;
+  payload: LocationData;
 };
 
 export type Rearrange = {
   type: "REARRANGE";
-  payload: { source: DraggableLocation; destination: DraggableLocation };
+  payload: { source: LocationData; destination: LocationData };
 };
 
 export type AddDragged = {
   type: "ADD_DRAGGED";
-  payload: { source: DraggableLocation; destination: DraggableLocation };
+  payload: { source: LocationData; destination: LocationData };
 };
 
 export type Enchant = {
@@ -76,6 +81,7 @@ export type ChangeNumRolls = {
 export type EndCurrentTurn = {
   type: "END_CURRENT_TURN"
 }
+
 
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 

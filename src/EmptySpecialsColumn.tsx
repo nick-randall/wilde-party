@@ -29,7 +29,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
     <div style={{ position: "relative", 
     //display: "flex", flexDirection: "column-reverse", 
     width: dimensions.cardWidth }}>
-      <Droppable droppableId={specialsZoneId + "dropZone"} isDropDisabled={!isHighlighted}>
+      <Droppable droppableId={"dropZone"+specialsZoneId } isDropDisabled={!isHighlighted}>
         {provided => (
           <div
             style={{

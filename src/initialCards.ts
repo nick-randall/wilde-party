@@ -245,29 +245,30 @@ const player1GCZCards: GameCard[] = [
 
 const deckCards: GameCard[] = [
   {
-    id: "hosey",
-    name: "rumgroelerin3",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
-    index: 7,
-    image: "rumgroelerin3",
-    pointValue: 1,
-    cardType: "guest",
-    guestCardType: "rumgroelerin",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
-  },
-  {
     id: "gogogogo",
     name: "megaphon",
     placeId: "klsjfd",
     playerId: "l93fld9",
-    index: 8,
+    index: 0,
     pointValue: 0,
     image: "megaphon",
     cardType: "special",
     specialsCardType: "rumgroelerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
   },
+  {
+    id: "hosey",
+    name: "rumgroelerin3",
+    placeId: "pd0s9fd",
+    playerId: "l93fld9",
+    index: 1,
+    image: "rumgroelerin3",
+    pointValue: 1,
+    cardType: "guest",
+    guestCardType: "rumgroelerin",
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+  
 ];
 const discardPileCards: GameCard[] = [
   {
@@ -339,7 +340,7 @@ export const initialGameSnapshot: GameSnapshot = {
   current: {
     player: 0,
     phase: "normalPhase",
-    draws: 2,
+    draws: 1,
     plays: 1,
     rolls: 1,
   },
@@ -366,7 +367,7 @@ export const initialGameSnapshot: GameSnapshot = {
         UWZ: {
           id: "0239842kl",
           playerId: "l93fld9",
-          placeType: "GCZ",
+          placeType: "UWZ",
           acceptedCardType: "unwanted",
           cards: myUWZCards,
         },
@@ -380,7 +381,7 @@ export const initialGameSnapshot: GameSnapshot = {
         hand: {
           id: "pqewoi",
           playerId: "l93fld9",
-          placeType: "GCZ",
+          placeType: "hand",
           cards: myHandCards,
         },
         enchantmentsRow: {
@@ -407,6 +408,7 @@ export const initialGameSnapshot: GameSnapshot = {
           id: "jr2034jrpdsf",
           playerId: "enemy",
           placeType: "GCZ",
+          acceptedCardType:"guest",
           cards: player1GCZCards,
         },
         UWZ: {
