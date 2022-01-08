@@ -3,7 +3,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
-import { drawCard } from "./redux/thunks";
+import { drawCardThunk } from "./redux/thunks";
 
 interface DeckProps {
   id: string;
@@ -19,7 +19,7 @@ export const Deck = (props: DeckProps) => {
   const { player, draws } = useSelector((state: RootState) => state.gameSnapshot.current);
   const canDraw = player === 0 && draws > 0;
   const handleClick = () => {
-    if (canDraw) dispatch(drawCard(0));
+    if (canDraw) dispatch(drawCardThunk(0));
   };
   console.log(x);
   return (

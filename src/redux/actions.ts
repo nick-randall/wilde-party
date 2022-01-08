@@ -73,7 +73,7 @@ export type ChangeNumRolls = {
   payload: number;
 }
 
-export type Test = { type: "TEST" };
+//export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 
 export type Action =
   | SetScreenSize
@@ -91,4 +91,5 @@ export type Action =
   | ChangeNumDraws
   | ChangeNumRolls
   | AddTranstion
-  | RemoveTransition;
+  | RemoveTransition
+  //| //Thunk;

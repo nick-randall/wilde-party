@@ -1,6 +1,7 @@
 import { DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
+import { addDraggedThunk } from "../redux/thunks";
 
 const isHandCard = (source: DraggableLocation) => locate(source.droppableId).place === "hand";
 
@@ -46,7 +47,7 @@ export const handleDragEnd = (d: DropResult) => {
   if (d.destination) {
     if (isRearrange(d)) store.dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
     else if (isEnchant(d, gameSnapshot)) store.dispatch({ type: "ENCHANT", payload: d });
-    else if (isAddDrag(d)) store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
+    else if (isAddDrag(d)) store.dispatch(addDraggedThunk( d.source, d.destination))//store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
   }
   store.dispatch({ type: "END_DRAG_CLEANUP" });
 };

@@ -1,10 +1,9 @@
-import React, { CSSProperties, useRef, useState } from "react";
+import React, { CSSProperties, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { CardInspector } from "./CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
-import useHoverStyles from "./hooks/useCardInspector";
 import { RootState } from "./redux/store";
 
 export interface CardProps {
