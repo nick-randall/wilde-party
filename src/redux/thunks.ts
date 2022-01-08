@@ -43,7 +43,7 @@ export const addDraggedThunk = (source: LocationData, destination: LocationData)
   const newSnapshot = getState().gameSnapshot;
   if (originPlayer !== 0) {
     const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", state);
-    console.log(newTransition)
+    console.log(newTransition);
     dispatch(addTransition(newTransition));
     // console.log(originPlayer)
     // if (originPlayer !== null && originPlace !== null) {
@@ -74,12 +74,17 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   let { draws } = gameSnapshot.current;
   let numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
   // setTimeout(() => {
-  while (draws > 0 && numCardsInDeck > 0) {
-    dispatch(drawCardThunk(player));
-    const { gameSnapshot } = getState();
-    draws = gameSnapshot.current.draws;
-    numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
-  }
+  // while (draws > 0 && numCardsInDeck > 0) {
+  //   dispatch(drawCardThunk(player));
+  //   const { gameSnapshot } = getState();
+  //   draws = gameSnapshot.current.draws;
+  //   numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
+  // }
+  const waitThenDraw = () => {
+    if (getState().transitionData.length < 1) dispatch(drawCardThunk(player));
+    else setTimeout(() => waitThenDraw(), 50);
+  };
+  waitThenDraw();
   // }, 1000);
   gameSnapshot = getState().gameSnapshot;
   const randomCard = cleverGetNextAiCard(player, gameSnapshot);
@@ -94,13 +99,17 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
       const action = randomCard.action;
       switch (action.actionType) {
         case "addDragged": {
-          console.log(hand.id, randomCard);
-          dispatch(
-            addDraggedThunk(
-              { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-              { droppableId: potentialTargets[0], index: 0 }
-            )
-          );
+          const waitThenPlay = () => {
+            if (getState().transitionData.length < 1)
+              dispatch(
+                addDraggedThunk(
+                  { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                  { droppableId: potentialTargets[0], index: 0 }
+                )
+              );
+            else setTimeout(() => waitThenPlay(), 50);
+          };
+          waitThenPlay();
         }
       }
     }
