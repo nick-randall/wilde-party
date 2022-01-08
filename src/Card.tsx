@@ -5,6 +5,7 @@ import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
+import TransitionStyles from "./renderPropsComponents/TransitionStyles";
 
 export interface CardProps {
   id: string;
@@ -32,7 +33,6 @@ const Card = (props: CardProps) => {
     const rndY = Math.random() - 0.5;
     setMessinessOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
   }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
-
 
   const highlights = useSelector((state: RootState) => state.highlights);
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
@@ -72,25 +72,32 @@ const Card = (props: CardProps) => {
                 dimensions={dimensions}
                 cardRotation={messinessRotation}
                 render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
-                  <div ref={cardRef}>
-                  <img
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    alt={image}
-                    src={`./images/${image}.jpg`}
-                    onClick = {handleClick}
-                    onMouseLeave={handleMouseLeave}
+                  <TransitionStyles
+                    index={0}
                     id={id}
-                    style={{
-                      WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                      //border: highlights.includes(id) ? "thick blue dotted" : "",
-                      //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
-                      transition: "box-shadow 180ms",
-                      ...normalStyles,
-                      ...inspectingStyles
-                    }}
+                    render={(transitionStyles: CSSProperties) => (
+                      <div ref={cardRef}>
+                        <img
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          alt={image}
+                          src={`./images/${image}.jpg`}
+                          onClick={handleClick}
+                          onMouseLeave={handleMouseLeave}
+                          id={id}
+                          style={{
+                            WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                            //border: highlights.includes(id) ? "thick blue dotted" : "",
+                            //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
+                            transition: "box-shadow 180ms",
+                            ...normalStyles,
+                            ...inspectingStyles,
+                            ...transitionStyles
+                          }}
+                        />
+                      </div>
+                    )}
                   />
-                  </div>
                 )}
               />
               {ghostCard ? (
