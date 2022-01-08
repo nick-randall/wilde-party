@@ -12,8 +12,15 @@ import { buildTransition } from "../dimensions/buildTransition";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { findChanges } from "../animations/findChanges.ts/findChanges";
 import { produce } from "immer";
+import { Console } from "console";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
+
+const nextPlayer = (gameSnapshot: GameSnapshot) => {
+  const currentPlayer = gameSnapshot.current.player;
+  const numPlayers = gameSnapshot.players.length;
+  return currentPlayer < numPlayers - 2 ? currentPlayer + 1 : 0  
+}
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -141,6 +148,17 @@ export const stateReducer = (
         draft.current.draws += change;
       });
       return { ...state, gameSnapshot: newSnapshot };
+    }
+    case "END_CURRENT_TURN": {
+      const { gameSnapshot } = state;
+      const newSnapshot = produce(gameSnapshot, draft => {
+        draft.current.player = nextPlayer(gameSnapshot)
+        draft.current.draws = 1;
+        draft.current.plays = 1;
+        draft.current.rolls = 1;
+      });
+      console.log(newSnapshot)
+    return {...state, gameSnapshot: newSnapshot}
     }
     default:
       return state;

@@ -73,6 +73,10 @@ export type ChangeNumRolls = {
   payload: number;
 }
 
+export type EndCurrentTurn = {
+  type: "END_CURRENT_TURN"
+}
+
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 
 export type Action =
@@ -92,4 +96,5 @@ export type Action =
   | ChangeNumRolls
   | AddTranstion
   | RemoveTransition
+  | EndCurrentTurn;
   //| //Thunk;
