@@ -77,7 +77,7 @@ const HandCard = (props: HandCardProps) => {
         y = 60;
       } else if (draggedHandCard && draggedHandCard.cardType === "special") {
         x = -15;
-        y = -25;
+        y = -15;
       } else {
         x = cardWidth - 175;
         y = cardHeight - 195;

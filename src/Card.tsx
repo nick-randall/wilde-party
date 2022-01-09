@@ -89,7 +89,7 @@ const Card = (props: CardProps) => {
                           style={{
                             WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
                             //border: highlights.includes(id) ? "thick blue dotted" : "",
-                            //boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
+                            boxShadow: snapshot.isDraggingOver ? "0px 0px 20px 20px yellowgreen" : "",
                             transition: "box-shadow 180ms",
                             ...normalStyles,
                             ...inspectingStyles,

@@ -9,7 +9,7 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
   const numCards = getNumCards(placeId, gameSnapshot);
   
   const tableCardHeights = { enemy: 120, self : 148 };
-  const handCardHeights = { enemy: 120, self : 180 }
+  const handCardHeights = { enemy: 100, self : 180 }
   
   const playerType = player === 0 || player === null ? "self" : "enemy";
 

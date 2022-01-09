@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
 import { Droppable } from "react-beautiful-dnd";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -9,8 +9,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 interface HandProps {
   id: string;
   handCards: GameCard[];
-  playerZoneSize: {width: number, height: number}
-
+  playerZoneSize: { width: number; height: number };
 }
 
 const transitionData: TransitionData[] = [];
@@ -21,8 +20,13 @@ const Hand = (props: HandProps) => {
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
-  const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length >0);
+  const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
+  
+  useEffect(()=>{
+    if (transitionsUnderway && mouseOverHand)
+    setMouseOverHand(false)
+  }, [transitionsUnderway, setMouseOverHand, mouseOverHand])
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
@@ -30,8 +34,8 @@ const Hand = (props: HandProps) => {
       {provided => (
         <div
           id={props.id}
-          onMouseEnter={!transitionsUnderway ?() => setMouseOverHand(true): ()=>null}
-          onMouseLeave={!transitionsUnderway?() => setMouseOverHand(false): ()=> null}
+          onMouseEnter={!transitionsUnderway ? () => setMouseOverHand(true) : () => null}
+          onMouseLeave={!transitionsUnderway ? () => setMouseOverHand(false) : () => null}
           style={{
             position: "absolute",
             display: "flex",
@@ -50,7 +54,7 @@ const Hand = (props: HandProps) => {
               // This is a container div for one card and two spacers
               style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
             >
-               <div
+              <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                 style={{
                   width: spread / 2,
@@ -58,17 +62,9 @@ const Hand = (props: HandProps) => {
                   height: dimensions.cardHeight,
                   // border:"thin green solid",
                   // zIndex: 100
-                  
                 }}
               />
-              <HandCard
-                id={card.id}
-                index={index}
-                image={card.image}
-                dimensions={dimensions}
-                numHandCards={handCards.length}
-                key={card.id}
-              />
+              <HandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
 
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
@@ -78,8 +74,6 @@ const Hand = (props: HandProps) => {
                   height: dimensions.cardHeight,
                   // border:"thin red solid",
                   // zIndex: 100
-
-
                 }}
               />
             </div>

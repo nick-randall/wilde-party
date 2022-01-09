@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
 import { dealInitialHands } from "./redux/thunks";
+import EnemyPlayer from "./EnemyPlayer";
 
 export const Table = () => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -44,8 +45,8 @@ export const Table = () => {
       
      
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current = {player === 0}/>
-        <Player id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current = {player === 1}/>
-        <Player id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current = {player === 2}/>
+        <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current = {player === 1}/>
+        <EnemyPlayer id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current = {player === 2}/>
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>
