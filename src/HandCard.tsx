@@ -58,6 +58,7 @@ const HandCard = (props: HandCardProps) => {
     transform: `rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms`,
     pointerEvents: "auto",
+    boxShadow: "10px 10px 10px black"
   };
 
   const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {

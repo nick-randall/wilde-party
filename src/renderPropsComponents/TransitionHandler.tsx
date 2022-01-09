@@ -32,7 +32,7 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
         },
         entered: {
           transition: `transform ${data.duration}ms ${data.curve},  height ${data.duration}ms ${data.curve}, width ${data.duration}ms ${data.curve}, left ${data.duration}ms ${data.curve}, top ${data.duration}ms ${data.curve}`,
-        opacity:1
+          opacity:1
         },
       }
     : {};

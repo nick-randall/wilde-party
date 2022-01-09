@@ -38,7 +38,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
               position: "absolute",
               //bottom: -cardWidth -30,
               
-              // backgroundColor: isHighlighted ? "yellowgreen" : "",
+              backgroundColor: isHighlighted ? "yellowgreen" : "",
               boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
               transition: "background-color 180ms, box-shadow 180ms, left 180ms",
             }}

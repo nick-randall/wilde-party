@@ -1,13 +1,22 @@
 import { v4 as uuidv4 } from "uuid";
+import shuffle from "../helperFunctions/shuffle";
 import { createDeck, getPreppedDeck } from "./deckGenerator";
+import startGaeste, { prepStartGast } from "./startGaeste";
 
 const numPlayers = 3;
+
+
 
 export const createGame = () => {
   const players: GamePlayer[] = [];
   let { deck: deckCards, deckId } = getPreppedDeck();
+  const shuffledStartGaeste = shuffle(startGaeste);
+  
   for (let i = 0; i < numPlayers; i++) {
     const playerId = uuidv4();
+    const GCZId = uuidv4();
+    let startGast = shuffledStartGaeste[i];
+    const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
     const player: GamePlayer = {
       id: playerId,
       name: `player${i + 1}`,
@@ -15,11 +24,11 @@ export const createGame = () => {
       skipNextTurn: false,
       places: {
         GCZ: {
-          id: uuidv4(),
+          id: GCZId,
           playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
-          cards: [],
+          cards: [preppedStartGast],
         },
         UWZ: {
           id: uuidv4(),
@@ -51,6 +60,9 @@ export const createGame = () => {
     };
     players.push(player);
   }
+
+  
+
 
   const gameSnapshot: GameSnapshot = {
     current: {
