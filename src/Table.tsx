@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getIdListObject } from "./helperFunctions/getIdList";
 import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
-import EnemyPlayer from "./EnemyPlayer";
-import { createDeck} from "./allCards.ts/deckGenerator";
-import { generateGame } from "./allCards.ts/playersGenerator";
+import { dealInitialHands } from "./redux/thunks";
 
 export const Table = () => {
+  const [gameStarted, setGameStarted] = useState(false);
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const ids = getIdListObject(gameSnapshot);
@@ -22,7 +21,15 @@ export const Table = () => {
       dispatch({ type: "SET_SCREEN_SIZE" });
     });
   });
-  console.log(generateGame())
+
+  useEffect(()=>{
+    if(!gameStarted) {
+      console.log("called it")
+      dispatch(dealInitialHands());
+    setGameStarted(true);
+    }
+    
+  }, [gameStarted, dispatch])
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>

@@ -118,6 +118,23 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   console.log(randomCard);
 };
 
-export const dealInitialHands = () => {
-
-}
+export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
+  console.log("dealInitialHands");
+  const numCardsInHand = 7;
+  const numPlayers = getState().gameSnapshot.players.length;
+  const { gameSnapshot } = getState();
+  for (let i = 0; i < numPlayers; i++) {
+    const handId = gameSnapshot.players[i].places.hand.id;
+    for (let j = 0; j < numCardsInHand; j++) {
+      const prevSnapshot = getState().gameSnapshot;
+      console.log("player ", i, "should draw a card");
+      dispatch({
+        type: "DRAW_CARD",
+        payload: { player: i, handId: handId },
+      });
+      const newSnapshot = getState().gameSnapshot;
+      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * 500 + j * 500);
+      dispatch(addTransition(newTransition));
+    }
+  }
+};

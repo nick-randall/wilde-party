@@ -55,6 +55,7 @@ const Card = (props: CardProps) => {
     transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",
     transitionDelay: "150ms",
+    userSelect: "none"
   };
 
   return (
