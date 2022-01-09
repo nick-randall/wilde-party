@@ -21,6 +21,7 @@ const Hand = (props: HandProps) => {
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
+  const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length >0);
   const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
@@ -29,8 +30,8 @@ const Hand = (props: HandProps) => {
       {provided => (
         <div
           id={props.id}
-          onMouseEnter={() => setMouseOverHand(true)}
-          onMouseLeave={() => setMouseOverHand(false)}
+          onMouseEnter={!transitionsUnderway ?() => setMouseOverHand(true): ()=>null}
+          onMouseLeave={!transitionsUnderway?() => setMouseOverHand(false): ()=> null}
           style={{
             position: "absolute",
             display: "flex",

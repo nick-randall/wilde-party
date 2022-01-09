@@ -29,6 +29,8 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
     payload: { player: player, handId: handId },
   });
   dispatch({ type: "CHANGE_NUM_DRAWS", payload: -1 });
+  console.log(newTransition);
+
   dispatch(addTransition(newTransition));
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
@@ -119,7 +121,6 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
 };
 
 export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
-  console.log("dealInitialHands");
   const numCardsInHand = 7;
   const numPlayers = getState().gameSnapshot.players.length;
   const { gameSnapshot } = getState();
@@ -127,13 +128,14 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
     const handId = gameSnapshot.players[i].places.hand.id;
     for (let j = 0; j < numCardsInHand; j++) {
       const prevSnapshot = getState().gameSnapshot;
-      console.log("player ", i, "should draw a card");
       dispatch({
         type: "DRAW_CARD",
         payload: { player: i, handId: handId },
       });
       const newSnapshot = getState().gameSnapshot;
-      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * 500 + j * 500);
+      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * 2500 + 300 * j);
+      console.log(newTransition)
+
       dispatch(addTransition(newTransition));
     }
   }

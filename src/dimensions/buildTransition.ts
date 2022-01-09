@@ -37,7 +37,7 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-const durationConstant = (distance: number) => (distance < 0 ? -2.5 : 2.5);
+const durationConstant = (distance: number) => (distance < 0 ? -25 : 25);
 
 const getOriginDelta = (
   originPlaceId: string,
@@ -63,7 +63,7 @@ const getOriginDelta = (
   };
   const originDelta = { x: origin.x - destination.x, y: origin.y - destination.y };
   console.log(origin.x, destination.x, origin.y, destination.y);
-  const distance = measureDistance(origin.x, origin.y, destination.x, destination.y);
+  const distance = 50// measureDistance(origin.x, origin.y, destination.x, destination.y);
   //return { originDelta: {x: originPlaceX - destinationPlaceX, y: originPlaceY - destinationPlaceY}, distance: distance }
   return { originDelta: originDelta, distance: distance };
 };
@@ -80,7 +80,7 @@ const getTransitionData = (transitionType: string, distance: number) => {
       cardInitialrotation = 0;
       startAnimationDuration = 2;
       transitionDuration = 1;
-      curve = "ease";
+      curve = "ease-out";
   }
   const calculatedAnimationDuration = startAnimationDuration * distance * durationConstant(distance);
   const calculatedTransitionDuration = transitionDuration * distance * durationConstant(distance);
