@@ -62,18 +62,19 @@ export const myHandCards: GameCard[] = [
   //   specialsCardType: "schleckermaul",
   //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
   // },
+
   {
-    id: "jadsif293jfnjskdnv",
-    name: "schleckermaul4",
-    playerId: "l93fld9",
+    id: "asdf2r42345",
+    name: "zwilling2",
     placeId: "pqewoi",
+    playerId: "l93fld9",
     index: 2,
-    image: "schleckermaul4",
-    cardType: "guest",
     pointValue: 1,
-    guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    image: "zwilling",
+    cardType: "zwilling",
+    action: { targetPlayerType: "self", actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
   },
+  
   {
     id: "123123",
     name: "barkeeperin",
@@ -122,17 +123,7 @@ export const myHandCards: GameCard[] = [
   },
 ];
 export const myEnchantmentsRowCards: GameCard[] = [
-  // {
-  //   id: "asdf2r42345",
-  //   name: "zwilling2",
-  //   placeId: "324562132300",
-  //   playerId: "l93fld9",
-  //   index: 1,
-  //   pointValue: 1,
-  //   image: "zwilling",
-  //   cardType: "zwilling",
-  //   action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
-  // },
+
 ];
 
 const mySpecialsZoneCards: GameCard[] = [
@@ -247,7 +238,7 @@ const deckCards: GameCard[] = [
   {
     id: "gogogogo",
     name: "megaphon",
-    placeId: "klsjfd",
+    placeId: "klasdf",
     playerId: "l93fld9",
     index: 0,
     pointValue: 0,
@@ -259,7 +250,7 @@ const deckCards: GameCard[] = [
   {
     id: "hosey",
     name: "rumgroelerin3",
-    placeId: "pd0s9fd",
+    placeId: "klasdf",
     playerId: "l93fld9",
     index: 1,
     image: "rumgroelerin3",
@@ -268,6 +259,19 @@ const deckCards: GameCard[] = [
     guestCardType: "rumgroelerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
+  {
+    id: "jadsif293jfnjskdnv",
+    name: "schleckermaul4",
+    playerId: "l93fld9",
+    placeId: "klasdf",
+    index: 2,
+    image: "schleckermaul4",
+    cardType: "guest",
+    pointValue: 1,
+    guestCardType: "schleckermaul", //???
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+  },
+    
   
 ];
 const discardPileCards: GameCard[] = [
