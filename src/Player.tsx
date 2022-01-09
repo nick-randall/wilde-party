@@ -17,7 +17,9 @@ const Player = (props: PlayerProps) => {
 
 
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, border: "thin black solid", display:"block"}}>
+    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, 
+    // border: "thin black solid", 
+    display:"block"}}>
         <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
         <div>
           <GCZ

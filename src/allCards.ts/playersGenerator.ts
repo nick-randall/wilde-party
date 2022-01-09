@@ -3,11 +3,22 @@ import { createDeck, getPreppedDeck } from "./deckGenerator";
 
 const numPlayers = 3;
 
+const setHandCardsPlaceId = (cards: GameCard[],  playerId: string) => cards.map((card) => ({...card, playerId: playerId}))
+
+// export const generateGame = () => {
+//   const players: GamePlayer[] = [];
+//   let { deck, deckId } = getPreppedDeck();
+//   for (let i = 0; i < numPlayers; i++) {
+//     const handCards = deck.splice(deck.length - 7, deck.length - 1);
+
 export const generateGame = () => {
   const players: GamePlayer[] = [];
   let { deck, deckId } = getPreppedDeck();
   for (let i = 0; i < numPlayers; i++) {
-    const handCards = deck.splice(deck.length - 7, deck.length - 1);
+    let handCards = deck.splice(deck.length - 7, deck.length - 1);
+    const playerId = uuidv4();
+    const preppedHandCards = setHandCardsPlaceId(handCards, playerId)
+    
     const player: GamePlayer = {
       id: uuidv4(),
       name: "Nick",
@@ -16,30 +27,30 @@ export const generateGame = () => {
       places: {
         GCZ: {
           id: uuidv4(),
-          playerId: uuidv4(),
+          playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
           cards: [],
         },
         UWZ: {
           id: uuidv4(),
-          playerId: uuidv4(),
+          playerId: playerId,
           placeType: "UWZ",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
           id: uuidv4(),
-          playerId: uuidv4(),
+          playerId: playerId,
           placeType: "specialsZone",
           acceptedCardType: "special",
           cards: [],
         },
         hand: {
           id: uuidv4(),
-          playerId: uuidv4(),
+          playerId: playerId,
           placeType: "hand",
-          cards: handCards,
+          cards: preppedHandCards,
         },
         enchantmentsRow: {
           id: uuidv4(),

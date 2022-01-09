@@ -29,7 +29,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
     <div style={{ position: "relative", 
     //display: "flex", flexDirection: "column-reverse", 
     width: dimensions.cardWidth }}>
-      <Droppable droppableId={"dropZone"+specialsZoneId } isDropDisabled={!isHighlighted}>
+      <Droppable droppableId={specialsZoneId + "dropZone"} isDropDisabled={!isHighlighted}>
         {provided => (
           <div
             style={{
@@ -37,8 +37,8 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
               width: cardWidth,
               position: "absolute",
               //bottom: -cardWidth -30,
-
-              backgroundColor: isHighlighted ? "yellowgreen" : "",
+              
+              // backgroundColor: isHighlighted ? "yellowgreen" : "",
               boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
               transition: "background-color 180ms, box-shadow 180ms, left 180ms",
             }}
