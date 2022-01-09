@@ -139,11 +139,11 @@ type GamePlace = {
 type GamePlayer = {
   id: string;
   name: string;
-  current: boolean;
-  currentPhase: Phase;
-  draws: number;
-  plays: number;
-  rolls: number;
+  // current: boolean;
+  // currentPhase: Phase;
+  // draws: number;
+  // plays: number;
+  // rolls: number;
 
   places: PlayerPlaces;
 

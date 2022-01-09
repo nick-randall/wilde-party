@@ -1,11 +1,9 @@
+import { v4 as uuidv4 } from "uuid";
+import shuffle from "../helperFunctions/shuffle";
+
 const numGuestCardsPerType = 5;
 const numUnscheinbar = 4;
 const guestCardTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
-const rumGroelerinSpecials = ["megaphon", "karaoke", "heliumballon", "meinsong", "smile"];
-const saufnaseSpecials = ["shots", "beerpong", "prost", "raucherzimmer", "barkeeperin"];
-const schleckermaulSpecials = ["eisimbecher", "suessigkeiten", "midnightsnack", "fingerfood", "partypizza"];
-const taenzerinSpecials = ["nebelmaschine", "lichtshow", "discokugel", "poledance", "playlist"];
-
 interface Specials {
   [name: string]: string[];
 }
@@ -18,20 +16,31 @@ const specials: Specials = {
 };
 
 //startgast
-//unscheinbar
-
-const getRandomId = () => {};
-
 
 export const createDeck = () => {
-  const deck: GameCard[] = []
+  const deck: GameCard[] = [];
+
+  for (let i = 0; i < numUnscheinbar; i++) {
+    const unscheibarerGast: GameCard = {
+      id: uuidv4(),
+      name: `unscheinbar${i}`,
+      placeId: "",
+      playerId: "",
+      index: 0,
+      image: `unscheinbar${i}`,
+      pointValue: 1,
+      cardType: "guest",
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    };
+    deck.push(unscheibarerGast);
+  }
   for (let guestCardType of guestCardTypes) {
     for (let i = 0; i < numGuestCardsPerType; i++) {
       const guestCard: GameCard = {
-        id: "hosey",
+        id: uuidv4(),
         name: `${guestCardType}${i}`,
-        placeId: "klasdf",
-        playerId: "l93fld9",
+        placeId: "",
+        playerId: "",
         index: 0,
         image: `${guestCardType}${i}`,
         pointValue: 1,
@@ -39,37 +48,45 @@ export const createDeck = () => {
         guestCardType: `${guestCardType}`,
         action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
       };
-      deck.push(guestCard)
-
-      
-
-      //for (let i = 0; i < guestCardTypes.length; i++) {}
+      deck.push(guestCard);
     }
     const specialsOfThisType = specials[guestCardType];
 
     for (let special of specialsOfThisType) {
       const specialsCard: GameCard = {
-        id: "alsvdknnakvos",
+        id: uuidv4(),
         name: `${special}`,
         playerId: "",
-        placeId: "klasd02mcvdlw",
+        placeId: "",
         index: 0,
-        image: `${special}`, 
+        image: `${special}`,
         cardType: "special",
         pointValue: 0,
-        guestCardType: `${guestCardType}`, 
+        guestCardType: `${guestCardType}`,
         action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
       };
-      deck.push(specialsCard)
+      deck.push(specialsCard);
     }
   }
   return deck;
 };
-const shuffle = () => {};
+
+
+const setDeckIndexes = (deck: GameCard[]) => deck.map((card, i) => ({...card, index: i}))
+
+const setDeckPlaceId = (deck: GameCard[], deckId: string) => deck.map((card) => ({...card, placeId: deckId}))
+
+export const getPreppedDeck = () => {
+  const deckId = uuidv4();
+  let deck = createDeck();
+  const shuffledDeck = shuffle(deck);
+  const withIndexes = setDeckIndexes(shuffledDeck);
+  const withPlaceId = (setDeckPlaceId(withIndexes, deckId))
+  return {deck: withPlaceId, deckId: deckId};
+};
 
 // fix place and player ids
 
 export const deal = (cards: GameCard[]) => {};
 
 // const setDeckIndexes = () ={}
-

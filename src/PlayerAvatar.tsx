@@ -12,7 +12,7 @@ height: 100px
 
 const PlayerAvatar = (props: PlayerProps) => {
   const { player } = props;
-  const { id, name, current, currentPhase, draws, plays, rolls, places, glitzaglitza, skipNextTurn } = player;
+  const { id, name, places, glitzaglitza, skipNextTurn } = player;
 
   return (
     <Droppable droppableId={id}>

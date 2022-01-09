@@ -7,7 +7,8 @@ import { useEffect } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
 import EnemyPlayer from "./EnemyPlayer";
-import { createDeck } from "./allCards.ts/deckGenerator";
+import { createDeck} from "./allCards.ts/deckGenerator";
+import { generateGame } from "./allCards.ts/playersGenerator";
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -21,7 +22,7 @@ export const Table = () => {
       dispatch({ type: "SET_SCREEN_SIZE" });
     });
   });
-  console.log(createDeck())
+  console.log(generateGame())
 
   return (
     <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
