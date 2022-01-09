@@ -108,6 +108,7 @@ export interface TransitionInputs {
 export const buildTransition: (
   cardId: string,
   transitionType: string,
+  delay: number,
   originPlaceId: string,
   originIndex: number,
   destinationPlaceId: string,
@@ -118,6 +119,7 @@ export const buildTransition: (
   
   cardId: string,
   transitionType: string,
+  delay: number,
   originPlaceId: string,
   originIndex: number,
   destinationPlaceId: string,
@@ -144,7 +146,7 @@ export const buildTransition: (
     startAnimation: startAnimation,
     startAnimationDuration: startAnimationDuration,
     cardInitialrotation: cardInitialrotation,
-    wait: 0,
+    wait: delay,
     curve: curve,
   };
   console.log(startAnimationDuration);

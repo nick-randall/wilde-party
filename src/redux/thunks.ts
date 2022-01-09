@@ -23,7 +23,7 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   const cardId = gameSnapshot.nonPlayerPlaces["deck"].cards[0].id;
   const handIndex = 0;
   const transitionType = "drawCard";
-  const newTransition = buildTransition(cardId, transitionType, deckId, originIndex, handId, handIndex, state);
+  const newTransition = buildTransition(cardId, transitionType, 0, deckId, originIndex, handId, handIndex, state);
   dispatch({
     type: "DRAW_CARD",
     payload: { player: player, handId: handId },
@@ -42,7 +42,7 @@ export const addDraggedThunk = (source: LocationData, destination: LocationData)
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
   const newSnapshot = getState().gameSnapshot;
   if (originPlayer !== 0) {
-    const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", state);
+    const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
     console.log(newTransition);
     dispatch(addTransition(newTransition));
     // console.log(originPlayer)
@@ -117,3 +117,7 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   }
   console.log(randomCard);
 };
+
+export const dealInitialHands = () => {
+
+}

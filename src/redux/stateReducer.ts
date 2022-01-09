@@ -11,6 +11,7 @@ import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/re
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
 import { generateGame } from "../allCards.ts/playersGenerator";
+import { createGame } from "../allCards.ts/createGame";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -43,7 +44,7 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: generateGame(),
+    gameSnapshot: createGame(),
     screenSize: getScreenSize(),
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
