@@ -62,7 +62,7 @@ export const createDeck = () => {
         image: `${special}`,
         cardType: "special",
         pointValue: 0,
-        guestCardType: `${guestCardType}`,
+        specialsCardType: `${guestCardType}`,
         action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
       };
       deck.push(specialsCard);

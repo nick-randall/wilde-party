@@ -20,7 +20,7 @@ export const generateGame = () => {
     const preppedHandCards = setHandCardsPlaceId(handCards, playerId)
     
     const player: GamePlayer = {
-      id: uuidv4(),
+      id: playerId,
       name: "Nick",
       glitzaglitza: false,
       skipNextTurn: false,
@@ -54,7 +54,7 @@ export const generateGame = () => {
         },
         enchantmentsRow: {
           id: uuidv4(),
-          playerId: uuidv4(),
+          playerId: playerId,
           placeType: "enchantmentsRow",
           cards: [],
         },
