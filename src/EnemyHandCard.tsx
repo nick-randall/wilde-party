@@ -47,7 +47,9 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         render={(transitionStyles: CSSProperties) => (
           <img
             alt={image}
-            src="./images/back.jpg"
+             src="./images/back.jpg"
+            // src={`./images/${image}.jpg`}
+
             id={id}
             style={{
               ...normalStyles,

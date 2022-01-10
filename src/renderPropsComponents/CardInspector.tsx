@@ -77,6 +77,8 @@ export const CardInspector = (props: CardInspectorProps) => {
     ? {
         transform: `scale(${scale}) translateX(${translate.x}px) translateY(${translate.y}px)`,
         zIndex: 15,
+        boxShadow: "10px 10px 10px black"
+
       }
     : {};
 

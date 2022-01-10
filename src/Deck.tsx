@@ -21,7 +21,6 @@ export const Deck = (props: DeckProps) => {
   const handleClick = () => {
     if (canDraw) dispatch(drawCardThunk(0));
   };
-  console.log(x);
   return (
     <div style={{ left: x, top: y, position: "absolute" }} onClick={handleClick}>
       {cards.length > 0 ? <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} /> : null}
