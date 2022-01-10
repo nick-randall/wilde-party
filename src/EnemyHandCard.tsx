@@ -28,7 +28,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     left: 0,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
-    // transition: `left 250ms, width 180ms, transform 180ms`,
+    transition: `left 250ms, width 180ms, transform 180ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
   };

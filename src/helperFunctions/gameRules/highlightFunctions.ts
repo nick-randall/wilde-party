@@ -27,7 +27,7 @@ export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedC
   return locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;}
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-  console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, draggedCard.cardType === highlightPlace.acceptedCardType, "draggedIsOfAcceptedType");
+  console.log(highlightPlace.placeType, draggedCard.name, draggedCard.cardType, highlightPlace.id, highlightPlace.playerId, draggedCard.cardType === highlightPlace.acceptedCardType, "draggedIsOfAcceptedType");
   return  draggedCard.cardType === highlightPlace.acceptedCardType;}
 
 export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{

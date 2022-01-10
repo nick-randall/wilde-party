@@ -1,5 +1,5 @@
 import getPlayersLayout from "./dimensions/getPlayersLayout";
-import { EnemyHand } from "./EnemyHand";
+import EnemyHand from "./EnemyHand";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
 import { SpecialsZone } from "./SpecialsZone";
@@ -18,7 +18,9 @@ const EnemyPlayer = (props: PlayerProps) => {
 
 
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, border: "thin black solid", display:"block"}}>
+    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, 
+    // border: "thin black solid", display:"block"
+    }}>
         <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
         <div>
           <GCZ

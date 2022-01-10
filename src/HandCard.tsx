@@ -12,8 +12,6 @@ export interface HandCardProps {
   image: string;
   dimensions: AllDimensions;
   numHandCards: number;
-  offsetLeft?: number;
-  offsetTop?: number;
 }
 
 

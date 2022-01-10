@@ -66,6 +66,7 @@ export const enchantThunk = (dropResult: DropResult) => (dispatch: Function, get
 export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => RootState) => {
   dispatch({ type: "END_CURRENT_TURN" });
   const { gameSnapshot } = getState();
+  console.log("turn ended");
   if (gameSnapshot.current.player !== 0)
     //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
     dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
@@ -82,13 +83,22 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   //   draws = gameSnapshot.current.draws;
   //   numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
   // }
+  console.log("ai waiting");
+
   const waitThenDraw = () => {
     if (getState().transitionData.length < 1) dispatch(drawCardThunk(player));
-    else setTimeout(() => waitThenDraw(), 50);
+    else
+      setTimeout(() => {
+        waitThenDraw();
+        const state = getState()
+        const transitionData = state.transitionData;
+        console.log(transitionData ?  locate(transitionData[0].cardId, state.gameSnapshot): "");
+      }, 50);
   };
   waitThenDraw();
   // }, 1000);
   gameSnapshot = getState().gameSnapshot;
+
   const randomCard = cleverGetNextAiCard(player, gameSnapshot);
   if (randomCard === undefined) dispatch(endCurrentTurnThunk());
   else {
@@ -115,6 +125,7 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
         }
       }
     }
+    console.log("potential targets");
     console.log(potentialTargets);
   }
   console.log(randomCard);
@@ -123,6 +134,8 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
 export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
   const numCardsInHand = 7;
   const numPlayers = getState().gameSnapshot.players.length;
+  const delayBetweenCards = 300;
+  const delayBetweenPlayers = 2300;
   const { gameSnapshot } = getState();
   for (let i = 0; i < numPlayers; i++) {
     const handId = gameSnapshot.players[i].places.hand.id;
@@ -133,8 +146,8 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
         payload: { player: i, handId: handId },
       });
       const newSnapshot = getState().gameSnapshot;
-      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * 2500 + 300 * j);
-      console.log(newTransition)
+      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers + j * delayBetweenCards);
+      console.log(newTransition);
 
       dispatch(addTransition(newTransition));
     }
