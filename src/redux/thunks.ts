@@ -90,9 +90,9 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
     else
       setTimeout(() => {
         waitThenDraw();
-        const state = getState()
+        const state = getState();
         const transitionData = state.transitionData;
-        console.log(transitionData ?  locate(transitionData[0].cardId, state.gameSnapshot): "");
+        console.log(transitionData ? locate(transitionData[0].cardId, state.gameSnapshot) : "");
       }, 50);
   };
   waitThenDraw();
@@ -100,11 +100,18 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
   gameSnapshot = getState().gameSnapshot;
 
   const randomCard = cleverGetNextAiCard(player, gameSnapshot);
+  const hand = gameSnapshot.players[player].places.hand;
+  console.log(hand.cards)
+  console.log("randomcard index is ", randomCard ? randomCard.index: "undefined")
+
   if (randomCard === undefined) dispatch(endCurrentTurnThunk());
   else {
     const potentialTargets = getHighlights(randomCard, gameSnapshot);
     if (potentialTargets.length > 0) {
-      const hand = gameSnapshot.players[player].places.hand;
+      gameSnapshot = getState().gameSnapshot;
+      
+      console.log("randomcard index is ",  hand.cards.map(c => c.id).indexOf(randomCard.id));
+      console.log(hand.cards);
 
       // should choose a random target, currently just getting target[0]
 
@@ -112,23 +119,32 @@ export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, g
       switch (action.actionType) {
         case "addDragged": {
           const waitThenPlay = () => {
-            if (getState().transitionData.length < 1)
+            if (getState().transitionData.length < 1) {
+              gameSnapshot = getState().gameSnapshot;
+              const hand = gameSnapshot.players[player].places.hand;
+      const index = hand.cards.map(c => c.id).indexOf(randomCard.id);
+      console.log("randomcard index is ",  hand.cards.map(c => c.id).indexOf(randomCard.id));
+
               dispatch(
                 addDraggedThunk(
-                  { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                  {
+                    droppableId: hand.id,
+                    // index: index,
+                     index: hand.cards.map(c => c.id).indexOf(randomCard.id)
+                  },
                   { droppableId: potentialTargets[0], index: 0 }
                 )
               );
-            else setTimeout(() => waitThenPlay(), 50);
+            } else setTimeout(() => waitThenPlay(), 50);
           };
           waitThenPlay();
         }
       }
+    } else {
+      console.log("potential targets");
+      console.log(potentialTargets);
     }
-    console.log("potential targets");
-    console.log(potentialTargets);
   }
-  console.log(randomCard);
 };
 
 export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
