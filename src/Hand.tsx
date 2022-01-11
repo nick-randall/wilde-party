@@ -16,17 +16,22 @@ const transitionData: TransitionData[] = [];
 
 const Hand = (props: HandProps) => {
   const { id, handCards, playerZoneSize } = props;
-  const [mouseOverHand, setMouseOverHand] = useState(false);
+  const [shouldSpread, setShouldSpread] = useState(false);
   const dimensions = getAllDimensions(id);
+  const { cardLeftSpread } = dimensions;
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
+  const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
-  const spread = !handCardDragged && mouseOverHand ? maxCardLeftSpread : dimensions.cardLeftSpread;
-  
-  useEffect(()=>{
-    if (transitionsUnderway && mouseOverHand)
-    setMouseOverHand(false)
-  }, [transitionsUnderway, setMouseOverHand, mouseOverHand])
+  const enemysTurn = useSelector((state: RootState) => state.gameSnapshot.current.player !== 0);
+
+  useEffect(() => {
+    if (shouldSpread) {
+      if (!transitionsUnderway && !handCardDragged && !enemysTurn) setSpread(maxCardLeftSpread);
+    } else {
+      setSpread(cardLeftSpread);
+    }
+  }, [transitionsUnderway, shouldSpread, handCardDragged, maxCardLeftSpread, cardLeftSpread, enemysTurn]);
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
@@ -34,8 +39,8 @@ const Hand = (props: HandProps) => {
       {provided => (
         <div
           id={props.id}
-          onMouseEnter={!transitionsUnderway ? () => setMouseOverHand(true) : () => null}
-          onMouseLeave={!transitionsUnderway ? () => setMouseOverHand(false) : () => null}
+          onMouseEnter={() => setShouldSpread(true)}
+          onMouseLeave={() => setShouldSpread(false)}
           style={{
             position: "absolute",
             display: "flex",
