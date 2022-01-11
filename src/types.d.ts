@@ -106,7 +106,7 @@ type CardAction = {
 
 type CardType = "guest" | "unwanted" | "instant" | "ereignis" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
 
-type GuestCardType = "saufnase" | "taenzerin" | "schleckermaul" | "rumgroelerin" | "einfach";
+type GuestCardType = "saufnase" | "taenzerin" | "schleckermaul" | "rumgroelerin";
 
 type GhostCard = {
   index: number;

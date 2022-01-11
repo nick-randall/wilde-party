@@ -11,6 +11,7 @@ const countPlayerPoints = (playerIdOrNumber: number | string, gameSnapshot: Game
     const playerSpecialsCards = gameSnapshot.players[player].places.specialsZone.cards;
     const enchantmentsCards = gameSnapshot.players[player].places.enchantmentsRow.cards;
     const guestCards = gameSnapshot.players[player].places.GCZ.cards;
+    const unwantedGuestCards = gameSnapshot.players[player].places.UWZ.cards;
 
     guestCards.forEach(guestCard => {
       const specialsWithCorrectType = playerSpecialsCards.filter(
@@ -21,8 +22,9 @@ const countPlayerPoints = (playerIdOrNumber: number | string, gameSnapshot: Game
     });
 
     enchantmentsCards.forEach(enchantmentsCard => (playerPoints += enchantmentsCard.pointValue));
+    unwantedGuestCards.forEach(unwantedGuestCard => (playerPoints += unwantedGuestCard.pointValue));
   }
-  return playerPoints
+  return playerPoints;
 };
 
 export default countPlayerPoints;
