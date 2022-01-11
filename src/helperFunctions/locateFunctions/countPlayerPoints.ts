@@ -17,7 +17,7 @@ const countPlayerPoints = (playerIdOrNumber: number | string, gameSnapshot: Game
         specialsCard => guestCard.guestCardType && specialsCard.specialsCardType === guestCard.guestCardType
       );
       playerPoints += specialsWithCorrectType.length;
-      playerPoints += 1;
+      playerPoints += guestCard.pointValue;
     });
 
     enchantmentsCards.forEach(enchantmentsCard => (playerPoints += enchantmentsCard.pointValue));

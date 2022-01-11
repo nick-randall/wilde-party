@@ -17,7 +17,7 @@ export const createGameSnapshot = () => {
     const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
     const player: GamePlayer = {
       id: playerId,
-      name: `player${i + 1}`,
+      name: `Player ${i + 1}`,
       glitzaglitza: false,
       skipNextTurn: false,
       places: {

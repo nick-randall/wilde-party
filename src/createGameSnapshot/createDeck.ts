@@ -34,6 +34,36 @@ export const createDeck = () => {
     };
     deck.push(unscheibarerGast);
   }
+  for (let i = 0; i < numGuestCardsPerType; i++) {
+    const einfacherGuestCard: GameCard = {
+      id: uuidv4(),
+      name: `einfach${i}`,
+      placeId: "",
+      playerId: "",
+      index: 0,
+      image: `einfach${i}`,
+      pointValue: 1,
+      cardType: "guest",
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    };
+    deck.push(einfacherGuestCard);
+    const doppelterGuestCard: GameCard = {
+      id: uuidv4(),
+      name: `doppelt${i}`,
+      placeId: "",
+      playerId: "",
+      index: 0,
+      image: `doppelt${i}`,
+      pointValue: 2,
+      cardType: "guest",
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    };
+    deck.push(doppelterGuestCard);
+
+
+  }
+
+
   for (let guestCardType of guestCardTypes) {
     for (let i = 0; i < numGuestCardsPerType; i++) {
       const guestCard: GameCard = {
