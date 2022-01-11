@@ -12,8 +12,6 @@ interface HandProps {
   playerZoneSize: { width: number; height: number };
 }
 
-const transitionData: TransitionData[] = [];
-
 const Hand = (props: HandProps) => {
   const { id, handCards, playerZoneSize } = props;
   const [shouldSpread, setShouldSpread] = useState(false);

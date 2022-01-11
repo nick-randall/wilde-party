@@ -10,8 +10,8 @@ import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour"
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
-import { generateGame } from "../allCards.ts/playersGenerator";
-import { createGame } from "../allCards.ts/createGame";
+import { generateGame } from "../createGameSnapshot/old_create_Game";
+import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -44,7 +44,7 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: createGame(),
+    gameSnapshot: createGameSnapshot(),
     screenSize: getScreenSize(),
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,

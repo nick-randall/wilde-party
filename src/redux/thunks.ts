@@ -8,7 +8,7 @@ import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
 import { addTransition } from "./actionCreators";
 import { LocationData } from "./actions";
-import { cleverGetNextAiCard } from "./ai/getNextAiCard";
+import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { RootState } from "./store";
 
 const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;

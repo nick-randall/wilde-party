@@ -38,13 +38,13 @@ export const getPlacesLayout = (
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight*1.5) };
       case "UWZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight * 1.5) };
       case "GCZ":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
+        return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight * 0.5) };
       case "hand":
-        return { x: handFromCenterWidth(-200), y: handFromBottom(100) };
+        return { x: handFromCenterWidth(-200), y: handFromBottom(80) };
       
     }
   } else {

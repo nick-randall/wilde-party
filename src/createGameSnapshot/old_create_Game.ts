@@ -1,34 +1,36 @@
 import { v4 as uuidv4 } from "uuid";
-import shuffle from "../helperFunctions/shuffle";
-import { createDeck, getPreppedDeck } from "./deckGenerator";
-import startGaeste, { prepStartGast } from "./startGaeste";
+import { createDeck, getPreppedDeck } from "./createDeck";
 
 const numPlayers = 3;
 
+const setHandCardsPlaceId = (cards: GameCard[],  playerId: string) => cards.map((card) => ({...card, playerId: playerId}))
 
+// export const generateGame = () => {
+//   const players: GamePlayer[] = [];
+//   let { deck, deckId } = getPreppedDeck();
+//   for (let i = 0; i < numPlayers; i++) {
+//     const handCards = deck.splice(deck.length - 7, deck.length - 1);
 
-export const createGame = () => {
+export const generateGame = () => {
   const players: GamePlayer[] = [];
-  let { deck: deckCards, deckId } = getPreppedDeck();
-  const shuffledStartGaeste = shuffle(startGaeste);
-  
+  let { deck, deckId } = getPreppedDeck();
   for (let i = 0; i < numPlayers; i++) {
+    let handCards = deck.splice(deck.length - 7, deck.length - 1);
     const playerId = uuidv4();
-    const GCZId = uuidv4();
-    let startGast = shuffledStartGaeste[i];
-    const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
+    const preppedHandCards = setHandCardsPlaceId(handCards, playerId)
+    
     const player: GamePlayer = {
       id: playerId,
-      name: `player${i + 1}`,
+      name: "Nick",
       glitzaglitza: false,
       skipNextTurn: false,
       places: {
         GCZ: {
-          id: GCZId,
+          id: uuidv4(),
           playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
-          cards: [preppedStartGast],
+          cards: [],
         },
         UWZ: {
           id: uuidv4(),
@@ -48,7 +50,7 @@ export const createGame = () => {
           id: uuidv4(),
           playerId: playerId,
           placeType: "hand",
-          cards: [],
+          cards: preppedHandCards,
         },
         enchantmentsRow: {
           id: uuidv4(),
@@ -60,9 +62,6 @@ export const createGame = () => {
     };
     players.push(player);
   }
-
-  
-
 
   const gameSnapshot: GameSnapshot = {
     current: {
@@ -76,9 +75,9 @@ export const createGame = () => {
     nonPlayerPlaces: {
       discardPile: { id: uuidv4(), placeType: "discardPile", cards: [] },
       deck: {
-        id: deckId,
+        id: uuidv4(),
         placeType: "deck",
-        cards: deckCards,
+        cards: deck,
       },
     },
   };
