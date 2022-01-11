@@ -32,7 +32,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const allowDropping = rearranging;
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
+    <Droppable droppableId={"dd"} direction="horizontal" isDropDisabled={true}>
       {provided => (
         <div
           ref={provided.innerRef}

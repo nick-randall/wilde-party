@@ -18,8 +18,8 @@ const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHei
 const nextPlayer = (gameSnapshot: GameSnapshot) => {
   const currentPlayer = gameSnapshot.current.player;
   const numPlayers = gameSnapshot.players.length;
-  return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0  
-}
+  return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
+};
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -36,6 +36,8 @@ export interface State {
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
 
 const isSpecialsZone = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "specialsZone";
+
+const isSpecialsColumn = (droppableId: string, gameSnapshot: GameSnapshot) => locate(droppableId.slice(1), gameSnapshot).place === "specialsZone";
 
 const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
   draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
@@ -72,15 +74,21 @@ export const stateReducer = (
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
+        console.log(highlights);
         const highlightType = draggedHandCard.action.highlightType;
         return { ...state, highlights, highlightType };
       } else return state;
     }
     case "UPDATE_DRAG": {
+      const { index, droppableId } = action.payload;
       if (isEnchantWithBFF(state.draggedHandCard)) {
         const { droppableId } = action.payload;
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
         return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
+      }
+      if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
+        console.log(droppableId.slice(1));
+        return { ...state, dragUpdate: { droppableId: droppableId.slice(1), index: 0 } };
       } else return { ...state, dragUpdate: action.payload };
     }
     case "REARRANGE": {
@@ -95,8 +103,12 @@ export const stateReducer = (
     }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
-      console.log((destination.droppableId.slice(0,5)))
-      // if(destination.droppableId.slice(4))
+      const { droppableId } = destination;
+      if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
+        const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId.slice(1), destination.index);
+
+        return { ...state, gameSnapshot };
+      }
 
       const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
       return { ...state, gameSnapshot };
@@ -154,13 +166,13 @@ export const stateReducer = (
     case "END_CURRENT_TURN": {
       const { gameSnapshot } = state;
       const newSnapshot = produce(gameSnapshot, draft => {
-        draft.current.player = nextPlayer(gameSnapshot)
+        draft.current.player = nextPlayer(gameSnapshot);
         draft.current.draws = 1;
         draft.current.plays = 1;
         draft.current.rolls = 1;
       });
-      console.log(newSnapshot)
-    return {...state, gameSnapshot: newSnapshot}
+      console.log(newSnapshot);
+      return { ...state, gameSnapshot: newSnapshot };
     }
     default:
       return state;

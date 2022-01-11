@@ -73,7 +73,7 @@ const HandCard = (props: HandCardProps) => {
           x = BFFDraggedOverSide === "left" ? -60 : 40;
         } else x = -15;
         y = 60;
-      } else if (draggedHandCard && draggedHandCard.cardType === "special") {
+      } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType==="unwanted")) {
         x = -15;
         y = -15;
       } else {

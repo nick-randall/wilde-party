@@ -20,3 +20,11 @@ export const getTypeofSpecials = (array: GameCard[], typeIndex: number) =>
 
 // export const getNextIndexOfSpecialsType = (array: GameCard[], startIndex: number) =>
 //   array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);
+
+export const getNextIndexOfSpecialsType = (cards: GameCard[], type: string) => {
+  const specialsTypes: (GuestCardType | number | undefined)[] = cards.map(card => card.specialsCardType);
+  const nextIndex = specialsTypes.reduce((prev, curr, index) => (prev === type && prev !== curr ? index : 0),0);
+  console.log(nextIndex)
+  if (typeof nextIndex === "number") return nextIndex;
+  else return 0;
+};

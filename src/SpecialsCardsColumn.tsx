@@ -20,7 +20,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
 
   const specialsColumnLastIndex = cards[cards.length - 1].index;
   // Represents the next index where a new card of this special type will be inserted;
-  const specialsColumnId = specialsZoneId + (specialsColumnLastIndex + 1);
+  const specialsColumnId = columnIndex + specialsZoneId;
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId && isHighlighted);
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
@@ -56,7 +56,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
               boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
               transition: "background-color 180ms, box-shadow 180ms, left 180ms",
               position: "absolute",
-              top:  cards.length * dimensions.cardTopSpread,
+              top: cards.length * dimensions.cardTopSpread,
             }}
           >
             {provided.placeholder}
