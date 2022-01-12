@@ -21,7 +21,7 @@ export const addDraggedUpdateSnapshot = (
   destinationIndex: number
 ): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    console.log(destinationIndex)
+    console.log(destinationPlaceId)
    const { place: destPlace, player: destPlayer} = (uuidIsToLong(destinationPlaceId))  ? locate(destinationPlaceId.slice(1), gameSnapshot): locate(destinationPlaceId, gameSnapshot)
 
     let {player: sourcePlayer, place: sourcePlace} = locate(sourcePlaceId, gameSnapshot);
@@ -43,12 +43,12 @@ export const addDraggedUpdateSnapshot = (
           destinationPlaceId = destinationPlaceId.slice(1);
         }
       } else if (destPlace === "UWZ") {
-        targetIndex = getNumCards(destinationPlaceId, gameSnapshot);
+        targetIndex = getNumCards(destinationPlaceId, gameSnapshot); 
       }
 
       const newPlayerId = gameSnapshot.players[destPlayer].places[destPlace].playerId;
       setAttributes(draft.players[sourcePlayer].places.hand.cards[sourceIndex], {
-        placeId: destinationIndex,
+        placeId: destinationPlaceId,
         playerId: newPlayerId,
         index: targetIndex,
       });
