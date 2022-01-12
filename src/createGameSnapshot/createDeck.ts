@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 import createSpecialsAndGuests from "./createSpecialsAndGuests";
 import createUnwanteds from "./createUnwanteds";
-import getStartingGuests from "./startGaeste";
-import startGaeste from "./startGaeste";
+import createStartingGuests from "./createStartingGuests";
+import startGaeste from "./createStartingGuests";
 
 
 export const createDeck = () => {

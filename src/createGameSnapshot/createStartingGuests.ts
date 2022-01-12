@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 
-const getStartingGuests = () : GameCard[] => { 
+const createStartingGuests = () : GameCard[] => { 
   let startingGuests: GameCard[]  = [
   {
     id: uuidv4(),
@@ -68,4 +68,4 @@ return shuffle(startingGuests);
 }
 // export const prepStartGast = (card: GameCard, playerId: string, GCZId: string): GameCard => ({ ...card, placeId: GCZId, playerId: playerId });
 
-export default getStartingGuests;
+export default createStartingGuests;
