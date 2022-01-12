@@ -1,9 +1,9 @@
-import {  DropResult } from "react-beautiful-dnd";
+import { DropResult } from "react-beautiful-dnd";
 
 export type LocationData = {
-  index: number,
-  droppableId: string
-}
+  index: number;
+  droppableId: string;
+};
 
 export type SetScreenSize = {
   type: "SET_SCREEN_SIZE";
@@ -50,7 +50,7 @@ export type EndDragCleanup = {
 
 export type DrawCard = {
   type: "DRAW_CARD";
-  payload: {handId: string, player: number};
+  payload: { handId: string; player: number };
 };
 
 export type AddTranstion = {
@@ -64,24 +64,29 @@ export type RemoveTransition = {
 };
 
 export type ChangeNumDraws = {
-  type: "CHANGE_NUM_DRAWS",
+  type: "CHANGE_NUM_DRAWS";
   payload: number;
-}
+};
 
 export type ChangeNumPlays = {
-  type: "CHANGE_NUM_PLAYS",
+  type: "CHANGE_NUM_PLAYS";
   payload: number;
-}
+};
 
 export type ChangeNumRolls = {
-  type: "CHANGE_NUM_ROLLS",
+  type: "CHANGE_NUM_ROLLS";
   payload: number;
-}
+};
 
 export type EndCurrentTurn = {
-  type: "END_CURRENT_TURN"
-}
+  type: "END_CURRENT_TURN";
+};
+export type EndCurrentPhase = { type: "END_CURRENT_PHASE" };
 
+export type DealStartingGuest = {
+  type: "DEAL_STARTING_GUEST";
+  payload: number;
+};
 
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 
@@ -102,5 +107,7 @@ export type Action =
   | ChangeNumRolls
   | AddTranstion
   | RemoveTransition
-  | EndCurrentTurn;
-  //| //Thunk;
+  | EndCurrentTurn
+  | EndCurrentPhase
+  |DealStartingGuest;
+//| //Thunk;

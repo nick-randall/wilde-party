@@ -12,6 +12,7 @@ import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/d
 import { produce } from "immer";
 import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
+import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -44,6 +45,8 @@ const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
 
 const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
 
+const phaseNormalTurnIsYours = (gameSnapshot: GameSnapshot) => gameSnapshot.current.player === 0 && gameSnapshot.current.phase === "normalPhase";
+
 export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
@@ -71,6 +74,7 @@ export const stateReducer = (
       return { ...state, rearrangingData: action.payload };
     }
     case "SET_HIGHLIGHTS": {
+      if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
@@ -101,6 +105,12 @@ export const stateReducer = (
         return { ...state, gameSnapshot };
       } else return state;
     }
+    case "DEAL_STARTING_GUEST":{
+      console.log("deal starting guest")
+      const player = action.payload;
+      const gameSnapshot =  dealStartingGuestUpdateSnapshot(player, state.gameSnapshot)
+      return {...state, gameSnapshot}
+      }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       // const { droppableId } = destination;
@@ -163,6 +173,8 @@ export const stateReducer = (
       });
       return { ...state, gameSnapshot: newSnapshot };
     }
+    case "END_CURRENT_PHASE":
+      return state;
     case "END_CURRENT_TURN": {
       const { gameSnapshot } = state;
       const newSnapshot = produce(gameSnapshot, draft => {

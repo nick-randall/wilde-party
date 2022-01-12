@@ -1,20 +1,22 @@
 import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 import { getPreppedDeck } from "./createDeck";
-import startGaeste, { prepStartGast } from "./startGaeste";
+import getStartingGuests from "./startGaeste";
 
 const numPlayers = 3;
 
 export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
   let { deck: deckCards, deckId } = getPreppedDeck();
-  const shuffledStartGaeste = shuffle(startGaeste);
+  const startingGuests = getStartingGuests();
+  const withStartingGuestsOnTop = startingGuests.concat(deckCards)
+  // const shuffledStartGaeste = shuffle(startGaeste);
   
   for (let i = 0; i < numPlayers; i++) {
     const playerId = uuidv4();
     const GCZId = uuidv4();
-    let startGast = shuffledStartGaeste[i];
-    const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
+    // let startGast = shuffledStartGaeste[i];
+    // const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
     const player: GamePlayer = {
       id: playerId,
       name: `Player ${i + 1}`,
@@ -26,7 +28,7 @@ export const createGameSnapshot = () => {
           playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
-          cards: [preppedStartGast],
+          cards: [],
         },
         UWZ: {
           id: uuidv4(),
@@ -56,6 +58,7 @@ export const createGameSnapshot = () => {
         },
       },
     };
+    
     players.push(player);
   }
 
@@ -76,7 +79,7 @@ export const createGameSnapshot = () => {
       deck: {
         id: deckId,
         placeType: "deck",
-        cards: deckCards,
+        cards: withStartingGuestsOnTop,
       },
     },
   };
