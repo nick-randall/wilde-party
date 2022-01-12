@@ -88,7 +88,7 @@ export const stateReducer = (
       }
       if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
         console.log(droppableId.slice(1));
-        return { ...state, dragUpdate: { droppableId: droppableId.slice(1), index: 0 } };
+        return { ...state, dragUpdate: { droppableId: droppableId, index: 0 } };
       } else return { ...state, dragUpdate: action.payload };
     }
     case "REARRANGE": {
@@ -103,12 +103,12 @@ export const stateReducer = (
     }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
-      const { droppableId } = destination;
-      if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
-        const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId.slice(1), destination.index);
+      // const { droppableId } = destination;
+      // if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
+      //   const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId.slice(1), destination.index);
 
-        return { ...state, gameSnapshot };
-      }
+      //   return { ...state, gameSnapshot };
+      // }
 
       const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
       return { ...state, gameSnapshot };
