@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 
-const createStartingGuests = () : GameCard[] => { 
+const createStartingGuests = (numPlayers: number) : GameCard[] => { 
   let startingGuests: GameCard[]  = [
   {
     id: uuidv4(),
@@ -63,7 +63,8 @@ const createStartingGuests = () : GameCard[] => {
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
 ];
-return shuffle(startingGuests);
+const shuffledStartingGuests = shuffle(startingGuests)
+return shuffledStartingGuests.slice(0, numPlayers);
 
 }
 // export const prepStartGast = (card: GameCard, playerId: string, GCZId: string): GameCard => ({ ...card, placeId: GCZId, playerId: playerId });

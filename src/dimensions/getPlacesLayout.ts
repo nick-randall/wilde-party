@@ -38,7 +38,7 @@ export const getPlacesLayout = (
   if (player === 0) {
     switch (place) {
       case "specialsZone":
-        return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight*1.5) };
+        return { x: fromCenterWidth(0 + cardWidth * 2), y: fromCenterHeight(-cardHeight*1.5) };
       case "UWZ":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight * 1.5) };
       case "GCZ":

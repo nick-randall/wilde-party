@@ -26,11 +26,12 @@ const HandCard = (props: HandCardProps) => {
   const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
+  const transitionUnderway = useSelector((state: RootState) => state.transitionData.length>0)
 
   const currentPlayer = 0; // gameSnapshot.current.player
   const currentPhase = "play"; // "play" "roll" "counter"
 
-  const canPlay = currentPlayer === 0 && currentPhase === "play";
+  const canPlay = currentPlayer === 0 && currentPhase === "play" && !transitionUnderway;
 
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
     isDragging
@@ -92,7 +93,7 @@ const HandCard = (props: HandCardProps) => {
   };
 
   return (
-    <Draggable draggableId={id} index={index} key={id}>
+    <Draggable draggableId={id} index={index} key={id} isDragDisabled={!canPlay}>
       {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <div

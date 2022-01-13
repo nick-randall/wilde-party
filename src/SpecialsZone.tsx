@@ -42,7 +42,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
             position: "absolute",
             top: y,
             left: x,
-            flexDirection: "row",
+            flexDirection: "row-reverse",
             // backgroundColor: isHighlighted ? "yellowgreen" : "",
             // boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
             // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
@@ -51,11 +51,11 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
             transition: "left 250ms",
           }}
         >
+         
           {specialsCardsColumns.map((cardColumns, index) => (
             <SpecialsCardsColumn cards={cardColumns} columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
           ))}
-
-          {specialsCardsColumns.length < 4 ? (
+           {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn
               index={specialsCards.length}
               acceptedSpecialsTypes={missingSpecialsCardsTypes}
@@ -63,6 +63,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null}
+
           {provided.placeholder}
         </div>
       )}

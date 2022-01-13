@@ -8,9 +8,8 @@ const numPlayers = 3;
 export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
   let { deck: deckCards, deckId } = getPreppedDeck();
-  const startingGuests = createStartingGuests();
-  const withStartingGuestsOnTop = startingGuests.concat(deckCards)
-  // const shuffledStartGaeste = shuffle(startGaeste);
+  const startingGuests = createStartingGuests(numPlayers);
+  deckCards =  startingGuests.concat(deckCards)
   
   for (let i = 0; i < numPlayers; i++) {
     const playerId = uuidv4();
@@ -79,7 +78,7 @@ export const createGameSnapshot = () => {
       deck: {
         id: deckId,
         placeType: "deck",
-        cards: withStartingGuestsOnTop,
+        cards: deckCards,
       },
     },
   };
