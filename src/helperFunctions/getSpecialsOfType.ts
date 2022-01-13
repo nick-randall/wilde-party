@@ -1,5 +1,4 @@
 import * as R from "ramda";
-import { PollingWatchKind } from "typescript";
 
 // checks whether array in 3d array is unique by comparing first element in array
 export const onlyUniqueArrays = (array2d: any[], index: number, array3d: any[][]) => {
@@ -19,13 +18,14 @@ export const getSpecialsOfType = (array: GameCard[], typeIndex: number): GameCar
 export const getTypeofSpecials = (array: GameCard[], typeIndex: number) =>
   getSpecialsOfType(array, typeIndex).length > 0 ? getSpecialsOfType(array, typeIndex)[0].specialsCardType : undefined;
 
-
 // returns the index any new specials card should have
-export const getNextIndexOfSpecialsType = (cards: GameCard[], typeToFind: string): number => {
+export const getNextIndexOfSpecialsType = (cards: GameCard[], typeToFind: GuestCardType, index: number): number => {
   if (cards.length === 0) return 0;
+  if (!cards.map(c => c.specialsCardType).includes(typeToFind)) return cards.slice(0, index).reduce((acc, curr) => curr.length + acc, 0);
   const specialsColumns = sortSpecials(cards);
   let cardCount = 0;
   let currentType = specialsColumns[0][0].specialsCardType;
+  console.log("current type is " + currentType);
   for (let column of specialsColumns) {
     if (currentType === typeToFind) {
       return (cardCount += column.length);
@@ -36,3 +36,6 @@ export const getNextIndexOfSpecialsType = (cards: GameCard[], typeToFind: string
   }
   return cardCount;
 };
+
+export const getNextIndexOfSpecialsType2 = (array: GameCard[], startIndex: number) =>
+  array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);

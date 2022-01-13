@@ -67,7 +67,7 @@ const Card = (props: CardProps) => {
           // no elements can actually be added to the droppable, but it allows
           // us to use the API (eg. isDraggingOver, droppableId--which is now
           // the targeted card) just the same...
-          (provided, snapshot) => (
+          provided => (
             <div style={{ position: "relative" }}>
               <CardInspector
                 dimensions={dimensions}

@@ -28,7 +28,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const allowDropping = isHighlighted;
 
   return (
-    <Draggable draggableId={specialsColumnId + "draggableId"} index={columnIndex} isDragDisabled={false}>
+    <Draggable draggableId={specialsColumnId + "draggableId"} index={columnIndex} isDragDisabled={true}>
       {provided => (
         <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
           <div style={{ width: dimensions.cardLeftSpread, height: dimensions.cardHeight }}>
@@ -62,7 +62,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                     }}
                   >
                     {provided.placeholder}
-                    {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                    {/* {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
                   </div>
                 )}
               </Droppable>

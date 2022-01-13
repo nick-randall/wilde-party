@@ -3,7 +3,7 @@ import { produce } from "immer";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 import { compareProps } from "../tests";
 import locatePlayer from "../locateFunctions/locatePlayer";
-import { getNextIndexOfSpecialsType, getSpecialsOfType, sortSpecials } from "../getSpecialsOfType";
+import { getNextIndexOfSpecialsType, getNextIndexOfSpecialsType2, getSpecialsOfType, sortSpecials } from "../getSpecialsOfType";
 
 export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   for (var key in attrs) {
@@ -21,10 +21,12 @@ export const addDraggedUpdateSnapshot = (
   destinationIndex: number
 ): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    console.log(destinationPlaceId)
-   const { place: destPlace, player: destPlayer} = (uuidIsToLong(destinationPlaceId))  ? locate(destinationPlaceId.slice(1), gameSnapshot): locate(destinationPlaceId, gameSnapshot)
+    console.log(destinationPlaceId);
+    const { place: destPlace, player: destPlayer } = uuidIsToLong(destinationPlaceId)
+      ? locate(destinationPlaceId.slice(1), gameSnapshot)
+      : locate(destinationPlaceId, gameSnapshot);
 
-    let {player: sourcePlayer, place: sourcePlace} = locate(sourcePlaceId, gameSnapshot);
+    let { player: sourcePlayer, place: sourcePlace } = locate(sourcePlaceId, gameSnapshot);
     let targetIndex = destinationIndex;
     if (sourcePlayer !== null && destPlayer !== null && destPlace !== null) {
       if (destPlace === "GCZ") {
@@ -35,15 +37,26 @@ export const addDraggedUpdateSnapshot = (
         const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs);
         targetIndex = cardRowShape[destinationIndex];
       } else if (destPlace === "specialsZone") {
-        console.log("specialsZone addDragged");
+        console.log("specials Zone is destPlace");
         const allSpecials = gameSnapshot.players[destPlayer].places["specialsZone"].cards;
+        // if (destinationIndex > 0) {
+        //   console.log("index > 0")
+        //   const specialsColumns = sortSpecials(allSpecials);
+        //   const cardsBefore = specialsColumns.slice(0, destinationIndex).reduce((acc, curr) => curr.length + acc, 0);
+        //   console.log(specialsColumns.slice(0, destinationIndex))
+        //   console.log(cardsBefore);
+        //   destinationIndex = cardsBefore;
+        // } else {
+        console.log("index === " + destinationIndex);
         const specialsType = gameSnapshot.players[sourcePlayer].places["hand"].cards[sourceIndex].specialsCardType;
         if (specialsType) {
-          targetIndex = getNextIndexOfSpecialsType(allSpecials, specialsType);
+          targetIndex = getNextIndexOfSpecialsType(allSpecials, specialsType, destinationIndex);
+          console.log(targetIndex);
           destinationPlaceId = destinationPlaceId.slice(1);
+          console.log(destinationPlaceId);
         }
       } else if (destPlace === "UWZ") {
-        targetIndex = getNumCards(destinationPlaceId, gameSnapshot); 
+        targetIndex = getNumCards(destinationPlaceId, gameSnapshot);
       }
 
       const newPlayerId = gameSnapshot.players[destPlayer].places[destPlace].playerId;
