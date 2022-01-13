@@ -9,13 +9,11 @@ export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
   let { deck: deckCards, deckId } = getPreppedDeck();
   const startingGuests = createStartingGuests(numPlayers);
-  deckCards =  startingGuests.concat(deckCards)
+  deckCards.unshift(...startingGuests)
   
   for (let i = 0; i < numPlayers; i++) {
     const playerId = uuidv4();
     const GCZId = uuidv4();
-    // let startGast = shuffledStartGaeste[i];
-    // const preppedStartGast = prepStartGast(startGast, playerId, GCZId);
     const player: GamePlayer = {
       id: playerId,
       name: `Player ${i + 1}`,

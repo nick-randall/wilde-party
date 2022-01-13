@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
+import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
 import { RootState } from "./redux/store";
@@ -21,18 +22,22 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const { cardWidth, cardHeight } = dimensions;
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const { x, y } = getPlacesLayout(id, playerZoneSize);
-  const highlights = useSelector((state: RootState) => state.highlights);
+  const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id));
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
   const specialsCardsColumns = sortSpecials2(specialsCards);
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
+  const allowDropping = isHighlighted && draggedHandCard?.specialsCardType && missingSpecialsCardsTypes.includes(draggedHandCard?.specialsCardType) ;
+  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
 
-  const allowDropping = rearranging;
+  const ghostCard = draggedHandCard && draggedOver.index !== -1 ? draggedHandCard : undefined;
+
+  // const allowDropping = rearranging;
 
   return (
-    <Droppable droppableId={"dd"} direction="horizontal" isDropDisabled={true}>
+    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
           ref={provided.innerRef}
@@ -40,29 +45,32 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
           style={{
             display: "flex",
             position: "absolute",
+            margin:0,
             top: y,
             left: x,
-            flexDirection: "row-reverse",
-            // backgroundColor: isHighlighted ? "yellowgreen" : "",
-            // boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+            // flexDirection: "row",
+            backgroundColor: allowDropping ? "yellowgreen" : "",
+            boxShadow: allowDropping ? "0px 0px 30px 30px yellowgreen" : "",
             // transition: "background-color 180ms, box-shadow 180ms, left 180ms",
             width: specialsCardsColumns.length * cardWidth,
+            minWidth: cardWidth,
             height: cardHeight,
             transition: "left 250ms",
           }}
         >
          
-          {specialsCardsColumns.map((cardColumns, index) => (
-            <SpecialsCardsColumn cards={cardColumns} columnIndex={index} dimensions={dimensions} key={cardColumns[0].id} specialsZoneId={id} />
+          {specialsCardsColumns.map((cards, index) => (
+            <SpecialsCardsColumn cards={cards} columnIndex={index} dimensions={dimensions} key={cards[0].id + index} specialsZoneId={id} />
           ))}
-           {specialsCardsColumns.length < 4 ? (
+           {/* {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn
               index={specialsCards.length}
               acceptedSpecialsTypes={missingSpecialsCardsTypes}
               specialsZoneId={id}
               dimensions={dimensions}
             />
-          ) : null}
+          ) : null} */}
+                    {ghostCard ? <GhostCard index={draggedOver.index} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

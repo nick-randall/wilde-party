@@ -50,7 +50,6 @@ function GCZ(props: GCZProps) {
     <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
-          className="pl0GCZ"
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{

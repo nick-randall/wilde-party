@@ -28,42 +28,48 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const allowDropping = isHighlighted;
 
   return (
-    <div>
-      {cards.map((card, index) => (
-        <div style={{ width: dimensions.cardWidth }}>
-          <Card
-            index={card.index}
-            id={card.id}
-            image={card.image}
-            dimensions={dimensions}
-            key={card.id}
-            offsetTop={index * dimensions.cardTopSpread}
-            //showNotAmongHighlights={cardsNotAmongHighlights}
-          />
-        </div>
-      ))}
+    <Draggable draggableId={specialsColumnId + "draggableId"} index={columnIndex} isDragDisabled={false}>
+      {provided => (
+        <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+          <div style={{ width: dimensions.cardLeftSpread, height: dimensions.cardHeight }}>
+            <div style={{ position: "relative" }}>
+              {cards.map((card, index) => (
+                <Card
+                  index={card.index}
+                  id={card.id}
+                  image={card.image}
+                  dimensions={dimensions}
+                  key={card.id}
+                  offsetTop={index * dimensions.cardTopSpread}
+                  //showNotAmongHighlights={cardsNotAmongHighlights}
+                />
+              ))}
 
-      <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>
-        {provided => (
-          <div
-            // This is the drop box
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            style={{
-              height: dimensions.cardHeight,
-              width: dimensions.cardWidth,
-              backgroundColor: isHighlighted ? "yellowgreen" : "",
-              boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-              transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-              position: "absolute",
-              top: cards.length * dimensions.cardTopSpread,
-            }}
-          >
-            {provided.placeholder}
-            {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+              <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>
+                {provided => (
+                  <div
+                    // This is the drop box
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={{
+                      height: dimensions.cardHeight,
+                      width: dimensions.cardWidth,
+                      backgroundColor: isHighlighted ? "yellowgreen" : "",
+                      boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+                      transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+                      position: "absolute",
+                      top: cards.length * dimensions.cardTopSpread,
+                    }}
+                  >
+                    {provided.placeholder}
+                    {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                  </div>
+                )}
+              </Droppable>
+            </div>
           </div>
-        )}
-      </Droppable>
-    </div>
+        </div>
+      )}
+    </Draggable>
   );
 };
