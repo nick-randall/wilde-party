@@ -103,6 +103,7 @@ const EnemyCard = (props: EnemyCardProps) => {
       alt={image}
       // src={`./images/${image}.jpg`}
       src="./images/back.jpg"
+      draggable="false"
       id={id}
       style={{
         WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",

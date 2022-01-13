@@ -82,6 +82,7 @@ const Card = (props: CardProps) => {
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           alt={image}
+                          draggable="false"
                           src={`./images/${image}.jpg`}
                           onClick={handleClick}
                           onMouseLeave={handleMouseLeave}

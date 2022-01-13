@@ -1,8 +1,5 @@
 import { CSSProperties } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
 import "./animations/animations.css";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
 export interface EnemyHandCardProps {
@@ -49,6 +46,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
             alt={image}
              src="./images/back.jpg"
             // src={`./images/${image}.jpg`}
+            draggable = "false"
 
             id={id}
             style={{

@@ -114,6 +114,7 @@ const HandCard = (props: HandCardProps) => {
                     <img
                       alt={image}
                       src={`./images/${image}.jpg`}
+                      draggable="false"
                       ref={cardRef}
                       onClick={handleClick}
                       onMouseLeave={handleMouseLeave}
