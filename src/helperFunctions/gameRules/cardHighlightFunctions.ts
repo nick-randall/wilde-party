@@ -1,6 +1,7 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
 import { locate } from "../locateFunctions";
+import { highlightPlacePlayerIsOfCorrectType } from "./highlightFunctions";
 //import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted } from "./cardHighlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
@@ -83,12 +84,21 @@ export const canSwap = (highlightCard: GameCard, draggedCard: GameCard, gameSnap
 
 // canDestroy
 
-export const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => true; //{
+const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => highlightCard.cardType === draggedCard.action.cardHighlightType
+ //true; //{
 // eg "Polizei" only targets unwanteds, "Partyflüsterer" only guests
 //const correctTypes = draggedCard.legalTargets[0].cardTypes
 //};
+const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
+  console.log(locate(highlightCard.id, gameSnapshot).place, highlightCard.id, (draggedCard.action.targetPlayerType === "enemy" &&
+    locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+  (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightCardPlayerIsOfCorrectType")
+  return  (draggedCard.action.targetPlayerType === "enemy" &&
+    locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+  (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+}
 
-export const canDestroy = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardIsNotMine, highlightCardCorrectType, highlightCardUnenchanted);
+export const canDestroy = allTrueWithArgs(canEnchant, highlightCardPlayerIsOfCorrectType, highlightCardCorrectType, highlightCardUnenchanted);
 
 export const canProtectSelf: HighlightPlayerFunction = (highlightPlayer: GamePlayer, draggedCard: GameCard, gameSnaphot: GameSnapshot) => {
   console.log("error: this function 'canProtectSelf' has not been created yet");

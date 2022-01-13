@@ -2,17 +2,22 @@ import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 import createSpecialsAndGuests from "./createSpecialsAndGuests";
 import createUnwanteds from "./createUnwanteds";
-import createStartingGuests from "./createStartingGuests";
-import startGaeste from "./createStartingGuests";
+import createDestroyCards from "./createDestroyCards";
+import createEnchantCards from "./createEnchantCards";
 
 
 export const createDeck = () => {
   const deck: GameCard[] = [];
   const unwanteds = createUnwanteds();
   const specialsAndGuests = createSpecialsAndGuests();
-  
+  const destroyCards = createDestroyCards();
+  const enchantCards = createEnchantCards();
+
   deck.push(...specialsAndGuests);
   deck.push(...unwanteds);
+  deck.push(...enchantCards);
+
+  deck.push(...destroyCards);
 
   return deck;
 };

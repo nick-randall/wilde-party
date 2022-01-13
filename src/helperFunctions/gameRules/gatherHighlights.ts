@@ -8,7 +8,7 @@ export const getHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot)
   const { action } = draggedCard;
   const { highlightType } = action;
 
-  if (highlightType === "guestCard") return getCardHighlights(draggedCard, gameSnapshot)
+  if (highlightType === "card") return getCardHighlights(draggedCard, gameSnapshot)
   else if (highlightType === "place") return getPlaceHighlights(draggedCard, gameSnapshot)
   else return getPlayerHighlights(draggedCard, gameSnapshot)
 };

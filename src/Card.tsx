@@ -35,7 +35,7 @@ const Card = (props: CardProps) => {
   }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
 
   const highlights = useSelector((state: RootState) => state.highlights);
-  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
+  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
 
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
@@ -44,7 +44,7 @@ const Card = (props: CardProps) => {
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
-
+  console.log(notAmongHighlights)
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,

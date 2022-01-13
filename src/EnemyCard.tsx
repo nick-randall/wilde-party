@@ -22,7 +22,7 @@ const EnemyCard = (props: EnemyCardProps) => {
   const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const highlights = useSelector((state: RootState) => state.highlights);
-  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "guestCard");
+  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
   
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);

@@ -37,7 +37,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 1,
     image: "bffs",
     cardType: "bff",
-    action: { actionType: "enchantWithBff", highlightType: "guestCard", cardHighlightType: "guest", targetPlayerType: "self" },
+    action: { actionType: "enchantWithBff", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
   {
     id: "asdf",
@@ -72,7 +72,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 1,
     image: "zwilling",
     cardType: "zwilling",
-    action: { targetPlayerType: "self", actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest" },
+    action: { targetPlayerType: "self", actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
   
   {
@@ -96,7 +96,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 1,
     image: "zwilling",
     cardType: "zwilling",
-    action: { actionType: "enchant", highlightType: "guestCard", cardHighlightType: "guest", targetPlayerType: "self" },
+    action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
   {
     id: "fffff",

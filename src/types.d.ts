@@ -86,7 +86,7 @@ type BlitzActionType = "";
 
 type ActionType = PlaceActionType | CardActionType | PlayerActionType;
 
-type HighlightType = "guestCard" | "place" | "player" | "";
+type HighlightType = "card" | "place" | "player" | "";
 
 type TargetPlayerType = "enemy" | "self";
 
@@ -104,7 +104,7 @@ type CardAction = {
 //   targetPlayer: number;
 // };
 
-type CardType = "guest" | "unwanted" | "instant" | "ereignis" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
+type CardType = "guest" | "unwanted" | "instant" | "interrupt" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
 
 type GuestCardType = "saufnase" | "taenzerin" | "schleckermaul" | "rumgroelerin" | "";
 

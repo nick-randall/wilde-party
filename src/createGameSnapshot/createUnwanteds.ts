@@ -18,18 +18,18 @@ const createUnwanteds = (): GameCard[] => {
     };
     unwanteds.push(musikfuersichalleinebeansprucherin);
 
-    const nachbarin: GameCard = {
+    const quasselstrippe: GameCard = {
       id: uuidv4(),
-      name: `nachbarin${i}`,
+      name: `quasselstrippe${i}`,
       placeId: "",
       playerId: "", 
       index: 0,
-      image: `nachbarin`,
+      image: `quasselstrippe`,
       pointValue: -1,
       cardType: "unwanted",
       action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
     };
-    unwanteds.push(nachbarin);
+    unwanteds.push(quasselstrippe);
   }
 
   return unwanteds;
