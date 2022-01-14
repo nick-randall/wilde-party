@@ -13,7 +13,7 @@ const createDestroyCards = (): GameCard[] => {
       image: `nachbarin`,
       pointValue: 0,
       cardType: "instant",
-      action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
+      action: { actionType: "destroy", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "enemy" },
     };
     destroyCards.push(nachbarin);
     const polizei: GameCard = {
@@ -25,7 +25,7 @@ const createDestroyCards = (): GameCard[] => {
       image: `polizei`,
       pointValue: 0,
       cardType: "instant",
-      action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
+      action: { actionType: "destroy", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "enemy" },
     };
     destroyCards.push(polizei);
   

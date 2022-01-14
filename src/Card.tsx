@@ -44,7 +44,7 @@ const Card = (props: CardProps) => {
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
-  console.log(notAmongHighlights)
+  
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,

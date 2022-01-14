@@ -53,6 +53,11 @@ export type DrawCard = {
   payload: { handId: string; player: number };
 };
 
+export type DestroyCard = {
+  type: "DESTROY_CARD";
+  payload: { targetCardId: string };
+};
+
 export type AddTranstion = {
   type: "ADD_TRANSITION";
   payload: TransitionData;
@@ -109,5 +114,6 @@ export type Action =
   | RemoveTransition
   | EndCurrentTurn
   | EndCurrentPhase
-  |DealStartingGuest;
+  | DealStartingGuest
+  | DestroyCard;
 //| //Thunk;

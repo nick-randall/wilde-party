@@ -13,7 +13,7 @@ const createEnchantCards = (): GameCard[] => {
       image: `bffs`,
       pointValue: 0,
       cardType: "bff",
-      action: { actionType: "enchantWithBff", highlightType: "card", targetPlayerType: "self" },
+      action: { actionType: "enchantWithBff", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
     };
     enchantCards.push(bff);
     const zwilling: GameCard = {
@@ -25,10 +25,9 @@ const createEnchantCards = (): GameCard[] => {
       image: `zwilling`,
       pointValue: 0,
       cardType: "instant",
-      action: { actionType: "enchant", highlightType: "card",  cardHighlightType: "guest",targetPlayerType: "self" },
+      action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
     };
     enchantCards.push(zwilling);
-  
   }
   return enchantCards;
 };

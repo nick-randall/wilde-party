@@ -16,6 +16,11 @@ const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
   return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
 };
 
+const isDestroy =  (d: DropResult, gameSnapshot: GameSnapshot) => {
+  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); 
+  return handCard?.action.actionType === "destroy";
+};
+
 const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
   draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
@@ -47,6 +52,7 @@ export const handleDragEnd = (d: DropResult) => {
   if (d.destination) {
     if (isRearrange(d)) store.dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
     else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk(d))//store.dispatch({ type: "ENCHANT", payload: d });
+    else if(isDestroy(d,gameSnapshot)) store.dispatch({type: "DESTROY_CARD", payload: d.destination.droppableId })
     else if (isAddDrag(d)) store.dispatch(addDraggedThunk( d.source, d.destination))//store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
   }
   store.dispatch({ type: "END_DRAG_CLEANUP" });

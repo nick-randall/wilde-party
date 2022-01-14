@@ -44,18 +44,20 @@ export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: Gam
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const leftNeighbourEnchantCard = enchantmentsRow.find(card => card.index === highlightCard.index - 1);
-    console.log(leftNeighbourEnchantCard?.image)
+    if (!leftNeighbourEnchantCard) return true;
+    console.log(leftNeighbourEnchantCard?.image);
     return leftNeighbourEnchantCard?.cardType !== "bff";
   }
   return false;
 };
 
-
 //canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightCardHasEnchantableNeighbour, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
-
-//canEnchantWithZwilling Or With e.g. perplex
-export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
+export const canEnchantWithBFF = allTrueWithArgs(
+  ownerHighlightCardUnenchanted,
+  highlightCardUnenchanted,
+  highlightCardHasEnchantableNeighbour,
+  leftNeighbourOfHighlightCardIsNotBFFEnchanted
+);
 
 // steal
 
@@ -84,19 +86,32 @@ export const canSwap = (highlightCard: GameCard, draggedCard: GameCard, gameSnap
 
 // canDestroy
 
-const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => highlightCard.cardType === draggedCard.action.cardHighlightType
- //true; //{
+const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
+  highlightCard.cardType === draggedCard.action.cardHighlightType;
+//true; //{
 // eg "Polizei" only targets unwanteds, "Partyflüsterer" only guests
 //const correctTypes = draggedCard.legalTargets[0].cardTypes
 //};
+// const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
+//   console.log(locate(highlightCard.id, gameSnapshot).place, highlightCard.id, (draggedCard.action.targetPlayerType === "enemy" &&
+//     locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightCardPlayerIsOfCorrectType")
+//   return  (draggedCard.action.targetPlayerType === "enemy" &&
+//     locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+// }
+
 const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-  console.log(locate(highlightCard.id, gameSnapshot).place, highlightCard.id, (draggedCard.action.targetPlayerType === "enemy" &&
-    locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-  (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightCardPlayerIsOfCorrectType")
-  return  (draggedCard.action.targetPlayerType === "enemy" &&
-    locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-  (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+
+  const highlightCardPlayerIsOfCorrectTypee = (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
+    draggedCard.action.targetPlayerType === "enemy") ||
+  (locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
+  console.log(highlightCard.name, highlightCardPlayerIsOfCorrectTypee)
+  return highlightCardPlayerIsOfCorrectTypee
 }
+
+//canEnchantWithZwilling Or With e.g. perplex
+export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardPlayerIsOfCorrectType,highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
 export const canDestroy = allTrueWithArgs(canEnchant, highlightCardPlayerIsOfCorrectType, highlightCardCorrectType, highlightCardUnenchanted);
 

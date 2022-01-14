@@ -28,10 +28,9 @@ const HandCard = (props: HandCardProps) => {
   const highlightType = useSelector((state: RootState) => state.highlightType);
   const transitionUnderway = useSelector((state: RootState) => state.transitionData.length>0)
 
-  const currentPlayer = 0; // gameSnapshot.current.player
-  const currentPhase = "play"; // "play" "roll" "counter"
+  const {player, phase} = useSelector((state: RootState) => state.gameSnapshot.current)
 
-  const canPlay = currentPlayer === 0 && currentPhase === "play" && !transitionUnderway;
+  const canPlay = player === 0 && phase === "normalPhase" && !transitionUnderway;
 
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
     isDragging
