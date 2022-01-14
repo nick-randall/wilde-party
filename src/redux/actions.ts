@@ -55,7 +55,7 @@ export type DrawCard = {
 
 export type DestroyCard = {
   type: "DESTROY_CARD";
-  payload: { targetCardId: string };
+  payload: string;
 };
 
 export type AddTranstion = {

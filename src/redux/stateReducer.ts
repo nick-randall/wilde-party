@@ -13,6 +13,7 @@ import { produce } from "immer";
 import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
+import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -74,7 +75,7 @@ export const stateReducer = (
       return { ...state, rearrangingData: action.payload };
     }
     case "SET_HIGHLIGHTS": {
-      if(!phaseNormalTurnIsYours) return state;
+      // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
@@ -105,12 +106,12 @@ export const stateReducer = (
         return { ...state, gameSnapshot };
       } else return state;
     }
-    case "DEAL_STARTING_GUEST":{
-      console.log("deal starting guest")
+    case "DEAL_STARTING_GUEST": {
+      console.log("deal starting guest");
       const player = action.payload;
-      const gameSnapshot =  dealStartingGuestUpdateSnapshot(player, state.gameSnapshot)
-      return {...state, gameSnapshot}
-      }
+      const gameSnapshot = dealStartingGuestUpdateSnapshot(player, state.gameSnapshot);
+      return { ...state, gameSnapshot };
+    }
     case "ADD_DRAGGED": {
       const { source, destination } = action.payload;
       // const { droppableId } = destination;
@@ -130,6 +131,14 @@ export const stateReducer = (
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };
       } else return state;
+    case "DESTROY_CARD": {
+      const targetCardId  = action.payload;
+      console.log("destroy card", targetCardId)
+
+      const gameSnapshot = destroyCardUpdateSnapshot(targetCardId, state.gameSnapshot);
+
+      return { ...state, gameSnapshot };
+    }
     case "DRAW_CARD":
       if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
       const { player, handId } = action.payload;

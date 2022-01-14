@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
@@ -14,7 +14,6 @@ export interface HandCardProps {
   numHandCards: number;
 }
 
-
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, dimensions } = props;
 
@@ -26,11 +25,13 @@ const HandCard = (props: HandCardProps) => {
   const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
-  const transitionUnderway = useSelector((state: RootState) => state.transitionData.length>0)
+  const transitionUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
 
-  const {player, phase} = useSelector((state: RootState) => state.gameSnapshot.current)
+  const { player, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
 
   const canPlay = player === 0 && phase === "normalPhase" && !transitionUnderway;
+
+  const [shortHover, setShortHover] = useState(false);
 
   const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
     isDragging
@@ -45,18 +46,17 @@ const HandCard = (props: HandCardProps) => {
         }
       : {};
   const normalStyles: CSSProperties = {
-    zIndex: tableCardzIndex,
+    // should be in dimensions
+    zIndex: shortHover ? 30 : tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-
-    //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: index * cardTopSpread,
     left: 0,
     position: "absolute",
-    transform: `rotate(${rotation(index)}deg)`,
+    transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 :1})`,
     transition: `left 250ms, width 180ms, transform 180ms`,
     pointerEvents: "auto",
-    boxShadow: "10px 10px 10px black"
+    boxShadow: "10px 10px 10px black",
   };
 
   const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
@@ -73,7 +73,7 @@ const HandCard = (props: HandCardProps) => {
           x = BFFDraggedOverSide === "left" ? -60 : 40;
         } else x = -15;
         y = 60;
-      } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType==="unwanted")) {
+      } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")) {
         x = -15;
         y = -15;
       } else {
@@ -89,6 +89,11 @@ const HandCard = (props: HandCardProps) => {
         transition: `all ${curve} ${duration + 0.5}s`,
       };
     }
+  };
+
+  const endShortAndLongHover = (handleMouseLeave: Function) => {
+    handleMouseLeave();
+    setShortHover(false);
   };
 
   return (
@@ -116,7 +121,8 @@ const HandCard = (props: HandCardProps) => {
                       draggable="false"
                       ref={cardRef}
                       onClick={handleClick}
-                      onMouseLeave={handleMouseLeave}
+                      onMouseEnter={()=>setShortHover(true)}
+                      onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
                       id={id}
                       style={{
                         ...normalStyles,
