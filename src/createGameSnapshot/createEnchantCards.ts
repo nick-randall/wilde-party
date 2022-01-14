@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 const createEnchantCards = (): GameCard[] => {
-  const numEnchantCardsPerType = 2;
+  const numEnchantCardsPerType = 20;
   let enchantCards: GameCard[] = [];
   for (let i = 0; i < numEnchantCardsPerType + 1; i++) {
     const bff: GameCard = {

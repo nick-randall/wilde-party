@@ -127,6 +127,7 @@ export const stateReducer = (
     case "ENCHANT":
       // Here "destination.droppableId" is actually the card that is being enchanted.
       const { source, destination } = action.payload;
+      console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot))
       if (destination) {
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };

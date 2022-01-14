@@ -10,8 +10,9 @@ import { addTransition } from "./actionCreators";
 import { LocationData } from "./actions";
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { RootState } from "./store";
+import enactAiPlayerTurnThunk from "../thunks/enactAiPlayerTurnThunk";
 
-const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
+export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 
 export const drawCardThunk = (player: number) => (dispatch: Function, getState: Function) => {
   const state: RootState = getState();
@@ -35,9 +36,10 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
-export const addDraggedThunk = (source: LocationData, destination: LocationData) => (dispatch: Function, getState: () => RootState) => {
+export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Function, getState: () => RootState) => {
   const state = getState();
   const { gameSnapshot } = state;
+  const {source, destination} = dropResult;
   const { place: originPlace, player: originPlayer } = locate(source.droppableId, gameSnapshot);
 
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
@@ -57,9 +59,11 @@ export const addDraggedThunk = (source: LocationData, destination: LocationData)
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
-export const enchantThunk = (dropResult: DropResult) => (dispatch: Function, getState: () => RootState) => {
+export const enchantThunk = (dropResult: DropResultEvent) => (dispatch: Function, getState: () => RootState) => {
+  console.log("enchant thunk", dropResult)
   dispatch({ type: "ENCHANT", payload: dropResult });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
+  console.log(getState().gameSnapshot.players[0].places.enchantmentsRow.cards)
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
@@ -70,110 +74,4 @@ export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => Ro
   if (gameSnapshot.current.player !== 0)
     //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
     dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
-};
-
-export const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState: () => RootState) => {
-  let { gameSnapshot } = getState();
-  let { draws } = gameSnapshot.current;
-  let numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
-  // setTimeout(() => {
-  // while (draws > 0 && numCardsInDeck > 0) {
-  //   dispatch(drawCardThunk(player));
-  //   const { gameSnapshot } = getState();
-  //   draws = gameSnapshot.current.draws;
-  //   numCardsInDeck = gameSnapshot.nonPlayerPlaces.deck.cards.length;
-  // }
-  console.log("ai waiting");
-
-  const waitThenDraw = () => {
-    if (getState().transitionData.length < 1) dispatch(drawCardThunk(player));
-    else
-      setTimeout(() => {
-        waitThenDraw();
-        const state = getState();
-        const transitionData = state.transitionData;
-        console.log(transitionData ? locate(transitionData[0].cardId, state.gameSnapshot) : "");
-      }, 50);
-  };
-  waitThenDraw();
-  // }, 1000);
-  gameSnapshot = getState().gameSnapshot;
-
-  const randomCard = cleverGetNextAiCard(player, gameSnapshot);
-  const hand = gameSnapshot.players[player].places.hand;
-  console.log(hand.cards);
-  console.log("randomcard index is ", randomCard ? randomCard.index : "undefined");
-
-  if (randomCard === undefined) dispatch(endCurrentTurnThunk());
-  else {
-    const potentialTargets = getHighlights(randomCard, gameSnapshot);
-    if (potentialTargets.length > 0) {
-      gameSnapshot = getState().gameSnapshot;
-
-      console.log("randomcard index is ", hand.cards.map(c => c.id).indexOf(randomCard.id));
-      console.log(hand.cards);
-
-      // should choose a random target, currently just getting target[0]
-
-      const action = randomCard.action;
-      switch (action.actionType) {
-        case "addDragged": {
-          const waitThenPlay = () => {
-            if (getState().transitionData.length < 1) {
-              gameSnapshot = getState().gameSnapshot;
-              const hand = gameSnapshot.players[player].places.hand;
-              const index = hand.cards.map(c => c.id).indexOf(randomCard.id);
-              console.log("randomcard index is ", hand.cards.map(c => c.id).indexOf(randomCard.id));
-
-              dispatch(
-                addDraggedThunk(
-                  {
-                    droppableId: hand.id,
-                    // index: index,
-                    index: hand.cards.map(c => c.id).indexOf(randomCard.id),
-                  },
-                  { droppableId: potentialTargets[0], index: 0 }
-                )
-              );
-            } else setTimeout(() => waitThenPlay(), 50);
-          };
-          waitThenPlay();
-        }
-      }
-    } else {
-      console.log("potential targets");
-      console.log(potentialTargets);
-    }
-  }
-};
-
-export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
-  const numCardsInHand = 7;
-  const numPlayers = getState().gameSnapshot.players.length;
-  const delayBetweenCards = 300;
-  const delayBetweenPlayers = 2300;
-  const { gameSnapshot } = getState();
-  for (let i = 0; i < numPlayers; i++) {
-    const prevSnapshot = getState().gameSnapshot;
-
-    dispatch({ type: "DEAL_STARTING_GUEST", payload: i });
-    const newSnapshot = getState().gameSnapshot;
-    const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers);
-    dispatch(addTransition(newTransition));
-  }
-  for (let i = 0; i < numPlayers; i++) {
-    const handId = gameSnapshot.players[i].places.hand.id;
-    for (let j = 0; j < numCardsInHand; j++) {
-      const prevSnapshot = getState().gameSnapshot;
-      dispatch({
-        type: "DRAW_CARD",
-        payload: { player: i, handId: handId },
-      });
-      const newSnapshot = getState().gameSnapshot;
-      const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers + j * delayBetweenCards);
-      console.log(newTransition);
-
-      dispatch(addTransition(newTransition));
-    }
-  }
 };

@@ -6,7 +6,7 @@ import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate }
 import { useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
-import { dealInitialHands } from "./redux/thunks";
+import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
 
 export const Table = () => {

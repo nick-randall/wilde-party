@@ -98,6 +98,13 @@ type CardAction = {
   placeHighlightType?: PlaceType;
 };
 
+type LocationData = {droppableId: string, index: number}
+
+type DropResultEvent = {
+  source: LocationData,
+  destination: LocationData
+}
+
 // type TablePositionLocator = {
 //   targetIndex: number;
 //   targetPlace: PlaceType;

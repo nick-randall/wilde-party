@@ -41,6 +41,7 @@ export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targe
       });
       const [handCard] = draft.players[player].places.hand.cards.splice(handCardIndex, 1);
       draft.players[player].places["enchantmentsRow"].cards.push(handCard);
+      console.log("enchanted a card at index " + destinationIndex + "enchantmentsRow is "  ,draft.players[player].places["enchantmentsRow"].cards);
       convertSnapshot(draft);
     }
   });

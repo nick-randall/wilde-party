@@ -41,7 +41,7 @@ export type AddDragged = {
 
 export type Enchant = {
   type: "ENCHANT";
-  payload: DropResult;
+  payload: DropResultEvent;
 };
 
 export type EndDragCleanup = {
@@ -65,6 +65,11 @@ export type AddTranstion = {
 
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
+  payload: string;
+};
+
+export type DiscardPlayedCard = {
+  type: "DISCARD_PLAYED_CARD";
   payload: string;
 };
 
@@ -115,5 +120,6 @@ export type Action =
   | EndCurrentTurn
   | EndCurrentPhase
   | DealStartingGuest
-  | DestroyCard;
+  | DestroyCard
+  | DiscardPlayedCard;
 //| //Thunk;

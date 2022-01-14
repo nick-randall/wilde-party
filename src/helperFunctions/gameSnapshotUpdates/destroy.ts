@@ -22,7 +22,7 @@ export const destroyCardUpdateSnapshot = (targetCardId: string, gameSnapshot: Ga
         index: 0,
       });
       const [targetGuestCard] = draft.players[player].places["GCZ"].cards.splice(targetIndex, 1);
-      draft.nonPlayerPlaces["discardPile"].cards.unshift(targetGuestCard);
+      draft.nonPlayerPlaces["discardPile"].cards.push(targetGuestCard);
       convertSnapshot(draft);
     }
   });
