@@ -1,4 +1,5 @@
 import getPlayersLayout from "./dimensions/getPlayersLayout";
+import EnemyGCZ from "./EnemyGCZ";
 import EnemyHand from "./EnemyHand";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
@@ -26,7 +27,13 @@ const EnemyPlayer = (props: PlayerProps) => {
     }}>
         <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
         <div>
-          <GCZ
+          {/* <GCZ
+            id={places.GCZ.id}
+            enchantmentsRowCards={places.enchantmentsRow.cards}
+            GCZCards={places.GCZ.cards}
+            playerZoneSize={{ width, height }}
+          /> */}
+          <EnemyGCZ
             id={places.GCZ.id}
             enchantmentsRowCards={places.enchantmentsRow.cards}
             GCZCards={places.GCZ.cards}

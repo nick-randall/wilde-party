@@ -16,9 +16,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   const highlights = useSelector((state: RootState) => state.highlights);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const specialsColumnType = cards[0].specialsCardType;
-  //
 
-  const specialsColumnLastIndex = cards[cards.length - 1].index;
   // Represents the next index where a new card of this special type will be inserted;
   const specialsColumnId = columnIndex + specialsZoneId;
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
@@ -41,7 +39,6 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                   dimensions={dimensions}
                   key={card.id}
                   offsetTop={index * dimensions.cardTopSpread}
-                  //showNotAmongHighlights={cardsNotAmongHighlights}
                 />
               ))}
 
@@ -59,7 +56,6 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                       transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                       position: "absolute",
                       top: cards.length * dimensions.cardTopSpread,
-                      // border:"thin white dotted"
                     }}
                   >
                     {provided.placeholder}

@@ -3,6 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getSettings } from "./gameSettings/uiSettings";
 import { Transition, TransitionStatus } from "react-transition-group";
+import { Droppable } from "react-beautiful-dnd";
+import { CardInspector } from "./renderPropsComponents/CardInspector";
+import TransitionHandler from "./renderPropsComponents/TransitionHandler";
+import GhostCard from "./GhostCard";
+import React from "react";
 
 
 export interface EnemyCardProps {
@@ -34,86 +39,92 @@ const EnemyCard = (props: EnemyCardProps) => {
   interface TransitionStyles {
     [status: string]: {};
   }
-  const settings = getSettings();
-  const [rotation, setRotation] = useState(0);
-  const [rndOffset, setRndOffset] = useState({x:0, y:0});
 
-  useEffect(() => {
+
+  const settings = getSettings();
+  const [messinessRotation, setMessinessRotation] = useState(0);
+  const [messinessOffset, setMessinessOffset] = useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
     const rndR = Math.random() - 0.5;
-    setRotation(rndR * settings.messiness);
+    setMessinessRotation(rndR * settings.messiness);
     const rndX = Math.random() - 0.5;
     const rndY = Math.random() - 0.5;
-    setRndOffset({x: rndX * settings.messiness, y: rndY * settings.messiness})
-  }, [setRotation, setRndOffset, index, settings.messiness]);
+    setMessinessOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
+  }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
 
+  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft? + offsetLeft + rndOffset.x : rndOffset.x,
-    top: offsetTop? offsetTop + rndOffset.y : rndOffset.y,
+    left: offsetLeft ? +offsetLeft + messinessOffset.x : messinessOffset.x,
+    top: offsetTop ? offsetTop + messinessOffset.y : messinessOffset.y,
     position: "absolute",
-    transform: `rotate(${rotation}deg)`,
+    transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",
-    transitionDelay: "150ms",
+    // transitionDelay: "150ms",
+    userSelect: "none"
   };
-  let transitionStyles: TransitionStyles = 
-  transitionData ? 
-  
-  { 
-    entering: {}, entered: {} }:{};
-  const getTransition = (state: TransitionStatus) => {
-    if (transitionData) {
-      const { originDelta, duration, curve, originDimensions, startAnimation, startAnimationDuration } = transitionData;
-
-      if (state === "entering") {
-        transitionStyles = {
-          transform: `rotate(${originDimensions.rotation(index)}deg) translateX(${originDelta.x}px) translateY(${originDelta.y}px`,
-          height: originDimensions.cardHeight,
-          width: originDimensions.cardWidth,
-          pointerEvents: "none",
-        };
-      } else if (state === "entered") {
-        transitionStyles = {
-          transition: `transform ${duration}ms ${curve},  height ${duration}ms ${curve}, width ${duration}ms ${curve}, left ${duration}ms ${curve}, top ${duration}ms ${curve}`,
-        };
-      }
-
-      return transitionStyles;
-    }
-  };
-
   return (
-      <Transition
-        in={true}timeout={0}
-        //timeout={transitionData !== undefined ? transitionData.startAnimationDuration : 0}
-        appear={true}
-        addEndListener={(node: HTMLElement) => {
-          node.addEventListener(
-            "transitionend",
-            () => 
-              dispatch({type:"REMOVE_TRANSITION", payload: id})
-            ,
-            false
-          );
-        }}
-      >
-  {(state)=>
-    <img
-      alt={image}
-      // src={`./images/${image}.jpg`}
-      src="./images/back.jpg"
-      draggable="false"
-      id={id}
-      style={{
-        WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-        transition: "box-shadow 180ms",
-        ...normalStyles,
-        ...getTransition(state)
-      }}
-    />}
-    </Transition>
-  );
+    <Droppable droppableId={id} isDropDisabled={!highlights.includes(id)}>
+    {
+      // Here we use a droppable in an idomatic way, in order to allow
+      // dropping on individual cards for the "enchant" action. Of course
+      // no elements can actually be added to the droppable, but it allows
+      // us to use the API (eg. isDraggingOver, droppableId--which is now
+      // the targeted card) just the same...
+      provided => (
+        <div style={{ position: "relative" }}>
+          <CardInspector
+            dimensions={dimensions}
+            cardRotation={messinessRotation}
+            render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
+              <TransitionHandler
+                index={index}
+                id={id}
+                render={(transitionStyles: CSSProperties) => (
+                  <div ref={cardRef}>
+                    <img
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      alt={image}
+                      draggable="false"
+                      src={`./images/${image}.jpg`}
+                      onClick={handleClick}
+                      onMouseLeave={handleMouseLeave}
+                      id={id}
+                      style={{
+                        WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                        boxShadow:  "2px 2px 2px black",
+                        transition: "box-shadow 180ms",
+                        ...normalStyles,
+                        ...inspectingStyles,
+                        ...transitionStyles
+                      }}
+                    />
+                  </div>
+                )}
+              />
+            )}
+          />
+          {ghostCard ? (
+            <GhostCard
+              index={0}
+              offsetLeft={cardLeftSpread * BFFOffset}
+              offsetTop={cardHeight / 2}
+              image={ghostCard.image}
+              dimensions={dimensions}
+              zIndex={5}
+            />
+          ) : null}
+          {provided.placeholder}
+        </div>
+      )
+    }
+  </Droppable>)
+  
 };
 
 export default EnemyCard;
