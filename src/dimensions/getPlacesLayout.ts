@@ -14,7 +14,7 @@ export const getPlacesLayout = (
   const { cardHeight, cardWidth, cardLeftSpread } = getAllDimensions(id, gameSnapshot);
   let numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
-  let draggedOverCard = draggedOver ? 1 : 0;
+  let draggedOverCard = draggedOver && numCards > 0 ? 1 : 0;
 
   let numCardsWidth = numCards;
   if ((place === "specialsZone" || place === "UWZ") && player !== null) {
@@ -25,7 +25,7 @@ export const getPlacesLayout = (
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
   if (place === "UWZ") draggedOverCard = 0;
-  if (place === "deck") numCardsWidth = 0;
+  if (place === "deck" || place ==="discardPile") numCardsWidth = 0;
 
   const fromCenterWidth = (distance: number): number => distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
   const fromCenterHeight = (distance: number): number => distance + (playerZoneSize.height / 2 - cardHeight / 2);
@@ -58,9 +58,9 @@ export const getPlacesLayout = (
       case "hand":
         return { x: handFromCenterWidth(0), y: handFromBottom(0) };
       case "deck":
-        return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
+        return { x: fromCenterWidth(-cardWidth), y: fromCenterHeight(0) };
       case "discardPile": {
-        return { x: fromCenterWidth(-cardWidth / 2), y: fromCenterHeight(0) };
+        return { x: fromCenterWidth(0 ), y: fromCenterHeight(0) };
       }
     }
   }

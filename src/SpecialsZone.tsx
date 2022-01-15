@@ -31,8 +31,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
   const allowDropping = isHighlighted && draggedHandCard?.specialsCardType && missingSpecialsCardsTypes.includes(draggedHandCard?.specialsCardType) ;
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
-
-  const ghostCard = draggedHandCard && draggedOver.index !== -1 ? draggedHandCard : undefined;
+  const ghostCard = draggedOver.droppableId === id && draggedOver.index !== -1 ? draggedHandCard : undefined;
 
   // const allowDropping = rearranging;
 
@@ -70,7 +69,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null} */}
-                    {/* {ghostCard ? <GhostCard index={draggedOver.index} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
+                    {ghostCard ? <GhostCard index={draggedOver.index} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

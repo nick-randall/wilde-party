@@ -50,14 +50,9 @@ export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: Gam
   }
   return false;
 };
+// export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardPlayerIsOfCorrectType,highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
-//canEnchantWithBFF
-export const canEnchantWithBFF = allTrueWithArgs(
-  ownerHighlightCardUnenchanted,
-  highlightCardUnenchanted,
-  highlightCardHasEnchantableNeighbour,
-  leftNeighbourOfHighlightCardIsNotBFFEnchanted
-);
+
 
 // steal
 
@@ -89,7 +84,7 @@ export const canSwap = (highlightCard: GameCard, draggedCard: GameCard, gameSnap
 const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
   highlightCard.cardType === draggedCard.action.cardHighlightType;
 //true; //{
-// eg "Polizei" only targets unwanteds, "Partyflüsterer" only guests
+// eg "Türsteher" only targets unwanteds, "Partyflüsterer" only guests
 //const correctTypes = draggedCard.legalTargets[0].cardTypes
 //};
 // const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
@@ -112,6 +107,15 @@ const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard
 
 //canEnchantWithZwilling Or With e.g. perplex
 export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardPlayerIsOfCorrectType,highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
+
+//canEnchantWithBFF
+export const canEnchantWithBFF = allTrueWithArgs(
+  ownerHighlightCardUnenchanted,
+  highlightCardPlayerIsOfCorrectType,
+  highlightCardUnenchanted,
+  highlightCardHasEnchantableNeighbour,
+  leftNeighbourOfHighlightCardIsNotBFFEnchanted
+);
 
 export const canDestroy = allTrueWithArgs(canEnchant, highlightCardPlayerIsOfCorrectType, highlightCardCorrectType, highlightCardUnenchanted);
 

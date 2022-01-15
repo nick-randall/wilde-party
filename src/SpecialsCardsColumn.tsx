@@ -59,10 +59,11 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                       transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                       position: "absolute",
                       top: cards.length * dimensions.cardTopSpread,
+                      // border:"thin white dotted"
                     }}
                   >
                     {provided.placeholder}
-                    {/* {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
+                    {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
                   </div>
                 )}
               </Droppable>
