@@ -24,7 +24,7 @@ const createEnchantCards = (): GameCard[] => {
       index: 0,
       image: `zwilling`,
       pointValue: 0,
-      cardType: "instant",
+      cardType: "zwilling",
       action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
     };
     enchantCards.push(zwilling);

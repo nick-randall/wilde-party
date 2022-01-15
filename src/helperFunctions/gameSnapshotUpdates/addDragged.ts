@@ -36,6 +36,10 @@ export const addDraggedUpdateSnapshot = (
         const cardGroupObjs = getCardGroupObjs(enchantmentsRow.cards, GCZ.cards);
         const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs);
         targetIndex = cardRowShape[destinationIndex];
+
+        draft.players[destPlayer].places["enchantmentsRow"].cards = enchantmentsRow.cards.map(card =>
+          card.index >= destinationIndex ? { ...card, index: (card.index + 1) } : card
+        );
       } else if (destPlace === "specialsZone") {
         console.log("specials Zone is destPlace");
         const allSpecials = gameSnapshot.players[destPlayer].places["specialsZone"].cards;
@@ -68,6 +72,8 @@ export const addDraggedUpdateSnapshot = (
       const [handCard] = draft.players[sourcePlayer].places.hand.cards.splice(sourceIndex, 1);
       draft.players[destPlayer].places[destPlace].cards.splice(targetIndex, 0, handCard);
       draft.players[destPlayer].places[destPlace].cards = draft.players[destPlayer].places[destPlace].cards.map((c, i) => ({ ...c, index: i }));
+      // if(destPlace === "GCZ")
+
       compareProps(draft.players[destPlayer].places[destPlace].cards);
     }
   });
