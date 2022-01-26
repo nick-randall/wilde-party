@@ -33,6 +33,7 @@ export interface State {
   draggedHandCard: GameCard | undefined;
   highlights: string[];
   highlightType: string;
+  aiPlaying: string
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
@@ -59,6 +60,7 @@ export const stateReducer = (
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
+    aiPlaying:"",
   },
   action: Action
 ) => {
@@ -122,6 +124,7 @@ export const stateReducer = (
       // }
 
       const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
+      console.log("finished adding dragged")
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
@@ -195,6 +198,10 @@ export const stateReducer = (
       });
       console.log(newSnapshot);
       return { ...state, gameSnapshot: newSnapshot };
+    }
+    case "SET_AI_PLAYING" : {
+      console.log("setting playing", action.payload)
+      return {...state, aiPlaying: action.payload}
     }
     default:
       return state;

@@ -1,5 +1,7 @@
 import { CSSProperties } from "react";
+import { useSelector } from "react-redux";
 import "./animations/animations.css";
+import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
 export interface EnemyHandCardProps {
@@ -14,6 +16,8 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   const { id, index, image, dimensions } = props;
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
+
+  const playing = useSelector((state: RootState) => state.aiPlaying === id);
 
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
@@ -44,7 +48,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         render={(transitionStyles: CSSProperties) => (
           <img
             alt={image}
-             src="./images/back.jpg"
+             src={!playing ? "./images/back.jpg" : `./images/${image}.jpg`}
             // src={`./images/${image}.jpg`}
             draggable = "false"
 

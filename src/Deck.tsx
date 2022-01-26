@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
@@ -23,7 +24,10 @@ export const Deck = (props: DeckProps) => {
   };
   return (
     <div style={{ left: x, top: y, position: "absolute" }} onClick={handleClick}>
-      {cards.length > 0 ? <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight }} /> : null}
+      {/* {cards.length} */}
+      {/* {cards.map((card, index) => <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight, position: "absolute", left: index % 10 * 4 }} />)} */}
+      {cards.map((card, index) => <Card dimensions={dimensions} id={card.id} index={0} image="back"/>)}
+
     </div>
   );
 };

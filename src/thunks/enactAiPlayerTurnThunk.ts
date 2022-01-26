@@ -1,8 +1,9 @@
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
-import { RootState } from "../redux/store";
+import store, { RootState } from "../redux/store";
 import { addDraggedThunk, drawCardThunk, enchantThunk, endCurrentTurnThunk } from "../redux/thunks";
+import destroyCardThunk from "./destroyCardThunk";
 
 const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState: () => RootState) => {
   let { gameSnapshot } = getState();
@@ -31,21 +32,28 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
   };
   waitThenDraw();
 
-  const tryToPlayACard = () => {
+  const tryToPlayACard = (tries: number) => {
     gameSnapshot = getState().gameSnapshot;
-
+    if (tries >= 10)
+      //gameSnapshot.players[player].places.hand.cards.length)
+      dispatch(endCurrentTurnThunk());
+    if (tries > 1) console.log("tries ", tries);
     const randomCard = cleverGetNextAiCard(player, gameSnapshot);
     const hand = gameSnapshot.players[player].places.hand;
 
     if (randomCard === undefined) dispatch(endCurrentTurnThunk());
     else {
       const potentialTargets = getHighlights(randomCard, gameSnapshot);
+      dispatch({ type: "SET_HIGHLIGHTS", payload: randomCard });
       if (potentialTargets.length === 0) {
         console.log(randomCard.name + " has no targets, trying again");
-        tryToPlayACard();
+        tryToPlayACard(tries + 1);
       }
       // if (potentialTargets.length > 0) {
       else {
+        dispatch({ type: "SET_AI_PLAYING", payload: randomCard.id });
+        console.log("potential targets > 0")
+        console.log(potentialTargets)
         gameSnapshot = getState().gameSnapshot;
 
         // should choose a random target, currently just getting target[0]
@@ -57,7 +65,7 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
             gameSnapshot = getState().gameSnapshot;
             const hand = gameSnapshot.players[player].places.hand;
             const index = hand.cards.map(c => c.id).indexOf(randomCard.id);
-           
+
             switch (action.actionType) {
               case "addDragged": {
                 dispatch(
@@ -78,14 +86,23 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
                 break;
               }
               case "enchantWithBff":
-                 dispatch(
-                   enchantThunk({
-                     source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-                     destination: { droppableId: potentialTargets[0], index: 0 },
-                   })
-                 );
-                 break;
-            }
+                dispatch(
+                  enchantThunk({
+                    source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                    destination: { droppableId: potentialTargets[0], index: 0 },
+                  })
+                );
+                break;
+            
+            case "destroy":
+              dispatch(
+                destroyCardThunk({
+                  source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                  destination: { droppableId: potentialTargets[0], index: 0 },
+                })
+              );
+              break;
+          }
           } else
             setTimeout(() => {
               console.log("ai waiting for transition", getState().transitionData);
@@ -96,7 +113,8 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
       }
     }
   };
-  tryToPlayACard();
+  tryToPlayACard(0);
+  console.log("got here");
 };
 
 export default enactAiPlayerTurnThunk;

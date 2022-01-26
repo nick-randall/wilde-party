@@ -98,6 +98,8 @@ export type DealStartingGuest = {
   payload: number;
 };
 
+export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: string };
+
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 
 export type Action =
@@ -121,5 +123,6 @@ export type Action =
   | EndCurrentPhase
   | DealStartingGuest
   | DestroyCard
-  | DiscardPlayedCard;
+  | DiscardPlayedCard
+  | SetAiPlaying;
 //| //Thunk;

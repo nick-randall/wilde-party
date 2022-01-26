@@ -61,6 +61,9 @@ export const addDraggedUpdateSnapshot = (
         }
       } else if (destPlace === "UWZ") {
         targetIndex = getNumCards(destinationPlaceId, gameSnapshot);
+        console.log(targetIndex + " is targetIndex of unwanted " + draft.players[sourcePlayer].places.hand.cards[sourceIndex].name)
+        compareProps(draft.players[destPlayer].places[destPlace].cards);
+
       }
 
       const newPlayerId = gameSnapshot.players[destPlayer].places[destPlace].playerId;
@@ -73,7 +76,10 @@ export const addDraggedUpdateSnapshot = (
       draft.players[destPlayer].places[destPlace].cards.splice(targetIndex, 0, handCard);
       draft.players[destPlayer].places[destPlace].cards = draft.players[destPlayer].places[destPlace].cards.map((c, i) => ({ ...c, index: i }));
       // if(destPlace === "GCZ")
-
+      if(sourcePlace && handCard.cardType === "unwanted")
+      console.log((draft.players[sourcePlayer].places[sourcePlace].cards))
+    
+    
       compareProps(draft.players[destPlayer].places[destPlace].cards);
     }
   });

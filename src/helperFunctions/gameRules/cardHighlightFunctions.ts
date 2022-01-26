@@ -96,14 +96,19 @@ const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard
 //   (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
 // }
 
-const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
+// const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
 
-  const highlightCardPlayerIsOfCorrectTypee = (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
-    draggedCard.action.targetPlayerType === "enemy") ||
-  (locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
-  console.log(highlightCard.name, highlightCardPlayerIsOfCorrectTypee)
-  return highlightCardPlayerIsOfCorrectTypee
-}
+//   const highlightCardPlayerIsOfCorrectTypee = (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
+//     draggedCard.action.targetPlayerType === "enemy") ||
+//   (locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
+//   console.log(highlightCard.name, highlightCardPlayerIsOfCorrectTypee)
+//   return highlightCardPlayerIsOfCorrectTypee
+// }
+
+const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
+draggedCard.action.targetPlayerType === "enemy") ||
+(locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
+
 
 //canEnchantWithZwilling Or With e.g. perplex
 export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardPlayerIsOfCorrectType,highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);

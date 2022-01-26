@@ -30,11 +30,11 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
           pointerEvents: "none",
           left: data.originDelta.x,
           top: data.originDelta.y,
-          opacity : 0
+          opacity: 0,
         },
         entered: {
           transition: `transform ${data.duration}ms ${data.curve},  height ${data.duration}ms ${data.curve}, width ${data.duration}ms ${data.curve}, left ${data.duration}ms ${data.curve}, top ${data.duration}ms ${data.curve}`,
-          opacity:1
+          opacity: 1,
         },
       }
     : {};
@@ -46,6 +46,7 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
       timeout={data !== undefined ? data.wait : 0}
       appear={true}
       addEndListener={(node: HTMLElement) => {
+        
         node.addEventListener("transitionend", () => dispatch({ type: "REMOVE_TRANSITION", payload: id }), false);
       }}
     >

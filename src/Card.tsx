@@ -68,7 +68,7 @@ const Card = (props: CardProps) => {
           // us to use the API (eg. isDraggingOver, droppableId--which is now
           // the targeted card) just the same...
           provided => (
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "absolute" }}>
               <CardInspector
                 dimensions={dimensions}
                 cardRotation={messinessRotation}

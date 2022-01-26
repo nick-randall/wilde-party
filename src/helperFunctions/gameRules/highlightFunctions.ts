@@ -20,24 +20,52 @@ const allTrueWithArgs =
     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
 // add
-export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-  console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards, 
-  "highlightPlaceHasEnoughSpace")
+export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
+  
+  locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;
 
-  return locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;}
 
-export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-  console.log(highlightPlace.placeType, draggedCard.name, draggedCard.cardType, highlightPlace.id, highlightPlace.playerId, draggedCard.cardType === highlightPlace.acceptedCardType, "draggedIsOfAcceptedType");
-  return  draggedCard.cardType === highlightPlace.acceptedCardType;}
+// export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+//   console.log(
+//     highlightPlace.placeType,
+//     highlightPlace.id,
+//     highlightPlace.playerId,
+//     locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards,
+//     "highlightPlaceHasEnoughSpace"
+//   );
 
-export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-  console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, (draggedCard.action.targetPlayerType === "enemy" &&
-    locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-  (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
-  return  (draggedCard.action.targetPlayerType === "enemy" &&
-    locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+//   return locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;
+// };
+
+export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
+  draggedCard.cardType === highlightPlace.acceptedCardType;
+
+
+// export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+//   console.log(
+//     highlightPlace.placeType,
+//     draggedCard.name,
+//     draggedCard.cardType,
+//     highlightPlace.id,
+//     highlightPlace.playerId,
+//     draggedCard.cardType === highlightPlace.acceptedCardType,
+//     "draggedIsOfAcceptedType"
+//   );
+//   return draggedCard.cardType === highlightPlace.acceptedCardType;
+// };
+
+export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
+(draggedCard.action.targetPlayerType === "enemy" &&locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
   (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
-}
+
+// export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
+//   console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, (draggedCard.action.targetPlayerType === "enemy" &&
+//     locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
+//   return  (draggedCard.action.targetPlayerType === "enemy" &&
+//     locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+// }
 
 //canAddDragged
 export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType, highlightPlacePlayerIsOfCorrectType);
