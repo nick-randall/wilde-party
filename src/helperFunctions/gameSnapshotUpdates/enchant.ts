@@ -1,6 +1,7 @@
 import produce from "immer";
 import { convertSnapshot } from "../../initialCards";
 import { locate } from "../locateFunctions";
+import { compareProps } from "../tests";
 
 function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   for (var key in attrs) {
@@ -34,15 +35,16 @@ export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targe
 
       let destinationIndex = GCZ.cards.map(e => e.id).indexOf(targetCardId);
       console.log(GCZ.cards[destinationIndex].name  + " is enchant target");
-      if (playedCardType === "bff" && !rightNeighbourIsEnchantable(destinationIndex, enchantmentsRow.cards, GCZ.cards)) destinationIndex -= 1;
       setAttributes(draft.players[player].places.hand.cards[handCardIndex], {
         placeId: enchantmentsRowId,
         playerId: newPlayerId,
         index: destinationIndex,
       });
       const [handCard] = draft.players[player].places.hand.cards.splice(handCardIndex, 1);
-      draft.players[player].places["enchantmentsRow"].cards.push(handCard);
+      draft.players[player].places["enchantmentsRow"].cards.splice(destinationIndex, 0, handCard);
       console.log("enchanted a card at index " + destinationIndex + "enchantmentsRow is "  ,draft.players[player].places["enchantmentsRow"].cards);
-      convertSnapshot(draft);
+      compareProps(draft.players[player].places["enchantmentsRow"].cards);
+      //draft.players[player].places["enchantmentsRow"].cards.sort((a, b) => a.index - b.index);
+      //convertSnapshot(draft);
     }
   });

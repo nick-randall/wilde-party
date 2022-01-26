@@ -3,7 +3,7 @@ const addProp = (key: any, obj: {[proparray: string ]: any[],  }, curr: {[a: str
 export const compareProps = (array: object[]) => {
   let proparray = {};  
   array.forEach(obj => Object.keys(obj).forEach(key => addProp(key, proparray, obj )))
-  console.log(proparray)
+  console.log(JSON.stringify(proparray), null, 2 )
 }
 
 // origArray[key]
