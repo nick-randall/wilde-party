@@ -37,30 +37,30 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
     else setTimeout(() => dealCard(player), 50);
   };
 
-  // for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);
-  // for (let i = 0; i < numPlayers; i++) for (let j = 0; j < numCardsInHand; j++) dealCard(i);
+  for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);
+  for (let i = 0; i < numPlayers; i++) for (let j = 0; j < numCardsInHand; j++) dealCard(i);
 
-  for (let i = 0; i < numPlayers; i++) {
-    const prevSnapshot = getState().gameSnapshot;
+  // for (let i = 0; i < numPlayers; i++) {
+  //   const prevSnapshot = getState().gameSnapshot;
 
-    dispatch({ type: "DEAL_STARTING_GUEST", payload: i });
-    const newSnapshot = getState().gameSnapshot;
-    const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers);
-    dispatch(addTransition(newTransition));
-  }
-    for (let i = 0; i < numPlayers; i++) {
-      const handId = gameSnapshot.players[i].places.hand.id;
-      for (let j = 0; j < numCardsInHand; j++) {
-        const prevSnapshot = getState().gameSnapshot;
-        dispatch({
-          type: "DRAW_CARD",
-          payload: { player: i, handId: handId },
-        });
-        const newSnapshot = getState().gameSnapshot;
-        const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers + j * delayBetweenCards);
-        console.log(newTransition);
+  //   dispatch({ type: "DEAL_STARTING_GUEST", payload: i });
+  //   const newSnapshot = getState().gameSnapshot;
+  //   const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers);
+  //   dispatch(addTransition(newTransition));
+  // }
+  //   for (let i = 0; i < numPlayers; i++) {
+  //     const handId = gameSnapshot.players[i].places.hand.id;
+  //     for (let j = 0; j < numCardsInHand; j++) {
+  //       const prevSnapshot = getState().gameSnapshot;
+  //       dispatch({
+  //         type: "DRAW_CARD",
+  //         payload: { player: i, handId: handId },
+  //       });
+  //       const newSnapshot = getState().gameSnapshot;
+  //       const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", i * delayBetweenPlayers + j * delayBetweenCards);
+  //       console.log(newTransition);
 
-        dispatch(addTransition(newTransition));
-      }
-    }
+  //       dispatch(addTransition(newTransition));
+  //     }
+  //   }
 };

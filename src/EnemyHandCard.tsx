@@ -17,7 +17,6 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
 
-  const playing = useSelector((state: RootState) => state.aiPlaying === id);
 
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
@@ -48,7 +47,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         render={(transitionStyles: CSSProperties) => (
           <img
             alt={image}
-             src={!playing ? "./images/back.jpg" : `./images/${image}.jpg`}
+             src={"./images/back.jpg"}
             // src={`./images/${image}.jpg`}
             draggable = "false"
 

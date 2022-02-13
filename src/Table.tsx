@@ -8,6 +8,7 @@ import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
 import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
+import './global.css'
 
 export const Table = () => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -33,13 +34,13 @@ export const Table = () => {
   }, [gameStarted, dispatch])
 
   return (
-    <div style={{ width: "100vw", height: "100vh", backgroundColor: "blue" }}>
-      <div style={{marginLeft:"50%", marginRight:"50%"}}>
-        <div> current player: {player}</div>
+    <div style={{backgroundColor: "blue", position:"relative"}}>
+      {/* <div style={{marginLeft:"50%", marginRight:"50%"}}> */}
+        {/* <div> current player: {player}</div>
         <div> plays left: {plays}</div>
-        <div> draws left: {draws}</div>
+        <div> draws left: {draws}</div> */}
         {/* <div> rolls left: {rolls}</div> */}
-      </div>
+      {/* </div> */}
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
       <NonPlayerPlaces places = {gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
       

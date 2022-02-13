@@ -43,7 +43,7 @@ const EnemyPlayer = (props: PlayerProps) => {
         <EnemyHand id={places.hand.id} handCards={places.hand.cards} playerZoneSize={{ width, height }} />
      
       <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
-      <div style={{color: "white", fontSize:100, position: "relative"}}>{playerPoints}</div>
+      <div style={{color: "white", fontSize:50, position: "relative"}}>{playerPoints}{playerPoints === 1 ? "Punkt" : "Punkte" }</div>
       {/* <Player player = {gameSnapshot.players[0]}/> */}
     </div>
   );

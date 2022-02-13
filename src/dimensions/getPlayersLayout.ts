@@ -32,13 +32,13 @@ const getPlayersLayout = (screenSize: { width: number; height: number }, playerI
       playerZonePosition = { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       break;
     case 0:
-      playerZonePosition = { x: fromCenterWidth(400), y: 0 };
+      playerZonePosition = { x: fromCenterWidth(400), y: -10 };
       break;
     case 1:
       playerZonePosition = { x: 200, y: 0 };
       break;
     case 2:
-      playerZonePosition = { x: 200, y: fromBottom(playerZoneHeight) };
+      playerZonePosition = { x: 200, y: fromBottom(playerZoneHeight+50) };
       break;
     default:
       playerZonePosition = { x: 0, y: 0 };
