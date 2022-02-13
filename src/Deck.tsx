@@ -22,11 +22,12 @@ export const Deck = (props: DeckProps) => {
   const handleClick = () => {
     if (canDraw) dispatch(drawCardThunk(0));
   };
+
+  const cardsInReverseOrder = Array.from(cards).reverse();
+
   return (
     <div style={{ left: x, top: y, position: "absolute" }} onClick={handleClick}>
-      {/* {cards.length} */}
-      {/* {cards.map((card, index) => <input type="image" src="./images/back.jpg" alt="deck" style={{ height: dimensions.cardHeight, position: "absolute", left: index % 10 * 4 }} />)} */}
-      {cards.map((card, index) => <Card dimensions={dimensions} id={card.id} index={0} image="back"/>)}
+      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} id={card.id} index={index} image="back"/>)}
 
     </div>
   );

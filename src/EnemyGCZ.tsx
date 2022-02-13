@@ -10,14 +10,19 @@ interface EnemyGCZProps {
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-  const { GCZCards, id, playerZoneSize } = props;
-  const {x, y} = getPlacesLayout(id, playerZoneSize)
+  const { GCZCards, enchantmentsRowCards, id, playerZoneSize } = props;
+  const { x, y } = getPlacesLayout(id, playerZoneSize);
   const dimensions = getAllDimensions(id);
   return (
-    <div style={{left:x, top: y, position:"absolute" }}>
+    <div style={{ left: x, top: y, position: "absolute" }}>
       {GCZCards.map((card, index) => (
         <Card dimensions={dimensions} key={card.id} id={card.id} index={index} image={card.image} offsetLeft={index * dimensions.cardWidth} />
       ))}
+      <div style={{ top: dimensions.cardHeight/2, position: "absolute" }}>
+      {enchantmentsRowCards.map((card) => (
+        <Card dimensions={dimensions} key={card.id} id={card.id} index={card.index} image={card.image} offsetLeft={card.index * dimensions.cardWidth} />
+      ))}
+      </div>
     </div>
   );
 };
