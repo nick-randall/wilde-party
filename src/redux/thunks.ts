@@ -11,6 +11,7 @@ import { LocationData } from "./actions";
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { RootState } from "./store";
 import enactAiPlayerTurnThunk from "../thunks/enactAiPlayerTurnThunk";
+import { compareProps } from "../helperFunctions/tests";
 
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 
@@ -41,13 +42,25 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
   const { gameSnapshot } = state;
   const {source, destination} = dropResult;
   const { place: originPlace, player: originPlayer } = locate(source.droppableId, gameSnapshot);
-
+  const { place: destPlace, player: destPlayer } = locate(destination.droppableId, gameSnapshot);
+  let playedCard: GameCard | null = null;
+  if(originPlayer && originPlace) playedCard = gameSnapshot.players[originPlayer].places[originPlace].cards[destination.index]
+  //else playedCard = gameSnapshot.nonPlayerPlaces[originPlace].cards[destination.index]
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   console.log("followoing add dragged")
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
+  console.log("followoing change_num_plays")
+
   const newSnapshot = getState().gameSnapshot;
-  if (originPlayer !== 0) {
+  if (originPlayer !== 0 && playedCard && playedCard.card!== "unwanted") {
+    locate(destination.droppableId, gameSnapshot)
+    console.log("origin player !=0")
+    //compareProps(gameSnapshot.players[player])
+    console.log(findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot}))
     const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
+    console.log("followoing newTransition");
+    console.log(newTransition);
+
     dispatch(addTransition(newTransition));
     // console.log(originPlayer)
     // if (originPlayer !== null && originPlace !== null) {
@@ -56,6 +69,8 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
     //   dispatch(addTransition(newTransition));
     // }
   }
+  console.log("followoing setting transition")
+
   
   console.log(shouldEndTurn(getState().gameSnapshot) ? "should end turn": "should not end turn")
   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
@@ -74,7 +89,7 @@ export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => Ro
   const { gameSnapshot } = getState();
   console.log("turn ended");
   // TODO: change back to allow player 0 to play
-  if (gameSnapshot.current.player !== 0)
+  //if (gameSnapshot.current.player !== 0)
     //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
     dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
 };
