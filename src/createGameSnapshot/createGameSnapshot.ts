@@ -65,7 +65,7 @@ export const createGameSnapshot = () => {
   const gameSnapshot: GameSnapshot = {
     current: {
       player: 0,
-      phase: "normalPhase",
+      phase: "dealPhase",
       draws: 1,
       plays: 1,
       rolls: 1,

@@ -343,7 +343,7 @@ export const initialGamePlayers: GamePlayer[] = [
 export const initialGameSnapshot: GameSnapshot = {
   current: {
     player: 0,
-    phase: "normalPhase",
+    phase: "dealPhase",
     draws: 1,
     plays: 1,
     rolls: 1,

@@ -47,7 +47,7 @@ const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
 
 const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
 
-const phaseNormalTurnIsYours = (gameSnapshot: GameSnapshot) => gameSnapshot.current.player === 0 && gameSnapshot.current.phase === "normalPhase";
+//const phaseNormalTurnIsYours = (gameSnapshot: GameSnapshot) => gameSnapshot.current.player === 0 && gameSnapshot.current.phase === "normalPhase";
 
 export const stateReducer = (
   state: State = {
@@ -187,7 +187,12 @@ export const stateReducer = (
       return { ...state, gameSnapshot: newSnapshot };
     }
     case "END_CURRENT_PHASE":
-      return state;
+      // currently only ends the deal phase
+      const newSnapshot = produce(state.gameSnapshot, draft => {
+        draft.current.phase = "playPhase";
+      });
+      console.log("here")
+      return {...state, gameSnapshot: newSnapshot };
     case "END_CURRENT_TURN": {
       const { gameSnapshot } = state;
       const newSnapshot = produce(gameSnapshot, draft => {

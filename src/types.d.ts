@@ -159,7 +159,7 @@ type GamePlayer = {
   skipNextTurn: boolean;
 };
 // type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
-type Phase = "normalPhase" |  "rollPhase" |"counterPhase" ;
+type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" |"counterPhase" ;
 
 
 type PlayerPlaces = {

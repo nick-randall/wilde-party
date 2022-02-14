@@ -29,7 +29,7 @@ const HandCard = (props: HandCardProps) => {
 
   const { player, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
 
-  const canPlay = player === 0 && phase === "normalPhase" && !transitionUnderway;
+  const canPlay = player === 0 && phase === "playPhase" && !transitionUnderway;
 
   const [shortHover, setShortHover] = useState(false);
 

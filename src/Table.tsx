@@ -15,7 +15,7 @@ export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const ids = getIdListObject(gameSnapshot);
-  const {player, plays, draws, rolls } = useSelector((state: RootState) => state.gameSnapshot.current);
+  const {player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,8 +36,9 @@ export const Table = () => {
   return (
     <div style={{backgroundColor: "blue", position:"relative"}}>
       {/* <div style={{marginLeft:"50%", marginRight:"50%"}}> */}
-        {/* <div> current player: {player}</div>
-        <div> plays left: {plays}</div>
+        {<div> current player: {phase}</div>}
+        {/* 
+          <div> plays left: {plays}</div>
         <div> draws left: {draws}</div> */}
         {/* <div> rolls left: {rolls}</div> */}
       {/* </div> */}
