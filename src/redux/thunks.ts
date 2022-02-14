@@ -90,7 +90,7 @@ export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => Ro
   const { gameSnapshot } = getState();
   console.log("turn ended");
   // TODO: change back to allow player 0 to play
-  //if (gameSnapshot.current.player !== 0)
+  if (gameSnapshot.current.player !== 0)
     //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
     dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
 };

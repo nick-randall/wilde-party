@@ -1,6 +1,7 @@
 import { CSSProperties } from "react";
 import { useSelector } from "react-redux";
 import "./animations/animations.css";
+import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
@@ -15,7 +16,7 @@ export interface EnemyHandCardProps {
 const EnemyHandCard = (props: EnemyHandCardProps) => {
   const { id, index, image, dimensions } = props;
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
+  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
 
 
   const normalStyles: CSSProperties = {
@@ -24,23 +25,22 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     height: cardHeight,
 
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
-    top: index * cardTopSpread,
-    left: 0,
+    //top: index * cardTopSpread,
+    left: index * cardLeftSpread,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
-    transition: `left 250ms, width 180ms, transform 180ms`,
+    transition: `left 250ms, width 180ms, transform 180ms, opacity 300ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
   };
+  const cardPlayer = locatePlayer(id);
+  const current = useSelector((state: RootState) => state.gameSnapshot.current.player === cardPlayer);
+  const disappearingStyles = current ? {
+    opacity : 1
+  } :{ opacity:0}
 
   return (
-    <div
-      // The width of this element determines how far cards
-      // move aside and make room in other droppables.
-      // When not dragging it has a width of 0, which
-      // tucks hand cards together
-      style={{ width:  0, position: "relative" }}
-    >
+   
       <TransitionHandler
         index={index}
         id={id}
@@ -55,11 +55,12 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
             style={{
               ...normalStyles,
               ...transitionStyles,
+              ...disappearingStyles
             }}
           />
         )}
       />
-    </div>
+
   );
 };
 export default EnemyHandCard;

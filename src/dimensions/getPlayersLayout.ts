@@ -1,3 +1,4 @@
+import { getAllDimensions } from "../helperFunctions/getDimensions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import store, { RootState } from "../redux/store";
 
@@ -8,6 +9,14 @@ export interface PlayerLayout {
   y: number;
 }
 
+const getEnemyPlayerHeight = (player: number | null, gameSnapshot: GameSnapshot, screenHeight: number) => {
+  if(player === null) return 0;
+  // increases player height when it is players' turn, so the player's hand can be seen
+  const playerIsCurrentPlayer = gameSnapshot.current.player === player;
+  const handHeight = getAllDimensions(gameSnapshot.players[player].places["hand"].id).cardHeight;
+  return (screenHeight / 2) + (playerIsCurrentPlayer ? handHeight : 0)
+}
+
 const getPlayersLayout = (screenSize: { width: number; height: number }, playerId: string | null, state: RootState | null = null): PlayerLayout => {
   if (state === null) state = store.getState();
   const { gameSnapshot } = state;
@@ -15,9 +24,10 @@ const getPlayersLayout = (screenSize: { width: number; height: number }, playerI
   if (playerId === null) player = null;
   // else player = gameSnapshot.players.map(p => p.id).indexOf(playerId);
   else player = locatePlayer(playerId, gameSnapshot)
+  
 
   const playerZoneWidth = player === 0 ? 500 : 250;
-  const playerZoneHeight = player === 0 ? screenSize.height : screenSize.height /2 ;
+  const playerZoneHeight = player === 0 ? screenSize.height : getEnemyPlayerHeight(player, gameSnapshot, screenSize.height);
   // need null case for deck and discardpile
 
   const fromCenterWidth = (distance: number): number => distance + (screenSize.width / 2 - playerZoneWidth / 2);
