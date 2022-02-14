@@ -36,7 +36,7 @@ export const Table = () => {
   return (
     <div style={{backgroundColor: "blue", position:"relative"}}>
       {/* <div style={{marginLeft:"50%", marginRight:"50%"}}> */}
-        {<div> current player: {phase}</div>}
+        {/* {<div> current player: {phase}</div>} */}
         {/* 
           <div> plays left: {plays}</div>
         <div> draws left: {draws}</div> */}

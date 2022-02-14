@@ -25,7 +25,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     height: cardHeight,
 
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
-    //top: index * cardTopSpread,
+    top:  cardTopSpread,
     left: index * cardLeftSpread,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,

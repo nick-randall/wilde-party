@@ -36,6 +36,8 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const newSnapshot = getState().gameSnapshot;
       const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", 0);
       dispatch(addTransition(newTransition));
+      // Would be better to use getState().gameSnapshot...numHandCards for each player
+      // to determine if no more cards should be dealt
       if (finalCard) dispatch({ type: "END_CURRENT_PHASE" });
     } else setTimeout(() => dealCard(player, finalCard), 50);
   };
