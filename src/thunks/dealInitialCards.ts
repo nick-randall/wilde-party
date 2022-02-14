@@ -22,7 +22,6 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
     }
   };
 
-  let i = 0;
 
   const dealCard = (player: number, finalCard: boolean) => {
     const handId = gameSnapshot.players[player].places.hand.id;

@@ -33,7 +33,7 @@ export interface State {
   draggedHandCard: GameCard | undefined;
   highlights: string[];
   highlightType: string;
-  aiPlaying: string
+  aiPlaying: string;
 }
 
 const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
@@ -60,7 +60,7 @@ export const stateReducer = (
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
-    aiPlaying:"",
+    aiPlaying: "",
   },
   action: Action
 ) => {
@@ -124,20 +124,20 @@ export const stateReducer = (
       // }
 
       const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
-      console.log("finished adding dragged")
+      console.log("finished adding dragged");
       return { ...state, gameSnapshot };
     }
     case "ENCHANT":
       // Here "destination.droppableId" is actually the card that is being enchanted.
       const { source, destination } = action.payload;
-      console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot))
+      console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot));
       if (destination) {
         const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
         return { ...state, gameSnapshot };
       } else return state;
     case "DESTROY_CARD": {
-      const targetCardId  = action.payload;
-      console.log("destroy card", targetCardId)
+      const targetCardId = action.payload;
+      console.log("destroy card", targetCardId);
 
       const gameSnapshot = destroyCardUpdateSnapshot(targetCardId, state.gameSnapshot);
 
@@ -188,11 +188,21 @@ export const stateReducer = (
     }
     case "END_CURRENT_PHASE":
       // currently only ends the deal phase
+      const phases: Phase[] = ["dealPhase", "playPhase", "drawPhase", "rollPhase", "counterPhase"];
       const newSnapshot = produce(state.gameSnapshot, draft => {
-        draft.current.phase = "playPhase";
+        switch (state.gameSnapshot.current.phase) {
+          case "dealPhase":
+            draft.current.phase = "drawPhase";
+            break;
+          case "drawPhase":
+            draft.current.phase = "playPhase";
+            break;
+          default:
+            draft.current.phase = "playPhase";
+        }
       });
-      console.log("here")
-      return {...state, gameSnapshot: newSnapshot };
+      console.log("here");
+      return { ...state, gameSnapshot: newSnapshot };
     case "END_CURRENT_TURN": {
       const { gameSnapshot } = state;
       const newSnapshot = produce(gameSnapshot, draft => {
@@ -200,13 +210,14 @@ export const stateReducer = (
         draft.current.draws = 1;
         draft.current.plays = 1;
         draft.current.rolls = 1;
+        draft.current.phase = "drawPhase";
       });
       console.log(newSnapshot);
       return { ...state, gameSnapshot: newSnapshot };
     }
-    case "SET_AI_PLAYING" : {
-      console.log("setting playing", action.payload)
-      return {...state, aiPlaying: action.payload}
+    case "SET_AI_PLAYING": {
+      console.log("setting playing", action.payload);
+      return { ...state, aiPlaying: action.payload };
     }
     default:
       return state;
