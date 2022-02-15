@@ -10,4 +10,10 @@ user-select: none;
 }
 body{
   background-color: blue;
+  margin:0px;
+}
+
+@font-face {
+  font-family: wilde-party-font;
+  src: url('Grandstander-clean.otf');
 }
