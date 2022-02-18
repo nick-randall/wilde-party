@@ -4,11 +4,24 @@ import { Provider } from "react-redux";
 import { Table } from "./Table";
 import store from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import  HomePage  from "./HomePage";
+
+
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Table />
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+            {/* can put layout wrapper here*
+            <Route /> */}
+            <Route path= "game" element={<Table />} />
+          
+          {/* <Table /> */}
+        </Routes>
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
