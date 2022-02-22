@@ -21,7 +21,6 @@ const HomeScreenButton = styled.div<GameStartedProps>`
   /*text-shadow: 4px 5px 0px black;*/
 `;
 
-
 const HomePage: React.FC = () => {
   return (
     <div>
