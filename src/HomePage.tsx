@@ -1,47 +1,30 @@
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { StyledComponent } from "styled-components";
 
-  type GameStartedProps = {
-    offsetTop?: number
-  }
+type GameStartedProps = {
+  imageHeight?: number;
+};
 
-  const SplashScreenButton = styled.div<GameStartedProps>`
-  height: 80px;
-  width: 400px;
+const HomeScreenButton = styled.div<GameStartedProps>`
+  height: 40px;
+  width: 300px;
   font-family: wilde-party-font;
-  font-size: 30px;
+  font-size: 35px;
   border-radius: 30px;
-  box-shadow: 10px 10px 25px black;
+  box-shadow: 4px 5px 0px black;
   background-color: white;
-  color: black;
-  position: absolute;
-  transform: translateX(-50%);
-  top: ${props => (props.offsetTop ? props.offsetTop : "")}px;
+  color: #f9ca44;
+  border: thin black solid;
+  padding: ${props => (props.imageHeight ? "12.5px 15px 12.5px 15px" : "20px 15px 10px 15px")};
+  text-align: center;
+  display: inline-block;
+  /*text-shadow: 4px 5px 0px black;*/
 `;
 
 
-
 const HomePage: React.FC = () => {
-  // const onStart = () => {
-  //   setGameStarted(true);
-  //   setTimeout(() => {
-  //     dispatch(dealInitialHands());
-  //   }, 1800);
-  // };
-  // useEffect(()=>{
-  //   if(!gameStarted) {
-  //     console.log("called it")
-  //     dispatch(dealInitialHands());
-  //   setGameStarted(true);
-  //   }
-
-  // }, [gameStarted, dispatch])
-
-
-
   return (
     <div>
-      {" "}
       <img
         src="./images/splashscreen.jpg"
         alt="background"
@@ -50,39 +33,25 @@ const HomePage: React.FC = () => {
           transition: "1600ms",
           overflow: "hidden",
           padding: 0,
-          backgroundColor: "blue",
           position: "fixed",
         }}
       />
-      
-      <div style={{ display: "block", position: "absolute", top: "50vh", marginLeft: "50%", marginRight: "50%" }}>
-      <Link to="/game">
-        <SplashScreenButton >
-        
-          <div style={{ position: "relative", textAlign: "center", top: "50%", transform: "translateY(-50%)" }}>Spiel starten</div>
-          
-        </SplashScreenButton>
-        </Link>
-        <SplashScreenButton  offsetTop={100}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <a
-              href="https://github.com/nick-randall/wilde-party"
-              target="_self"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                verticalAlign: "middle",
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)",
-              }}
-            >
-              <img src="https://www.analyticsvidhya.com/wp-content/uploads/2015/07/github_logo.png" alt="github logo" style={{ height: 40 }} />
+      <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ height: "45vh" }} />
+          <Link to="/game">
+            <HomeScreenButton>Spiel starten</HomeScreenButton>
+          </Link>
+          <div style={{ height: 10 }} />
+          <HomeScreenButton imageHeight={30}>
+            <a href="https://github.com/nick-randall/wilde-party" target="_self">
+              <img src="https://www.analyticsvidhya.com/wp-content/uploads/2015/07/github_logo.png" alt="github logo" style={{ height: 35 }} />
             </a>
-          </div>
-        </SplashScreenButton>
+          </HomeScreenButton>
+        </div>
       </div>
     </div>
+    // </div>
   );
 };
 

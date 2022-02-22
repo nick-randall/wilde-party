@@ -7,14 +7,14 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
 
   const placeType = place;
   const numCards = getNumCards(placeId, gameSnapshot);
-  
-  const tableCardHeights = { enemy: 120, self : 148 };
-  const handCardHeights = { enemy: 100, self : 180 }
-  
+
+  const tableCardHeights = { enemy: 120, self: 148 };
+  const handCardHeights = { enemy: 100, self: 180 };
+
   const playerType = player === 0 || player === null ? "self" : "enemy";
 
   const heightToWidthRatio = 1500 / 973;
-  const tableCardHeight =  tableCardHeights[playerType];
+  const tableCardHeight = tableCardHeights[playerType];
   const tableCardWidth = tableCardHeight / heightToWidthRatio;
 
   const handCardHeight = handCardHeights[playerType];
@@ -34,7 +34,7 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
     tableCardzIndex: 3,
-     rotation: placeType === "deck" ? ()=>0: (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
+    rotation: placeType === "deck" ? () => 0 : (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
     scale: 2.4,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     //GCZHeight: numEnchantmentsCards === 0 ? tableCardHeight : tableCardHeight * 1.5,
