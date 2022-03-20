@@ -137,51 +137,25 @@ type GamePlace = {
   playerId?: string;
   cards: GameCard[];
   acceptedCardType?: CardType;
-  // numCards should be INFERRED from GameCards
-  // but where does this happen? useEffect of app?
-  // => gameState can still be interpreted from database--which we do after every DB update
-  //numCards: number;
 };
 
 type GamePlayer = {
   id: string;
   name: string;
-  // current: boolean;
-  // currentPhase: Phase;
-  // draws: number;
-  // plays: number;
-  // rolls: number;
-
   places: PlayerPlaces;
-
-  //points:number;//??????
   glitzaglitza: boolean;
   skipNextTurn: boolean;
 };
-// type Phase = "normalDrawPhase" | "normalActionPhase" | "normalRollPhase" | "specialDrawOrPlayPhase";
 type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" |"counterPhase" ;
 
 
 type PlayerPlaces = {
   [type: string]: GamePlace;
 };
-// type PlayerPlaces = {
-//  "GCZ" : GamePlace
-// , "UWZ": GamePlace
-// , "specialsZone": GamePlace
-// , "hand": GamePlace
-// , "enchantmentsRow": GamePlace;
-// }
 
 type NonPlayerPlaces = {
   [type: string]: GamePlace;
 };
-// type NonPlayerPlaces = {
-//   deck: GamePlace;
-//   discardPile: GamePlace;
-// };
-
-// type Phase = "normal" | "roll" | "counter";
 
 type Current = {
   player: number,

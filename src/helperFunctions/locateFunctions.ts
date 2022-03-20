@@ -3,7 +3,7 @@ import store from "../redux/store";
 
 export interface Locator {
   player: number | null;
-  place: PlaceType | null;
+  place: PlaceType;
 }
 
 export const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
@@ -51,7 +51,7 @@ export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): Lo
     if (id === nonPlayerPlaces[place].id) return { player: null, place: place };
   }
   console.log("cardId" + id);
-  return { player: null, place: null };
+  return { player: null, place: "GCZ" };
 };
 
 export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlayer) =>
