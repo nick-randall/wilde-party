@@ -9,8 +9,8 @@ const destroyCardThunk = (dropResult: DropResultEvent) => (dispatch: Function, g
   const { gameSnapshot } = state;
   const { destination } = dropResult;
   if (destination) {
-    const { droppableId } = destination;
-    dispatch({ type: "DESTROY_CARD", payload: droppableId });
+    const { containerId } = destination;
+    dispatch({ type: "DESTROY_CARD", payload: containerId });
     const newSnapshot = getState().gameSnapshot;
     const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
     console.log(newTransition);

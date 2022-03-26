@@ -41,9 +41,9 @@ export default class SnapshotChanger {
   private convertToSnapshotChange(change: Change): SnapshotChange {
     let origin: SnapshotLocation;
     let destination: SnapshotLocation;
-    const { player: originPlayer, place: originPlace } = locate(change.origin.droppableId, this.snapshot);
+    const { player: originPlayer, place: originPlace } = locate(change.origin.containerId, this.snapshot);
     origin = { player: originPlayer, place: originPlace, index: change.origin.index };
-    const { player: destinationPlayer, place: destinationPlace } = locate(change.destination.droppableId, this.snapshot);
+    const { player: destinationPlayer, place: destinationPlace } = locate(change.destination.containerId, this.snapshot);
     destination = { player: destinationPlayer, place: destinationPlace, index: change.origin.index };
     return { origin: origin, destination: destination };
   }

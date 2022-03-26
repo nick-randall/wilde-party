@@ -1,8 +1,8 @@
 import { pipe } from "ramda";
 import React, { CSSProperties, Ref, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
 import { dragUpateThunk } from "./dragEventThunks";
-import { RootState } from "./store";
 
 
 export const cumulativeSum = (sum: number) => (value: number) => (sum += value);

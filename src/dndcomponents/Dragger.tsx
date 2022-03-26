@@ -1,9 +1,9 @@
 import React, { CSSProperties, Ref, useCallback, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
 import { dragEndThunk, dragStartThunk } from "./dragEventThunks";
 import { addZeroAtFirstIndex, getCumulativeSum } from "./DraggerContainer";
 import { DragLocation } from "./stateReducer";
-import { RootState } from "./store";
 
 export interface DraggerProps {
   draggerId: string;
@@ -150,7 +150,7 @@ const Dragger: React.FC<CombinedProps> = ({ children, index, draggerId, containe
     transform: "",
     pointerEvents: "auto",
     position: "relative",
-    zIndex: isReturning ? 9 : "",
+    zIndex: isReturning ? 9 : undefined,
     transition: "280ms",
     left: "",
     cursor: isDragDisabled ? "auto" : "grab",

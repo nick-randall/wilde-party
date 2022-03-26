@@ -43,8 +43,8 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
   const state = getState();
   const { gameSnapshot } = state;
   const { source, destination } = dropResult;
-  const { place: originPlace, player: originPlayer } = locate(source.droppableId, gameSnapshot);
-  const { place: destPlace, player: destPlayer } = locate(destination.droppableId, gameSnapshot);
+  const { place: originPlace, player: originPlayer } = locate(source.containerId, gameSnapshot);
+  const { place: destPlace, player: destPlayer } = locate(destination.containerId, gameSnapshot);
   let playedCard: GameCard | null = null;
   if (originPlayer && originPlace) playedCard = gameSnapshot.players[originPlayer].places[originPlace].cards[destination.index];
   //else playedCard = gameSnapshot.nonPlayerPlaces[originPlace].cards[destination.index]
@@ -55,7 +55,7 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
 
   const newSnapshot = getState().gameSnapshot;
   if (originPlayer !== 0 && playedCard && playedCard.card !== "unwanted") {
-    locate(destination.droppableId, gameSnapshot);
+    locate(destination.containerId, gameSnapshot);
     console.log("origin player !=0");
     //compareProps(gameSnapshot.players[player])
     console.log(findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }));

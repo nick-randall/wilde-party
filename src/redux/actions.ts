@@ -1,4 +1,5 @@
 import { DropResult } from "react-beautiful-dnd";
+import { DragAction } from "../dndcomponents/stateReducer";
 
 export type LocationData = {
   index: number;
@@ -103,6 +104,7 @@ export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: string };
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 
 export type Action =
+  | DragAction
   | SetScreenSize
   | RemoveTransition
   | SetHandCardDrag

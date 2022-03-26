@@ -52,9 +52,9 @@ export const handleDragEnd = (d: DropResult) => {
   const gameSnapshot = store.getState().gameSnapshot;
   if (d.destination) {
     if (isRearrange(d)) store.dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
-    else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ENCHANT", payload: d });
-    else if(isDestroy(d,gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }))
-    else if (isAddDrag(d)) store.dispatch(addDraggedThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
+    // else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ENCHANT", payload: d });
+    // else if(isDestroy(d,gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }))
+    // else if (isAddDrag(d)) store.dispatch(addDraggedThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
   }
   store.dispatch({ type: "END_DRAG_CLEANUP" });
 };

@@ -70,8 +70,8 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
               case "addDragged": {
                 dispatch(
                   addDraggedThunk({
-                    source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-                    destination: { droppableId: potentialTargets[0], index: 0 },
+                    source: { containerId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                    destination: { containerId: potentialTargets[0], index: 0 },
                   })
                 );
                 break;
@@ -79,8 +79,8 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
               case "enchant": {
                 dispatch(
                   enchantThunk({
-                    source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-                    destination: { droppableId: potentialTargets[0], index: 0 },
+                    source: { containerId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                    destination: { containerId: potentialTargets[0], index: 0 },
                   })
                 );
                 break;
@@ -88,8 +88,8 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
               case "enchantWithBff":
                 dispatch(
                   enchantThunk({
-                    source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-                    destination: { droppableId: potentialTargets[0], index: 0 },
+                    source: { containerId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                    destination: { containerId: potentialTargets[0], index: 0 },
                   })
                 );
                 break;
@@ -97,8 +97,8 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
             case "destroy":
               dispatch(
                 destroyCardThunk({
-                  source: { droppableId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
-                  destination: { droppableId: potentialTargets[0], index: 0 },
+                  source: { containerId: hand.id, index: hand.cards.map(c => c.id).indexOf(randomCard.id) },
+                  destination: { containerId: potentialTargets[0], index: 0 },
                 })
               );
               break;

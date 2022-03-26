@@ -14,6 +14,7 @@ import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
+import { DraggedState } from "../dndcomponents/stateReducer";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -25,6 +26,9 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
 
 export interface State {
   gameSnapshot: GameSnapshot;
+  draggedState: DraggedState;
+  draggedId?: string;
+  dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
@@ -49,10 +53,19 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 
 //const phaseNormalTurnIsYours = (gameSnapshot: GameSnapshot) => gameSnapshot.current.player === 0 && gameSnapshot.current.phase === "normalPhase";
 
+const initialDragState = {
+  draggedId: undefined,
+  draggedState: { source: undefined, destination: undefined },
+  dragContainerExpand: { width: 0, height: 0 },
+};
+
 export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
     screenSize: getScreenSize(),
+    draggedId: initialDragState.draggedId,
+    dragContainerExpand: initialDragState.dragContainerExpand,
+    draggedState: initialDragState.draggedState,
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],
@@ -69,6 +82,24 @@ export const stateReducer = (
       return { ...state, screenSize: getScreenSize() };
     // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
     // be altered
+    case "SET_DRAGGED_ID":
+      return { ...state, draggedId: action.payload };
+    case "SET_INITIAL_DRAGGED_STATE": {
+      return { ...state, draggedState: { source: action.payload, destination: action.payload, isInitialRearrange: true } };
+    }
+    case "UPDATE_DRAG_DESTINATION":
+      const { destination } = action.payload;
+      return { ...state, draggedState: { ...state.draggedState, destination: destination, isInitialRearrange: false } };
+    case "CLEAN_UP_DRAG_STATE":
+      return {
+        ...state,
+        draggedState: initialDragState.draggedState,
+        draggedId: initialDragState.draggedId,
+        dragContainerExpand: initialDragState.dragContainerExpand,
+      };
+    case "SET_DRAG_CONTAINER_EXPAND":
+      return { ...state, dragContainerExpand: action.payload };
+
     case "SET_DRAGGED_HAND_CARD":
       const draggableId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
@@ -127,14 +158,14 @@ export const stateReducer = (
       console.log("finished adding dragged");
       return { ...state, gameSnapshot };
     }
-    case "ENCHANT":
-      // Here "destination.droppableId" is actually the card that is being enchanted.
-      const { source, destination } = action.payload;
-      console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot));
-      if (destination) {
-        const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
-        return { ...state, gameSnapshot };
-      } else return state;
+    // case "ENCHANT":
+    //   // Here "destination.droppableId" is actually the card that is being enchanted.
+    //   const { source, destination } = action.payload;
+    //   console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot));
+    //   if (destination) {
+    //     const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
+    //     return { ...state, gameSnapshot };
+    //   } else return state;
     case "DESTROY_CARD": {
       const targetCardId = action.payload;
       console.log("destroy card", targetCardId);

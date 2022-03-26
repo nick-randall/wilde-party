@@ -28,15 +28,15 @@ type UpdateSnapshot = {
   payload: Snapshot;
 };
 
-type Action = SetDraggedId | SetInitialDraggedState | UpdateDragDestination | CleanUpDragState | SetDragContainerExpand;
+export type DragAction = SetDraggedId | SetInitialDraggedState | UpdateDragDestination | CleanUpDragState | SetDragContainerExpand;
 
-const initialState = {
+const initialDragState = {
   draggedId: undefined,
   draggedState: { source: undefined, destination: undefined },
   dragContainerExpand: { width: 0, height: 0 },
 };
 
-export const stateReducer = (state: State = initialState, action: Action) => {
+export const stateReducer = (state: State = initialDragState, action: DragAction) => {
   switch (action.type) {
     case "SET_DRAGGED_ID":
       return { ...state, draggedId: action.payload };
@@ -49,9 +49,9 @@ export const stateReducer = (state: State = initialState, action: Action) => {
     case "CLEAN_UP_DRAG_STATE":
       return {
         ...state,
-        draggedState: initialState.draggedState,
-        draggedId: initialState.draggedId,
-        dragContainerExpand: initialState.dragContainerExpand,
+        draggedState: initialDragState.draggedState,
+        draggedId: initialDragState.draggedId,
+        dragContainerExpand: initialDragState.dragContainerExpand,
       };
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };

@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from "./store";
+import { RootState } from "../redux/store";
 
 interface LastLocation {
   left: number;
