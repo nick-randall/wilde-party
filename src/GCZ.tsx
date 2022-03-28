@@ -4,6 +4,8 @@ import CardGroup from "./CardGroup";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { PlayerLayout } from "./dimensions/getPlayersLayout";
+import Dragger from "./dndcomponents/Dragger";
+import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -14,7 +16,7 @@ interface GCZProps {
   id: string;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
-  playerZoneSize: {width: number, height: number}
+  playerZoneSize: { width: number; height: number };
 }
 
 function GCZ(props: GCZProps) {
@@ -42,43 +44,42 @@ function GCZ(props: GCZProps) {
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
-  const { cardHeight } = dimensions;
+  const { cardHeight, cardWidth } = dimensions;
   const { x, y } = getPlacesLayout(id, playerZoneSize);
 
-
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
-      {provided => (
-        <div
-        className="pl0GCZ"
+    <div
+      className="pl0GCZ"
+      style={{
+        display: "flex",
+        // top: 100,
+        position: "absolute",
+        margin: 0,
+        //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
+        left: x,
+        top: y,
+        height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
+        minWidth: dimensions.cardWidth,
+        backgroundColor: isHighlighted ? "yellowgreen" : "",
+        boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+        transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+      }}
+    >
+      <DraggerContainer id={"containerOneId"} elementWidth={cardWidth} numElementsAt={cardRowShape} isDropDisabled={!allowDropping}>
+        {cardRow.map((cardGroup, index) => (
+          <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={cardRowShape}>
+            {(handleDragStart, draggerRef) => (
+              <div ref={draggerRef} onMouseDown={handleDragStart}>
+                <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
+              </div>
+            )}
+          </Dragger>
+        ))}
 
-          {...provided.droppableProps}
-          ref={provided.innerRef}
-          style={{
-            display: "flex",
-            // top: 100,
-            position: "absolute",
-            margin: 0,
-            //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: x,
-            top: y,
-            height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
-            minWidth: dimensions.cardWidth,
-            backgroundColor: isHighlighted ? "yellowgreen" : "",
-            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-            transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-          }}
-        >
-          {cardRow.map((cardGroup, index) => (
-            <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
-          ))}
-          {provided.placeholder}
-
-          {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[ghostCardIndex]} dimensions={dimensions} /> : null}
-          {ghostCard ? <GhostCard index={cardRowShape[ghostCardIndex]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null}
-        </div>
-      )}
-    </Droppable>
+        {/* {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[ghostCardIndex]} dimensions={dimensions} /> : null}
+          {ghostCard ? <GhostCard index={cardRowShape[ghostCardIndex]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null} */}
+      </DraggerContainer>
+    </div>
   );
 }
 

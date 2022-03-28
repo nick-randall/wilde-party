@@ -24,41 +24,36 @@ const CardGroup = (props: CardGroupProps) => {
   };
 
   return (
-    <Draggable draggableId={cardGroup.id} index={index} key={cardGroup.id}>
-      {provided => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <div
-            // Container only the size of cardLeftSpread ie. able to be smaller
-            // than the size of the cardGroups and allows overlapping cardGroups.
-            // It represents the matrix of draggable elements
-            style={{
-              // transition: "300ms",
-              width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
-              // this here determines height of GCZ dragover area
-              height: cardHeight * 1.5,
-            }}
-          >
-            <div
-              // This relative container allows the cards to be positioned absolutely within the CardGroup
-              style={{ position: "relative" }}
-            >
-              {cardGroup.cards.map((card, cardGroupIndex) => (
-                <Card
-                  offsetTop={getOffset(card, cardGroupIndex).top} 
-                  offsetLeft={getOffset(card, cardGroupIndex).left}
-                  //cardGroupIndex={cardGroupIndex}
-                  id={card.id}
-                  image={card.image}
-                  index={index}
-                  dimensions={dimensions}
-                  key={card.id}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </Draggable>
+    <div
+      // Container only the size of cardLeftSpread ie. able to be smaller
+      // than the size of the cardGroups and allows overlapping cardGroups.
+      // It represents the matrix of draggable elements
+      style={{
+        // transition: "300ms",
+        width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
+        // this here determines height of GCZ dragover area
+        height: cardHeight * 1.5,
+        border: "thin black solid",
+      }}
+    >
+      <div
+        // This relative container allows the cards to be positioned absolutely within the CardGroup
+        style={{ position: "relative" }}
+      >
+        {cardGroup.cards.map((card, cardGroupIndex) => (
+          <Card
+            offsetTop={getOffset(card, cardGroupIndex).top}
+            offsetLeft={getOffset(card, cardGroupIndex).left}
+            //cardGroupIndex={cardGroupIndex}
+            id={card.id}
+            image={card.image}
+            index={index}
+            dimensions={dimensions}
+            key={card.id}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 export default CardGroup;

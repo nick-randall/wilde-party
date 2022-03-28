@@ -100,6 +100,8 @@ type CardAction = {
 
 type LocationData = {containerId: string, index: number}
 
+
+
 type DropResultEvent = {
   source: LocationData,
   destination: LocationData

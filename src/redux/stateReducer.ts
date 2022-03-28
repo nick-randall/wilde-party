@@ -14,7 +14,8 @@ import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
-import { DraggedState } from "../dndcomponents/stateReducer";
+
+
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -85,6 +86,7 @@ export const stateReducer = (
     case "SET_DRAGGED_ID":
       return { ...state, draggedId: action.payload };
     case "SET_INITIAL_DRAGGED_STATE": {
+      console.log(action.payload)
       return { ...state, draggedState: { source: action.payload, destination: action.payload, isInitialRearrange: true } };
     }
     case "UPDATE_DRAG_DESTINATION":

@@ -1,55 +1,16 @@
 import { RootState } from "../redux/store";
+import { cleanUpDragState, setDragContainerExpand, setDraggedId, setInitialDraggedState, updateDragDestination } from "./dragEventActionCreators";
 
 interface LastLocation {
   left: number;
   top: number;
 }
 
-export type SetDraggedId = {
-  type: "SET_DRAGGED_ID";
-  payload: string;
-};
-
-export type SetInitialDraggedState = {
-  type: "SET_INITIAL_DRAGGED_STATE";
-  payload: { containerId: string; index: number };
-};
-
-export type CleanUpDragState = {
-  type: "CLEAN_UP_DRAG_STATE";
-};
-
-export type SetDragContainerExpand = {
-  type: "SET_DRAG_CONTAINER_EXPAND";
-  payload: { width: number; height: number };
-};
-
-export type UpdateDragDestination = {
-  type: "UPDATE_DRAG_DESTINATION";
-  payload: { destination: LocationData | undefined };
-};
-
-// Action Creators
-const setDraggedId = (id: string): SetDraggedId => ({ type: "SET_DRAGGED_ID", payload: id });
-
-const setInitialDraggedState = (sourceAndDestination: LocationData): SetInitialDraggedState => ({
-  type: "SET_INITIAL_DRAGGED_STATE",
-  payload: sourceAndDestination,
-});
-const cleanUpDragState = (): CleanUpDragState => ({ type: "CLEAN_UP_DRAG_STATE" });
-const setDragContainerExpand = (dragContainerExpand: { width: number; height: number }): SetDragContainerExpand => ({
-  type: "SET_DRAG_CONTAINER_EXPAND",
-  payload: dragContainerExpand,
-});
-const updateDragDestination = (destinationLocationUpdate: LocationData | undefined): UpdateDragDestination => ({
-  type: "UPDATE_DRAG_DESTINATION",
-  payload: { destination: destinationLocationUpdate },
-});
-
 // Thunks
 
 export const dragStartThunk =
-  (id: string, source: LocationData, dragContainerExpand: { width: number; height: number }) => (dispatch: Function, getState: () => RootState) => {
+  (id: string, source: DragSourceData, dragContainerExpand: { width: number; height: number }) => (dispatch: Function, getState: () => RootState) => {
+    console.log("drag started")
     dispatch(setDraggedId(id));
     dispatch(setInitialDraggedState(source));
     dispatch(setDragContainerExpand(dragContainerExpand));

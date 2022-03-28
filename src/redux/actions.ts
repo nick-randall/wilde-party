@@ -1,6 +1,4 @@
-import { DropResult } from "react-beautiful-dnd";
-import { DragAction } from "../dndcomponents/stateReducer";
-
+import { DragAction } from "../dndcomponents/dragEventActionCreators";
 export type LocationData = {
   index: number;
   droppableId: string;
