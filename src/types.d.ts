@@ -218,4 +218,10 @@ type CardGroupObj = {
   cards: CardGroup;
 };
 
+type NewCardGroupObj={
+  id: string;
+  width: number;
+  cards: CardGroup;
+}
+
 type Hover = "shortHover" | "longHover" | "none";

@@ -1,34 +1,45 @@
 import { pipe } from "ramda";
 import { filterOutDuplicates } from "./genericFunctions";
 
-// TODO cleanup!!!
-
 const isBff = (card?: GameCard) => card && card.cardType === "bff";
 
 const isZwilling = (card?: GameCard) => card && card.cardType === "zwilling";
 
 const isGuestCard = (card?: GameCard) => card && card.cardType === "guest";
 
-export const getCardGroupsObjsnew = (GCZCards: GameCard[]): CardGroup[] => {
-  let cardGroups = [];
+export const getCardGroupsObjsnew = (GCZCards: GameCard[]): NewCardGroupObj[] => {
+  let cardGroupObjs: NewCardGroupObj[] = [];
   for (let i = 0; i < GCZCards.length; i++) {
-    const card: GameCard = GCZCards[i];
-    let cardGroup: GameCard[] | undefined; //[card];
+    let newCardGroup: GameCard[] | undefined;
 
+    const card: GameCard = GCZCards[i];
     const cardToLeft: GameCard | undefined = GCZCards[i - 1];
     const cardToRight: GameCard | undefined = GCZCards[i + 1];
     const cardTwoToRight: GameCard | undefined = GCZCards[i + 2];
 
-    if (isBff(cardToRight)) cardGroup = [card, cardToRight, cardTwoToRight];
-    if (isZwilling(cardToRight)) cardGroup = [card, cardToRight];
-    if (!cardGroup) {
-      if (isGuestCard(card) && !isBff(cardToLeft)) cardGroup = [card];
+    if (isBff(cardToRight)) newCardGroup = [card, cardToRight, cardTwoToRight];
+    if (isZwilling(cardToRight)) newCardGroup = [card, cardToRight];
+    if (!newCardGroup) {
+      if (isGuestCard(card) && !isBff(cardToLeft)) newCardGroup = [card];
     }
 
-    if (cardGroup) cardGroups.push(cardGroup);
+    let newCardGroupObj: NewCardGroupObj | undefined;
+    if (newCardGroup) {
+      newCardGroupObj = {
+        id: `cardGroup${newCardGroup[0].name}`,
+        width: newCardGroup.length === 1 ? 1 : newCardGroup.length - 1,
+        cards: newCardGroup,
+      };
+      cardGroupObjs.push(newCardGroupObj);
+    }
   }
-  return cardGroups;
+  return cardGroupObjs;
 };
+
+// const convertCardGroupToObj =
+
+// export const convertCardGroupToObj = (cardGroupArray: CardGroup[]): CardGroupObj[] =>
+// cardGroupArray.map(cardGroup => ({ id: `cardGroup${cardGroup[0].name}`, width: cards: cardGroup }));
 
 // const convertCardGroupToObj = (cardGroupArray: CardGroup[]): CardGroupObj[] =>
 //   cardGroupArray.map(cardGroup => ({ id: `cardGroup${cardGroup[0].name}`, size: cardGroup.length < 3 ? 1 : 2, cards: cardGroup }));

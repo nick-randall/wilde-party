@@ -8,6 +8,8 @@ import NonPlayerPlaces from "./NonPlayerPlaces";
 import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
+import { GCZCards } from "./createGameSnapshot/sampleCards";
+import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -29,6 +31,10 @@ export const Table = () => {
       setGameStarted(true);
     }
   }, [dispatch, gameStarted]);
+
+const cards = GCZCards;
+
+console.log(getCardGroupsObjsnew(cards));
 
   return (
     <div>
