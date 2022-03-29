@@ -1,8 +1,8 @@
 import React, { CSSProperties, Ref, useCallback, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { RootState } from "../redux/store";
 import { dragEndThunk, dragStartThunk } from "./dragEventThunks";
-import { addZeroAtFirstIndex, getCumulativeSum } from "./DraggerContainer";
+import { getCumulativeSum, addZeroAtFirstIndex, indexToMapped } from "./dragEventHelperFunctions";
+import { RootState } from "../redux/store";
 
 export interface DraggerProps {
   draggerId: string;
@@ -103,17 +103,19 @@ const Dragger: React.FC<CombinedProps> = ({
           //
           dragContainerExpand.width = width / 2 - touchedPointX;
 
-          const trueSourceIndex = numElementsAt !== undefined ? getCumulativeSum(addZeroAtFirstIndex(numElementsAt))[index] : index;
-          const numDraggedElements = numElementsAt !== undefined ? numElementsAt[index] : index;
-          console.log(numElementsAt)
+          const mappedSourceIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, index) : index;
+          const numDraggedElements = numElementsAt !== undefined ? numElementsAt[index] : 1;
 
-          const dragSourceAndDestination = {
+          const dragSource: DragSourceData = {
             containerId: containerId,
-            index: index,
-            trueSourceIndex: trueSourceIndex,
+            index: mappedSourceIndex,
             numDraggedElements: numDraggedElements,
           };
-          dispatch(dragStartThunk(draggerId, dragSourceAndDestination, dragContainerExpand));
+          const dragDestination: LocationData = {
+            containerId: containerId,
+            index: mappedSourceIndex
+          }
+          dispatch(dragStartThunk(draggerId, dragSource, dragDestination, dragContainerExpand));
         }
       } else console.log("error getting html node");
     },
@@ -183,6 +185,8 @@ const Dragger: React.FC<CombinedProps> = ({
 
   return <div style={{ ...styles }}>{children(handleDragStart, draggableRef, dragState.dragged)}</div>;
 };
+
+// export default Dragger;
 
 const mapStateToProps = (state: RootState) => {
   const { draggedState } = state;

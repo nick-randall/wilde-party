@@ -1,4 +1,4 @@
-import { addZeroAtFirstIndex, getCardGroupObjsFromSnapshot, getCumulativeSum, mapSizes } from "../groupGCZCards";
+import { addZeroAtFirstIndex, getCardGroupObjsFromSnapshot, getCumulativeSum, mapSizes } from "../groupGCZCards"
 import * as R from "ramda";
 import { getIdListObject } from "../getIdList";
 
