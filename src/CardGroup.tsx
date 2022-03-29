@@ -1,10 +1,12 @@
 import { Draggable } from "react-beautiful-dnd";
 import Card from "./Card";
+import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 
 export interface CardGroupProps {
   cardGroup: CardGroupObj;
   index: number;
   dimensions: AllDimensions;
+  GCZId: string
 }
 
 interface CardOffset {
@@ -13,7 +15,7 @@ interface CardOffset {
 }
 
 const CardGroup = (props: CardGroupProps) => {
-  const { cardGroup, index, dimensions } = props;
+  const { cardGroup, index, dimensions, GCZId } = props;
   const { cardHeight, cardLeftSpread } = dimensions;
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
@@ -50,6 +52,7 @@ const CardGroup = (props: CardGroupProps) => {
             index={index}
             dimensions={dimensions}
             key={card.id}
+            placeId={GCZId}
           />
         ))}
       </div>

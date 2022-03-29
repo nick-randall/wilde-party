@@ -68,9 +68,9 @@ function GCZ(props: GCZProps) {
       <DraggerContainer id={"containerOneId"} elementWidth={cardWidth} numElementsAt={cardRowShape} isDropDisabled={!allowDropping}>
         {cardRow.map((cardGroup, index) => (
           <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={cardRowShape}>
-            {(handleDragStart, draggerRef) => (
-              <div ref={draggerRef} onMouseDown={handleDragStart}>
-                <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} />
+            {(draggerProps) => (
+              <div ref={draggerProps.draggerRef} onMouseDown={draggerProps.handleDragStart}>
+                <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id}/>
               </div>
             )}
           </Dragger>

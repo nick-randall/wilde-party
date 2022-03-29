@@ -16,7 +16,7 @@ const DiscardPile = (props: DiscardPileProps) => {
     <div style={{position: "absolute", left: x, top: y}}>
       {cards.map((card, index) => (
         // <img src={card.image} alt={card.image} style={{ height: cardHeight, width: cardWidth }} />
-        <Card id={card.id} key={card.id} index={0} image={card.image} dimensions={dimensions} offsetLeft={index* 3}/>
+        <Card id={card.id} key={card.id} index={0} image={card.image} dimensions={dimensions} offsetLeft={index* 3} placeId={id}/>
       ))}
     </div>
   );

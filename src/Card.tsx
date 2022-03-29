@@ -6,6 +6,7 @@ import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
+import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 
 export interface CardProps {
   id: string;
@@ -15,11 +16,12 @@ export interface CardProps {
   offsetLeft?: number;
   offsetTop?: number;
   //cardGroupIndex: number;
+  placeId: string;
   showNotAmongHighlights?: boolean;
 }
 
 const Card = (props: CardProps) => {
-  const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
+  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image} = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
@@ -38,13 +40,13 @@ const Card = (props: CardProps) => {
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
 
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
+  // const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
 
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  // const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
-  
+
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
@@ -55,32 +57,24 @@ const Card = (props: CardProps) => {
     transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",
     // transitionDelay: "150ms",
-    userSelect: "none"
+    userSelect: "none",
   };
 
   return (
-    <div>
-      <Droppable droppableId={id} isDropDisabled={!highlights.includes(id)}>
-        {
-          // Here we use a droppable in an idomatic way, in order to allow
-          // dropping on individual cards for the "enchant" action. Of course
-          // no elements can actually be added to the droppable, but it allows
-          // us to use the API (eg. isDraggingOver, droppableId--which is now
-          // the targeted card) just the same...
-          provided => (
-            <div style={{ position: "absolute" }}>
-              <CardInspector
-                dimensions={dimensions}
-                cardRotation={messinessRotation}
-                render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
-                  <TransitionHandler
-                    index={index}
-                    id={id}
-                    render={(transitionStyles: CSSProperties) => (
-                      <div ref={cardRef}>
+      <div style={{ position: "absolute" }}>
+        <CardInspector
+          dimensions={dimensions}
+          cardRotation={messinessRotation}
+          render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
+            <TransitionHandler
+              index={index}
+              id={id}
+              render={(transitionStyles: CSSProperties) => (
+                <div ref={cardRef}>
+                  <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight>
+                    {isDraggingOver => (
+                      <div>
                         <img
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
                           alt={image}
                           draggable="false"
                           src={`./images/${image}.jpg`}
@@ -89,34 +83,33 @@ const Card = (props: CardProps) => {
                           id={id}
                           style={{
                             WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                            boxShadow:  "2px 2px 2px black",
+                            boxShadow: "2px 2px 2px black",
                             transition: "box-shadow 180ms",
                             ...normalStyles,
                             ...inspectingStyles,
-                            ...transitionStyles
+                            ...transitionStyles,
                           }}
                         />
+                        {isDraggingOver && draggedHandCard ? (
+                          <GhostCard
+                            index={0}
+                            offsetLeft={cardLeftSpread * BFFOffset}
+                            offsetTop={cardHeight / 2}
+                            image={draggedHandCard.image}
+                            dimensions={dimensions}
+                            zIndex={5}
+                          />
+                        ) : null}
                       </div>
                     )}
-                  />
-                )}
-              />
-              {ghostCard ? (
-                <GhostCard
-                  index={0}
-                  offsetLeft={cardLeftSpread * BFFOffset}
-                  offsetTop={cardHeight / 2}
-                  image={ghostCard.image}
-                  dimensions={dimensions}
-                  zIndex={5}
-                />
-              ) : null}
-              {provided.placeholder}
-            </div>
-          )
-        }
-      </Droppable>
-    </div>
+                  </DropZoneWrapper>
+                </div>
+              )}
+            />
+          )}
+        />
+      </div>
+      
   );
 };
 export default Card;

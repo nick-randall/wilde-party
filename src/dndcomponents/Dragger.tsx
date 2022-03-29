@@ -3,7 +3,9 @@ import { connect, useDispatch } from "react-redux";
 import { dragEndThunk, dragStartThunk } from "./dragEventThunks";
 import { getCumulativeSum, addZeroAtFirstIndex, indexToMapped } from "./dragEventHelperFunctions";
 import { RootState } from "../redux/store";
-
+interface DraggerRenderProps {
+  handleDragStart: (event: React.MouseEvent) => void, draggerRef:  Ref<HTMLImageElement>, isDragging: boolean;
+}
 export interface DraggerProps {
   draggerId: string;
   index: number;
@@ -13,8 +15,10 @@ export interface DraggerProps {
   isOutsideContainer?: boolean;
   isDragDisabled?: boolean;
   numElementsAt?: number[];
-  children: (handleDragStart: (event: React.MouseEvent) => void, ref: Ref<HTMLImageElement>, dragged: boolean) => JSX.Element;
+  children: (renderProps: DraggerRenderProps) => JSX.Element;
 }
+
+
 
 interface DraggerReduxProps {
   source: DragSourceData | undefined;
@@ -183,7 +187,9 @@ const Dragger: React.FC<CombinedProps> = ({
 
   const styles = dragState.dragged ? draggedStyles : notDraggedStyles;
 
-  return <div style={{ ...styles }}>{children(handleDragStart, draggableRef, dragState.dragged)}</div>;
+  const renderProps: DraggerRenderProps = {handleDragStart: handleDragStart, draggerRef: draggableRef, isDragging: dragState.dragged}
+
+  return <div style={{ ...styles }}>{children(renderProps)}</div>;
 };
 
 // export default Dragger;

@@ -39,6 +39,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                   dimensions={dimensions}
                   key={card.id}
                   offsetTop={index * dimensions.cardTopSpread}
+                  placeId={specialsZoneId}
                 />
               ))}
 

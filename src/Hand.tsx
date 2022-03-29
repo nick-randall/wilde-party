@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
+import DraggerContainer from "./dndcomponents/DraggerContainer";
+import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
 interface HandProps {
   id: string;
   handCards: GameCard[];
@@ -33,58 +35,31 @@ const Hand = (props: HandProps) => {
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
-      {provided => (
-        <div
-          id={props.id}
-          onMouseEnter={() => setShouldSpread(true)}
-          onMouseLeave={() => setShouldSpread(false)}
-          style={{
-            position: "absolute",
-            display: "flex",
-            bottom: 30,
-            // This causes whole card row to move left on spread
-            left: x - (spread / 2 - 0.5) * handCards.length,
-            //left: x - (spread / 2) * handCards.length,
-            top: y,
-            transition: "180ms",
-            height: dimensions.cardHeight,
-          }}
-          ref={provided.innerRef}
-        >
-          {handCards.map((card, index) => (
-            <div
-              // This is a container div for one card and two spacers
-              style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
-            >
-              <div
-                // This is a card spacer div, responsible for growing and pushing the hand cards apart.
-                style={{
-                  width: spread / 2,
-                  transition: "all 180ms",
-                  height: dimensions.cardHeight,
-                  // border:"thin green solid",
-                  // zIndex: 100
-                }}
-              />
-              <HandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
-
-              <div
-                // This is a card spacer div, responsible for growing and pushing the hand cards apart.
-                style={{
-                  width: spread / 2,
-                  transition: "all 180ms",
-                  height: dimensions.cardHeight,
-                  // border:"thin red solid",
-                  // zIndex: 100
-                }}
-              />
-            </div>
-          ))}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+    <div
+      id={props.id}
+      onMouseEnter={() => setShouldSpread(true)}
+      onMouseLeave={() => setShouldSpread(false)}
+      style={{
+        position: "absolute",
+        display: "flex",
+        bottom: 30,
+        // This causes whole card row to move left on spread
+        // left: x - (spread / 2 - 0.5) * handCards.length,
+        //left: x - (spread / 2) * handCards.length,
+        top: y,
+        transition: "180ms",
+        height: dimensions.cardHeight,
+      }}
+    >
+      <NoLayoutDragContainer>
+        {handCards.map((card, index) => (
+       
+          
+          <HandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} handId={id} spread={spread}/>
+        
+        ))}
+      </NoLayoutDragContainer>
+    </div>
   );
 };
 

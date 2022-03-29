@@ -31,7 +31,7 @@ export const Deck = (props: DeckProps) => {
 
   return (
     <div style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
-      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} id={card.id} index={index} image="back"/>)}
+      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id}/>)}
 
     </div>
   );
