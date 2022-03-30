@@ -1,3 +1,6 @@
+import { createDeck, setDeckIndexes, setDeckPlaceId } from "./createDeck";
+import shuffle from "../helperFunctions/shuffle";
+
 export const GCZCards: GameCard[] = [
   {
     id: "einfachRonny",
@@ -23,11 +26,11 @@ export const GCZCards: GameCard[] = [
   },
   {
     id: "rumgroelerDrunkAtFiveClive",
-    name: `rumgroelerin`,
+    name: `rumgroelerin1`,
     placeId: "",
     playerId: "",
     index: 0,
-    image: `rumgroelerin`,
+    image: `rumgroelerin1`,
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin",
@@ -70,3 +73,14 @@ export const GCZCards: GameCard[] = [
 
 
 ];
+
+
+export const getSampleDeck = () : { deck: GameCard[]; deckId: string } => {
+  const deckId = "uuidv4(";
+  let deck = createDeck();
+  let shuffledDeck = shuffle(deck);
+  shuffledDeck = GCZCards.concat(shuffledDeck)
+  const withIndexes = setDeckIndexes(shuffledDeck);
+  const withPlaceId = setDeckPlaceId(withIndexes, deckId);
+  return {deck: withPlaceId, deckId: deckId}
+}

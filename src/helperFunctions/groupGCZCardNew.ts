@@ -40,11 +40,11 @@ export const getCardGroupsObjsnew = (GCZCards: GameCard[]): NewCardGroupObj[] =>
 
 export const getGCZTotalWidth = (GCZCards: GameCard[]) => GCZCards.filter(card => card.cardType === "guest").map(card => 1);
 
-export const getGCZWidthMap = (GCZCards: GameCard[]): number[] => {
-  let widthMap: number[] = [];
-  GCZCards.forEach(card => card.cardType === "bff" ? widthMap.push(2) : widthMap.push(1))
-  return widthMap;
-}
+// export const getGCZWidthMap = (GCZCards: GameCard[]): number[] => {
+//   let widthMap: number[] = [];
+//   GCZCards.forEach(card => card.cardType === "bff" ? widthMap.push(2) : widthMap.push(1))
+//   return widthMap;
+// }
 
 export const getGCZNumElementsAt = (GCZCards: GameCard[]) => "a"//GCZCards.map(e => )
 

@@ -19,9 +19,9 @@ export const createDeck = () => {
   return deck;
 };
 
-const setDeckIndexes = (deck: GameCard[]) => deck.map((card, i) => ({ ...card, index: i }));
+export const setDeckIndexes = (deck: GameCard[]) => deck.map((card, i) => ({ ...card, index: i }));
 
-const setDeckPlaceId = (deck: GameCard[], deckId: string) => deck.map(card => ({ ...card, placeId: deckId }));
+export const setDeckPlaceId = (deck: GameCard[], deckId: string) => deck.map(card => ({ ...card, placeId: deckId }));
 
 export const getPreppedDeck = (): { deck: GameCard[]; deckId: string } => {
   const deckId = uuidv4();
@@ -32,6 +32,8 @@ export const getPreppedDeck = (): { deck: GameCard[]; deckId: string } => {
 
   return { deck: withPlaceId, deckId: deckId };
 };
+
+
 
 // fix place and player ids
 

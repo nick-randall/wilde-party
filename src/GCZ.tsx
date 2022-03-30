@@ -9,7 +9,7 @@ import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupsObjsnew, getGCZWidthMap } from "./helperFunctions/groupGCZCardNew";
+import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
@@ -45,7 +45,9 @@ function GCZ(props: GCZProps) {
   const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
 
 
-  const elementWidthAt = getGCZWidthMap(GCZCards);
+  const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width)//getGCZWidthMap(GCZCards);
+  
+  console.log("GCZ objects" , elementWidthAt, numElementsAt, cardGroups)
   // const containsTargetedCard =
   //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
@@ -62,8 +64,8 @@ function GCZ(props: GCZProps) {
         // top: 100,
         position: "absolute",
         margin: 0,
-        //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-        left: 200,
+        // left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
+        left: 0,
         top: y,
         height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
         minWidth: dimensions.cardWidth,
@@ -75,7 +77,7 @@ function GCZ(props: GCZProps) {
       }}
     >
       <DraggerContainer id={id} elementWidth={cardWidth} numElementsAt={numElementsAt} elementWidthAt={elementWidthAt}>{/* isDropDisabled={!allowDropping}*/}
-        {cardRow.map((cardGroup, index) => (
+        {cardGroups.map((cardGroup, index) => (
           <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
             {(draggerProps) => (
               <div ref={draggerProps.draggerRef} onMouseDown={draggerProps.handleDragStart}>

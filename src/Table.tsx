@@ -17,8 +17,8 @@ export const Table = () => {
   const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const [gameStarted, setGameStarted] = useState(false);
 
-// const draggedState = useSelector((state: RootState) => state.draggedState)
-// const draggerId = useSelector((state: RootState) => state.draggedId)
+const draggedState = useSelector((state: RootState) => state.draggedState)
+const draggerId = useSelector((state: RootState) => state.draggedId)
 
   const dispatch = useDispatch();
 
@@ -43,10 +43,10 @@ console.log(getCardGroupsObjsnew(cards));
     <div>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
         <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
-        {/* numDraggedElements: {draggedState.source?.numDraggedElements}
+        numDraggedElements: {draggedState.source?.numDraggedElements}
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
-        draggerId: {draggerId} */}
+        draggerId: {draggerId}
 
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />

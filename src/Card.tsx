@@ -113,5 +113,3 @@ const Card = (props: CardProps) => {
   );
 };
 export default Card;
-
-//<div ref={provided.innerRef} {...provided.droppableProps} style={{ width: dimensions.cardWidth, height: dimensions.cardHeight }} >

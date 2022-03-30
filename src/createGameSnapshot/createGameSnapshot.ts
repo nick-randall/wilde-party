@@ -2,12 +2,13 @@ import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 import { getPreppedDeck } from "./createDeck";
 import createStartingGuests from "./createStartingGuests";
+import { getSampleDeck } from "./sampleCards";
 
 const numPlayers = 3;
 
 export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
-  let { deck: deckCards, deckId } = getPreppedDeck();
+  let { deck: deckCards, deckId } = getSampleDeck()//getPreppedDeck();
   const startingGuests = createStartingGuests(numPlayers);
   deckCards.unshift(...startingGuests)
   

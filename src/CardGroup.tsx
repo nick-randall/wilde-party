@@ -3,7 +3,7 @@ import Card from "./Card";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 
 export interface CardGroupProps {
-  cardGroup: CardGroupObj;
+  cardGroup: NewCardGroupObj;
   index: number;
   dimensions: AllDimensions;
   GCZId: string
@@ -19,8 +19,8 @@ const CardGroup = (props: CardGroupProps) => {
   const { cardHeight, cardLeftSpread } = dimensions;
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
-    if (card.cardType === "bff") return { top: cardHeight / 2, left: cardLeftSpread / 2 };
-    if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
+    if (card.cardType === "bff") return { top: cardHeight / 2, left: -cardLeftSpread / 2 };
+    if (card.cardType === "zwilling") return { top: cardHeight / 2, left:0 };
     if (cardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
     else return { top: 0, left: 0 };
   };
@@ -32,7 +32,8 @@ const CardGroup = (props: CardGroupProps) => {
       // It represents the matrix of draggable elements
       style={{
         // transition: "300ms",
-        width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
+        // width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
+        width: cardGroup.width * cardLeftSpread,
         // this here determines height of GCZ dragover area
         height: cardHeight * 1.5,
         border: "thin black solid",
