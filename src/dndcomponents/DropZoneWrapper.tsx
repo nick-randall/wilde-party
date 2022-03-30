@@ -56,6 +56,7 @@ const DropZoneWrapper: React.FC<ComponentProps> = ({
   const handleMouseMove = () => {
     if (!dragged) return;
     if (isDropDisabled) return;
+    if(isDraggingOver) return;
     setIsDraggingOver(true);
     let calculatedIndex;
     if(insertToTheRight) {

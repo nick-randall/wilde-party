@@ -71,7 +71,7 @@ const Card = (props: CardProps) => {
               id={id}
               render={(transitionStyles: CSSProperties) => (
                 <div ref={cardRef}>
-                  <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight>
+                  <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
                     {isDraggingOver => (
                       <div>
                         <img

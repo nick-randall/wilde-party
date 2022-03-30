@@ -29,6 +29,7 @@ export const getCardGroupsObjsnew = (GCZCards: GameCard[]): NewCardGroupObj[] =>
       newCardGroupObj = {
         id: `cardGroup${newCardGroup[0].name}`,
         width: newCardGroup.length === 1 ? 1 : newCardGroup.length - 1,
+        size: newCardGroup.length,
         cards: newCardGroup,
       };
       cardGroupObjs.push(newCardGroupObj);
@@ -44,6 +45,8 @@ export const getGCZWidthMap = (GCZCards: GameCard[]): number[] => {
   GCZCards.forEach(card => card.cardType === "bff" ? widthMap.push(2) : widthMap.push(1))
   return widthMap;
 }
+
+export const getGCZNumElementsAt = (GCZCards: GameCard[]) => "a"//GCZCards.map(e => )
 
 const getGCZWidthMapFromObjs = (GCZCardObjs: NewCardGroupObj[]) => GCZCardObjs.map(cardGroup => cardGroup.width);
 

@@ -109,7 +109,6 @@ const Dragger: React.FC<CombinedProps> = ({
 
           const mappedSourceIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, index) : index;
           const numDraggedElements = numElementsAt !== undefined ? numElementsAt[index] : 1;
-
           const dragSource: DragSourceData = {
             containerId: containerId,
             index: mappedSourceIndex,

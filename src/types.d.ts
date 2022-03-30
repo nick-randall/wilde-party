@@ -221,6 +221,7 @@ type CardGroupObj = {
 type NewCardGroupObj={
   id: string;
   width: number;
+  size: number;
   cards: CardGroup;
 }
 

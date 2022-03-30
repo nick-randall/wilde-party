@@ -9,6 +9,7 @@ import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getCardGroupsObjsnew, getGCZWidthMap } from "./helperFunctions/groupGCZCardNew";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
 
@@ -30,7 +31,7 @@ function GCZ(props: GCZProps) {
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
   const cardRow = getCardGroupObjs(enchantmentsRowCards, GCZCards);
-  const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
+  // const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
   const ghostCardGroup = cardRow.find(e => rearrange.draggableId === e.id);
 
   const highlights = useSelector((state: RootState) => state.highlights);
@@ -39,6 +40,12 @@ function GCZ(props: GCZProps) {
 
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
 
+  const cardGroups = getCardGroupsObjsnew(GCZCards);
+
+  const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
+
+
+  const elementWidthAt = getGCZWidthMap(GCZCards);
   // const containsTargetedCard =
   //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
@@ -51,23 +58,25 @@ function GCZ(props: GCZProps) {
     <div
       className="pl0GCZ"
       style={{
-        display: "flex",
+        // display: "flex", 
         // top: 100,
         position: "absolute",
         margin: 0,
         //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-        left: x,
+        left: 200,
         top: y,
         height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
         minWidth: dimensions.cardWidth,
         backgroundColor: isHighlighted ? "yellowgreen" : "",
         boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
         transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+        border: "thin red solid"
+        
       }}
     >
-      <DraggerContainer id={"containerOneId"} elementWidth={cardWidth} numElementsAt={cardRowShape} isDropDisabled={!allowDropping}>
+      <DraggerContainer id={id} elementWidth={cardWidth} numElementsAt={numElementsAt} elementWidthAt={elementWidthAt}>{/* isDropDisabled={!allowDropping}*/}
         {cardRow.map((cardGroup, index) => (
-          <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={cardRowShape}>
+          <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
             {(draggerProps) => (
               <div ref={draggerProps.draggerRef} onMouseDown={draggerProps.handleDragStart}>
                 <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id}/>

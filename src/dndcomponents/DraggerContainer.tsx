@@ -74,7 +74,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const containerRef: Ref<HTMLDivElement> = useRef(null);
   const dragged = draggedId !== undefined;
   const isInitialRearrange = usePrevious(draggedId) === undefined && draggedId !== undefined;
-
+  console.log(isInitialRearrange)
 
   useEffect(() => {
     if (!draggedOverIndex) setBreakPoints([]);

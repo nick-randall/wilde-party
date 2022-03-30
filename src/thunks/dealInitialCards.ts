@@ -43,6 +43,8 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
   };
 
   for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);
+  for(let i = 0; i < 4; i++)
+  dealStartingGuest(0)
   for (let i = 0; i < numPlayers; i++) for (let j = 0; j < numCardsInHand; j++) dealCard(i, i * j === (numCardsInHand - 1) * (numPlayers - 1));
   // for (let i = 0; i < numPlayers; i++) {
   //   const prevSnapshot = getState().gameSnapshot;
