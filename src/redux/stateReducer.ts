@@ -86,7 +86,6 @@ export const stateReducer = (
     case "SET_DRAGGED_ID":
       return { ...state, draggedId: action.payload };
     case "SET_INITIAL_DRAGGED_STATE": {
-      console.log(action.payload)
       const {source, destination} = action.payload
       return { ...state, draggedState: {source: source, destination: destination} };
     }

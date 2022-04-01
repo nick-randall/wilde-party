@@ -19,7 +19,7 @@ const CardGroup = (props: CardGroupProps) => {
   const { cardHeight, cardLeftSpread } = dimensions;
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
-    if (card.cardType === "bff") return { top: cardHeight / 2, left: -cardLeftSpread / 2 };
+    if (card.cardType === "bff") return { top: cardHeight / 2, left: cardLeftSpread / 2 };
     if (card.cardType === "zwilling") return { top: cardHeight / 2, left:0 };
     if (cardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
     else return { top: 0, left: 0 };

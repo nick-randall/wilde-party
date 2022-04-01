@@ -1,5 +1,6 @@
 import { isNonNullChain } from "typescript";
 import store from "../redux/store";
+import { getGCZTotalWidth } from "./groupGCZCardNew";
 
 export interface Locator {
   player: number | null;
@@ -18,6 +19,7 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
       const place = playerPlacesTypes[j];
       if (placeId === players[i]["places"][place].id) {
         if (place === "enchantmentsRow") return players[i]["places"]["GCZ"].cards.length;
+        if (place === "GCZ") return getGCZTotalWidth(players[i]["places"]["GCZ"].cards)
         return players[i]["places"][place].cards.length;
       }
     }

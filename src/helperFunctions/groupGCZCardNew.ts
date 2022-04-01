@@ -38,7 +38,7 @@ export const getCardGroupsObjsnew = (GCZCards: GameCard[]): NewCardGroupObj[] =>
   return cardGroupObjs;
 };
 
-export const getGCZTotalWidth = (GCZCards: GameCard[]) => GCZCards.filter(card => card.cardType === "guest").map(card => 1);
+export const getGCZTotalWidth = (GCZCards: GameCard[]) => GCZCards.filter(card => card.cardType === "guest").map(c => 1).reduce((acc: number, curr) => acc + curr);
 
 // export const getGCZWidthMap = (GCZCards: GameCard[]): number[] => {
 //   let widthMap: number[] = [];
