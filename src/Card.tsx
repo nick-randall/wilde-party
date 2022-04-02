@@ -92,7 +92,6 @@ const Card = (props: CardProps) => {
                         />
                         {isDraggingOver && draggedHandCard ? (
                           <GhostCard
-                            index={0}
                             offsetLeft={cardLeftSpread * BFFOffset}
                             offsetTop={cardHeight / 2}
                             image={draggedHandCard.image}

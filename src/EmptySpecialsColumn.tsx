@@ -47,7 +47,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
             {...provided.droppableProps}
           >
             {provided.placeholder}
-            {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+            {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
           </div>
         )}
       </Droppable>

@@ -111,7 +111,6 @@ const EnemyCard = (props: EnemyCardProps) => {
           />
           {ghostCard ? (
             <GhostCard
-              index={0}
               offsetLeft={cardLeftSpread * BFFOffset}
               offsetTop={cardHeight / 2}
               image={ghostCard.image}

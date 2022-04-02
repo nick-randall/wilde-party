@@ -1,5 +1,4 @@
 interface GhostCardProps {
-  index: number;
   image: string;
   offsetLeft?: number;
   offsetTop?: number;
@@ -9,7 +8,7 @@ interface GhostCardProps {
 }
 
 export const GhostCard = (props: GhostCardProps) => {
-  const { dimensions, rotation, image, index, offsetLeft, offsetTop, zIndex } = props;
+  const { dimensions, rotation, image,  offsetLeft, offsetTop, zIndex } = props;
   const {cardLeftSpread, cardWidth} = dimensions;
   const id = "ghostCard" + image;
 
@@ -23,7 +22,7 @@ export const GhostCard = (props: GhostCardProps) => {
             opacity: 0.7,
             width: cardWidth,
             border: "thin solid",
-            left: (index) * cardLeftSpread + (offsetLeft || 0),
+            left: (offsetLeft || 0), //(index) * cardLeftSpread + (offsetLeft || 0),
             top: (offsetTop || 0),
             rotate: rotation + "deg" || "0deg",
             position: "absolute",

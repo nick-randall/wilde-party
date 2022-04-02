@@ -1,7 +1,7 @@
 import GhostCard from "./GhostCard";
 
 export interface GhostCardGroupProps {
-  index: number;
+  // index: number;
   ghostCardGroup: CardGroupObj;
   dimensions: AllDimensions;
 }
@@ -12,7 +12,7 @@ interface CardOffset {
 }
 
 const GhostCardGroup = (props: GhostCardGroupProps) => {
-  const { ghostCardGroup, index, dimensions } = props;
+  const { ghostCardGroup,  dimensions } = props;
   const { cardHeight, cardLeftSpread } = dimensions;
 
   const getOffset = (card: GameCard, ghostCardGroupIndex: number): CardOffset => {
@@ -27,7 +27,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
       <div id={`ghostcard-relative-positioning-container${ghostCardGroup}`} style={{ position: "relative" }}>
         {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
           <GhostCard
-            index={index}
+            // index={index}
             image={ghostCard.image}
             dimensions={dimensions}
             key={ghostCard.id}

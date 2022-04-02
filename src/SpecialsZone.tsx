@@ -69,7 +69,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null} */}
-                    {ghostCard ? <GhostCard index={draggedOver.index} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                    {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

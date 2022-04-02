@@ -45,7 +45,7 @@ function GCZ(props: GCZProps) {
   const ghostCardGroup = cardGroups.find(e => draggedId === e.id) ;
   const destination = useSelector((state: RootState) => state.draggedState.destination)
   const source = useSelector((state: RootState) => state.draggedState.source)
-  console.log(rearranging)
+  // console.log(rearranging)
 
 
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width)//getGCZWidthMap(GCZCards);
@@ -60,8 +60,8 @@ function GCZ(props: GCZProps) {
   const convertedDraggedOverIndex = ghostCardGroup ? draggedOverindexFromMapped(destination?.index ?? 0, numElementsAt, source?.index ?? 0, rearranging): undefined
   const cumulativeWidthAt = pipe(removeSourceIndex(source?.index ?? 0), getCumulativeSum, addZeroAtFirstIndex)(elementWidthAt);
 
-  console.log(cumulativeWidthAt )
-  console.log("draggedOVerIndex " + convertedDraggedOverIndex + destination?.index)
+  // console.log(cumulativeWidthAt )
+  // console.log("draggedOVerIndex " + convertedDraggedOverIndex + destination?.index)
   // const containsTargetedCard =
   //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
 
@@ -89,6 +89,7 @@ function GCZ(props: GCZProps) {
       }}
     >
       <DraggerContainer id={id} elementWidth={cardWidth} numElementsAt={numElementsAt} elementWidthAt={elementWidthAt} 
+      placeHolder={ghostCardGroup && <GhostCardGroup ghostCardGroup={ghostCardGroup} dimensions={dimensions} />}
       containerStyles={ rearranging ? { backgroundColor: isHighlighted || rearranging ? "yellowgreen" : "",
         boxShadow: isHighlighted || rearranging ? "0px 0px 30px 30px yellowgreen" : "",
         transition: "background-color 180ms, box-shadow 180ms, left 180ms"}:{}}
@@ -104,8 +105,8 @@ function GCZ(props: GCZProps) {
         ))}
  </DraggerContainer>
 
- {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cumulativeWidthAt[convertedDraggedOverIndex ?? 0]} dimensions={dimensions} /> : null}
-          {/* {ghostCard ? <GhostCard index={numElementsAt[ghostCardIndex]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null} */}
+ {/* {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cumulativeWidthAt[convertedDraggedOverIndex ?? 0]} dimensions={dimensions} /> : null}
+          {ghostCard ? <GhostCard index={numElementsAt[ghostCardIndex]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null} */}
      
     </div>
   );
