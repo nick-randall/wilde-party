@@ -29,6 +29,7 @@ export const GhostCard = (props: GhostCardProps) => {
             position: "absolute",
             transition: "left 250ms ease",
             zIndex: zIndex,
+            pointerEvents: "none"
           }}
         />
   )

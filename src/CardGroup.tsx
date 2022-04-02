@@ -36,7 +36,7 @@ const CardGroup = (props: CardGroupProps) => {
         width: cardGroup.width * cardLeftSpread,
         // this here determines height of GCZ dragover area
         height: cardHeight * 1.5,
-        border: "thin black solid",
+        // border: "thin black solid",
       }}
     >
       <div
