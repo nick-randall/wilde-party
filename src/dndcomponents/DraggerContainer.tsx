@@ -88,8 +88,8 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const dragged = draggedId !== undefined;
   const isInitialRearrange = usePrevious(draggedId) === undefined && draggedId !== undefined;
 
-  console.log(distFromLeftMap)
-  console.log(draggedOverIndex)
+  console.log(distFromLeftMap);
+  console.log(draggedOverIndex);
   console.log(distFromLeftMap[draggedOverIndex ?? 0]);
 
   useEffect(() => {
@@ -244,7 +244,9 @@ const DraggerContainer: React.FC<ComponentProps> = ({
           }}
           draggable="false"
         />
-        {draggedOverIndex !== undefined && <div style={{ position: "absolute", left: distFromLeftMap[draggedOverIndex] * elementWidth, transition: "200ms ease", }}>{placeHolder}</div>}
+        {draggedOverIndex !== undefined && (
+          <div style={{ position: "absolute", transform: `translateX(${distFromLeftMap[draggedOverIndex] * elementWidth}px)`, transition: "200ms ease" }}>{placeHolder}</div>
+        )}
         {draggedOverIndex}
       </div>
     </div>
@@ -272,7 +274,9 @@ const mapStateToProps = (state: RootState, ownProps: DraggerContainerProps) => {
     if (isDraggingOver) draggedOverIndex = draggedOverindexFromMapped(draggedState.destination.index, numElementsAt, sourceIndex, isRearrange);
   }
 
-  const distFromLeftMap = isRearrange ? pipe(removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(elementWidthAt ?? numElementsAt) : pipe(addZeroAtFirstIndex, getCumulativeSum)(elementWidthAt ?? numElementsAt) ;
+  const distFromLeftMap = isRearrange
+    ? pipe(removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(elementWidthAt ?? numElementsAt)
+    : pipe(addZeroAtFirstIndex, getCumulativeSum)(elementWidthAt ?? numElementsAt);
   let expandAbove = 0;
   let expandBelow = 0;
   let expandLeft = 0;
