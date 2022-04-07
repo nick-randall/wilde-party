@@ -35,9 +35,6 @@ export const Table = () => {
     }
   }, [dispatch, gameStarted]);
 
-const cards = GCZCards;
-
-console.log(getCardGroupsObjsnew(cards));
 
   return (
     <div>

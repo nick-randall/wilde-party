@@ -88,10 +88,6 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const dragged = draggedId !== undefined;
   const isInitialRearrange = usePrevious(draggedId) === undefined && draggedId !== undefined;
 
-  console.log(distFromLeftMap);
-  console.log(draggedOverIndex);
-  console.log(distFromLeftMap[draggedOverIndex ?? 0]);
-
   useEffect(() => {
     if (!draggedOverIndex) setBreakPoints([]);
   }, [draggedOverIndex]);

@@ -1,3 +1,4 @@
+import { getSettings } from "../gameSettings/uiSettings";
 import { measureDistance, widthOfRotated } from "../helperFunctions/equations";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
@@ -53,7 +54,7 @@ const getOriginDelta = (
     y: destinationPlayerY + destinationPlaceY + destinationCardOffsetY,
   };
   const originDelta = { x: origin.x - destination.x, y: origin.y - destination.y };
-  console.log(origin.x, destination.x, origin.y, destination.y);
+  if(getSettings().logVerbose)console.log(origin.x, destination.x, origin.y, destination.y);
   const distance = 50; // measureDistance(origin.x, origin.y, destination.x, destination.y);
   //return { originDelta: {x: originPlaceX - destinationPlaceX, y: originPlaceY - destinationPlaceY}, distance: distance }
   return { originDelta: originDelta, distance: distance };
@@ -136,7 +137,7 @@ export const buildTransition: (
     wait: delay,
     curve: curve,
   };
-  console.log(startAnimationDuration);
+  // console.log(startAnimationDuration);
   //console.log(transition)
   //return originDelta;
   return transition;

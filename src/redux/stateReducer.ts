@@ -236,7 +236,6 @@ export const stateReducer = (
             draft.current.phase = "playPhase";
         }
       });
-      console.log("here");
       return { ...state, gameSnapshot: newSnapshot };
     case "END_CURRENT_TURN": {
       const { gameSnapshot } = state;

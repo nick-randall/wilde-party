@@ -18,7 +18,7 @@ interface GCZProps {
 
 interface GCZReduxProps {
   draggedId?: string;
-  setEmissaries: boolean;
+  showEmissaries: boolean;
   isRearranging: boolean;
   isDraggingOver: boolean;
   isHighlighted: boolean;
@@ -39,26 +39,10 @@ function GCZ(props: GCZProps & GCZReduxProps) {
     numElementsAt,
     elementWidthAt,
     cardGroups,
-    setEmissaries,
+    showEmissaries,
     isDraggingOver,
   } = props;
 
-  // const highlights = useSelector((state: RootState) => state.highlights);
-
-  // const isHighlighted = highlights.includes(id);
-
-  // const cardGroups = getCardGroupsObjsnew(GCZCards);
-  // const ghostCardGroup = cardGroups.find(e => draggedId === e.id) ;
-
-  // const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width)//getGCZWidthMap(GCZCards);
-  // const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
-  /**
-   * the steps to getting back to the correct index for the ghost cards:
-   * convert the dragged over index back to the simple index
-   * Create the cumulativeWidthAt [0, 1, 3 , 4]
-   * find the draggedOVerIndex: mapWidthAt[convertedDraggedOverIndex]
-   *
-   */
   const allowDropping = isHighlighted || isRearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight, cardWidth } = dimensions;
@@ -119,7 +103,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 // export default GCZ;
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
-  let setEmissaries = false;
+  let showEmissaries = false;
   let isDraggingOver = false;
   const { snapshotChangeData, draggedId, highlights } = state;
   
@@ -127,8 +111,8 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width);
   const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
   const placeholder = cardGroups.find(e => draggedId === e.id);
-  const isHighlighted = highlights.includes(ownProps.id);
 
+  const isHighlighted = highlights.includes(ownProps.id);
   const isRearranging = state.draggedState.destination?.containerId === ownProps.id;
 
 
@@ -139,10 +123,10 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
 
       // }
       // emissaries.push(change.to.index)
-      setEmissaries = true;
+      showEmissaries = true;
     }
   });
-  return { draggedId, isRearranging, isDraggingOver, elementWidthAt, cardGroups, numElementsAt, placeholder, isHighlighted, setEmissaries };
+  return { draggedId, isRearranging, isDraggingOver, elementWidthAt, cardGroups, numElementsAt, placeholder, isHighlighted, showEmissaries };
 };
 
 export default connect(mapStateToProps)(GCZ);

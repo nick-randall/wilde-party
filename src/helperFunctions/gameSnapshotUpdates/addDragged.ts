@@ -2,6 +2,7 @@ import { getNumCards, locate } from "../locateFunctions";
 import { produce } from "immer";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 import { compareProps } from "../tests";
+import { getSettings } from "../../gameSettings/uiSettings";
 import locatePlayer from "../locateFunctions/locatePlayer";
 import { getNextIndexOfSpecialsType, getNextIndexOfSpecialsType2, getSpecialsOfType, sortSpecials } from "../getSpecialsOfType";
 
@@ -62,7 +63,7 @@ export const addDraggedUpdateSnapshot = (
       } else if (destPlace === "UWZ") {
         targetIndex = getNumCards(destinationPlaceId, gameSnapshot);
         console.log(targetIndex + " is targetIndex of unwanted " + draft.players[sourcePlayer].places.hand.cards[sourceIndex].name)
-        compareProps(draft.players[destPlayer].places[destPlace].cards);
+        if(getSettings().logVerbose)compareProps(draft.players[destPlayer].places[destPlace].cards);
 
       }
 

@@ -1,4 +1,5 @@
 import { produce } from "immer";
+import { getSettings } from "../../gameSettings/uiSettings";
 import { compareProps } from "../tests";
 
 export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
@@ -17,5 +18,7 @@ export const drawCardUpdateSnapshot = (handId: string, player: number, gameSnaps
       ...card,
       index: i,
     }));
+    const settings = getSettings();
+    if(settings.logVerbose)
     compareProps(draft.players[player].places["hand"].cards);
   });
