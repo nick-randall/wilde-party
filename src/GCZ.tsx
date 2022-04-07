@@ -47,7 +47,6 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   const dimensions = getAllDimensions(id);
   const { cardHeight, cardWidth } = dimensions;
   const { x, y } = getPlacesLayout(id, playerZoneSize);
-
   return (
     <div
       className="pl0GCZ"
@@ -72,10 +71,10 @@ function GCZ(props: GCZProps & GCZReduxProps) {
         elementWidthAt={elementWidthAt}
         placeHolder={placeholder && <GhostCardGroup ghostCardGroup={placeholder} dimensions={dimensions} />}
         containerStyles={
-          isRearranging
+          isRearranging || isHighlighted
             ? {
-                backgroundColor: isHighlighted || isRearranging ? "yellowgreen" : "",
-                boxShadow: isHighlighted || isRearranging ? "0px 0px 30px 30px yellowgreen" : "",
+                backgroundColor: "yellowgreen",
+                boxShadow: "0px 0px 30px 30px yellowgreen",
                 transition: "background-color 180ms, box-shadow 180ms, left 180ms",
               }
             : {}
@@ -98,23 +97,26 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   );
 }
 
-  /* isDropDisabled={!allowDropping}*/
+/* isDropDisabled={!allowDropping}*/
 
 // export default GCZ;
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   let showEmissaries = false;
   let isDraggingOver = false;
-  const { snapshotChangeData, draggedId, highlights } = state;
-  
+  const { snapshotChangeData, draggedId, highlights, draggedHandCard } = state;
   const cardGroups = getCardGroupsObjsnew(ownProps.GCZCards);
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width);
   const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
-  const placeholder = cardGroups.find(e => draggedId === e.id);
-
+  let placeholder = cardGroups.find(e => draggedId === e.id);
   const isHighlighted = highlights.includes(ownProps.id);
   const isRearranging = state.draggedState.destination?.containerId === ownProps.id;
-
+  if (draggedHandCard) placeholder  = {
+    id: `cardGroup${draggedHandCard.name}`,
+    width: 1,
+    size: 1,
+    cards: [draggedHandCard],
+  };
 
   snapshotChangeData.forEach(change => {
     if (change.to.placeId === ownProps.id) {

@@ -41,6 +41,7 @@ const HandCard = (props: HandCardProps) => {
       ? {
           left: "",
           transform: `rotate(0deg)`,
+          pointerEvents: "none"
           // This width causes cards to move aside and make room in other droppables.
           // When not dragging it tucks cards together
 
@@ -63,37 +64,6 @@ const HandCard = (props: HandCardProps) => {
     boxShadow: "10px 10px 10px black",
   };
 
-  // const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
-  //   if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
-  //     return style;
-  //   }
-  //   if (snapshot.dropAnimation) {
-  //     const { curve, duration, moveTo } = snapshot.dropAnimation;
-  //     let x = moveTo.x;
-  //     let y = moveTo.y;
-  //     console.log(moveTo);
-  //     if (highlightType === "card") {
-  //       if (draggedHandCard && draggedHandCard.cardType === "bff") {
-  //         x = BFFDraggedOverSide === "left" ? -60 : 40;
-  //       } else x = -15;
-  //       y = 60;
-  //     } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")) {
-  //       x = -15;
-  //       y = -15;
-  //     } else {
-  //       x = cardWidth - 175;
-  //       y = cardHeight - 195;
-  //     }
-
-  //     const translate = `translate(${x}px, ${y}px)`;
-  //     const scale = `scale(${dimensions.handToTableScaleFactor})`;
-  //     return {
-  //       ...style,
-  //       transform: `${translate} ${scale}`,
-  //       transition: `all ${curve} ${duration + 0.5}s`,
-  //     };
-  //   }
-  // };
 
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();

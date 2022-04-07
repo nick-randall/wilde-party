@@ -20,7 +20,7 @@ const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: 
   return { x: 0, y: 0 };
 };
 
-const durationConstant = (distance: number) => (distance < 0 ? -10 : 10);
+const durationConstant = (distance: number) => (distance < 0 ? -3 : 3);
 
 const getOriginDelta = (
   originPlaceId: string,

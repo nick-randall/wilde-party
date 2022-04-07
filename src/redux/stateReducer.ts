@@ -88,10 +88,20 @@ export const stateReducer = (
     // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
     // be altered
     case "SET_DRAGGED_ID":
-      return { ...state, draggedId: action.payload };
+      const draggedId = action.payload 
+      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
+      return { ...state, draggedId: draggedId, draggedHandCard: draggedHandCard };
     case "SET_INITIAL_DRAGGED_STATE": {
       const {source, destination} = action.payload
-      return { ...state, draggedState: {source: source, destination: destination} };
+      // TODO remove this code!!!!
+      const isHandCard = locate(source?.containerId || "", state.gameSnapshot).place === "hand"
+      const  GCZId = isHandCard ? state.gameSnapshot.players[0].places["GCZ"].id : ""
+      //
+      return { ...state, draggedState: {source: source, destination: destination}, 
+      //
+      highlights:[GCZId] 
+    ///
+    };
     }
     case "UPDATE_DRAG_DESTINATION":
       const { destination } = action.payload;
@@ -102,14 +112,15 @@ export const stateReducer = (
         draggedState: initialDragState.draggedState,
         draggedId: initialDragState.draggedId,
         dragContainerExpand: initialDragState.dragContainerExpand,
+        highlights: []
       };
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
 
-    case "SET_DRAGGED_HAND_CARD":
-      const draggableId = action.payload;
-      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
-      return { ...state, draggedHandCard: draggedHandCard };
+    // case "SET_DRAGGED_HAND_CARD":
+    //   const draggableId = action.payload;
+    //   const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
+    //   return { ...state, draggedHandCard: draggedHandCard };
     case "START_REARRANGING": {
       return { ...state, rearrangingData: action.payload };
     }
@@ -118,7 +129,6 @@ export const stateReducer = (
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
         const highlights = getHighlights(draggedHandCard, state.gameSnapshot);
-        console.log(highlights);
         const highlightType = draggedHandCard.action.highlightType;
         return { ...state, highlights, highlightType };
       } else return state;
@@ -248,7 +258,7 @@ export const stateReducer = (
         draft.current.rolls = 1;
         draft.current.phase = "drawPhase";
       });
-      console.log(newSnapshot);
+      // console.log(newSnapshot);
       return { ...state, gameSnapshot: newSnapshot };
     }
     case "SET_AI_PLAYING": {
