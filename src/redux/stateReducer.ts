@@ -85,8 +85,6 @@ export const stateReducer = (
   switch (action.type) {
     case "SET_SCREEN_SIZE":
       return { ...state, screenSize: getScreenSize() };
-    // Necessary in "onBeforeCapture" phase of dragging so that size of dragged card can
-    // be altered
     case "SET_DRAGGED_ID":
       const draggedId = action.payload 
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
@@ -103,8 +101,10 @@ export const stateReducer = (
     ///
     };
     }
+   
     case "UPDATE_DRAG_DESTINATION":
       const { destination } = action.payload;
+      if(destination){console.log(destination.index)}
       return { ...state, draggedState: { ...state.draggedState, destination: destination } };
     case "CLEAN_UP_DRAG_STATE":
       return {
@@ -114,6 +114,8 @@ export const stateReducer = (
         dragContainerExpand: initialDragState.dragContainerExpand,
         highlights: []
       };
+      case "UPDATE_SNAPSHOT": 
+      return {...state, gameSnapshot: action.payload}
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
 

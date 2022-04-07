@@ -12,4 +12,4 @@ export const sendEmissaryDispatch = (id: string, xPosition: number, yPosition: n
   payload: { id: id, xPosition: xPosition, yPosition: yPosition },
 });
 
-// export const updateSnapshot = (gameSnapshot: GameSnapshot): UpdateSnapshot => ({type: "UPDATE_SNAPSHOT", payload: gameSnapshot})
+export const updateSnapshot = (gameSnapshot: GameSnapshot): UpdateSnapshot => ({type: "UPDATE_SNAPSHOT", payload: gameSnapshot});

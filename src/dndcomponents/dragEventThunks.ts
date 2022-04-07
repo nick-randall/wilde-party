@@ -1,6 +1,7 @@
 import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import SnapshotUpdater, { NewSnapshotChange } from "../helperFunctions/gameSnapshotUpdates/snapshotChanger";
 import { locate } from "../helperFunctions/locateFunctions";
+import { updateSnapshot } from "../redux/actionCreators";
 import { RootState } from "../redux/store";
 import { setDraggedId, setInitialDraggedState, setDragContainerExpand, updateDragDestination, cleanUpDragState } from "./dragEventActionCreators";
 
@@ -23,12 +24,11 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
   const { gameSnapshot } = getState();
 
   // if drag of no consequence
-  if (!destination || destination.containerId === source?.containerId) {
+  if (!destination || destination === source) {
   }
 
   if (source && destination) {
     const { player: sourcePlayer, place: sourcePlace } = locate(source.containerId, gameSnapshot);
-    // const { player: destinationPlayer, place: destinationPlace } = locate(destination.containerId, gameSnapshot);
 
     let playedCard: GameCard;
     if (sourcePlayer === null) {
@@ -41,7 +41,6 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
 
     switch (playedCard.action.actionType) {
       case "addDragged":
-        // updateSnapshotAddDraggedNew(gameSnapshot, sourcePlace, sourcePlayer, source.index, destinationPlace, destinationPlayer, destination.index);
         const snapshotUpdate: NewSnapshotChange = {
           origin: { containerId: source.containerId, index: source.index },
           destination: { containerId: destination.containerId, index: destination.index },
@@ -49,11 +48,9 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
         snapshotUpdater.addChange(snapshotUpdate);
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
-        if(newSnapshot)findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot});
-        console.log("newSnapshot")
-        console.log(newSnapshot)
+        dispatch(updateSnapshot(newSnapshot));
         
-      }
+    }
   }
 
   // console.log("drag source " + source);

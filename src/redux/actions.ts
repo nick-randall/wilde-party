@@ -123,5 +123,6 @@ export type Action =
   | DealStartingGuest
   | DestroyCard
   | DiscardPlayedCard
-  | SetAiPlaying;
+  | SetAiPlaying
+  | UpdateSnapshotTypes
 //| //Thunk;

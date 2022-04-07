@@ -24,15 +24,16 @@ export default class SnapshotUpdater {
 
   private snapshotChanges: SnapshotUpdate[] = [];
 
-  private newSnapshot?: GameSnapshot;
+  private newSnapshot: GameSnapshot;
 
   constructor(snapshot: GameSnapshot) {
     this.snapshot = { ...snapshot };
+    this.newSnapshot = { ...snapshot };
   }
 
   public addChange(change: NewSnapshotChange) {
     const snapshotChange = this.convertToSnapshotChange(change);
-    console.log(snapshotChange)
+    console.log(snapshotChange);
     this.snapshotChanges.push(snapshotChange);
   }
 
@@ -48,13 +49,14 @@ export default class SnapshotUpdater {
     origin = { player: originPlayer, place: originPlace, index: change.origin.index };
     const { player: destinationPlayer, place: destinationPlace } = locate(change.destination.containerId, this.snapshot);
     destination = { player: destinationPlayer, place: destinationPlace, index: change.destination.index };
-    console.log(origin, destination)
+    console.log(origin, destination);
     return { origin: origin, destination: destination };
   }
 
   public begin() {
     console.log(this.snapshotChanges);
-    this.snapshotChanges.forEach(change => { console.log("iteration")
+    this.snapshotChanges.forEach(change => {
+      console.log("iteration");
       this.newSnapshot = produce(this.snapshot, draft => {
         const { origin, destination } = change;
         const { player: originPlayer, place: originPlace, index: originIndex } = origin;
