@@ -1,6 +1,6 @@
 import { buildTransition } from "../../dimensions/buildTransition";
 import store, { RootState } from "../../redux/store";
-import { findChanges } from "./findChanges"
+import { findChanges } from "./findSnapshotChanges"
 
 // based on expecting a single change.
 

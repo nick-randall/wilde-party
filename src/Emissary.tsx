@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { sendEmissaryDispatch } from "./redux/actionCreators";
 
-interface CardEmissaryProps {
+export interface CardEmissaryProps {
   id: string;
   index: number;
   image: string;

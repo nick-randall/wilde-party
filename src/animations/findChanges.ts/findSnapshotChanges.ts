@@ -1,20 +1,5 @@
 import { nonPlayerPlacesTypes, playerPlacesTypes } from "../../helperFunctions/locateFunctions";
 
-interface ToOrFrom {
-  cardId: string;
-  place: PlaceType;
-  placeId: string;
-  player: number | null;
-  playerId: string | null;
-  index: number;
-  // xPosition: number
-  // yPosition: number
-}
-export interface Change {
-  from: ToOrFrom;
-  to: ToOrFrom;
-}
-
 export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameSnapshot; newSnapshot: GameSnapshot }) => {
   //if (prevSnapshot.players.length === 0) return [];
   const changes = [];
@@ -32,7 +17,7 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
       if (differences.length === 0) {}
       else {
         for (let i = 0; i < differences.length; i++) {
-          let change: Change = {
+          let change: SnapshotChange = {
             from: {
               cardId: differences[i],
               place: place,
@@ -68,7 +53,7 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
     if (differences.length === 0) {
     } else {
       for (let i = 0; i < differences.length; i++) {
-        let change: Change = {
+        let change: SnapshotChange = {
           from: {
             cardId: differences[i],
             place: place,

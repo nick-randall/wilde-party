@@ -31,6 +31,7 @@ export interface State {
   draggedId?: string;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
+  snapshotChangeData: SnapshotChange[]
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide: string | undefined;
@@ -67,6 +68,7 @@ export const stateReducer = (
     draggedId: initialDragState.draggedId,
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
+    snapshotChangeData: [],
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],

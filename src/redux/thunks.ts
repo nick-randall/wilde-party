@@ -2,7 +2,7 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
 import { DropResult } from "react-beautiful-dnd";
 import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
-import { findChanges } from "../animations/findChanges.ts/findChanges";
+import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import { buildTransition } from "../dimensions/buildTransition";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
