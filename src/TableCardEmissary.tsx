@@ -33,7 +33,10 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     position: "absolute",
     userSelect: "none",
   };
-
+  /**
+   * Called after the Emissary is created, passing its location to 
+   * the SnapshotChanges object...
+   */
   useEffect(() => {
     if (emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
