@@ -104,14 +104,17 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   let showEmissaries = false;
   let isDraggingOver = false;
+  let placeholder = undefined;
   const { snapshotChangeData, draggedId, highlights, draggedHandCard } = state;
   const cardGroups = getCardGroupsObjsnew(ownProps.GCZCards);
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width);
   const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
-  let placeholder = cardGroups.find(e => draggedId === e.id);
+ 
   const isHighlighted = highlights.includes(ownProps.id);
   const isRearranging = state.draggedState.destination?.containerId === ownProps.id;
-  if (draggedHandCard) placeholder  = {
+  
+  if (isRearranging) placeholder = cardGroups.find(e => draggedId === e.id);
+  if (draggedHandCard) placeholder = {
     id: `cardGroup${draggedHandCard.name}`,
     width: 1,
     size: 1,

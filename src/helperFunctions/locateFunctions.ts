@@ -32,6 +32,10 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
   return 0;
 };
 
+/**
+ * Note on performance: locate is very fast (around 0.005ms)
+ * However, it gets called hundreds of times, even when just hovering over hand cards.
+ */
 export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): Locator => {
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
 

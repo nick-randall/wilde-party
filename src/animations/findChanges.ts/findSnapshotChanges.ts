@@ -1,5 +1,12 @@
 import { nonPlayerPlacesTypes, playerPlacesTypes } from "../../helperFunctions/locateFunctions";
 
+/**
+ * Performance note: this function takes about (0.1ms -0.2 ms) when finding one change.
+ * @param param0 
+ * @returns 
+ */
+
+
 export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameSnapshot; newSnapshot: GameSnapshot }) => {
   //if (prevSnapshot.players.length === 0) return [];
   const changes = [];
@@ -14,8 +21,8 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
       const placeId = prevSnapshot.players[player].places[place].id;
 
       let differences = prevCardIds.filter(card => !newCardIds.includes(card));
-      if (differences.length === 0) {}
-      else {
+      if (differences.length === 0) {
+      } else {
         for (let i = 0; i < differences.length; i++) {
           let change: SnapshotChange = {
             from: {
@@ -47,9 +54,9 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
     const prevCardIds = prevSnapshot.nonPlayerPlaces[place].cards.map(card => card.id);
     const newCardIds = newSnapshot.nonPlayerPlaces[place].cards.map(card => card.id);
     let differences = prevCardIds.filter(card => !newCardIds.includes(card));
-    
+
     const placeId = prevSnapshot.nonPlayerPlaces[place].id;
-   
+
     if (differences.length === 0) {
     } else {
       for (let i = 0; i < differences.length; i++) {
@@ -71,20 +78,23 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
             index: prevCardIds.indexOf(differences[i]),
           },
         };
+
         changes.push(change);
       }
     }
   }
   // find those missing cards!!!
   for (let change = 0; change < changes.length; change++) {
+
     for (let player = 0; player < players.length; player++) {
+
       for (let place of playerPlacesTypes) {
         let i = 0;
         const newCardIds = newSnapshot.players[player].places[place].cards.map(card => card.id);
         const playerId = newSnapshot.players[player].id;
         const placeId = newSnapshot.players[player].places[place].id;
-        while (i < newSnapshot.players[player].places[place].cards.length) {
-        
+        for (i = 0; i < newSnapshot.players[player].places[place].cards.length; i++) {
+
           if (newCardIds[i] === changes[change]["from"]["cardId"]) {
             changes[change]["to"] = {
               cardId: changes[change]["from"]["cardId"],
@@ -94,12 +104,13 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
               playerId: playerId,
               index: i,
             };
-            i = place.length;
-          } else i++;
+            break;
+          } 
         }
       }
     }
   }
+
   // now  check deck & discard pile for those missing cards!!!
   for (let change = 0; change < changes.length; change++) {
     for (let place of nonPlayerPlacesTypes) {
@@ -107,7 +118,7 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
       const newCardIds = newSnapshot.nonPlayerPlaces[place].cards.map(card => card.id);
       const placeId = newSnapshot.nonPlayerPlaces[place].id;
 
-      while (i < newSnapshot.nonPlayerPlaces[place].cards.length) {
+      for (i = 0; i < newSnapshot.nonPlayerPlaces[place].cards.length; i++) {
         if (newCardIds[i] === changes[change]["from"]["cardId"]) {
           console.log("gotcha");
           changes[change]["to"] = {
@@ -118,12 +129,11 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
             playerId: null,
             index: i,
           };
-          i = newSnapshot.nonPlayerPlaces[place].cards.length;
-        } else i++;
+          break;//i = newSnapshot.nonPlayerPlaces[place].cards.length;
+        }
       }
     }
   }
-
   console.log(changes);
   return changes;
 };
