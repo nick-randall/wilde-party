@@ -2,18 +2,12 @@ import { getCard, locate } from "../locateFunctions";
 import { produce } from "immer";
 
 export interface NewSnapshotChange {
-  origin: LocationData;
+  source: LocationData;
   destination: LocationData;
 }
 
-interface SnapshotLocation {
-  player: number | null;
-  place: PlaceType;
-  index: number;
-}
-
 interface SnapshotUpdate {
-  origin: SnapshotLocation;
+  source: SnapshotLocation;
   destination: SnapshotLocation;
 }
 
@@ -31,10 +25,8 @@ export default class SnapshotUpdater {
     this.newSnapshot = { ...snapshot };
   }
 
-  public addChange(change: NewSnapshotChange) {
+  public addChange(change: DraggedResult/*change: NewSnapshotChange*/) {
     this.snapshotChange = this.convertToSnapshotChange(change);
-    // console.log(snapshotChange);
-    // this.snapshotChange.push(snapshotChange);
   }
 
   public addChanges(change: NewSnapshotChange, numElements: number) {
@@ -43,23 +35,21 @@ export default class SnapshotUpdater {
   }
 
   private convertToSnapshotChange(change: NewSnapshotChange): SnapshotUpdate {
-    let origin: SnapshotLocation;
+    let source: SnapshotLocation;
     let destination: SnapshotLocation;
-    const { player: originPlayer, place: originPlace } = locate(change.origin.containerId, this.snapshot);
-    origin = { player: originPlayer, place: originPlace, index: change.origin.index };
+    const { player: originPlayer, place: originPlace } = locate(change.source.containerId, this.snapshot);
+    source = { player: originPlayer, place: originPlace, index: change.source.index };
     const { player: destinationPlayer, place: destinationPlace } = locate(change.destination.containerId, this.snapshot);
     destination = { player: destinationPlayer, place: destinationPlace, index: change.destination.index };
-    console.log(origin, destination);
-    return { origin: origin, destination: destination };
+    console.log(source, destination);
+    return { source: source, destination: destination };
   }
 
   public begin() {
-    console.log(this.snapshotChange);
-
     this.newSnapshot = produce(this.snapshot, draft => {
       if (this.snapshotChange !== undefined) {
-        const { origin, destination } = this.snapshotChange;
-        const { player: originPlayer, place: originPlace, index: originIndex } = origin;
+        const { source, destination } = this.snapshotChange;
+        const { player: originPlayer, place: originPlace, index: originIndex } = source;
 
         let splicedCard;
         if (originPlayer !== null) {

@@ -2,10 +2,7 @@ import { isNonNullChain } from "typescript";
 import store from "../redux/store";
 import { getGCZTotalWidth } from "./groupGCZCardNew";
 
-export interface Locator {
-  player: number | null;
-  place: PlaceType;
-}
+
 
 export const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
 
@@ -36,7 +33,7 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
  * Note on performance: locate is very fast (around 0.005ms)
  * However, it gets called hundreds of times, even when just hovering over hand cards.
  */
-export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): Locator => {
+export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): SimpleSnapshotLocator => {
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;

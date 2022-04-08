@@ -12,3 +12,14 @@ type SnapshotChange = {
   from: ToOrFrom;
   to: ToOrFrom;
 }
+
+type SnapshotLocation = {
+  player: number | null;
+  place: PlaceType;
+  index: number;
+}
+
+type SimpleSnapshotLocator = {
+  player: number | null;
+  place: PlaceType;
+}

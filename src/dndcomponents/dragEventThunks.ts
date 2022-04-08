@@ -1,5 +1,5 @@
 import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
-import SnapshotUpdater, { NewSnapshotChange } from "../helperFunctions/gameSnapshotUpdates/snapshotChanger";
+import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/snapshotChanger";
 import { locate } from "../helperFunctions/locateFunctions";
 import { updateSnapshot } from "../redux/actionCreators";
 import { RootState } from "../redux/store";
@@ -21,7 +21,7 @@ export const dragUpateThunk = (destinationLocationUpdate: LocationData | undefin
 
 export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;
-  const { gameSnapshot } = getState();
+  const { gameSnapshot, draggedId } = getState();
 
   // if drag of no consequence
   if (!destination || destination === source) {
@@ -49,12 +49,7 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
 
     switch (playedCard.action.actionType) {
       case "addDragged":
-        const snapshotUpdate: NewSnapshotChange = {
-          origin: { containerId: source.containerId, index: source.index },
-          destination: { containerId: destination.containerId, index: destination.index },
-        };
-        // snapshotUpdater.addChanges(snapshotUpdate, numDraggedElements);
-        snapshotUpdater.addChange(snapshotUpdate);
+        snapshotUpdater.addChange({source: source, destination: destination});
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
         dispatch(updateSnapshot(newSnapshot));

@@ -16,3 +16,8 @@ type DraggedState = {
   destination?: DragDestinationData;
 }
 
+type DraggedResult = {
+  source: DragSourceData;
+  destination: DragDestinationData;
+}
+
