@@ -1,5 +1,10 @@
+import { pipe } from "ramda";
+import { GCZCards } from "../createGameSnapshot/sampleCards";
+import { filterOutDuplicates } from "./genericFunctions";
+
+// TODO: currently passing the id of the first card in the cardGrouObj
 const createCardGroupObj = (cardGroupObj: GameCard[]) => ({
-  id: `cardGroup${cardGroupObj[0].name}`,
+  id: cardGroupObj[0].id,//`cardGroup${cardGroupObj[0].name}`,
   width: cardGroupObj.length === 1 ? 1 : cardGroupObj.length - 1,
   size: cardGroupObj.length,
   cards: cardGroupObj,
@@ -34,6 +39,30 @@ export const getCardGroupsObjsnew = (GCZCards: GameCard[]): NewCardGroupObj[] =>
   }
   return cardGroupObjs;
 };
+
+const cardGroupType: { [cardType: string]: { start: number; length: number } } = {
+  bff: { start: -1, length: 3 },
+  zwilling: { start: 0, length: 2 },
+  guest: { start: 0, length: 1 },
+};
+interface CardGroupStructure {
+  [cardType: string]: number[];
+}
+const cardToLeft = -1;
+const thisCard = 0;
+const cardToRight = 1;
+
+const cardGroupStructures: CardGroupStructure = { bff: [cardToLeft, thisCard, cardToRight], zwilling: [cardToLeft, thisCard], guest: [thisCard] };
+
+const getCardGroups = (GCZCards: GameCard[]) =>
+  GCZCards.map((card, index) => {
+    const cardGroupStructure = cardGroupStructures[card.cardType];
+    return GCZCards.slice(index + cardGroupStructure[0], cardGroupStructure.length + cardGroupStructure[0]);
+  });
+
+const convertArraysToObjs = (cardGroups: GameCard[][]): NewCardGroupObj[] => cardGroups.map(c => createCardGroupObj(c))
+
+export const getCardGroupObjsAlt = (GCZCards: GameCard[]): NewCardGroupObj[] => pipe(getCardGroups, filterOutDuplicates, convertArraysToObjs)(GCZCards)
 
 export const getGCZTotalWidth = (GCZCards: GameCard[]) =>
   GCZCards.filter(card => card.cardType === "guest")

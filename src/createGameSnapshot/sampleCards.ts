@@ -4,7 +4,7 @@ import shuffle from "../helperFunctions/shuffle";
 export const GCZCards: GameCard[] = [
   {
     id: "einfachRonny",
-    name: `einfach$1`,
+    name: `einfach1`,
     placeId: "",
     playerId: "",
     index: 0,

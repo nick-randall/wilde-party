@@ -20,11 +20,11 @@ interface SnapshotUpdate {
 export default class SnapshotUpdater {
   private snapshot: GameSnapshot;
 
-  private changes: NewSnapshotChange[] = [];
-
-  private snapshotChanges: SnapshotUpdate[] = [];
-
   private newSnapshot: GameSnapshot;
+
+  private snapshotChange?: SnapshotUpdate;
+
+  private numElements: number = 1;
 
   constructor(snapshot: GameSnapshot) {
     this.snapshot = { ...snapshot };
@@ -32,14 +32,14 @@ export default class SnapshotUpdater {
   }
 
   public addChange(change: NewSnapshotChange) {
-    const snapshotChange = this.convertToSnapshotChange(change);
-    console.log(snapshotChange);
-    this.snapshotChanges.push(snapshotChange);
+    this.snapshotChange = this.convertToSnapshotChange(change);
+    // console.log(snapshotChange);
+    // this.snapshotChange.push(snapshotChange);
   }
 
-  public addChanges(changes: NewSnapshotChange[]) {
-    const snapshotChanges = changes.map(change => this.convertToSnapshotChange(change));
-    this.snapshotChanges.push(...snapshotChanges);
+  public addChanges(change: NewSnapshotChange, numElements: number) {
+    this.snapshotChange = this.convertToSnapshotChange(change);
+    this.numElements = numElements;
   }
 
   private convertToSnapshotChange(change: NewSnapshotChange): SnapshotUpdate {
@@ -54,16 +54,16 @@ export default class SnapshotUpdater {
   }
 
   public begin() {
-    console.log(this.snapshotChanges);
-    this.snapshotChanges.forEach(change => {
-      console.log("iteration");
-      this.newSnapshot = produce(this.snapshot, draft => {
-        const { origin, destination } = change;
+    console.log(this.snapshotChange);
+
+    this.newSnapshot = produce(this.snapshot, draft => {
+      if (this.snapshotChange !== undefined) {
+        const { origin, destination } = this.snapshotChange;
         const { player: originPlayer, place: originPlace, index: originIndex } = origin;
 
         let splicedCard;
         if (originPlayer !== null) {
-          splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, 1);
+          splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
         } else {
           splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
         }
@@ -74,7 +74,7 @@ export default class SnapshotUpdater {
         } else {
           draft.nonPlayerPlaces[destinationPlace].cards.splice(destinationIndex, 0, ...splicedCard);
         }
-      });
+      }
     });
   }
   public getSnapshot() {

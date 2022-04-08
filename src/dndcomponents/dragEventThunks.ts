@@ -28,6 +28,14 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
   }
 
   if (source && destination) {
+
+    // if(isRearrange){// TODO: rearrange of GCZ 
+    const { numDraggedElements } = source;
+    // currently passing the id of the first card in the cardGrouObj
+    // This can be confusing and should be changed if, for example,
+    // I change the draggedState to include player and place
+    // In which case I would not need to use the locate method
+    // }
     const { player: sourcePlayer, place: sourcePlace } = locate(source.containerId, gameSnapshot);
 
     let playedCard: GameCard;
@@ -45,11 +53,11 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
           origin: { containerId: source.containerId, index: source.index },
           destination: { containerId: destination.containerId, index: destination.index },
         };
+        // snapshotUpdater.addChanges(snapshotUpdate, numDraggedElements);
         snapshotUpdater.addChange(snapshotUpdate);
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
         dispatch(updateSnapshot(newSnapshot));
-        
     }
   }
 
