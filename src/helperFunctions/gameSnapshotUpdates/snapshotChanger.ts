@@ -1,22 +1,14 @@
-import { getCard, locate } from "../locateFunctions";
+import { locate } from "../locateFunctions";
 import { produce } from "immer";
-
-export interface NewSnapshotChange {
-  source: LocationData;
-  destination: LocationData;
-}
-
-interface SnapshotUpdate {
-  source: SnapshotLocation;
-  destination: SnapshotLocation;
-}
 
 export default class SnapshotUpdater {
   private snapshot: GameSnapshot;
 
   private newSnapshot: GameSnapshot;
 
-  private snapshotChange?: SnapshotUpdate;
+  private snapshotChange?: SnapshotChange;
+
+  private draggedId?: string;
 
   private numElements: number = 1;
 
@@ -25,31 +17,67 @@ export default class SnapshotUpdater {
     this.newSnapshot = { ...snapshot };
   }
 
-  public addChange(change: DraggedResult/*change: NewSnapshotChange*/) {
+  public addChange(change: DraggedResult) {
     this.snapshotChange = this.convertToSnapshotChange(change);
   }
 
-  public addChanges(change: NewSnapshotChange, numElements: number) {
+  public addChanges(change: DraggedResult, numElements: number) {
     this.snapshotChange = this.convertToSnapshotChange(change);
     this.numElements = numElements;
   }
 
-  private convertToSnapshotChange(change: NewSnapshotChange): SnapshotUpdate {
-    let source: SnapshotLocation;
-    let destination: SnapshotLocation;
-    const { player: originPlayer, place: originPlace } = locate(change.source.containerId, this.snapshot);
-    source = { player: originPlayer, place: originPlace, index: change.source.index };
-    const { player: destinationPlayer, place: destinationPlace } = locate(change.destination.containerId, this.snapshot);
-    destination = { player: destinationPlayer, place: destinationPlace, index: change.destination.index };
-    console.log(source, destination);
-    return { source: source, destination: destination };
+  private convertToSnapshotChange(change: DraggedResult): SnapshotChange {
+   
+
+    const draggedId = this.findDraggedId(change);
+
+    const { source, destination } = change;
+    let from = this.convertSourceOrDestToToOrFrom(source);
+    let to = this.convertSourceOrDestToToOrFrom(destination)
+
+    from.cardId = draggedId
+    to.cardId = draggedId
+
+    console.log(from, to);
+    return { from: from as ToOrFrom, to: to as ToOrFrom };
+  }
+
+  private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): ToOrFrom {
+    const { index, containerId } = sourceOrDest;
+    const { player, place } = locate(containerId, this.snapshot);
+    const playerId = this.findPlayerId(sourceOrDest);
+    return {
+      player,
+      place,
+      placeId: containerId,
+      index,
+      playerId,
+      cardId: "",
+    };
+  }
+
+  private findDraggedId(change: DraggedResult) {
+    const { player, place } = locate(change.source.containerId);
+    let draggedCard: GameCard;
+    if (player === null) {
+      draggedCard = this.snapshot.nonPlayerPlaces[place].cards[change.source.index];
+    } else {
+      draggedCard = this.snapshot.players[player].places[place].cards[change.source.index];
+    }
+    return draggedCard.id;
+  }
+
+  private findPlayerId(sourceOrDest: DragDestinationData) {
+    const player = locate(sourceOrDest.containerId, this.snapshot).player;
+    if (player !== null) return this.snapshot.players[player].id;
+    return null;
   }
 
   public begin() {
     this.newSnapshot = produce(this.snapshot, draft => {
       if (this.snapshotChange !== undefined) {
-        const { source, destination } = this.snapshotChange;
-        const { player: originPlayer, place: originPlace, index: originIndex } = source;
+        const { from, to } = this.snapshotChange;
+        const { player: originPlayer, place: originPlace, index: originIndex } = from;
 
         let splicedCard;
         if (originPlayer !== null) {
@@ -58,11 +86,11 @@ export default class SnapshotUpdater {
           splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
         }
 
-        const { player: destinationPlayer, place: destinationPlace, index: destinationIndex } = destination;
+        const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
         if (destinationPlayer !== null) {
-          draft.players[destinationPlayer].places[destinationPlace].cards.splice(destinationIndex, 0, ...splicedCard);
+          draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
         } else {
-          draft.nonPlayerPlaces[destinationPlace].cards.splice(destinationIndex, 0, ...splicedCard);
+          draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
         }
       }
     });

@@ -8,6 +8,7 @@ type ToOrFrom = {
   xPosition?: number
   yPosition?: number
 }
+
 type SnapshotChange = {
   from: ToOrFrom;
   to: ToOrFrom;
