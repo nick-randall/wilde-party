@@ -1,5 +1,5 @@
 import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
-import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/snapshotChanger";
+import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locate } from "../helperFunctions/locateFunctions";
 import { updateSnapshot } from "../redux/actionCreators";
 import { RootState } from "../redux/store";

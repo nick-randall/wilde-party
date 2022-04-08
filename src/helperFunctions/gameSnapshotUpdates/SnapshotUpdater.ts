@@ -8,8 +8,6 @@ export default class SnapshotUpdater {
 
   private snapshotChange?: SnapshotChange;
 
-  private draggedId?: string;
-
   private numElements: number = 1;
 
   constructor(snapshot: GameSnapshot) {
