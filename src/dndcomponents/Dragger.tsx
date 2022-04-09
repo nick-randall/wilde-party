@@ -141,10 +141,10 @@ const Dragger: React.FC<CombinedProps> = ({
     [dragState]
   );
   const handleDragEnd = useCallback(() => {
-    let dropLocation = { left: 0, top: 0 };
+    let dropLocation: LastLocation = { xPosition: 0, yPosition: 0 };
     if (draggableRef && draggableRef.current) {
       const { left, top } = draggableRef.current.getBoundingClientRect();
-      dropLocation = { left: left, top: top };
+      dropLocation = { xPosition: left, yPosition: top };
     }
     if (dragState.dragged) {
       setDragState(prevState => ({

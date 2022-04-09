@@ -15,8 +15,8 @@ type DraggedState = {
 }
 
 type LastLocation =  {
-  left: number;
-  top: number;
+  xPosition: number;
+  yPosition: number;
 }
 
 type SetDraggedId = {

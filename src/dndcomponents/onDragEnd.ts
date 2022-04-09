@@ -2,7 +2,7 @@ import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locate } from "../helperFunctions/locateFunctions";
 import { RootState } from "../redux/store";
-import { updateSnapshot } from "../redux/updateSnapshotActionCreators";
+import { setNewSnapshot, updateSnapshot } from "../redux/updateSnapshotActionCreators";
 import { cleanUpDragState, setDraggedId } from "./dragEventActionCreators";
 
 export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
@@ -16,6 +16,7 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
   if (source && destination) {
 
     // if(isRearrange){// TODO: rearrange of GCZ 
+    // rearrange of GCZ has to use snapshotupdater.addchanges() --plural
     const { numDraggedElements } = source;
     // currently passing the id of the first card in the cardGrouObj
     // This can be confusing and should be changed if, for example,
@@ -26,21 +27,24 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
 
     let playedCard: GameCard;
     if (sourcePlayer === null) {
-      playedCard = gameSnapshot.nonPlayerPlaces[sourcePlace].cards[destination.index];
+      playedCard = gameSnapshot.nonPlayerPlaces[sourcePlace].cards[source.index];
     } else {
-      playedCard = gameSnapshot.players[sourcePlayer].places[sourcePlace].cards[destination.index];
+      playedCard = gameSnapshot.players[sourcePlayer].places[sourcePlace].cards[source.index];
     }
 
     const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
-
     switch (playedCard.action.actionType) {
       case "addDragged":
         snapshotUpdater.addChange({source: source, destination: destination});
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
-        const changes = findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot});
-        // dispatch(setNewSnapshot(newSnapshot, changes));
-        dispatch(updateSnapshot(newSnapshot))
+        // Oh no! findChanges() doesn't seem to find changes of index within the same place... :(
+        const [change] = findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot});
+        const {xPosition, yPosition} = lastLocation
+        // change.from = {...change.from, xPosition, yPosition };
+        console.log(change)
+        dispatch(setNewSnapshot(newSnapshot, [change]));
+        // dispatch(updateSnapshot(newSnapshot))
     }
   }
 
