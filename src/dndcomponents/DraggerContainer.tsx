@@ -1,7 +1,6 @@
 import { pipe } from "ramda";
 import React, { CSSProperties, Ref, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { dragUpateThunk } from "./dragEventThunks";
 import {
   addZeroAtFirstIndex,
   getCumulativeSum,
@@ -12,6 +11,7 @@ import {
   removeSourceIndex,
 } from "./dragEventHelperFunctions";
 import { RootState } from "../redux/store";
+import { onDragUpdate } from "./onDragUpdate";
 
 const usePrevious = (value: any) => {
   const ref = React.useRef();
@@ -134,14 +134,14 @@ const DraggerContainer: React.FC<ComponentProps> = ({
       }
       if (draggedOverIndex !== newDraggedOverIndex) {
         newDraggedOverIndex = draggedOverindexToMapped(newDraggedOverIndex, numElementsAt, isRearrange, sourceIndex);
-        dispatch(dragUpateThunk({ index: newDraggedOverIndex, containerId: id }));
+        dispatch(onDragUpdate({ index: newDraggedOverIndex, containerId: id }));
       }
     }
   };
 
   const handleMouseLeave = () => {
     if (isDraggingOver) {
-      dispatch(dragUpateThunk(undefined));
+      dispatch(onDragUpdate(undefined));
       setBreakPoints([]);
     }
   };

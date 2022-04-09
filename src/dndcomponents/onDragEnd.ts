@@ -1,25 +1,11 @@
 import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locate } from "../helperFunctions/locateFunctions";
-import { updateSnapshot } from "../redux/actionCreators";
 import { RootState } from "../redux/store";
-import { setDraggedId, setInitialDraggedState, setDragContainerExpand, updateDragDestination, cleanUpDragState } from "./dragEventActionCreators";
+import { updateSnapshot } from "../redux/updateSnapshotActionCreators";
+import { cleanUpDragState, setDraggedId } from "./dragEventActionCreators";
 
-// Thunks
-
-export const dragStartThunk =
-  (id: string, source: DragSourceData, destination: LocationData, dragContainerExpand: { width: number; height: number }) =>
-  (dispatch: Function, getState: () => RootState) => {
-    dispatch(setDraggedId(id));
-    dispatch(setInitialDraggedState(source, destination));
-    dispatch(setDragContainerExpand(dragContainerExpand));
-  };
-
-export const dragUpateThunk = (destinationLocationUpdate: LocationData | undefined) => (dispatch: Function, getState: () => RootState) => {
-  dispatch(updateDragDestination(destinationLocationUpdate));
-};
-
-export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
+export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;
   const { gameSnapshot, draggedId } = getState();
 
@@ -52,7 +38,9 @@ export const dragEndThunk = (lastLocation: LastLocation) => (dispatch: Function,
         snapshotUpdater.addChange({source: source, destination: destination});
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
-        dispatch(updateSnapshot(newSnapshot));
+        const changes = findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot});
+        // dispatch(setNewSnapshot(newSnapshot, changes));
+        dispatch(updateSnapshot(newSnapshot))
     }
   }
 

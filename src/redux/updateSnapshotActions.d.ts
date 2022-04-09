@@ -1,6 +1,11 @@
 type UpdateSnapshot = {
   type: "UPDATE_SNAPSHOT";
-  payload: GameSnapshot
-}
+  payload: GameSnapshot;
+};
 
-type UpdateSnapshotTypes = UpdateSnapshot
+type SetNewSnapshot = {
+  type: "SET_NEW_SNAPSHOT";
+  payload: { newSnapshot: GameSnapshot; changes: SnapshotChange[] };
+};
+
+type UpdateSnapshotTypes = UpdateSnapshot;

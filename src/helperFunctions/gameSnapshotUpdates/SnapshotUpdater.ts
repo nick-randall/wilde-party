@@ -2,11 +2,12 @@ import { locate } from "../locateFunctions";
 import { produce } from "immer";
 
 export default class SnapshotUpdater {
+
   private snapshot: GameSnapshot;
 
   private newSnapshot: GameSnapshot;
 
-  private snapshotChange?: SnapshotChange;
+  private snapshotUpdate?: SnapshotUpdate;
 
   private numElements: number = 1;
 
@@ -16,41 +17,41 @@ export default class SnapshotUpdater {
   }
 
   public addChange(change: DraggedResult) {
-    this.snapshotChange = this.convertToSnapshotChange(change);
+    this.snapshotUpdate = this.convertToSnapshotChange(change);
   }
 
   public addChanges(change: DraggedResult, numElements: number) {
-    this.snapshotChange = this.convertToSnapshotChange(change);
+    this.snapshotUpdate = this.convertToSnapshotChange(change);
     this.numElements = numElements;
   }
 
-  private convertToSnapshotChange(change: DraggedResult): SnapshotChange {
+  private convertToSnapshotChange(change: DraggedResult): SnapshotUpdate {
    
 
     const draggedId = this.findDraggedId(change);
 
     const { source, destination } = change;
-    let from = this.convertSourceOrDestToToOrFrom(source);
-    let to = this.convertSourceOrDestToToOrFrom(destination)
+    let from: SnapshotUpdateToOrFrom = this.convertSourceOrDestToToOrFrom(source);
+    let to: SnapshotUpdateToOrFrom = this.convertSourceOrDestToToOrFrom(destination)
 
-    from.cardId = draggedId
-    to.cardId = draggedId
+    // from.cardId = draggedId
+    // to.cardId = draggedId
 
     console.log(from, to);
-    return { from: from as ToOrFrom, to: to as ToOrFrom };
+    return { from: from, to: to};
   }
 
-  private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): ToOrFrom {
+  private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): SnapshotUpdateToOrFrom {
     const { index, containerId } = sourceOrDest;
     const { player, place } = locate(containerId, this.snapshot);
-    const playerId = this.findPlayerId(sourceOrDest);
+    // const playerId = this.findPlayerId(sourceOrDest);
     return {
       player,
       place,
-      placeId: containerId,
+      // placeId: containerId,
       index,
-      playerId,
-      cardId: "",
+      // playerId,
+      // cardId: "",
     };
   }
 
@@ -73,8 +74,8 @@ export default class SnapshotUpdater {
 
   public begin() {
     this.newSnapshot = produce(this.snapshot, draft => {
-      if (this.snapshotChange !== undefined) {
-        const { from, to } = this.snapshotChange;
+      if (this.snapshotUpdate !== undefined) {
+        const { from, to } = this.snapshotUpdate;
         const { player: originPlayer, place: originPlace, index: originIndex } = from;
 
         let splicedCard;
@@ -99,4 +100,5 @@ export default class SnapshotUpdater {
   public getNewSnapshot() {
     return this.newSnapshot;
   }
+
 }

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { dragUpateThunk } from "./dragEventThunks";
 import { indexToMapped } from "./dragEventHelperFunctions";
 import { RootState } from "../redux/store";
+import { onDragUpdate } from "./onDragUpdate";
 
 interface ComponentReduxProps {
   draggedId?: string;
@@ -65,12 +65,12 @@ const DropZoneWrapper: React.FC<ComponentProps> = ({
     else {
       calculatedIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, providedIndex) : providedIndex
     }
-    dispatch(dragUpateThunk({ index: calculatedIndex, containerId: id }));
+    dispatch(onDragUpdate({ index: calculatedIndex, containerId: id }));
   };
 
   const handleMouseLeave = () => {
     if (isDraggingOver) {
-      dispatch(dragUpateThunk(undefined));
+      dispatch(onDragUpdate(undefined));
     }
     setIsDraggingOver(false);
   };

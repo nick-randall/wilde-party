@@ -1,8 +1,9 @@
 import React, { CSSProperties, Ref, useCallback, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { dragEndThunk, dragStartThunk } from "./dragEventThunks";
+import { onDragStart } from "./onDragStart";
 import { getCumulativeSum, addZeroAtFirstIndex, indexToMapped } from "./dragEventHelperFunctions";
 import { RootState } from "../redux/store";
+import { onDragEnd } from "./onDragEnd";
 interface DraggerRenderProps {
   handleDragStart: (event: React.MouseEvent) => void, draggerRef:  Ref<HTMLImageElement>, isDragging: boolean;
 }
@@ -120,7 +121,7 @@ const Dragger: React.FC<CombinedProps> = ({
             containerId: containerId,
             index: mappedSourceIndex
           }
-          dispatch(dragStartThunk(draggerId, dragSource, dragDestination, dragContainerExpand));
+          dispatch(onDragStart(draggerId, dragSource, dragDestination, dragContainerExpand));
         }
       } else console.log("error getting html node");
     },
@@ -151,7 +152,7 @@ const Dragger: React.FC<CombinedProps> = ({
         dragged: false,
       }));
 
-      dispatch(dragEndThunk(dropLocation));
+      dispatch(onDragEnd(dropLocation));
       setIsReturning(true);
     }
   }, [dragState.dragged, dispatch]);
