@@ -64,6 +64,7 @@ export const createGameSnapshot = () => {
 
 
   const gameSnapshot: GameSnapshot = {
+    snapshotUpdateType: "initialSnapshot",
     current: {
       player: 0,
       phase: "dealPhase",

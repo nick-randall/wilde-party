@@ -341,6 +341,7 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
+  snapshotUpdateType: "initialSnapshot",
   current: {
     player: 0,
     phase: "dealPhase",

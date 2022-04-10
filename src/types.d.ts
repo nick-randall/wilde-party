@@ -37,7 +37,7 @@ type AllDimensions = {
   draggedCardzIndex: number;
   tableCardzIndex: number;
   rotation: (index: number) => number;
-  scale: number
+  scale: number;
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;
@@ -98,20 +98,14 @@ type CardAction = {
   placeHighlightType?: PlaceType;
 };
 
-type LocationData = {containerId: string, index: number}
 
 
+type LocationData = { containerId: string; index: number };
 
 type DropResultEvent = {
-  source: LocationData,
-  destination: LocationData
-}
-
-// type TablePositionLocator = {
-//   targetIndex: number;
-//   targetPlace: PlaceType;
-//   targetPlayer: number;
-// };
+  source: LocationData;
+  destination: LocationData;
+};
 
 type CardType = "guest" | "unwanted" | "instant" | "interrupt" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
 
@@ -148,8 +142,7 @@ type GamePlayer = {
   glitzaglitza: boolean;
   skipNextTurn: boolean;
 };
-type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" |"counterPhase" ;
-
+type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" | "counterPhase";
 
 type PlayerPlaces = {
   [type: string]: GamePlace;
@@ -160,14 +153,17 @@ type NonPlayerPlaces = {
 };
 
 type Current = {
-  player: number,
-  phase: Phase,
-  plays: number,
-  draws: number,
-  rolls: number, 
-}
+  player: number;
+  phase: Phase;
+  plays: number;
+  draws: number;
+  rolls: number;
+};
+
+type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCard" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;
 
 type GameSnapshot = {
+  snapshotUpdateType: SnapshotUpdateType;
   current: Current;
   players: GamePlayer[];
   nonPlayerPlaces: NonPlayerPlaces;
@@ -188,28 +184,8 @@ type TransitionData = {
   curve: string;
   originDimensions: AllDimensions;
   cardInitialrotation: number;
-  startAnimationDuration: number
+  startAnimationDuration: number;
   startAnimation: string;
-};
-
-type TransitionDataEvents = {
-  card: GameCard;
-  origin: TopLeftCoordinates;
-  animation: AnimationData;
-  duration: number;
-}[];
-
-type LegalTarget = {
-  type: LegalTargetType;
-  targetId: string;
-  draggedCard: GameCard;
-  isRearrange?: boolean;
-  placeOffset?: number;
-  draggedOverIndex?: number;
-};
-
-type Refs = {
-  [id: string]: HTMLElement;
 };
 
 type CardGroupObj = {
@@ -218,11 +194,11 @@ type CardGroupObj = {
   cards: CardGroup;
 };
 
-type NewCardGroupObj={
+type NewCardGroupObj = {
   id: string;
   width: number;
   size: number;
   cards: CardGroup;
-}
+};
 
 type Hover = "shortHover" | "longHover" | "none";

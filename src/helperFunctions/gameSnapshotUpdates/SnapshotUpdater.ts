@@ -31,8 +31,8 @@ export default class SnapshotUpdater {
     const draggedId = this.findDraggedId(change);
 
     const { source, destination } = change;
-    let from: SnapshotUpdateToOrFrom = this.convertSourceOrDestToToOrFrom(source);
-    let to: SnapshotUpdateToOrFrom = this.convertSourceOrDestToToOrFrom(destination)
+    let from: SnapshotLocation = this.convertSourceOrDestToToOrFrom(source);
+    let to: SnapshotLocation = this.convertSourceOrDestToToOrFrom(destination)
 
     // from.cardId = draggedId
     // to.cardId = draggedId
@@ -41,7 +41,7 @@ export default class SnapshotUpdater {
     return { from: from, to: to};
   }
 
-  private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): SnapshotUpdateToOrFrom {
+  private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): SnapshotLocation {
     const { index, containerId } = sourceOrDest;
     const { player, place } = locate(containerId, this.snapshot);
     // const playerId = this.findPlayerId(sourceOrDest);

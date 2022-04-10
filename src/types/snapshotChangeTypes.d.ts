@@ -5,19 +5,14 @@
  */
 
  type SnapshotUpdate = {
-  from: SnapshotUpdateToOrFrom;
-  to: SnapshotUpdateToOrFrom;
+  from: SnapshotLocation;
+  to: SnapshotLocation;
 }
 
-type SnapshotUpdateToOrFrom = {
-  // cardId: string;
-  place: PlaceType;
-  // placeId: string;
-  player: number | null;
-  // playerId: string | null;
-  index: number;
+type TransitionSet = {
+  status: "pending" | "ready",
+  transitions: TransitionData[],
 }
-
 
 /**
  * A snapshot change is a the summary of what has changed in the 
@@ -32,6 +27,8 @@ type SnapshotUpdateToOrFrom = {
   to: ToOrFrom;
 }
 
+type PendingTransition = SnapshotChange & { orderOfExecution: number }
+
 type ToOrFrom = {
   cardId: string;
   place: PlaceType;
@@ -44,13 +41,11 @@ type ToOrFrom = {
 }
 
 
-
-
-// type SnapshotLocation = {
-//   player: number | null;
-//   place: PlaceType;
-//   index: number;
-// }
+type SnapshotLocation = {
+  player: number | null;
+  place: PlaceType;
+  index: number;
+}
 
 type SimpleSnapshotLocator = {
   player: number | null;
