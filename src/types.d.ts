@@ -160,7 +160,6 @@ type Current = {
   rolls: number;
 };
 
-type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCard" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;
 
 type GameSnapshot = {
   snapshotUpdateType: SnapshotUpdateType;

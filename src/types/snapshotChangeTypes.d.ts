@@ -51,3 +51,5 @@ type SimpleSnapshotLocator = {
   player: number | null;
   place: PlaceType;
 }
+
+type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCard" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;
