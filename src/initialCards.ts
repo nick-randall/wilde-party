@@ -341,6 +341,7 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
+  id: 1,
   snapshotUpdateType: "initialSnapshot",
   current: {
     player: 0,

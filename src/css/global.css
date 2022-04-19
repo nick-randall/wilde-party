@@ -13,6 +13,7 @@ body{
   margin:0px;
   background-image: url(background_tile.jpg);
   background-repeat: repeat;
+  background-size: 130px;
 }
 
 @font-face {

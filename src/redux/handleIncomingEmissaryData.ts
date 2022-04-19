@@ -2,7 +2,7 @@ import { RootState } from "./store";
 import { addNewTransition, updateTransitionTemplate } from "./transitionQueueActionCreators";
 
 /**
- * called when emissary to or from data is received.
+ * This function iscalled when emissary to or from data is received.
  * */
 
 export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatch: Function, getState: () => RootState) => {
@@ -17,7 +17,7 @@ export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatc
     // if Template has already had fromData added, create a new transition from it
     if (currTemplate.from.xPosition !== undefined) {
       currTemplate.status = "underway";
-      dispatch(createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
+      dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }
@@ -34,13 +34,13 @@ export const handleEmissaryFromData = (emissaryFromData: EmissaryFromData) => (d
     // if Template has already had toData added, create a new transition from it
     if (currTemplate.to.xPosition !== undefined) {
       currTemplate.status = "underway";
-      dispatch(createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
+      dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }
 };
 
-const createTransitionFromTemplate = (template: CompleteTransitionTemplate) => (dispatch: Function, getState: () => RootState) => {
+const createAndAddTransitionFromTemplate = (template: CompleteTransitionTemplate) => (dispatch: Function, getState: () => RootState) => {
   const { to, from } = template;
   const xDelta = from.xPosition - to.xPosition;
   const yDelta = from.yPosition - to.yPosition;

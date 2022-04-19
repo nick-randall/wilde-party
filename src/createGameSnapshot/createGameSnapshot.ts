@@ -64,6 +64,7 @@ export const createGameSnapshot = () => {
 
 
   const gameSnapshot: GameSnapshot = {
+    id : 1,
     snapshotUpdateType: "initialSnapshot",
     current: {
       player: 0,

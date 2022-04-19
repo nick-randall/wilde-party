@@ -23,15 +23,18 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
   const handleClick = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
-    const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
+    //const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
     const dragSource : DragSourceData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 0, numDraggedElements: 1 }
     const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[0].places["GCZ"].id, index: 1 }
     snapshotUpdater.addChange({source: dragSource, destination: dragDestination});
     snapshotUpdater.begin();
-    let newSnapshot = snapshotUpdater.getNewSnapshot();
+    /**
+     * This part will need to be handled by a function
+     */
+    const newSnapshot = snapshotUpdater.getNewSnapshot();
     const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
     const transitionTemplates = createTransitionTemplates(changes, "addDragged");
-    const newSnapshotComplete = {...newSnapshot, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
+    const newSnapshotComplete = {...newSnapshot, id: currentSnapshot.id + 1, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
     dispatch(addNewGameSnapshots([newSnapshotComplete]));
   };
   return <button onClick={handleClick}>Simulate Incoming NewSnapshots</button>;

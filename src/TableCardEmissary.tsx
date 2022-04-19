@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { handleEmissaryFromData } from "./redux/transitionQueueActions";
+import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
 
 export interface CardEmissaryProps {
   id: string;

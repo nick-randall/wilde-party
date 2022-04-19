@@ -162,6 +162,7 @@ type Current = {
 
 
 type GameSnapshot = {
+  id: number;
   snapshotUpdateType: SnapshotUpdateType;
   current: Current;
   players: GamePlayer[];
