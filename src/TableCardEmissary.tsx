@@ -1,14 +1,14 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { sendEmissaryDispatch } from "./redux/actionCreators";
+import { handleEmissaryFromData } from "./redux/transitionQueueActions";
 
 export interface CardEmissaryProps {
   id: string;
   index: number;
   image: string;
   dimensions: AllDimensions;
-  offsetLeft?: number;
-  offsetTop?: number;
+  offsetLeft: number;
+  offsetTop: number;
   //cardGroupIndex: number;
   placeId: string;
 }
@@ -41,9 +41,9 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     if (emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
-      dispatch(sendEmissaryDispatch(id, left, top));
+      dispatch(handleEmissaryFromData({cardId: id, xPosition: left, yPosition : top, rotation: 0, dimensions: dimensions}));
     }
-  }, [dispatch, id]);
+  }, [dimensions, dispatch, id]);
 
   return (
     <img

@@ -1,3 +1,5 @@
+import { TransitionQueueActions } from "./transitionQueueActionCreators";
+
 export type LocationData = {
   index: number;
   droppableId: string;
@@ -125,4 +127,5 @@ export type Action =
   | DiscardPlayedCard
   | SetAiPlaying
   | UpdateSnapshotTypes
+  | TransitionQueueActions
 //| //Thunk;

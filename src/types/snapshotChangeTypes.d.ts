@@ -36,8 +36,8 @@ type ToOrFrom = {
   player: number | null;
   playerId: string | null;
   index: number;
-  xPosition?: number
-  yPosition?: number
+  // xPosition?: number
+  // yPosition?: number
 }
 
 

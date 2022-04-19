@@ -44,7 +44,7 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
         // change.from = {...change.from, xPosition, yPosition };
         console.log(change)
         dispatch(setNewSnapshot(newSnapshot, [change]));
-        dispatch(updateSnapshot(newSnapshot))
+        // dispatch(updateSnapshot(newSnapshot))
     }
   }
 

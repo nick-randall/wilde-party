@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import "./animations/animations.css";
-import { sendEmissaryDispatch } from "./redux/actionCreators";
+import { handleEmissaryToData } from "./redux/transitionQueueActions";
 
 export interface HandCardEmissaryProps {
   id: string;
@@ -35,7 +35,7 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     if (emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
-      dispatch(sendEmissaryDispatch(id, left, top));
+      dispatch(handleEmissaryToData({cardId: id, xPosition: left, yPosition: top}));
     }
   }, [dispatch, id]);
 

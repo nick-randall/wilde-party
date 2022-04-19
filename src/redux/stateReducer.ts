@@ -27,7 +27,7 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
 
 export interface State {
   gameSnapshot: GameSnapshot;
-  newGameSnapshot?: GameSnapshot;
+  newSnapshots: NewSnapshot[];
   draggedState: DraggedState;
   draggedId?: string;
   dragContainerExpand: { width: number; height: number };
@@ -65,7 +65,7 @@ const initialDragState = {
 export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
-    newGameSnapshot: undefined,
+    newSnapshots: [],
     screenSize: getScreenSize(),
     draggedId: initialDragState.draggedId,
     dragContainerExpand: initialDragState.dragContainerExpand,
