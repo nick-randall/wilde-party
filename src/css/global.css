@@ -9,8 +9,10 @@ user-select: none;
   
 }
 body{
-  background-color: blue;
+  /* background-color: blue; */
   margin:0px;
+  background-image: url(background_tile.jpg);
+  background-repeat: repeat;
 }
 
 @font-face {
