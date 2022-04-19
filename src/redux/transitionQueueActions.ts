@@ -31,8 +31,8 @@ export const handleEmissaryFromData = (emissaryFromData: EmissaryFromData) => (d
     // update Template with emissary data
     currTemplate.to = { ...currTemplate.to, ...emissaryFromData };
 
-    // if Template has already had fromData added, create a new transition from it
-    if (currTemplate.from.xPosition !== undefined) {
+    // if Template has already had toData added, create a new transition from it
+    if (currTemplate.to.xPosition !== undefined) {
       currTemplate.status = "underway";
       dispatch(createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
     }

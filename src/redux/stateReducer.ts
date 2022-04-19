@@ -119,6 +119,8 @@ export const stateReducer = (
       return { ...state, dragContainerExpand: action.payload };
 
     case "ADD_NEW_GAME_SNAPSHOTS":
+      console.log(action.payload)
+      console.log("adding new game snapshot")
       // they should already be in the right order and the first snapshot should
       // have added transitionTemplates already---if there are no more
       return { ...state, newSnapshots: state.newSnapshots.concat(action.payload)}

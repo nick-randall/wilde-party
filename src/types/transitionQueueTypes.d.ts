@@ -1,19 +1,24 @@
-type TransitionTemplate = 
-// {
-//   status: TransitionTemplateStatus;
-//   to: ToOrFrom & ScreenToData;
-//   from: ToOrFrom & ScreenFromData;
-// };
+type TransitionTemplate = {
+  to: ToWithPossibleScreenData; 
+  from: FromWithPossibleScreenData;
+} & { id: string; status: string; orderOfExecution: number; animation?: string };
 
-SnapshotChange & { id: string; status: string; orderOfExecution: number; animation?: string};
 
 type TransitionTemplateStatus = "waitingInLine" | "underway" | "complete";
 
 type CompleteTransitionTemplate = {
+  id: string
   status: TransitionTemplateStatus;
-  to: ToOrFrom & { xPosition: number; yPosition: number };
-  from: ToOrFrom & { xPosition: number; yPosition: number; rotation: number; dimensions: AllDimensions };
+  animation?: string;
+  to: ToWithScreenData;
+  from: FromWithScreenData; 
 };
+
+type ToWithScreenData = ToOrFrom & CompleteScreenToData
+type FromWithScreenData = ToOrFrom & CompleteScreenFromData
+type ToWithPossibleScreenData = ToOrFrom & ScreenToData
+type FromWithPossibleScreenData = ToOrFrom & ScreenFromData
+
 
 type ScreenToData = {
   xPosition?: number;
@@ -24,6 +29,16 @@ type ScreenFromData = ScreenToData & {
   rotation?: number;
   dimensions?: AllDimensions;
 };
+
+type CompleteScreenToData = {
+  xPosition: number;
+  yPosition: number;
+}
+
+type CompleteScreenFromData = CompleteScreenToData & {
+  rotation: number;
+  dimensions: AllDimensions;
+}
 
 type TransitionData = {
   cardId: string;

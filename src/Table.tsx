@@ -10,14 +10,17 @@ import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import createTransitionTemplates from "./animations/findChanges.ts/specifyChangeTransitions";
+import createTransitionTemplates from "./animations/findChanges.ts/createTransitionTemplates";
 import { findChanges } from "./animations/findChanges.ts/findSnapshotChanges";
+import { addNewGameSnapshots } from "./redux/newSnapshotActions";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;
 }
 
 const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
+  const dispatch = useDispatch()
+
   const handleClick = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
     const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
@@ -25,13 +28,13 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[0].places["GCZ"].id, index: 1 }
     snapshotUpdater.addChange({source: dragSource, destination: dragDestination});
     snapshotUpdater.begin();
-    const newSnapshot = snapshotUpdater.getNewSnapshot();
+    let newSnapshot = snapshotUpdater.getNewSnapshot();
     const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
-    newSnapshot.snapshotUpdateType = "addDragged";
     const transitionTemplates = createTransitionTemplates(changes, "addDragged");
-    const newSnapshotComplete = {...newSnapshot, transitionTemplates } as NewSnapshot;
+    const newSnapshotComplete = {...newSnapshot, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
+    dispatch(addNewGameSnapshots([newSnapshotComplete]));
   };
-  return <button onClick={handleClick}></button>;
+  return <button onClick={handleClick}>Simulate Incoming NewSnapshots</button>;
 };
 
 export default SimulateNewSnapshotButton;
@@ -68,7 +71,7 @@ export const Table = () => {
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
         draggerId: {draggerId} */}
-
+        <SimulateNewSnapshotButton currentSnapshot={gameSnapshot}/>
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />
         <EnemyPlayer id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current={player === 2} />

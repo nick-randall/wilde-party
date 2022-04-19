@@ -40,7 +40,6 @@ type ToOrFrom = {
   // yPosition?: number
 }
 
-
 type SnapshotLocation = {
   player: number | null;
   place: PlaceType;

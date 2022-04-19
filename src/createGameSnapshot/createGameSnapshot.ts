@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import shuffle from "../helperFunctions/shuffle";
 import { getPreppedDeck } from "./createDeck";
 import createStartingGuests from "./createStartingGuests";
-import { GCZCards, getSampleDeck } from "./sampleCards";
+import { GCZCards } from "./sampleCards";
 
 const numPlayers = 3;
 
