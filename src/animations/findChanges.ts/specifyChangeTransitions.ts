@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 
 const orderTransitions = {
   addDragged: { addDragged: 0 },
@@ -5,38 +7,42 @@ const orderTransitions = {
   steal: { flyToStolenCard: 0, discard: 1, stolenCardToNewHome: 1 },
 };
 
-type UpdateTransition = SnapshotChange & { orderOfExecution: number; animation?: string };
+// type TransitionTemplate = SnapshotChange & { id: string; orderOfExecution: number; animation?: string};
 
-const specifyChangeTransitions = (changes: SnapshotChange[], snapshotUpdateType: SnapshotUpdateType) => {
+const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType: SnapshotUpdateType) : TransitionTemplate[] => {
   switch (snapshotUpdateType) {
-    case "rearrangingHand":
-      return "rearrangingHand";
+    case "addDragged": 
+    const transitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "underway"}
+      return [transitionTemplate]
+    // case "rearrangingHand":
+    //   break;
+     // return "rearrangingHand";
     case "destroy":
       // step One: find changed Card.
       const destroyedCard: ToOrFrom | undefined = changes.find(change => change.from.place === "GCZ")?.from;
       if (destroyedCard) {
-        let handCardFliesToDestroyedCard: UpdateTransition = {} as UpdateTransition;
-        let handCardFliesToDiscardPile: UpdateTransition = {} as UpdateTransition;
-        let destroyedCardFliesToDiscardPile: UpdateTransition = {} as UpdateTransition;
+        let handCardFliesToDestroyedCard: TransitionTemplate = {} as TransitionTemplate;
+        let handCardFliesToDiscardPile: TransitionTemplate = {} as TransitionTemplate;
+        let destroyedCardFliesToDiscardPile: TransitionTemplate = {} as TransitionTemplate;
         changes.forEach(change => {
           if (change.from.place === "hand") {
             // create two changes with orderOfExecution 0 and 1
-            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0};
-            handCardFliesToDiscardPile = { ...change, from: destroyedCard, orderOfExecution: 1};
+            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0, id: uuidv4(), status: "underway"};
+            handCardFliesToDiscardPile = { ...change, from: destroyedCard, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine"};
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, orderOfExecution: 1};
+            destroyedCardFliesToDiscardPile = { ...change, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine"};
           }
         });
         return [handCardFliesToDestroyedCard, handCardFliesToDiscardPile, destroyedCardFliesToDiscardPile];
       }
-      break;
-    case "steal":
-    case "enchant":
-    case "protectSelf":
-    case "drawingWildeParty":
-    case "initialSnapshot":
-      return [];
+
+    // case "steal":
+    // case "enchant":
+    // case "protectSelf":
+    // case "drawingWildeParty":
+    // case "initialSnapshot":
+      
   }
   // if (from.placeType === "deck") {
   //   return "drawCard";
@@ -60,7 +66,9 @@ const specifyChangeTransitions = (changes: SnapshotChange[], snapshotUpdateType:
   //   }
 
   // }
+  return [];
+
 };
 
 
-export default specifyChangeTransitions;
+export default createTransitionTemplates;

@@ -1,3 +1,4 @@
+import { NewSnapshotActions } from "./newSnapshotActions";
 import { TransitionQueueActions } from "./transitionQueueActionCreators";
 
 export type LocationData = {
@@ -128,4 +129,5 @@ export type Action =
   | SetAiPlaying
   | UpdateSnapshotTypes
   | TransitionQueueActions
+  | NewSnapshotActions
 //| //Thunk;

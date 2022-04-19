@@ -168,24 +168,14 @@ type GameSnapshot = {
   nonPlayerPlaces: NonPlayerPlaces;
 };
 
-type CardTransitionData = {
-  origin: TopLeftCoordinates;
-  wait: number; // if transition is not first in the queue
-  duration: number;
-  animation: AnimationData;
-};
+// type CardTransitionData = {
+//   origin: TopLeftCoordinates;
+//   wait: number; // if transition is not first in the queue
+//   duration: number;
+//   animation: AnimationData;
+// };
 
-type TransitionData = {
-  cardId: string;
-  originDelta: TopLeftCoordinates;
-  wait: number; // if transition is not first in the queue
-  duration: number;
-  curve: string;
-  originDimensions: AllDimensions;
-  cardInitialrotation: number;
-  startAnimationDuration: number;
-  startAnimation: string;
-};
+
 
 type CardGroupObj = {
   id: string;

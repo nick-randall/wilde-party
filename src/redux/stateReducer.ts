@@ -118,6 +118,10 @@ export const stateReducer = (
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
 
+    case "ADD_NEW_GAME_SNAPSHOTS":
+      // they should already be in the right order and the first snapshot should
+      // have added transitionTemplates already---if there are no more
+      return { ...state, newSnapshots: state.newSnapshots.concat(action.payload)}
     // case "SET_DRAGGED_HAND_CARD":
     //   const draggableId = action.payload;
     //   const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);

@@ -2,14 +2,39 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
-import { useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
 import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
-import { GCZCards } from "./createGameSnapshot/sampleCards";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
+import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
+import createTransitionTemplates from "./animations/findChanges.ts/specifyChangeTransitions";
+import { findChanges } from "./animations/findChanges.ts/findSnapshotChanges";
+
+interface SimulateNewSnapshotButtonProps {
+  currentSnapshot: GameSnapshot;
+}
+
+const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
+  const handleClick = () => {
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
+    const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
+    const dragSource : DragSourceData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 0, numDraggedElements: 1 }
+    const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[0].places["GCZ"].id, index: 1 }
+    snapshotUpdater.addChange({source: dragSource, destination: dragDestination});
+    snapshotUpdater.begin();
+    const newSnapshot = snapshotUpdater.getNewSnapshot();
+    const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
+    newSnapshot.snapshotUpdateType = "addDragged";
+    const transitionTemplates = createTransitionTemplates(changes, "addDragged");
+    const newSnapshotComplete = {...newSnapshot, transitionTemplates } as NewSnapshot;
+  };
+  return <button onClick={handleClick}></button>;
+};
+
+export default SimulateNewSnapshotButton;
 
 export const Table = () => {
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
@@ -17,8 +42,8 @@ export const Table = () => {
   const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const [gameStarted, setGameStarted] = useState(false);
 
-// const draggedState = useSelector((state: RootState) => state.draggedState)
-// const draggerId = useSelector((state: RootState) => state.draggedId)
+  // const draggedState = useSelector((state: RootState) => state.draggedState)
+  // const draggerId = useSelector((state: RootState) => state.draggedId)
 
   const dispatch = useDispatch();
 
@@ -34,7 +59,6 @@ export const Table = () => {
       setGameStarted(true);
     }
   }, [dispatch, gameStarted]);
-
 
   return (
     <div>
