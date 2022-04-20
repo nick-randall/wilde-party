@@ -1,10 +1,15 @@
+/**
+ * All the data needed to create a transition, though either 
+ * the screen data of xPosition/yPosition at origin
+ * or destination is still missing.
+ */
 type TransitionTemplate = {
   to: ToWithPossibleScreenData; 
   from: FromWithPossibleScreenData;
-} & { id: string; status: string; orderOfExecution: number; animation?: string };
+} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string };
 
 
-type TransitionTemplateStatus = "waitingInLine" | "underway" | "complete";
+type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "underway" | "complete";
 
 type CompleteTransitionTemplate = {
   id: string

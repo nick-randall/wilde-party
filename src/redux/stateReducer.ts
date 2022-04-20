@@ -124,6 +124,9 @@ export const stateReducer = (
       // they should already be in the right order and the first snapshot should
       // have added transitionTemplates already---if there are no more
       return { ...state, newSnapshots: state.newSnapshots.concat(action.payload)}
+      case "ADD_TRANSITION":
+        const newTransition = action.payload;
+        return {...state, transitionData: [...state.transitionData, newTransition]}
     // case "SET_DRAGGED_HAND_CARD":
     //   const draggableId = action.payload;
     //   const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
@@ -214,8 +217,6 @@ export const stateReducer = (
         BFFdraggedOverSide: undefined,
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
-    case "ADD_TRANSITION":
-      return { ...state, transitionData: [...state.transitionData, action.payload] };
     case "REMOVE_TRANSITION":
       const transitionData = state.transitionData.filter(td => td.cardId !== action.payload);
       return { ...state, transitionData };

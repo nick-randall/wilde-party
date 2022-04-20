@@ -12,7 +12,7 @@ const orderTransitions = {
 const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType: SnapshotUpdateType) : TransitionTemplate[] => {
   switch (snapshotUpdateType) {
     case "addDragged": 
-    const transitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "underway"}
+    const transitionTemplate: TransitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"}
       return [transitionTemplate]
     // case "rearrangingHand":
     //   break;
@@ -27,7 +27,7 @@ const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType
         changes.forEach(change => {
           if (change.from.place === "hand") {
             // create two changes with orderOfExecution 0 and 1
-            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0, id: uuidv4(), status: "underway"};
+            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"};
             handCardFliesToDiscardPile = { ...change, from: destroyedCard, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine"};
           }
           if (change.from.place === "GCZ") {

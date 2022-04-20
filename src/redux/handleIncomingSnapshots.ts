@@ -4,9 +4,7 @@ import { addNewGameSnapshots } from "./newSnapshotActions";
 import { RootState } from "./store";
 
 const handleIncomingSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function, getState: () => RootState) => {
-  /**
-   * This part will need to be handled by a function
-   */
+  
   const { gameSnapshot } = getState();
   let newSnapshotsAsNewSnapshots: NewSnapshot[] = newSnapshots.map(e => ({...e, transitionTemplates: [] }));
   let filteredNewSnapshots = newSnapshotsAsNewSnapshots.filter(newSnap => newSnap.id > gameSnapshot.id);

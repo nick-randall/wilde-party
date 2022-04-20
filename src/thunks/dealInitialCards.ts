@@ -1,6 +1,6 @@
 import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
-import { addTransition } from "../redux/actionCreators";
 import { RootState } from "../redux/store";
+import { addTransition } from "../redux/transitionQueueActionCreators";
 
 export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
   const numCardsInHand = 7;

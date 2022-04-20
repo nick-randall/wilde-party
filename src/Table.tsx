@@ -24,8 +24,8 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
   const handleClick = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
     //const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
-    const dragSource : DragSourceData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 0, numDraggedElements: 1 }
-    const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[0].places["GCZ"].id, index: 1 }
+    const dragSource : DragSourceData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 5, numDraggedElements: 1 }
+    const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[2].places["GCZ"].id, index: 1 }
     snapshotUpdater.addChange({source: dragSource, destination: dragDestination});
     snapshotUpdater.begin();
     /**
@@ -76,8 +76,8 @@ export const Table = () => {
         draggerId: {draggerId} */}
         <SimulateNewSnapshotButton currentSnapshot={gameSnapshot}/>
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
-        <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />
-        <EnemyPlayer id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current={player === 2} />
+        <EnemyPlayer id={gameSnapshot.players[1].id} player={1} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />
+        <EnemyPlayer id={gameSnapshot.players[2].id} player={2} screenSize={screenSize} places={gameSnapshot.players[2].places} current={player === 2} />
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>

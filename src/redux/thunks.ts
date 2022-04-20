@@ -6,12 +6,12 @@ import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import { buildTransition } from "../dimensions/buildTransition";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
-import { addTransition } from "./actionCreators";
 import { LocationData } from "./actions";
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { RootState } from "./store";
 import enactAiPlayerTurnThunk from "../thunks/enactAiPlayerTurnThunk";
 import { compareProps } from "../helperFunctions/tests";
+import { addTransition } from "./transitionQueueActionCreators";
 
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 export const shouldEndDrawPhase = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1;

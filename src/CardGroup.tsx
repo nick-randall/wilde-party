@@ -39,10 +39,7 @@ const CardGroup = (props: CardGroupProps) => {
         // border: "thin black solid",
       }}
     >
-      <div
-        // This relative container allows the cards to be positioned absolutely within the CardGroup
-        style={{ position: "relative" }}
-      >
+      
         {cardGroup.cards.map((card, cardGroupIndex) => (
           <Card
             offsetTop={getOffset(card, cardGroupIndex).top}
@@ -57,7 +54,7 @@ const CardGroup = (props: CardGroupProps) => {
           />
         ))}
       </div>
-    </div>
+  
   );
 };
 export default CardGroup;

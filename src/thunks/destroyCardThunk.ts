@@ -2,7 +2,7 @@ import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTr
 import { DropResult } from "react-beautiful-dnd";
 import { RootState } from "../redux/store";
 import { endCurrentTurnThunk, shouldEndTurn } from "../redux/thunks";
-import { addTransition } from "../redux/actionCreators";
+import { addTransition } from "../redux/transitionQueueActionCreators";
 
 const destroyCardThunk = (dropResult: DropResultEvent) => (dispatch: Function, getState: () => RootState) => {
   const state: RootState = getState();

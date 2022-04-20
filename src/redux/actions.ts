@@ -59,11 +59,6 @@ export type DestroyCard = {
   payload: string;
 };
 
-export type AddTranstion = {
-  type: "ADD_TRANSITION";
-  payload: TransitionData;
-};
-
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
   payload: string;
@@ -119,7 +114,6 @@ export type Action =
   | ChangeNumPlays
   | ChangeNumDraws
   | ChangeNumRolls
-  | AddTranstion
   | RemoveTransition
   | EndCurrentTurn
   | EndCurrentPhase

@@ -1,14 +1,14 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
+import { handleEmissaryFromData, handleEmissaryToData } from "./redux/handleIncomingEmissaryData";
 
 export interface CardEmissaryProps {
   id: string;
   index: number;
   image: string;
   dimensions: AllDimensions;
-  offsetLeft: number;
-  offsetTop: number;
+  offsetLeft?: number;
+  offsetTop?: number;
   //cardGroupIndex: number;
   placeId: string;
 }
@@ -30,7 +30,7 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     height: cardHeight,
     left: offsetLeft,
     top: offsetTop,
-    position: "absolute",
+    // position: "absolute",
     userSelect: "none",
   };
   /**
@@ -41,7 +41,8 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     if (emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
-      dispatch(handleEmissaryFromData({cardId: id, xPosition: left, yPosition : top, rotation: 0, dimensions: dimensions}));
+      console.log("TableCardEmissary dispatch ----left:" + left, " ---top: " + top)
+      dispatch(handleEmissaryToData({cardId: id, xPosition: left, yPosition : top}));
     }
   }, [dimensions, dispatch, id]);
 

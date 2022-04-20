@@ -29,8 +29,6 @@ const Player = (props: PlayerProps) => {
         <div>
           <GCZ
             id={places.GCZ.id}
-            enchantmentsRowCards={places.enchantmentsRow.cards}
-            GCZCards={places.GCZ.cards}
             playerZoneSize={{ width, height }}
           />
         </div>

@@ -1,12 +1,13 @@
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
+import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
 
 export interface CardProps {
   id: string;
@@ -60,8 +61,28 @@ const Card = (props: CardProps) => {
     userSelect: "none",
   };
 
+
+  const emissaryRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
+
+
+  // useEffect(() => {
+  //   if (newSnapshots.length === 0) return;
+  //   newSnapshots[0].transitionTemplates.forEach(template => {
+  //     if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+  //       if (emissaryRef !== null && emissaryRef.current !== null) {
+  //         const element = emissaryRef.current;
+  //         const { left, top } = element.getBoundingClientRect();
+  //         console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+  //         dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+  //       }
+  //     }
+  //   });
+  // }, [dimensions, dispatch, id, newSnapshots]);
+
   return (
-      <div style={{ position: "absolute" }}>
+      <div style={{ position: "absolute" }} ref={emissaryRef}>
         <CardInspector
           dimensions={dimensions}
           cardRotation={messinessRotation}

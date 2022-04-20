@@ -11,11 +11,12 @@ interface PlayerProps {
   id: string;
   screenSize: { width: number; height: number };
   places: PlayerPlaces;
+  player: number
   current: boolean
 }
 
 const EnemyPlayer = (props: PlayerProps) => {
-  const { screenSize, id, places, current } = props;
+  const { screenSize, id, places, current, player } = props;
   const { width, height, x, y } = getPlayersLayout(screenSize, id);
   const playerPoints = countPlayerPoints(id);
 
@@ -36,7 +37,8 @@ const EnemyPlayer = (props: PlayerProps) => {
           <EnemyGCZ
             id={places.GCZ.id}
             enchantmentsRowCards={places.enchantmentsRow.cards}
-            GCZCards={places.GCZ.cards}
+            // GCZCards={places.GCZ.cards}
+            player = {player}
             playerZoneSize={{ width, height }}
           />
         </div>

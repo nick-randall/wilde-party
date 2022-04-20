@@ -21,6 +21,7 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
   // if(data){
   //   console.log(useSelector((state:RootState)=> stat))
   //   console.log(data)}
+  if(data)console.log(data)
   let transitionStyles: TransitionStylesObj = data
     ? {
         entering: {

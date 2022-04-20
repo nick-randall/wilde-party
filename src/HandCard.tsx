@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
@@ -6,6 +6,7 @@ import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
+import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
 
 export interface HandCardProps {
   id: string;
@@ -41,7 +42,7 @@ const HandCard = (props: HandCardProps) => {
       ? {
           left: "",
           transform: `rotate(0deg)`,
-          pointerEvents: "none"
+          pointerEvents: "none",
           // This width causes cards to move aside and make room in other droppables.
           // When not dragging it tucks cards together
 
@@ -64,11 +65,28 @@ const HandCard = (props: HandCardProps) => {
     boxShadow: "10px 10px 10px black",
   };
 
-
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();
     setShortHover(false);
   };
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
+
+  const emissaryRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (newSnapshots.length === 0) return;
+    newSnapshots[0].transitionTemplates.forEach(template => {
+      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+        if (emissaryRef !== null && emissaryRef.current !== null) {
+          const element = emissaryRef.current;
+          const { left, top } = element.getBoundingClientRect();
+          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+
+          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+        }
+      }
+    });
+  }, [dimensions, dispatch, id, newSnapshots]);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
@@ -82,24 +100,26 @@ const HandCard = (props: HandCardProps) => {
               index={index}
               id={id}
               render={(transitionStyles: CSSProperties) => (
-                <img
-                  alt={image}
-                  src={`./images/${image}.jpg`}
-                  draggable="false"
-                  ref={draggerRenderProps.draggerRef}
-                  onClick={handleClick}
-                  onMouseDown={draggerRenderProps.handleDragStart}
-                  onMouseEnter={() => setShortHover(true)}
-                  onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
-                  id={id}
-                  style={{
-                    ...normalStyles,
-                    ...inspectedStyles,
-                    ...dragStyles(draggerRenderProps.isDragging),
-                    ...transitionStyles,
-                    // ...droppingStyles(snapshot, provided.draggableProps),
-                  }}
-                />
+                <div ref={emissaryRef} style={{ position: "relative" }}>
+                  <img
+                    alt={image}
+                    src={`./images/${image}.jpg`}
+                    draggable="false"
+                    ref={draggerRenderProps.draggerRef}
+                    onClick={handleClick}
+                    onMouseDown={draggerRenderProps.handleDragStart}
+                    onMouseEnter={() => setShortHover(true)}
+                    onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
+                    id={id}
+                    style={{
+                      ...normalStyles,
+                      ...inspectedStyles,
+                      ...dragStyles(draggerRenderProps.isDragging),
+                      ...transitionStyles,
+                      // ...droppingStyles(snapshot, provided.draggableProps),
+                    }}
+                  />
+                </div>
               )}
             />
           )}
