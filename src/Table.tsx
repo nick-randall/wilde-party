@@ -10,7 +10,7 @@ import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import createTransitionTemplates from "./animations/findChanges.ts/createTransitionTemplates";
+import createTransitionTemplates from "./animations/findChanges.ts/createTransitionTemplatesFromChanges";
 import { findChanges } from "./animations/findChanges.ts/findSnapshotChanges";
 import { addNewGameSnapshots } from "./redux/newSnapshotActions";
 
@@ -34,6 +34,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const newSnapshot = snapshotUpdater.getNewSnapshot();
     const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
     const transitionTemplates = createTransitionTemplates(changes, "addDragged");
+
     const newSnapshotComplete = {...newSnapshot, id: currentSnapshot.id + 1, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
     dispatch(addNewGameSnapshots([newSnapshotComplete]));
   };
@@ -60,7 +61,6 @@ export const Table = () => {
   });
   useEffect(() => {
     if (!gameStarted) {
-      console.log("called it");
       dispatch(dealInitialHands());
       setGameStarted(true);
     }

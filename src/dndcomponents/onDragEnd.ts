@@ -1,9 +1,11 @@
 import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { locate } from "../helperFunctions/locateFunctions";
 import { RootState } from "../redux/store";
-import { setNewSnapshot, updateSnapshot } from "../redux/updateSnapshotActionCreators";
+import { setNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import { cleanUpDragState, setDraggedId } from "./dragEventActionCreators";
+import { v4 as uuidv4 } from "uuid";
 
 export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;
@@ -14,8 +16,7 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
   }
 
   if (source && destination) {
-
-    // if(isRearrange){// TODO: rearrange of GCZ 
+    // if(isRearrange){// TODO: rearrange of GCZ
     // rearrange of GCZ has to use snapshotupdater.addchanges() --plural
     const { numDraggedElements } = source;
     // currently passing the id of the first card in the cardGrouObj
@@ -35,16 +36,21 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
     const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
     switch (playedCard.action.actionType) {
       case "addDragged":
-        snapshotUpdater.addChange({source: source, destination: destination});
+        snapshotUpdater.addChange({ source: source, destination: destination });
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
-        // Oh no! findChanges() doesn't seem to find changes of index within the same place... :(
-        const [change] = findChanges({prevSnapshot: gameSnapshot, newSnapshot: newSnapshot});
-        const {xPosition, yPosition} = lastLocation
-        // change.from = {...change.from, xPosition, yPosition };
-        console.log(change)
-        dispatch(setNewSnapshot(newSnapshot, [change]));
-        // dispatch(updateSnapshot(newSnapshot))
+        // NOTE: findChanges() doesn't find changes of index within the same place.
+        const [change] = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
+        if (draggedId) {
+          const { xPosition, yPosition } = lastLocation;
+          const dimensions: AllDimensions = getAllDimensions(draggedId);
+          const rotation = 0; // handcards shouldn't have a rotation
+          const from : FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation } ;
+          const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
+          
+          dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
+        }
+      // dispatch(updateSnapshot(newSnapshot))
     }
   }
 

@@ -120,24 +120,43 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
       if (template.to.placeId === id) {
         //TODO sort somtehing like this:
         // if (template.to.placeId === id || template.from.placeId === id) {
-
-        if (template.status !== "waitingInLine") {
-          // this path should be figured out with
-          // player slash place data;
-
-          // Listen to next newSnapshot in line rather than currSnapshot
-          cards = newSnapshots[0].players[0].places.GCZ.cards;
-          cardGroups = getCardGroupsObjsnew(cards);
-          console.log("listening to newSnapshot")
-          if (template.status === "awaitingEmissaryData") {
-            ////?? could be imporved
-            // emissaryCardGroupIndex = cardGroups.map(c => c.id).indexOf(template.to.cardId);
+        switch (template.status) {
+          case "waitingInLine":
+            break;
+          
+          case "awaitingEmissaryData":
+            cards = newSnapshots[0].players[0].places.GCZ.cards;
+            cardGroups = getCardGroupsObjsnew(cards);
+            console.log("listening to newSnapshot");
             emissaryCardGroupIndex = cardGroups
               .map(group => group.cards)
               .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
             console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardGroupIndex);
-          }
+            break;
+          case "underway":
+            console.log("listening to newSnapshot");
+            cards = newSnapshots[0].players[0].places.GCZ.cards;
+            cardGroups = getCardGroupsObjsnew(cards);
+            // case "complete" :
+          //   break; ???
         }
+        // if (template.status !== "waitingInLine") {
+        //   // this path should be figured out with
+        //   // player slash place data;
+
+        //   // Listen to next newSnapshot in line rather than currSnapshot
+        //   cards = newSnapshots[0].players[0].places.GCZ.cards;
+        //   cardGroups = getCardGroupsObjsnew(cards);
+        //   console.log("listening to newSnapshot");
+        //   // if (template.status === "awaitingEmissaryData") {
+        //   //   ////?? could be imporved
+        //   //   // emissaryCardGroupIndex = cardGroups.map(c => c.id).indexOf(template.to.cardId);
+        //   //   emissaryCardGroupIndex = cardGroups
+        //   //     .map(group => group.cards)
+        //   //     .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
+        //   //   console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardGroupIndex);
+        //   // }
+        // }
       }
     });
   }

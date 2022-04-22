@@ -1,13 +1,33 @@
+
+
+ type ReplaceCurrentSnapshotWithNewSnapshot = {
+  type: "UPDATE_SNAPSHOT";
+  payload: NewSnapshot;
+};
+
+type SetNewSnapshot = {
+  type: "SET_NEW_SNAPSHOT";
+  payload: NewSnapshot;
+};
+
+type RemoveNewSnapshot = {
+  type: "REMOVE_NEW_SNAPSHOT";
+  payload: number
+}
+
+export type UpdateSnapshotTypes = ReplaceCurrentSnapshotWithNewSnapshot | SetNewSnapshot | RemoveNewSnapshot;
+
 /**
- * Adds a new snapshot to the stack. The new snapshot 
+ * Replaces the snapshot with a new one (for example)
  * @param newSnapshot 
  * @param changes 
  * @returns 
  */
-
-export const  setNewSnapshot = (newSnapshot: GameSnapshot, changes: SnapshotChange[]): SetNewSnapshot => ({
+export const  setNewSnapshot = (newSnapshot: NewSnapshot): SetNewSnapshot => ({
   type: "SET_NEW_SNAPSHOT",
-  payload: { newSnapshot, changes },
+  payload: newSnapshot,
 });
 
-export const updateSnapshot = (gameSnapshot: GameSnapshot): UpdateSnapshot => ({type: "UPDATE_SNAPSHOT", payload: gameSnapshot});
+export const removeNewSnapshot = (id: number): RemoveNewSnapshot => ({type: "REMOVE_NEW_SNAPSHOT", payload: id})
+
+export const replaceCurrentSnapshotWithNewSnapshot = (newSnapshot: NewSnapshot): ReplaceCurrentSnapshotWithNewSnapshot => ({type: "UPDATE_SNAPSHOT", payload: newSnapshot});

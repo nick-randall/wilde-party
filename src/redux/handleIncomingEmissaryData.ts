@@ -1,3 +1,4 @@
+import createTransitionFromTemplate from "../transitionFunctions.ts/createTransitionFromTemplate";
 import { RootState } from "./store";
 import {  addTransition, updateTransitionTemplate } from "./transitionQueueActionCreators";
 
@@ -19,8 +20,10 @@ export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatc
     if (currTemplate.from.xPosition !== undefined) {
       currTemplate.status = "underway";
       console.log("TO: currentTemplate should dispatch new transitionData")
+      const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)
+      dispatch(addTransition(newTransition))
 
-      dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
+      // dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }
@@ -39,27 +42,28 @@ export const handleEmissaryFromData = (emissaryFromData: EmissaryFromData) => (d
       currTemplate.status = "underway";
       console.log("FROM: currentTemplate should dispatch new transitionData")
       console.log(currTemplate)
-
-      dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
+      const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)
+      dispatch(addTransition(newTransition))
+      // dispatch(createAndAddTransitionFromTemplate(currTemplate as CompleteTransitionTemplate));
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }
 };
 
-const createAndAddTransitionFromTemplate = (template: CompleteTransitionTemplate) => (dispatch: Function, getState: () => RootState) => {
-  const { to, from } = template;
-  const xDelta = from.xPosition - to.xPosition;
-  const yDelta = from.yPosition - to.yPosition;
-  let newTransitionData: TransitionData = { cardId: to.cardId } as TransitionData;
-  newTransitionData.originDelta = { x: xDelta, y: yDelta }
-  newTransitionData.curve = "ease";
-  newTransitionData.cardInitialrotation = from.rotation;
-  newTransitionData.duration = 5000; // Should be calculated based on distance of originDelta
-  newTransitionData.originDimensions = from.dimensions;
-  newTransitionData.startAnimation = template.animation ?? "";
-  newTransitionData.startAnimationDuration = 0;
-  newTransitionData.wait = 0;
-  console.log("dispatching newTransition")
-  dispatch(addTransition(newTransitionData))
-};
+// const createAndAddTransitionFromTemplate = (template: CompleteTransitionTemplate) => (dispatch: Function, getState: () => RootState) => {
+//   const { to, from } = template;
+//   const xDelta = from.xPosition - to.xPosition;
+//   const yDelta = from.yPosition - to.yPosition;
+//   let newTransitionData: TransitionData = { cardId: to.cardId } as TransitionData;
+//   newTransitionData.originDelta = { x: xDelta, y: yDelta }
+//   newTransitionData.curve = "ease";
+//   newTransitionData.cardInitialrotation = from.rotation;
+//   newTransitionData.duration = 5000; // Should be calculated based on distance of originDelta
+//   newTransitionData.originDimensions = from.dimensions;
+//   newTransitionData.startAnimation = template.animation ?? "";
+//   newTransitionData.startAnimationDuration = 0;
+//   newTransitionData.wait = 0;
+//   console.log("dispatching newTransition")
+//   dispatch(addTransition(newTransitionData))
+// };
 

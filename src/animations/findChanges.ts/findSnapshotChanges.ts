@@ -1,6 +1,12 @@
 import { nonPlayerPlacesTypes, playerPlacesTypes } from "../../helperFunctions/locateFunctions";
 
 /**
+ * This function returns all differences between two given snapshots, with one
+ * exception: If a card has moved WITHIN a place the place will return that 
+ * there were no changes, since it only calls
+ * let differences = prevCardIds.filter(card => !newCardIds.includes(card));
+ * Therefore any rearranges within a place will not be found. 
+ * 
  * Performance note: this function takes about (0.1ms -0.2 ms) when finding one change.
  * @param param0 
  * @returns 

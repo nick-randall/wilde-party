@@ -1,5 +1,6 @@
 import { NewSnapshotActions } from "./newSnapshotActions";
 import { TransitionQueueActions } from "./transitionQueueActionCreators";
+import { UpdateSnapshotTypes } from "./updateSnapshotActionCreators";
 
 export type LocationData = {
   index: number;
@@ -59,10 +60,7 @@ export type DestroyCard = {
   payload: string;
 };
 
-export type RemoveTransition = {
-  type: "REMOVE_TRANSITION";
-  payload: string;
-};
+
 
 export type DiscardPlayedCard = {
   type: "DISCARD_PLAYED_CARD";
@@ -101,7 +99,6 @@ export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: string };
 export type Action =
   | DragAction
   | SetScreenSize
-  | RemoveTransition
   | SetHandCardDrag
   | StartRearranging
   | UpdateDrag
@@ -114,7 +111,6 @@ export type Action =
   | ChangeNumPlays
   | ChangeNumDraws
   | ChangeNumRolls
-  | RemoveTransition
   | EndCurrentTurn
   | EndCurrentPhase
   | DealStartingGuest
