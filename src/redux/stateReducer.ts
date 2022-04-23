@@ -1,21 +1,12 @@
-import { DraggableLocation } from "react-beautiful-dnd";
-import { addDraggedUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/addDragged";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { locate } from "../helperFunctions/locateFunctions";
-import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
-import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
-import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
-import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
-import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
-
-
+import { remove } from "ramda";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -32,7 +23,7 @@ export interface State {
   draggedId?: string;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
-  snapshotChangeData: SnapshotChange[]
+  snapshotChangeData: SnapshotChange[];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide: string | undefined;
@@ -42,19 +33,6 @@ export interface State {
   highlightType: string;
   aiPlaying: string;
 }
-
-const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
-
-const isSpecialsZone = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "specialsZone";
-
-const isSpecialsColumn = (droppableId: string, gameSnapshot: GameSnapshot) => locate(droppableId.slice(1), gameSnapshot).place === "specialsZone";
-
-const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
-  draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
-
-const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
-
-//const phaseNormalTurnIsYours = (gameSnapshot: GameSnapshot) => gameSnapshot.current.player === 0 && gameSnapshot.current.phase === "normalPhase";
 
 const initialDragState = {
   draggedId: undefined,
@@ -86,22 +64,26 @@ export const stateReducer = (
     case "SET_SCREEN_SIZE":
       return { ...state, screenSize: getScreenSize() };
     case "SET_DRAGGED_ID":
-      const draggedId = action.payload 
+      const draggedId = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
       return { ...state, draggedId: draggedId, draggedHandCard: draggedHandCard };
     case "SET_INITIAL_DRAGGED_STATE": {
-      const {source, destination} = action.payload
+      const { source, destination } = action.payload;
       // TODO remove this code!!!!
-      const isHandCard = locate(source?.containerId || "", state.gameSnapshot).place === "hand"
-      const  GCZId = isHandCard ? state.gameSnapshot.players[0].places["GCZ"].id : ""
+      // It is only here so that adding to GCZ is possible for any card.
+      // we need a proper check before adding highlights!!!
+      const isHandCard = locate(source?.containerId || "", state.gameSnapshot).place === "hand";
+      const GCZId = isHandCard ? state.gameSnapshot.players[0].places["GCZ"].id : "";
       //
-      return { ...state, draggedState: {source: source, destination: destination}, 
-      //
-      highlights:[GCZId] 
-    ///
-    };
+      return {
+        ...state,
+        draggedState: { source: source, destination: destination },
+        //
+        highlights: [GCZId],
+        ///
+      };
     }
-   
+
     case "UPDATE_DRAG_DESTINATION":
       const { destination } = action.payload;
       return { ...state, draggedState: { ...state.draggedState, destination: destination } };
@@ -111,29 +93,44 @@ export const stateReducer = (
         draggedState: initialDragState.draggedState,
         draggedId: initialDragState.draggedId,
         dragContainerExpand: initialDragState.dragContainerExpand,
-        highlights: []
+        highlights: [],
       };
-      case "UPDATE_SNAPSHOT": 
-      return {...state, gameSnapshot: action.payload}
+    case "REMOVE_NEW_SNAPSHOT":
+      const id = action.payload;
+      console.log("removing snapshot with id " + id);
+      const newSnapshots = state.newSnapshots.filter(e => e.id !== id);
+      return { ...state, newSnapshots };
+    case "SET_NEW_SNAPSHOT": {
+      const newSnapshot = action.payload;
+      const { id } = newSnapshot;
+      const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
+      return { ...state, ...newSnapshots };
+    }
+    case "OVERWRITE_CURRENT_SNAPSHOT":
+      return { ...state, gameSnapshot: action.payload };
+
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
 
     case "ADD_NEW_GAME_SNAPSHOTS":
-      console.log(action.payload)
-      console.log("adding new game snapshot")
+      console.log(action.payload);
+      console.log("adding new game snapshot");
       // they should already be in the right order and the first snapshot should
-      // have added transitionTemplates already---if there are no more
-      return { ...state, newSnapshots: state.newSnapshots.concat(action.payload)}
-      case "ADD_TRANSITION":
-        const newTransition = action.payload;
-        return {...state, transitionData: [...state.transitionData, newTransition]}
-    // case "SET_DRAGGED_HAND_CARD":
-    //   const draggableId = action.payload;
-    //   const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId);
-    //   return { ...state, draggedHandCard: draggedHandCard };
-    case "START_REARRANGING": {
-      return { ...state, rearrangingData: action.payload };
+      // have added transitionTemplates already---if there weren't already
+      // others in the stack
+      return { ...state, newSnapshots: state.newSnapshots.concat(action.payload) };
+    case "UPDATE_TRANSITION_TEMPLATE": {
+      const template = action.payload;
+      const { id } = template;
+      
+      const currentTemplates = state.newSnapshots[0].transitionTemplates;
+      const transitionTemplates = currentTemplates.map(e => (e.id === id ? template : e));
+      const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, transitionTemplates } : e));
+      return { ...state, newSnapshots };
     }
+    case "ADD_TRANSITION":
+      const newTransition = action.payload;
+      return { ...state, transitionData: [...state.transitionData, newTransition] };
     case "SET_HIGHLIGHTS": {
       // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
@@ -143,55 +140,12 @@ export const stateReducer = (
         return { ...state, highlights, highlightType };
       } else return state;
     }
-    case "UPDATE_DRAG": {
-      const { index, droppableId } = action.payload;
-      if (isEnchantWithBFF(state.draggedHandCard)) {
-        const { droppableId } = action.payload;
-        const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, droppableId);
-        return { ...state, dragUpdate: action.payload, BFFdraggedOverSide };
-      }
-      if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
-        console.log(droppableId.slice(1));
-        return { ...state, dragUpdate: { droppableId: droppableId, index: 0 } };
-      } else return { ...state, dragUpdate: action.payload };
-    }
-    case "REARRANGE": {
-      const { source, destination } = action.payload;
-      if (isGCZ(source, state.gameSnapshot)) {
-        const gameSnapshot = rearrangeGCZ(state.gameSnapshot, source.index, destination.index);
-        return { ...state, gameSnapshot };
-      } else if (isSpecialsZone(source, state.gameSnapshot)) {
-        const gameSnapshot = rearrangeSpecialsZone(state.gameSnapshot, source.index, destination.index);
-        return { ...state, gameSnapshot };
-      } else return state;
-    }
     case "DEAL_STARTING_GUEST": {
       console.log("deal starting guest");
       const player = action.payload;
       const gameSnapshot = dealStartingGuestUpdateSnapshot(player, state.gameSnapshot);
       return { ...state, gameSnapshot };
     }
-    case "ADD_DRAGGED": {
-      const { source, destination } = action.payload;
-      // const { droppableId } = destination;
-      // if (isSpecialsColumn(droppableId, state.gameSnapshot)) {
-      //   const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId.slice(1), destination.index);
-
-      //   return { ...state, gameSnapshot };
-      // }
-
-      const gameSnapshot = addDraggedUpdateSnapshot(state.gameSnapshot, source.droppableId, source.index, destination.droppableId, destination.index);
-      console.log("finished adding dragged");
-      return { ...state, gameSnapshot };
-    }
-    // case "ENCHANT":
-    //   // Here "destination.droppableId" is actually the card that is being enchanted.
-    //   const { source, destination } = action.payload;
-    //   console.log(locate(source.droppableId, state.gameSnapshot), locate(destination.droppableId, state.gameSnapshot));
-    //   if (destination) {
-    //     const gameSnapshot = enchant(state.gameSnapshot, source.index, destination.droppableId);
-    //     return { ...state, gameSnapshot };
-    //   } else return state;
     case "DESTROY_CARD": {
       const targetCardId = action.payload;
       console.log("destroy card", targetCardId);

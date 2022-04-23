@@ -6,11 +6,16 @@ import { removeNewSnapshot, replaceCurrentSnapshotWithNewSnapshot } from "../red
 import addTransitionTemplatesToNewestSnapshot from "./addTransitionTemplatesToNewestSnapshot";
 
 const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Function, getState: () => RootState) => {
+  console.log("handle transition end")
   const { gameSnapshot } = getState();
   // assign to mutablevalue to possibly get newest instance later...
   let newSnapshots = getState().newSnapshots;
 
   dispatch(removeTransition(endingTransition.cardId));
+
+  if(getState().newSnapshots.length === 0){
+return  }
+
   // check if the current transition is the last active transition:
   if (getState().transitionData.length === 0) {
     // first check if more transitionTemplates are waiting in the stack
@@ -24,6 +29,7 @@ const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Fun
       });
       return;
     }
+    console.log("no waiting transition templates ")
 
     // if NO transitionTemplates waiting, go ahead and delete the 
     // newGameSnapshot and copy its contents to the currSnapshot

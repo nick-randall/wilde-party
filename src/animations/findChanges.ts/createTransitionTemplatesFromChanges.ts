@@ -36,13 +36,17 @@ const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType
         });
         return [handCardFliesToDestroyedCard, handCardFliesToDiscardPile, destroyedCardFliesToDiscardPile];
       }
+      break;
 
     // case "steal":
     // case "enchant":
     // case "protectSelf":
     // case "drawingWildeParty":
     // case "initialSnapshot":
-      
+    case "dealingInitialCard": {
+    const transitionTemplate: TransitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"}
+    return [transitionTemplate]
+      }
   }
   // if (from.placeType === "deck") {
   //   return "drawCard";

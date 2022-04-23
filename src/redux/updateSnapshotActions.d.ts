@@ -1,5 +1,5 @@
 // type ReplaceCurrentSnapshotWithNewSnapshot = {
-//   type: "UPDATE_SNAPSHOT";
+//   type: "OVERWRITE_CURRENT_SNAPSHOT";
 //   payload: GameSnapshot;
 // };
 

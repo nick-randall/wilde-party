@@ -21,31 +21,6 @@ export type SetHighlights = {
   payload: string | undefined;
 };
 
-export type StartRearranging = {
-  type: "START_REARRANGING";
-  payload: SimpleRearrangingData;
-};
-
-export type UpdateDrag = {
-  type: "UPDATE_DRAG";
-  payload: LocationData;
-};
-
-export type Rearrange = {
-  type: "REARRANGE";
-  payload: { source: LocationData; destination: LocationData };
-};
-
-export type AddDragged = {
-  type: "ADD_DRAGGED";
-  payload: { source: LocationData; destination: LocationData };
-};
-
-export type Enchant = {
-  type: "ENCHANT";
-  payload: DropResultEvent;
-};
-
 export type EndDragCleanup = {
   type: "END_DRAG_CLEANUP";
 };
@@ -59,8 +34,6 @@ export type DestroyCard = {
   type: "DESTROY_CARD";
   payload: string;
 };
-
-
 
 export type DiscardPlayedCard = {
   type: "DISCARD_PLAYED_CARD";
@@ -100,12 +73,7 @@ export type Action =
   | DragAction
   | SetScreenSize
   | SetHandCardDrag
-  | StartRearranging
-  | UpdateDrag
   | SetHighlights
-  | Rearrange
-  | AddDragged
-  | Enchant
   | EndDragCleanup
   | DrawCard
   | ChangeNumPlays

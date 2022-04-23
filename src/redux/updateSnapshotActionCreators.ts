@@ -1,7 +1,7 @@
 
 
  type ReplaceCurrentSnapshotWithNewSnapshot = {
-  type: "UPDATE_SNAPSHOT";
+  type: "OVERWRITE_CURRENT_SNAPSHOT";
   payload: NewSnapshot;
 };
 
@@ -30,4 +30,4 @@ export const  setNewSnapshot = (newSnapshot: NewSnapshot): SetNewSnapshot => ({
 
 export const removeNewSnapshot = (id: number): RemoveNewSnapshot => ({type: "REMOVE_NEW_SNAPSHOT", payload: id})
 
-export const replaceCurrentSnapshotWithNewSnapshot = (newSnapshot: NewSnapshot): ReplaceCurrentSnapshotWithNewSnapshot => ({type: "UPDATE_SNAPSHOT", payload: newSnapshot});
+export const replaceCurrentSnapshotWithNewSnapshot = (newSnapshot: NewSnapshot): ReplaceCurrentSnapshotWithNewSnapshot => ({type: "OVERWRITE_CURRENT_SNAPSHOT", payload: newSnapshot});

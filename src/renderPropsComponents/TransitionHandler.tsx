@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { rotate } from "../helperFunctions/equations";
 import { RootState } from "../redux/store";
+import handleTransitionEnd from "../transitionFunctions.ts/handleTransitionEnd";
 
 interface TransitionHandlerProps {
   index: number;
@@ -47,8 +48,8 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
       timeout={data !== undefined ? data.wait : 0}
       appear={true}
       addEndListener={(node: HTMLElement) => {
-        
-        node.addEventListener("transitionend", () => dispatch({ type: "REMOVE_TRANSITION", payload: id }), false);
+        ////TODO: data can only be TransitionData
+        node.addEventListener("transitionend", () => {if(data)dispatch(handleTransitionEnd(data))}, false);
       }}
     >
       {state => props.render(transitionStyles[state])}

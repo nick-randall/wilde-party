@@ -13,6 +13,7 @@ import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdat
 import createTransitionTemplates from "./animations/findChanges.ts/createTransitionTemplatesFromChanges";
 import { findChanges } from "./animations/findChanges.ts/findSnapshotChanges";
 import { addNewGameSnapshots } from "./redux/newSnapshotActions";
+import handleIncomingSnapshots from "./redux/handleIncomingSnapshots";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;
@@ -32,11 +33,12 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
      * This part will need to be handled by a function
      */
     const newSnapshot = snapshotUpdater.getNewSnapshot();
-    const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
-    const transitionTemplates = createTransitionTemplates(changes, "addDragged");
+    // const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
+    // const transitionTemplates = createTransitionTemplates(changes, "addDragged");
 
-    const newSnapshotComplete = {...newSnapshot, id: currentSnapshot.id + 1, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
-    dispatch(addNewGameSnapshots([newSnapshotComplete]));
+    // const newSnapshotComplete = {...newSnapshot, id: currentSnapshot.id + 1, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
+    // dispatch(addNewGameSnapshots([newSnapshotComplete]));
+    dispatch(handleIncomingSnapshots([newSnapshot]))
   };
   return <button onClick={handleClick}>Simulate Incoming NewSnapshots</button>;
 };
