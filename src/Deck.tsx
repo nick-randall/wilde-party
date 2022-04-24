@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -12,7 +12,7 @@ interface DeckProps {
   zoneSize: { width: number; height: number };
 }
 
-export const Deck = (props: DeckProps) => {
+const Deck = (props: DeckProps) => {
   const { id, zoneSize, cards } = props;
   const { x, y } = getPlacesLayout(id, zoneSize);
   const dispatch = useDispatch();
@@ -36,3 +36,9 @@ export const Deck = (props: DeckProps) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: RootState, ownProps: DeckProps) => {
+
+}
+
+export default connect(mapStateToProps)(Deck)
