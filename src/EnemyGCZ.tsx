@@ -31,7 +31,6 @@ const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
             index={index}
             image={card.image}
             dimensions={dimensions}
-            placeId={id}
             key={"emissary" + card.id}
           />
         ) :

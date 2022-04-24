@@ -10,7 +10,6 @@ export interface CardEmissaryProps {
   offsetLeft?: number;
   offsetTop?: number;
   //cardGroupIndex: number;
-  placeId: string;
 }
 
 /**

@@ -13,6 +13,14 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
 
   // if drag of no consequence
   if (!destination || destination === source) {
+    return;
+  }
+  // if rearrange...not implemented yet
+  if (destination.containerId === source?.containerId) {
+    dispatch(setDraggedId(""));
+    dispatch(cleanUpDragState());
+    // handle rearrange
+    return;
   }
 
   if (source && destination) {
@@ -45,9 +53,9 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
           const { xPosition, yPosition } = lastLocation;
           const dimensions: AllDimensions = getAllDimensions(draggedId);
           const rotation = 0; // handcards shouldn't have a rotation
-          const from : FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation } ;
+          const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
           const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
-          
+
           dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
         }
       // dispatch(updateSnapshot(newSnapshot))

@@ -2,18 +2,14 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
-import { FunctionComponent, useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
-import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
-import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import createTransitionTemplates from "./animations/findChanges.ts/createTransitionTemplatesFromChanges";
-import { findChanges } from "./animations/findChanges.ts/findSnapshotChanges";
-import { addNewGameSnapshots } from "./redux/newSnapshotActions";
 import handleIncomingSnapshots from "./redux/handleIncomingSnapshots";
+import { useEffect, useState } from "react";
+import { dealInitialHands } from "./transitionFunctions.ts/simulateIncomingDealCardSnapshots";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;

@@ -67,19 +67,19 @@ const Card = (props: CardProps) => {
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
 
 
-  // useEffect(() => {
-  //   if (newSnapshots.length === 0) return;
-  //   newSnapshots[0].transitionTemplates.forEach(template => {
-  //     if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-  //       if (emissaryRef !== null && emissaryRef.current !== null) {
-  //         const element = emissaryRef.current;
-  //         const { left, top } = element.getBoundingClientRect();
-  //         console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
-  //         dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
-  //       }
-  //     }
-  //   });
-  // }, [dimensions, dispatch, id, newSnapshots]);
+  useEffect(() => {
+    if (newSnapshots.length === 0) return;
+    newSnapshots[0].transitionTemplates.forEach(template => {
+      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+        if (emissaryRef !== null && emissaryRef.current !== null) {
+          const element = emissaryRef.current;
+          const { left, top } = element.getBoundingClientRect();
+          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+        }
+      }
+    });
+  }, [dimensions, dispatch, id, newSnapshots]);
 
   return (
       <div style={{ position: "absolute" }} ref={emissaryRef}>

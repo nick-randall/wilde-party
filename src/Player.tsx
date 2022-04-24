@@ -32,7 +32,7 @@ const Player = (props: PlayerProps) => {
             playerZoneSize={{ width, height }}
           />
         </div>
-        <Hand id={places.hand.id} handCards={places.hand.cards} playerZoneSize={{ width, height }} />
+        <Hand id={places.hand.id} playerZoneSize={{ width, height }} />
      
       <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
       <div style={{color: "white", fontSize:50, position: "absolute"}}>Punkte:

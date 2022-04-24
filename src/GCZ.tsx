@@ -77,7 +77,6 @@ function GCZ(props: GCZProps & GCZReduxProps) {
               index={index}
               image={cardGroup.cards[0].image}
               dimensions={dimensions}
-              placeId={id}
               key={"emissary" + cardGroup.cards[0].id}
             />
           ) : (
@@ -100,7 +99,6 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 
 /* isDropDisabled={!allowDropping}*/
 
-// export default GCZ;
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   const { gameSnapshot, newSnapshots, draggedId, highlights, draggedHandCard } = state;
@@ -140,23 +138,6 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
             // case "complete" :
           //   break; ???
         }
-        // if (template.status !== "waitingInLine") {
-        //   // this path should be figured out with
-        //   // player slash place data;
-
-        //   // Listen to next newSnapshot in line rather than currSnapshot
-        //   cards = newSnapshots[0].players[0].places.GCZ.cards;
-        //   cardGroups = getCardGroupsObjsnew(cards);
-        //   console.log("listening to newSnapshot");
-        //   // if (template.status === "awaitingEmissaryData") {
-        //   //   ////?? could be imporved
-        //   //   // emissaryCardGroupIndex = cardGroups.map(c => c.id).indexOf(template.to.cardId);
-        //   //   emissaryCardGroupIndex = cardGroups
-        //   //     .map(group => group.cards)
-        //   //     .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
-        //   //   console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardGroupIndex);
-        //   // }
-        // }
       }
     });
   }

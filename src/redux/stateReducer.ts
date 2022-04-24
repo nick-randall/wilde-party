@@ -113,7 +113,7 @@ export const stateReducer = (
       return { ...state, dragContainerExpand: action.payload };
 
     case "ADD_NEW_GAME_SNAPSHOTS":
-      console.log(action.payload);
+      console.log(state.newSnapshots);
       console.log("adding new game snapshot");
       // they should already be in the right order and the first snapshot should
       // have added transitionTemplates already---if there weren't already
@@ -122,10 +122,11 @@ export const stateReducer = (
     case "UPDATE_TRANSITION_TEMPLATE": {
       const template = action.payload;
       const { id } = template;
-      
       const currentTemplates = state.newSnapshots[0].transitionTemplates;
       const transitionTemplates = currentTemplates.map(e => (e.id === id ? template : e));
       const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, transitionTemplates } : e));
+      console.log("update transition template, new snapshots: ", newSnapshots)
+
       return { ...state, newSnapshots };
     }
     case "ADD_TRANSITION":

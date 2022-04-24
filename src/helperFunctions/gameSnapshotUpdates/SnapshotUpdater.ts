@@ -34,10 +34,6 @@ export default class SnapshotUpdater {
     let from: SnapshotLocation = this.convertSourceOrDestToToOrFrom(source);
     let to: SnapshotLocation = this.convertSourceOrDestToToOrFrom(destination)
 
-    // from.cardId = draggedId
-    // to.cardId = draggedId
-
-    console.log(from, to);
     return { from: from, to: to};
   }
 
