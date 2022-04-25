@@ -30,7 +30,7 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     left: offsetLeft,
     top: offsetTop,
     position: "absolute",
-    backgroundColor: "black"
+    // backgroundColor: "black"
   };
   /**
    * Called after the Emissary is created, passing its location to 

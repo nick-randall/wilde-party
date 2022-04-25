@@ -8,6 +8,9 @@ import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
+import Hand from "./Hand";
+import HandCardEmissary from "./HandCardEmissary";
+import TableCardEmissary from "./TableCardEmissary";
 interface EnemyHandProps {
   id: string;
   player: number | null
@@ -45,6 +48,7 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
           }}
         >
           {handCards.map((card, index) => (
+            emissaryCardIndex === index ? <TableCardEmissary dimensions={dimensions} id= {card.id} index={index} image={card.image}/> :
             <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
           ))}
         </div>
