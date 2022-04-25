@@ -69,8 +69,8 @@ const HandCard = (props: HandCardProps) => {
     handleMouseLeave();
     setShortHover(false);
   };
-  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
 
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -80,7 +80,7 @@ const HandCard = (props: HandCardProps) => {
         if (emissaryRef !== null && emissaryRef.current !== null) {
           const element = emissaryRef.current;
           const { left, top } = element.getBoundingClientRect();
-          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+          console.log("handCardEmissary FromData---left: " + left, " ---top: " + top);
 
           dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
         }

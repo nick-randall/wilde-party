@@ -20,7 +20,7 @@ export interface CardEmissaryProps {
 
 const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offsetLeft, offsetTop }) => {
   const { tableCardzIndex, cardHeight, cardWidth } = dimensions;
-  const emissaryRef = useRef<HTMLImageElement>(null);
+  const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const normalStyles: CSSProperties = {
@@ -29,8 +29,8 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
     height: cardHeight,
     left: offsetLeft,
     top: offsetTop,
-    // position: "absolute",
-    userSelect: "none",
+    position: "absolute",
+    backgroundColor: "black"
   };
   /**
    * Called after the Emissary is created, passing its location to 
@@ -46,11 +46,9 @@ const CardEmissary: React.FC<CardEmissaryProps> = ({ id, image, dimensions, offs
   }, [dimensions, dispatch, id]);
 
   return (
-    <img
+    <div
       ref={emissaryRef}
-      alt={image}
       draggable="false"
-      src={`./images/${image}.jpg`}
       style={{
         ...normalStyles,
       }}

@@ -126,7 +126,6 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
 
       for (i = 0; i < newSnapshot.nonPlayerPlaces[place].cards.length; i++) {
         if (newCardIds[i] === changes[change]["from"]["cardId"]) {
-          console.log("gotcha");
           changes[change]["to"] = {
             cardId: changes[change]["from"]["cardId"],
             place: place,
@@ -140,6 +139,5 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
       }
     }
   }
-  console.log(changes);
   return changes;
 };

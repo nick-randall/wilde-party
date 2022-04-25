@@ -21,6 +21,7 @@ export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatc
       currTemplate.status = "underway";
       console.log("TO: currentTemplate should dispatch new transitionData")
       const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)
+      console.log(newTransition)
       dispatch(addTransition(newTransition))
     }
     dispatch(updateTransitionTemplate(currTemplate));

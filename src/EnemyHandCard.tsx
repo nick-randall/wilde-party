@@ -1,7 +1,8 @@
-import { CSSProperties } from "react";
-import { useSelector } from "react-redux";
+import { CSSProperties, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./animations/animations.css";
 import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
+import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
@@ -40,6 +41,24 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     opacity : 1
   } :{ opacity:0}
 
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
+  const emissaryRef = useRef<HTMLImageElement>(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (newSnapshots.length === 0) return;
+    newSnapshots[0].transitionTemplates.forEach(template => {
+      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+        if (emissaryRef !== null && emissaryRef.current !== null) {
+          const element = emissaryRef.current;
+          const { left, top } = element.getBoundingClientRect();
+          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+
+          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+        }
+      }
+    });
+  }, [dimensions, dispatch, id, newSnapshots]);
+
   return (
    
       <TransitionHandler
@@ -47,6 +66,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         id={id}
         render={(transitionStyles: CSSProperties) => (
           <img
+           ref={emissaryRef}
             alt={image}
              src={"./images/back.jpg"}
             // src={`./images/${image}.jpg`}
@@ -56,7 +76,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
             style={{
               ...normalStyles,
               ...transitionStyles,
-              ...disappearingStyles
+              // ...disappearingStyles
             }}
           />
         )}

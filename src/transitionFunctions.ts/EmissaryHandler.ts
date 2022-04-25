@@ -1,21 +1,22 @@
+import { T } from "ramda";
 import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../redux/store";
 
 interface EmissaryHandlerProps {
-  children: (cards: GameCard[]) => JSX.Element;
-  player: number;
+  children: (cards: GameCard[], emissaryCardIndex: number | undefined) => JSX.Element;
+  player: number | null;
   placeType: PlaceType;
   placeId: string;
 }
 
 type ReduxEmissaryHandlerProps = {
   cards: GameCard[];
-  emissaryIndex: number;
+  emissaryCardIndex: number | undefined;
 };
 
-const EmissaryHandler: React.FC<EmissaryHandlerProps & ReduxEmissaryHandlerProps> = ({ cards, children }) => {
-  return children(cards);
+const EmissaryHandler: React.FC<EmissaryHandlerProps & ReduxEmissaryHandlerProps> = ({ cards, children, emissaryCardIndex }) => {
+  return children(cards, emissaryCardIndex);
 };
 
 const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
@@ -32,33 +33,64 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
   let emissaryCardIndex;
 
   if (newSnapshots.length > 0) {
-    newSnapshots[0].transitionTemplates.forEach(template => {
-      // if place contains a card transitioning to or from it..
-      if (template.to.placeId === placeId) {
-        //TODO sort somtehing like this:
-        // if (template.to.placeId === id || template.from.placeId === id) {
-        switch (template.status) {
-          case "waitingInLine":
-            break;
+    newSnapshots[0].transitionTemplates
+      .filter(t => t.status !== "waitingInLine")
+      // newSnapshots[0].transitionTemplates
+      .forEach(template => {
+        // if place contains a card transitioning to or from it..
+        if (template.to.placeId === placeId) {
+          switch (template.status) {
+            case "awaitingEmissaryData":
+              if (player === null) {
+                cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              } else {
+                cards = newSnapshots[0].players[player].places[placeType].cards;
+              }
+              console.log("status is awaitingEmissaryData--> listening to newSnapshot...with ID " + newSnapshots[0].id );
+              emissaryCardIndex = cards.map(handCard => handCard.id).indexOf(template.to.cardId);
+              break;
+            case "underway":
+              console.log("status is underway--> listening to newSnapshot");
 
-          case "awaitingEmissaryData":
-            if (player === null) {
-              cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-            } else {
-              cards = newSnapshots[0].players[player].places[placeType].cards;
+              if (player === null) {
+                cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              } else {
+                cards = newSnapshots[0].players[player].places[placeType].cards;
+              }
+              break;
+            case "complete":
+              console.log("status is complete--> listening to newSnapshot");
+
+              if (player === null) {
+                cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              } else {
+                cards = newSnapshots[0].players[player].places[placeType].cards;
+              }
+          }
+          if (template.from.placeId === placeId) {
+            switch (template.status) {
+              case "awaitingEmissaryData":
+                console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
+
+                if (player === null) {
+                  cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+                } else {
+                  cards = newSnapshots[0].players[player].places[placeType].cards;
+                }
+                break;
+              case "underway":
+                console.log("TEMPLATEFROM: status is underway--> listening to newSnapshot");
+
+                if (player === null) {
+                  cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+                } else {
+                  cards = newSnapshots[0].players[player].places[placeType].cards;
+                }
+                break;
             }
-            console.log("listening to newSnapshot");
-            emissaryCardIndex = cards.map(handCard => handCard.id).indexOf(template.to.cardId);
-            console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardIndex);
-            break;
-          case "underway":
-            console.log("listening to newSnapshot");
-            cards = newSnapshots[0].players[player].places[placeType].cards;
-          // case "complete" :
-          //   break; ???
+          }
         }
-      }
-    });
+      });
   }
   return { cards, emissaryCardIndex };
 };

@@ -5,6 +5,8 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";
+import TableCardEmissary from "./TableCardEmissary";
+import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
 
 interface DeckProps {
   id: string;
@@ -23,22 +25,36 @@ const Deck = (props: DeckProps) => {
     if (canDraw) dispatch(drawCardThunk(0));
   };
 
-  const cardsInReverseOrder = Array.from(cards).reverse();
+  // const cardsInReverseOrder = Array.from(cards).reverse();
 
-  const highlightStyles =  canDraw ? {backgroundColor:  "yellowgreen",
-  boxShadow: "0px 0px 30px 30px yellowgreen",
-  transition: "background-color 180ms, box-shadow 180ms, left 180ms",} : {}
+  const highlightStyles = canDraw
+    ? {
+        backgroundColor: "yellowgreen",
+        boxShadow: "0px 0px 30px 30px yellowgreen",
+        transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+      }
+    : {};
 
   return (
-    <div style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
-      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id}/>)}
-
-    </div>
+    <EmissaryHandler player={null} placeType={"deck"} placeId={id}>
+      {(cards, emissaryCardIndex) => (
+        <div
+          style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }}
+          onClick={handleClick}
+        >
+          {Array.from(cards)
+            .reverse()
+            .slice(1)
+            .map((card, index) =>
+              index === emissaryCardIndex ? (
+                <TableCardEmissary dimensions={dimensions} id={card.id} image="back" index={index} />
+              ) : (
+                <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id} />
+              )
+            )}
+        </div>
+      )}
+    </EmissaryHandler>
   );
 };
-
-const mapStateToProps = (state: RootState, ownProps: DeckProps) => {
-
-}
-
-export default connect(mapStateToProps)(Deck)
+export default Deck;

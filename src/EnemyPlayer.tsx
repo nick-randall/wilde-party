@@ -42,7 +42,7 @@ const EnemyPlayer = (props: PlayerProps) => {
             playerZoneSize={{ width, height }}
           />
         </div>
-        <EnemyHand id={places.hand.id} handCards={places.hand.cards} playerZoneSize={{ width, height }} />
+        <EnemyHand id={places.hand.id} player={player} placeType="hand" playerZoneSize={{ width, height }} />
      
       <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
       <div style={{color: "white", fontSize:50, position: "relative"}}>{playerPoints}{playerPoints === 1 ? "Punkt" : "Punkte" }</div>

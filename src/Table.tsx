@@ -17,6 +17,11 @@ interface SimulateNewSnapshotButtonProps {
 
 const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
   const dispatch = useDispatch()
+  const newSnapshotcurrent = useSelector((state: RootState) =>state.newSnapshots[0] )
+
+  const logNewSnapshot = () => {
+    console.log(newSnapshotcurrent)
+  }
 
   const handleClick = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
@@ -36,7 +41,8 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     // dispatch(addNewGameSnapshots([newSnapshotComplete]));
     dispatch(handleIncomingSnapshots([newSnapshot]))
   };
-  return <button onClick={handleClick}>Simulate Incoming NewSnapshots</button>;
+  return (<div style={{display: "flex", flexDirection: "column"}}><button onClick={handleClick}>Simulate Incoming NewSnapshots</button>
+        <button onClick={logNewSnapshot}>Log New Snapshot</button></div>);
 };
 
 export default SimulateNewSnapshotButton;

@@ -15,7 +15,7 @@ export interface HandCardEmissaryProps {
 const HandCardEmissary = (props: HandCardEmissaryProps) => {
   const { id, index, image, dimensions, spread, numHandCards } = props;
   const { cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
-  const emissaryRef = useRef<HTMLImageElement>(null);
+  const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const normalStyles: CSSProperties = {
@@ -25,6 +25,7 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
+    backgroundColor: "black"
   };
 
   /**
@@ -35,14 +36,13 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     if (emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
+      console.log("handCard EmissaryTo Data---left: " + left, " ---top: " + top);
       dispatch(handleEmissaryToData({cardId: id, xPosition: left, yPosition: top}));
     }
   }, [dispatch, id]);
 
   return (
-    <img
-      alt={image}
-      src={`./images/${image}.jpg`}
+    <div
       ref={emissaryRef}
       id={id}
       style={{

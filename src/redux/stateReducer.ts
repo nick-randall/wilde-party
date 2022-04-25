@@ -106,7 +106,11 @@ export const stateReducer = (
       const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
       return { ...state, ...newSnapshots };
     }
+    case "SET_NEW_GAME_SNAPSHOTS" : {
+      return {...state, newSnapshots: action.payload}
+    }
     case "OVERWRITE_CURRENT_SNAPSHOT":
+      console.log("overwriting current snapshot")
       return { ...state, gameSnapshot: action.payload };
 
     case "SET_DRAG_CONTAINER_EXPAND":

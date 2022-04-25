@@ -28,14 +28,9 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
     } else {
       const newSnapshots = getState().newSnapshots;
       const lastSnapshot: NewSnapshot = newSnapshots[newSnapshots.length - 1];
-      // convert NewSnaphot to GameSnapshot
-      currentSnapshot = {
-        players: lastSnapshot.players,
-        nonPlayerPlaces: lastSnapshot.nonPlayerPlaces,
-        id: id,
-        snapshotUpdateType: "dealingInitialCard",
-        current: lastSnapshot.current,
-      };
+      // convert NewSnaphot to GameSnapshot using destructuring
+      const { transitionTemplates, ...lastSnapshotAsGameSnapshot} = lastSnapshot
+      currentSnapshot = lastSnapshotAsGameSnapshot;
     }
 
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
