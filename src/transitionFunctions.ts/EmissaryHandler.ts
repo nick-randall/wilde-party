@@ -67,28 +67,28 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
                 cards = newSnapshots[0].players[player].places[placeType].cards;
               }
           }
-          if (template.from.placeId === placeId) {
-            switch (template.status) {
-              case "awaitingEmissaryData":
-                console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
+          // if (template.from.placeId === placeId) {
+          //   switch (template.status) {
+          //     case "awaitingEmissaryData":
+          //       console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
 
-                if (player === null) {
-                  cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-                } else {
-                  cards = newSnapshots[0].players[player].places[placeType].cards;
-                }
-                break;
-              case "underway":
-                console.log("TEMPLATEFROM: status is underway--> listening to newSnapshot");
+          //       if (player === null) {
+          //         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+          //       } else {
+          //         cards = newSnapshots[0].players[player].places[placeType].cards;
+          //       }
+          //       break;
+          //     case "underway":
+          //       console.log("TEMPLATEFROM: status is underway--> listening to newSnapshot");
 
-                if (player === null) {
-                  cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-                } else {
-                  cards = newSnapshots[0].players[player].places[placeType].cards;
-                }
-                break;
-            }
-          }
+          //       if (player === null) {
+          //         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+          //       } else {
+          //         cards = newSnapshots[0].players[player].places[placeType].cards;
+          //       }
+          //       break;
+          //   }
+          // }
         }
       });
   }

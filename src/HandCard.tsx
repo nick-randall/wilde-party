@@ -82,11 +82,11 @@ const HandCard = (props: HandCardProps) => {
           const { left, top } = element.getBoundingClientRect();
           console.log("handCardEmissary FromData---left: " + left, " ---top: " + top);
 
-          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
         }
       }
     });
-  }, [dimensions, dispatch, id, newSnapshots]);
+  }, [dimensions, dispatch, id, index, newSnapshots, rotation]);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>

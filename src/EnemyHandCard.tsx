@@ -53,7 +53,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
           const { left, top } = element.getBoundingClientRect();
           console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
 
-          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, rotation: 0, dimensions: dimensions }));
+          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
         }
       }
     });

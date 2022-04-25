@@ -8,6 +8,6 @@ type SendEmissaryToDispatch = {
   payload: EmissaryToData;
 };
 
-type EmissaryFromData = { cardId: string; xPosition: number; yPosition: number; rotation: number; dimensions: AllDimensions };
+type EmissaryFromData = { cardId: string; xPosition: number; yPosition: number; dimensions: AllDimensions };
 
 type EmissaryToData = { cardId: string; xPosition: number; yPosition: number };

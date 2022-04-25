@@ -41,24 +41,25 @@ const Hand = (props: HandProps) => {
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <EmissaryHandler player={0} placeType="hand" placeId={id}>
-      {(handCards, emissaryCardIndex) => (
-        <div
-          id={props.id}
-          onMouseEnter={() => setShouldSpread(true)}
-          onMouseLeave={() => setShouldSpread(false)}
-          style={{
-            position: "absolute",
-            display: "flex",
-            bottom: 30,
-            // This causes whole card row to move left on spread
-            // left: x - (spread / 2 - 0.5) * handCards.length,
-            //left: x - (spread / 2) * handCards.length,
-            top: y,
-            transition: "180ms",
-            height: dimensions.cardHeight,
-          }}
-        >
+    <div
+      id={props.id}
+      onMouseEnter={() => setShouldSpread(true)}
+      onMouseLeave={() => setShouldSpread(false)}
+      style={{
+        position: "absolute",
+        display: "flex",
+        bottom: 30,
+        // This causes whole card row to move left on spread
+        // left: x - (spread / 2 - 0.5) * handCards.length,
+        //left: x - (spread / 2) * handCards.length,
+        top: y,
+        transition: "180ms",
+        height: dimensions.cardHeight,
+      }}
+    >
+      {" "}
+      <EmissaryHandler player={0} placeType="hand" placeId={id}>
+        {(handCards, emissaryCardIndex) => (
           <NoLayoutDragContainer>
             {handCards.map((card, index) =>
               emissaryCardIndex === index ? (
@@ -85,9 +86,9 @@ const Hand = (props: HandProps) => {
               )
             )}
           </NoLayoutDragContainer>
-        </div>
-      )}
-    </EmissaryHandler>
+        )}
+      </EmissaryHandler>
+    </div>
   );
 };
-export default Hand
+export default Hand;
