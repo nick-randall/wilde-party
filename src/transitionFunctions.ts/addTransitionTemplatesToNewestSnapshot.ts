@@ -21,6 +21,8 @@ const addTransitionTemplatesToNewestSnapshot = () => (dispatch: Function, getSta
 
     dispatch(setNewGameSnapshots(updatedNewSnapshots))
   }
+
+  //TODO: if no transitions to be created, just go straight to replacing currentsnapshot with new
 };
 
 export default addTransitionTemplatesToNewestSnapshot;

@@ -11,7 +11,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
   const numPlayers = getState().gameSnapshot.players.length;
   const delayBetweenCards = 300;
   const delayBetweenPlayers = 2300;
-  const { gameSnapshot } = getState();
+  // const { gameSnapshot } = getState();
 
   // const dealStartingGuest = (player: number) => {
 
@@ -29,7 +29,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const newSnapshots = getState().newSnapshots;
       const lastSnapshot: NewSnapshot = newSnapshots[newSnapshots.length - 1];
       // convert NewSnaphot to GameSnapshot using destructuring
-      const { transitionTemplates, ...lastSnapshotAsGameSnapshot} = lastSnapshot
+      const { transitionTemplates, ...lastSnapshotAsGameSnapshot } = lastSnapshot;
       currentSnapshot = lastSnapshotAsGameSnapshot;
     }
 
@@ -56,4 +56,9 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
   // for(let i = 0; i < 4; i++)
   // dealStartingGuest(0)
   for (let i = 0; i < numPlayers; i++) for (let j = 0; j < numCardsInHand; j++) dealCard(i, i === 0 && j === 0, i * numCardsInHand + (j + 1) + 1);
+  //create playPhase snapshot
+  // const gameSnapshot = getState().gameSnapshot;
+  // const { current } = gameSnapshot;
+  // const newSnaphot: NewSnapshot = { ...gameSnapshot, transitionTemplates: [], current: { ...current, phase: "playPhase" } };
+  // dispatch(addNewGameSnapshots([newSnaphot]));
 };

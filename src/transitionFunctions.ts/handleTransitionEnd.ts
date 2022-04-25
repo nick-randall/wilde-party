@@ -51,11 +51,11 @@ const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Fun
     newSnapshots = getState().newSnapshots;
     const isThisLastSnapshotInQueue = newSnapshots.length === 1;
 
-    if (!isThisLastSnapshotInQueue) {
+    // if (!isThisLastSnapshotInQueue) {
       console.log("handleTransitionEnd: adding TransitinTemplates to newestSnapshot");
       // Now create the transitionTemplates for the next newSnapshot in the stack.
       dispatch(addTransitionTemplatesToNewestSnapshot());
-    }
+    // }
   }
 };
 

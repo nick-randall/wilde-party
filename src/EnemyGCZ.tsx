@@ -23,7 +23,7 @@ const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   const dimensions = getAllDimensions(id);
   return (
-    <div style={{ left: x, top: y, position: "absolute" }}>
+    <div style={{ left: 200, top: y, position: "absolute" }}>
       {enemyGCZCards.map((card, index) => (
          emissaryCardIndex === index ? (
           <TableCardEmissary

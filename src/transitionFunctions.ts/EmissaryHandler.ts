@@ -20,6 +20,7 @@ const EmissaryHandler: React.FC<EmissaryHandlerProps & ReduxEmissaryHandlerProps
 };
 
 const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
+  console.time("emissaryhandler")
   const { gameSnapshot, newSnapshots } = state;
   const { placeId, player, placeType } = ownProps;
   // this path should be figured out with
@@ -46,8 +47,9 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               } else {
                 cards = newSnapshots[0].players[player].places[placeType].cards;
               }
-              console.log("status is awaitingEmissaryData--> listening to newSnapshot...with ID " + newSnapshots[0].id );
+              console.log("status is awaitingEmissaryData--> listening to newSnapshot...with ID " + newSnapshots[0].id);
               emissaryCardIndex = cards.map(handCard => handCard.id).indexOf(template.to.cardId);
+              console.timeEnd("emissaryhandler")
               break;
             case "underway":
               console.log("status is underway--> listening to newSnapshot");
@@ -57,6 +59,7 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               } else {
                 cards = newSnapshots[0].players[player].places[placeType].cards;
               }
+              console.timeEnd("emissaryhandler")
               break;
             // case "complete":
             //   console.log("status is complete--> listening to newSnapshot");
@@ -67,30 +70,46 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
             //     cards = newSnapshots[0].players[player].places[placeType].cards;
             //   }
           }
-          if (template.from.placeId === placeId) {
-            switch (template.status) {
-              case "awaitingEmissaryData":
-                console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
+        }
+      });
 
+    if (newSnapshots.length > 0) {
+      newSnapshots[0].transitionTemplates
+        .filter(t => t.status !== "waitingInLine")
+        // newSnapshots[0].transitionTemplates
+        .forEach(template => {
+          if (template.from.placeId === placeId) {
+            console.log("template from");
+            switch (template.status) {
+              // case "awaitingEmissaryData":
+              //   console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
+
+              //   if (player === null) {
+              //     cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              //   } else {
+              //     cards = newSnapshots[0].players[player].places[placeType].cards;
+              //   }
+              //   break;
+              case "underway":
                 if (player === null) {
                   cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
                 } else {
                   cards = newSnapshots[0].players[player].places[placeType].cards;
                 }
-                break;}}
-          //     case "underway":
-          //       console.log("TEMPLATEFROM: status is underway--> listening to newSnapshot");
+                console.timeEnd("emissaryhandler")
+                break;
+              //     case "complete":
+              //       console.log("status is complete--> listening to newSnapshot");
 
-          //       if (player === null) {
-          //         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-          //       } else {
-          //         cards = newSnapshots[0].players[player].places[placeType].cards;
-          //       }
-          //       break;
-          //   }
-          // }
-        }
-      });
+              //       if (player === null) {
+              //         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              //       } else {
+              //         cards = newSnapshots[0].players[player].places[placeType].cards;
+              //       }
+            }
+          }
+        });
+    }
   }
   return { cards, emissaryCardIndex };
 };
