@@ -16,7 +16,7 @@ const NonPlayerPlaces = (props: NonPlayerPlacesProps) => {
     // border: "thin black solid", 
     display: "block" }}>
       <Deck id={places.deck.id} cards={places.deck.cards} zoneSize={{ width: width, height: height }} />
-      <DiscardPile id={places.discardPile.id} cards={places.discardPile.cards} zoneSize={{width, height}}/>
+      <DiscardPile id={places.discardPile.id} zoneSize={{width, height}}/>
     </div>
   );
 };

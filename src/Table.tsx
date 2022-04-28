@@ -16,33 +16,57 @@ interface SimulateNewSnapshotButtonProps {
 }
 
 const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
-  const dispatch = useDispatch()
-  const newSnapshotcurrent = useSelector((state: RootState) =>state.newSnapshots[0] )
+  const dispatch = useDispatch();
+  const newSnapshotcurrent = useSelector((state: RootState) => state.newSnapshots[0]);
 
   const logNewSnapshot = () => {
-    console.log(newSnapshotcurrent)
+    console.log(newSnapshotcurrent);
+  };
+
+  const removeAllNewSnapshots = () => {
+
   }
 
-  const handleClick = () => {
+  const simulateHandToGCZ = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
-    //const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
-    const dragSource : DragSourceData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 5, numDraggedElements: 1 }
-    const dragDestination: DragDestinationData = {containerId: currentSnapshot.players[2].places["GCZ"].id, index: 1 }
-    snapshotUpdater.addChange({source: dragSource, destination: dragDestination});
+    const dragSource: DragSourceData = { containerId: currentSnapshot.players[2].places["hand"].id, index: 0, numDraggedElements: 1 };
+    const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[2].places["GCZ"].id, index: 1 };
+    snapshotUpdater.addChange({ source: dragSource, destination: dragDestination });
     snapshotUpdater.begin();
-    /**
-     * This part will need to be handled by a function
-     */
     const newSnapshot = snapshotUpdater.getNewSnapshot();
-    // const changes = findChanges({prevSnapshot: currentSnapshot, newSnapshot: newSnapshot});
-    // const transitionTemplates = createTransitionTemplates(changes, "addDragged");
-
-    // const newSnapshotComplete = {...newSnapshot, id: currentSnapshot.id + 1, transitionTemplates, snapshotUpdateType: "addDragged" } as NewSnapshot;
-    // dispatch(addNewGameSnapshots([newSnapshotComplete]));
-    dispatch(handleIncomingSnapshots([newSnapshot]))
+    dispatch(handleIncomingSnapshots([newSnapshot]));
   };
-  return (<div style={{display: "flex", flexDirection: "column"}}><button onClick={handleClick}>Simulate Incoming NewSnapshots</button>
-        <button onClick={logNewSnapshot}>Log New Snapshot</button></div>);
+
+  const simulateDestroy = () => {
+    const changes: DraggedResult[] = [];
+    let playedFromHandSource: DragSourceData = { containerId: currentSnapshot.players[1].places["hand"].id, index: 0, numDraggedElements: 1 };
+    let playedFromHandDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 0 };
+    const change1 = { source: playedFromHandSource, destination: playedFromHandDestination };
+    changes.push(change1);
+
+    const destroyedGCZCardSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 2, numDraggedElements: 1 };
+    const destroyedGCZCardDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 1 };
+    const change2 = { source: destroyedGCZCardSource, destination: destroyedGCZCardDestination };
+    changes.push(change2);
+
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
+    snapshotUpdater.addChangesFromDifferentPlaces(changes);
+    snapshotUpdater.begin();
+    const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();
+    const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType : "destroy"}
+    console.log(newSnapshot)
+
+    dispatch(handleIncomingSnapshots([newSnapshot]));
+
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
+      <button onClick={simulateDestroy}>Simulate destroy!</button>
+      <button onClick={logNewSnapshot}>Log New Snapshot</button>
+    </div>
+  );
 };
 
 export default SimulateNewSnapshotButton;
@@ -78,10 +102,22 @@ export const Table = () => {
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
         draggerId: {draggerId} */}
-        <SimulateNewSnapshotButton currentSnapshot={gameSnapshot}/>
+        <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} />
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
-        <EnemyPlayer id={gameSnapshot.players[1].id} player={1} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />
-        <EnemyPlayer id={gameSnapshot.players[2].id} player={2} screenSize={screenSize} places={gameSnapshot.players[2].places} current={player === 2} />
+        <EnemyPlayer
+          id={gameSnapshot.players[1].id}
+          player={1}
+          screenSize={screenSize}
+          places={gameSnapshot.players[1].places}
+          current={player === 1}
+        />
+        <EnemyPlayer
+          id={gameSnapshot.players[2].id}
+          player={2}
+          screenSize={screenSize}
+          places={gameSnapshot.players[2].places}
+          current={player === 2}
+        />
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>

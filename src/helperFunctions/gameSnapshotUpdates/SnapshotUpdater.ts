@@ -2,12 +2,13 @@ import { locate } from "../locateFunctions";
 import { produce } from "immer";
 
 export default class SnapshotUpdater {
-
   private snapshot: GameSnapshot;
 
   private newSnapshot: GameSnapshot;
 
   private snapshotUpdate?: SnapshotUpdate;
+
+  private snapshotUpdates: SnapshotUpdate[] = [];
 
   private numElements: number = 1;
 
@@ -17,24 +18,29 @@ export default class SnapshotUpdater {
   }
 
   public addChange(change: DraggedResult) {
-    this.snapshotUpdate = this.convertToSnapshotChange(change);
+    this.snapshotUpdate = this.convertToSnapshotUpdate(change);
   }
 
   public addChanges(change: DraggedResult, numElements: number) {
-    this.snapshotUpdate = this.convertToSnapshotChange(change);
+    this.snapshotUpdate = this.convertToSnapshotUpdate(change);
     this.numElements = numElements;
   }
 
-  private convertToSnapshotChange(change: DraggedResult): SnapshotUpdate {
-   
+  public addChangesFromDifferentPlaces(changes: DraggedResult[]) {
+    changes.forEach(change => {
+      const newUpdate = this.convertToSnapshotUpdate(change);
+      this.snapshotUpdates.push(newUpdate);
+    });
+  }
 
+  private convertToSnapshotUpdate(change: DraggedResult): SnapshotUpdate {
     const draggedId = this.findDraggedId(change);
 
     const { source, destination } = change;
     let from: SnapshotLocation = this.convertSourceOrDestToToOrFrom(source);
-    let to: SnapshotLocation = this.convertSourceOrDestToToOrFrom(destination)
+    let to: SnapshotLocation = this.convertSourceOrDestToToOrFrom(destination);
 
-    return { from: from, to: to};
+    return { from: from, to: to };
   }
 
   private convertSourceOrDestToToOrFrom(sourceOrDest: DragDestinationData): SnapshotLocation {
@@ -69,6 +75,7 @@ export default class SnapshotUpdater {
   }
 
   public begin() {
+   
     this.newSnapshot = produce(this.snapshot, draft => {
       if (this.snapshotUpdate !== undefined) {
         const { from, to } = this.snapshotUpdate;
@@ -87,6 +94,27 @@ export default class SnapshotUpdater {
         } else {
           draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
         }
+      } else if (this.snapshotUpdates.length > 0) {
+        this.snapshotUpdates.forEach(update => {
+          // this.newSnapshot = produce(this.snapshot, draft => {
+            const { from, to } = update;
+            const { player: originPlayer, place: originPlace, index: originIndex } = from;
+
+            let splicedCard;
+            if (originPlayer !== null) {
+              splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
+            } else {
+              splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
+            }
+
+            const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
+            if (destinationPlayer !== null) {
+              draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
+            } else {
+              draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
+            }
+          });
+        // });
       }
     });
   }
@@ -96,5 +124,4 @@ export default class SnapshotUpdater {
   public getNewSnapshot() {
     return this.newSnapshot;
   }
-
 }

@@ -43,7 +43,11 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
     const snapshot = snapshotUpdater.getNewSnapshot();
     let newSnapshot: NewSnapshot;
     if (!firstCard) {
-      newSnapshot = { ...snapshot, transitionTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id };
+      // Set the phase to playPhase in the newSnapshots, 
+      // the playPhase will be automatically updated after ALL snapshots have been animated
+      const { current } = snapshot
+      const currentWithPlayPhase: Current = {...current, phase: "playPhase"}
+      newSnapshot = { ...snapshot, transitionTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
     } else {
       const changes = findChanges({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
       const templates = createTransitionTemplates(changes, "dealingInitialCard");

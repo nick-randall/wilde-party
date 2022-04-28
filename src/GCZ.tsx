@@ -99,7 +99,6 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 
 /* isDropDisabled={!allowDropping}*/
 
-
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   const { gameSnapshot, newSnapshots, draggedId, highlights, draggedHandCard } = state;
   const { id } = ownProps;
@@ -110,7 +109,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   // player slash place data;
   let cards = gameSnapshot.players[0].places.GCZ.cards;
   let cardGroups = getCardGroupsObjsnew(cards);
-  let emissaryCardGroupIndex;
+  let emissaryCardGroupIndex: number = -1;
 
   if (newSnapshots.length > 0) {
     newSnapshots[0].transitionTemplates.forEach(template => {
@@ -121,22 +120,39 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
         switch (template.status) {
           case "waitingInLine":
             break;
-          
+
           case "awaitingEmissaryData":
             cards = newSnapshots[0].players[0].places.GCZ.cards;
             cardGroups = getCardGroupsObjsnew(cards);
             console.log("listening to newSnapshot");
-            emissaryCardGroupIndex = cardGroups
-              .map(group => group.cards)
-              .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
+            const groups: CardGroup[] = cardGroups.map(group => group.cards);
+            groups.forEach((cards, cardsIndex) =>
+              cards.forEach(card => {
+                console.log(card.id);
+                console.log(template.to.cardId);
+                if (card.id === template.to.cardId) emissaryCardGroupIndex = cardsIndex;
+              })
+            );
+            // emissaryCardGroupIndex = cardGroups
+            //   .map(group => group.cards)
+            //   .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
             console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardGroupIndex);
             break;
           case "underway":
             console.log("listening to newSnapshot");
             cards = newSnapshots[0].players[0].places.GCZ.cards;
             cardGroups = getCardGroupsObjsnew(cards);
-            // case "complete" :
+          // case "complete" :
           //   break; ???
+        }
+      }
+      if (template.from.placeId === id) {
+        console.log("template from");
+        switch (template.status) {
+          case "underway":
+            cards = newSnapshots[0].players[0].places["GCZ"].cards;
+            cardGroups = getCardGroupsObjsnew(cards);
+
         }
       }
     });
