@@ -22,7 +22,7 @@ const EmissaryHandler: React.FC<EmissaryHandlerProps & ReduxEmissaryHandlerProps
 const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
   console.time("emissaryhandler")
   const { gameSnapshot, newSnapshots } = state;
-  const { placeId, player, placeType } = ownProps;
+  const { player, placeType } = ownProps;
   // this path should be figured out with
   // player slash place data;
   let cards;
@@ -39,7 +39,11 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
       // newSnapshots[0].transitionTemplates
       .forEach(template => {
         // if place contains a card transitioning to or from it..
-        if (template.to.placeId === placeId) {
+
+        const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
+        if(placeType === "hand") console.log("hand " + newSnapshots[0].transitionTemplates[0].status + placeId)
+
+        if (placeId === ownProps.placeId) {
           switch (template.status) {
             case "awaitingEmissaryData":
               if (player === null) {
@@ -61,14 +65,15 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               }
               console.timeEnd("emissaryhandler")
               break;
-            // case "complete":
-            //   console.log("status is complete--> listening to newSnapshot");
+            case "complete":
 
-            //   if (player === null) {
-            //     cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-            //   } else {
-            //     cards = newSnapshots[0].players[player].places[placeType].cards;
-            //   }
+              console.log("status is complete--> listening to newSnapshot");
+
+              if (player === null) {
+                cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              } else {
+                cards = newSnapshots[0].players[player].places[placeType].cards;
+              }
           }
         }
       });
@@ -78,18 +83,11 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
         .filter(t => t.status !== "waitingInLine")
         // newSnapshots[0].transitionTemplates
         .forEach(template => {
-          if (template.from.placeId === placeId) {
+          const placeId = "placeId" in template.from ? template.from.placeId : undefined // will this work???
+
+          if (placeId === ownProps.placeId) {
             console.log("template from");
             switch (template.status) {
-              // case "awaitingEmissaryData":
-              //   console.log("TEMPLATEFROM: status is awaitingEmissaryData--> listening to newSnapshot");
-
-              //   if (player === null) {
-              //     cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
-              //   } else {
-              //     cards = newSnapshots[0].players[player].places[placeType].cards;
-              //   }
-              //   break;
               case "underway":
                 if (player === null) {
                   cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;

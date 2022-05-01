@@ -77,6 +77,7 @@ const HandCard = (props: HandCardProps) => {
     if (newSnapshots.length === 0) return;
     newSnapshots[0].transitionTemplates.forEach(template => {
       if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+        console.group("AWAITING")
         if (emissaryRef !== null && emissaryRef.current !== null) {
           const element = emissaryRef.current;
           const { left, top } = element.getBoundingClientRect();

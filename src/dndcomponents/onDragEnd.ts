@@ -6,6 +6,7 @@ import { RootState } from "../redux/store";
 import { setNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import { cleanUpDragState, setDraggedId } from "./dragEventActionCreators";
 import { v4 as uuidv4 } from "uuid";
+import handleNewSnapshotFromUserAction from "../transitionFunctions.ts/handleNewSnapshotFromUserAction";
 
 export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;
@@ -52,11 +53,16 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
         if (draggedId) {
           const { xPosition, yPosition } = lastLocation;
           const dimensions: AllDimensions = getAllDimensions(draggedId);
-          const rotation = 0; // handcards shouldn't have a rotation
-          const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
-          const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
+          // const rotation = 0; // handcards shouldn't have a rotation
+          // const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
+          // const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
 
-          dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
+          // dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
+
+          // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
+          
+
+          dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType, lastLocation, dimensions))
         }
       // dispatch(updateSnapshot(newSnapshot))
     }

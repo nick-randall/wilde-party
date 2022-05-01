@@ -113,8 +113,11 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
 
   if (newSnapshots.length > 0) {
     newSnapshots[0].transitionTemplates.forEach(template => {
+
+      const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
+
       // if place contains a card transitioning to or from it..
-      if (template.to.placeId === id) {
+      if (placeId === id) {
         //TODO sort somtehing like this:
         // if (template.to.placeId === id || template.from.placeId === id) {
         switch (template.status) {
@@ -146,7 +149,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
           //   break; ???
         }
       }
-      if (template.from.placeId === id) {
+      if (placeId === id) {
         console.log("template from");
         switch (template.status) {
           case "underway":

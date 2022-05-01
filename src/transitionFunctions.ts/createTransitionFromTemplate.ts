@@ -10,7 +10,7 @@ const createTransitionFromTemplate = (template: CompleteTransitionTemplate) : Tr
   newTransitionData.originDimensions = from.dimensions;
   newTransitionData.startAnimation = template.animation ?? "";
   newTransitionData.startAnimationDuration = 0;
-  newTransitionData.wait = 0;
+  newTransitionData.wait = 100;
 
   return newTransitionData;
 };

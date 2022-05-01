@@ -12,7 +12,8 @@ const orderTransitions = {
 const createTransitionTemplates = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
-  draggedCardScreenLocation: DraggedCardScreenLocation = null
+  draggedCardScreenLocation: DraggedCardScreenLocation = null,
+  dimensions: AllDimensions | null = null
 ): TransitionTemplate[] => {
   switch (snapshotUpdateType) {
     case "addDragged":
@@ -23,10 +24,12 @@ const createTransitionTemplates = (
         id: uuidv4(),
         status: "awaitingEmissaryData",
       };
-      if (draggedCardScreenLocation !== null) {
+      if (draggedCardScreenLocation !== null && dimensions !== null) {
         const { xPosition, yPosition } = draggedCardScreenLocation;
         const { from } = transitionTemplate;
-        transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition } };
+        const dimensionswithoutrotation = {...dimensions, rotation: () => 0}
+        transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition, rotation: 0, dimensions: dimensionswithoutrotation } };
+        
         console.log(transitionTemplate)
         // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
         // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition

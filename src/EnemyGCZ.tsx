@@ -58,7 +58,9 @@ const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
   if (newSnapshots.length > 0) {
     newSnapshots[0].transitionTemplates.forEach(template => {
       // if place contains a card transitioning to or from it..
-      if (template.to.placeId === id) {
+    
+      const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
+      if (placeId  === id) {
         //TODO sort somtehing like this:
         // if (template.to.placeId === id || template.from.placeId === id) {
 

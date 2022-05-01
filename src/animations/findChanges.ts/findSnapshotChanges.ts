@@ -30,7 +30,7 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
       if (differences.length === 0) {
       } else {
         for (let i = 0; i < differences.length; i++) {
-          let change: SnapshotChange = {
+          let change: SnapshotDifference = {
             from: {
               cardId: differences[i],
               place: place,
@@ -66,7 +66,7 @@ export const findChanges = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameS
     if (differences.length === 0) {
     } else {
       for (let i = 0; i < differences.length; i++) {
-        let change: SnapshotChange = {
+        let change: SnapshotDifference = {
           from: {
             cardId: differences[i],
             place: place,
