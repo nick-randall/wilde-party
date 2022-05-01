@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-
+import { DraggedCardScreenLocation } from "../../transitionFunctions.ts/handleNewSnapshotFromUserAction";
 
 const orderTransitions = {
   addDragged: { addDragged: 0 },
@@ -9,29 +9,47 @@ const orderTransitions = {
 
 // type TransitionTemplate = SnapshotChange & { id: string; orderOfExecution: number; animation?: string};
 
-const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType: SnapshotUpdateType) : TransitionTemplate[] => {
+const createTransitionTemplates = (
+  differences: SnapshotDifference[],
+  snapshotUpdateType: SnapshotUpdateType,
+  draggedCardScreenLocation: DraggedCardScreenLocation = null
+): TransitionTemplate[] => {
   switch (snapshotUpdateType) {
-    case "addDragged": 
-    const transitionTemplate: TransitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"}
-      return [transitionTemplate]
+    case "addDragged":
+      let transitionTemplate: TransitionTemplate = {
+        ...differences[0],
+        animation: "flip",
+        orderOfExecution: 0,
+        id: uuidv4(),
+        status: "awaitingEmissaryData",
+      };
+      if (draggedCardScreenLocation !== null) {
+        const { xPosition, yPosition } = draggedCardScreenLocation;
+        const { from } = transitionTemplate;
+        transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition } };
+        console.log(transitionTemplate)
+        // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
+        // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
+      }
+      return [transitionTemplate];
     // case "rearrangingHand":
     //   break;
-     // return "rearrangingHand";
+    // return "rearrangingHand";
     case "destroy":
       // step One: find changed Card.
-      const destroyedCard: ToOrFrom | undefined = changes.find(change => change.from.place === "GCZ")?.from;
+      const destroyedCard: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
       if (destroyedCard) {
         let handCardFliesToDestroyedCard: TransitionTemplate = {} as TransitionTemplate;
         let handCardFliesToDiscardPile: TransitionTemplate = {} as TransitionTemplate;
         let destroyedCardFliesToDiscardPile: TransitionTemplate = {} as TransitionTemplate;
-        changes.forEach(change => {
+        differences.forEach(change => {
           if (change.from.place === "hand") {
-            // create two changes with orderOfExecution 0 and 1
-            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"};
-            handCardFliesToDiscardPile = { ...change, from: destroyedCard, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine"};
+            // create two differences with orderOfExecution 0 and 1
+            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
+            handCardFliesToDiscardPile = { ...change, from: destroyedCard, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine" };
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine"};
+            destroyedCardFliesToDiscardPile = { ...change, orderOfExecution: 1, id: uuidv4(), status: "waitingInLine" };
           }
         });
         return [handCardFliesToDestroyedCard, handCardFliesToDiscardPile, destroyedCardFliesToDiscardPile];
@@ -44,9 +62,15 @@ const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType
     // case "drawingWildeParty":
     // case "initialSnapshot":
     case "dealingInitialCard": {
-    const transitionTemplate: TransitionTemplate = {...changes[0], animation: "flip", orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData"}
-    return [transitionTemplate]
-      }
+      const transitionTemplate: TransitionTemplate = {
+        ...differences[0],
+        animation: "flip",
+        orderOfExecution: 0,
+        id: uuidv4(),
+        status: "awaitingEmissaryData",
+      };
+      return [transitionTemplate];
+    }
   }
   // if (from.placeType === "deck") {
   //   return "drawCard";
@@ -71,8 +95,6 @@ const createTransitionTemplates = (changes: SnapshotChange[], snapshotUpdateType
 
   // }
   return [];
-
 };
-
 
 export default createTransitionTemplates;

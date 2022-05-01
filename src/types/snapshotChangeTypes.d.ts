@@ -9,11 +9,6 @@
   to: SnapshotLocation;
 }
 
-type TransitionSet = {
-  status: "pending" | "ready",
-  transitions: TransitionData[],
-}
-
 /**
  * A snapshot change is a the summary of what has changed in the 
  * snapshot. It is the output of analysing the before and after
@@ -22,7 +17,7 @@ type TransitionSet = {
  * transition data.
  */
 
- type SnapshotChange = {
+ type SnapshotDifference = {
   from: ToOrFrom;
   to: ToOrFrom;
 }
@@ -36,8 +31,11 @@ type ToOrFrom = {
   player: number | null;
   playerId: string | null;
   index: number;
-  // xPosition?: number
-  // yPosition?: number
+}
+
+type Via = {
+  cardId: string;
+  targetId: string;
 }
 
 type SnapshotLocation = {

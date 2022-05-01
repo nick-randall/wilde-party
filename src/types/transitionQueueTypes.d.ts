@@ -4,8 +4,8 @@
  * or destination is still missing.
  */
 type TransitionTemplate = {
-  to: ToWithPossibleScreenData; 
-  from: FromWithPossibleScreenData;
+  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData; 
+  from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
 } & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string };
 
 
@@ -15,14 +15,20 @@ type CompleteTransitionTemplate = {
   id: string
   status: TransitionTemplateStatus;
   animation?: string;
-  to: ToWithScreenData;
-  from: FromWithScreenData; 
+  to: ToWithScreenData | ToViaWithScreenData;
+  from: FromWithScreenData | FromViaWithScreenData; 
 };
 
 type ToWithScreenData = ToOrFrom & CompleteScreenToData
 type FromWithScreenData = ToOrFrom & CompleteScreenFromData
+type ToViaWithScreenData = Via & CompleteScreenToData
+type FromViaWithScreenData = Via & CompleteScreenFromData
+
 type ToWithPossibleScreenData = ToOrFrom & ScreenToData
 type FromWithPossibleScreenData = ToOrFrom & ScreenFromData
+type ToViaWithPossibleScreenData = Via & ScreenToData
+type FromViaWithPossibleScreenData = Via & ScreenFromData
+
 
 
 type ScreenToData = {
