@@ -18,6 +18,8 @@ export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatc
     // if Template has already had fromData added, create a new transition from it
     console.log(currTemplate)
     if (currTemplate.from.xPosition !== undefined) {
+      // could add IF clause here to check that others with its
+      // orderOFExecution are also ready
       currTemplate.status = "underway";
       console.log("TO: currentTemplate should dispatch new transitionData")
       const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)

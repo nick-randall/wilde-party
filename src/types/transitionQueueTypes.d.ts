@@ -9,7 +9,7 @@ type TransitionTemplate = {
 } & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string };
 
 
-type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "underway" | "complete";
+type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData"| "awaitingSimultaneousTemplates" | "underway" | "complete";
 
 type CompleteTransitionTemplate = {
   id: string

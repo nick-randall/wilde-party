@@ -31,7 +31,7 @@ const CardGroup = (props: CardGroupProps) => {
       // than the size of the cardGroups and allows overlapping cardGroups.
       // It represents the matrix of draggable elements
       style={{
-        // transition: "300ms",
+        transition: "300ms",
         // width: cardGroup.size === 2 ? cardLeftSpread * 2 : cardLeftSpread,
         width: cardGroup.width * cardLeftSpread,
         // this here determines height of GCZ dragover area

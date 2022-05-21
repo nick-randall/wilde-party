@@ -12,7 +12,7 @@ interface TransitionHandlerProps {
 }
 
 interface TransitionStylesObj {
-  [status: string]: {};
+  [status: string]: CSSProperties;
 }
 
 export const TransitionHandler = (props: TransitionHandlerProps) => {
@@ -33,10 +33,13 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
           left: data.originDelta.x,
           top: data.originDelta.y,
           opacity: 0,
+          zIndex: 100,
         },
         entered: {
+          transitionDelay: `${data.wait}ms`,
           transition: `transform ${data.duration}ms ${data.curve},  height ${data.duration}ms ${data.curve}, width ${data.duration}ms ${data.curve}, left ${data.duration}ms ${data.curve}, top ${data.duration}ms ${data.curve}`,
           opacity: 1,
+          
         },
       }
     : {};
