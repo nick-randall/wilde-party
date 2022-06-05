@@ -8,18 +8,33 @@ const orderTransitions = {
 };
 
 // type TransitionTemplate = SnapshotChange & { id: string; orderOfExecution: number; animation?: string};
-
-const createTransitionTemplatesFromChanges = (
+/**
+ * Can be used for both local snapshot updates and snapshot updates from the server.
+ * 
+ * @param differences 
+ * @param snapshotUpdateType 
+ * If snapshot update came from the user (true) or from the server.
+ * @param snapshotChangeSourceIsUser 
+ * @param draggedCardScreenLocation 
+ * @param dimensions 
+ * @returns 
+ */
+const createTransitionTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
-  updateIsFromUserAction: boolean = false,
+  snapshotChangeSourceIsUser: boolean = false,
   draggedCardScreenLocation: DraggedCardScreenLocation = null,
   dimensions: AllDimensions | null = null
 ): TransitionTemplate[] => {
-  const templates = createTransitionTemplates(differences, snapshotUpdateType, draggedCardScreenLocation, dimensions);
-  if (updateIsFromUserAction) {
-    const filtered = templates.filter(template => template.orderOfExecution !== 0);
-    filtered.map(template => ({ ...templates, orderOfExecution: template.orderOfExecution - 1 }));
+  let templates = createTransitionTemplates(differences, snapshotUpdateType, draggedCardScreenLocation, dimensions);
+
+  // If the user played a card to change the gameSnapshot, remove the initial transition,
+  // where the card transitions from the players' hand to the card's target location.
+  // This is because the user has already dragged the card to its target location. 
+
+  if (snapshotChangeSourceIsUser) {
+    const templatesWithoutUserAction = templates.filter(template => template.orderOfExecution !== 0);
+    templates = templatesWithoutUserAction.map(template => ({ ...template, orderOfExecution: template.orderOfExecution - 1 }));
   }
   return templates;
 };
