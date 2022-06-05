@@ -9,6 +9,21 @@ const orderTransitions = {
 
 // type TransitionTemplate = SnapshotChange & { id: string; orderOfExecution: number; animation?: string};
 
+const createTransitionTemplatesFromChanges = (
+  differences: SnapshotDifference[],
+  snapshotUpdateType: SnapshotUpdateType,
+  updateIsFromUserAction: boolean = false,
+  draggedCardScreenLocation: DraggedCardScreenLocation = null,
+  dimensions: AllDimensions | null = null
+): TransitionTemplate[] => {
+  const templates = createTransitionTemplates(differences, snapshotUpdateType, draggedCardScreenLocation, dimensions);
+  if (updateIsFromUserAction) {
+    const filtered = templates.filter(template => template.orderOfExecution !== 0);
+    filtered.map(template => ({ ...templates, orderOfExecution: template.orderOfExecution - 1 }));
+  }
+  return templates;
+};
+
 const createTransitionTemplates = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
@@ -27,10 +42,10 @@ const createTransitionTemplates = (
       if (draggedCardScreenLocation !== null && dimensions !== null) {
         const { xPosition, yPosition } = draggedCardScreenLocation;
         const { from } = transitionTemplate;
-        const dimensionswithoutrotation = {...dimensions, rotation: () => 0}
+        const dimensionswithoutrotation = { ...dimensions, rotation: () => 0 };
         transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition, rotation: 0, dimensions: dimensionswithoutrotation } };
-        
-        console.log(transitionTemplate)
+
+        console.log(transitionTemplate);
         // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
         // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
       }
