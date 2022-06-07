@@ -103,7 +103,6 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
   const { draggedId } = draggedState;
   const { id } = ownProps;
-  console.log(draggedId)
 
   let isDraggingOver = false;
   let placeholder = undefined;
