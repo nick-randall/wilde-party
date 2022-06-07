@@ -10,19 +10,15 @@ type DragSourceData = {
 }
 
 type DraggedState = {
-  source?: DragSourceData;
+  draggedId: string
+  source: DragSourceData;
   destination?: DragDestinationData;
-}
+} | undefined
 
 type LastLocation =  {
   xPosition: number;
   yPosition: number;
 }
-
-type SetDraggedId = {
-  type: "SET_DRAGGED_ID";
-  payload: string;
-};
 
 type SetInitialDraggedState = {
   type: "SET_INITIAL_DRAGGED_STATE";

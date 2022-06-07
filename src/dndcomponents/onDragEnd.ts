@@ -4,13 +4,13 @@ import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { locate } from "../helperFunctions/locateFunctions";
 import { RootState } from "../redux/store";
 import { setNewSnapshot } from "../redux/updateSnapshotActionCreators";
-import { cleanUpDragState, setDraggedId } from "./dragEventActionCreators";
+import { cleanUpDragState } from "./dragEventActionCreators";
 import { v4 as uuidv4 } from "uuid";
 import handleNewSnapshotFromUserAction from "../transitionFunctions/handleNewSnapshotFromUserAction";
 
 export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
-  const { source, destination } = getState().draggedState;
-  const { gameSnapshot, draggedId } = getState();
+  const { draggedId, source, destination } = getState().draggedState;
+  const { gameSnapshot } = getState();
 
   // if drag of no consequence
   if (!destination || destination === source) {
@@ -18,7 +18,6 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
   }
   // if rearrange...not implemented yet
   if (destination.containerId === source?.containerId) {
-    dispatch(setDraggedId(""));
     dispatch(cleanUpDragState());
     // handle rearrange
     return;
@@ -72,6 +71,5 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
   // console.log("drag destination " + destination);
   // console.log(lastLocation);
 
-  dispatch(setDraggedId(""));
   dispatch(cleanUpDragState());
 };

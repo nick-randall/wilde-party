@@ -18,8 +18,8 @@ type DropZoneWrapperProps = {
   providedIndex: number;
   id: string;
   isDropDisabled?: boolean;
-  numElementsAt?: number[]
-  insertToTheRight?: boolean
+  numElementsAt?: number[];
+  insertToTheRight?: boolean;
 };
 type ComponentProps = ComponentReduxProps & DropZoneWrapperProps;
 
@@ -28,12 +28,12 @@ type ComponentProps = ComponentReduxProps & DropZoneWrapperProps;
  * Unlike the DraggerContainer, it can be given an index, and this index is passed into the redux dragState
  * when dragged over
  * @param props.providedIndex An array representing the number of elements at each index.
-   * Supplying this allows the dragger to return its calculated position in 
-   * the array of elements. 
+ * Supplying this allows the dragger to return its calculated position in
+ * the array of elements.
  * @param props.insertToTheRight If true, the calculated destination index will be adjusted
-   * so an inserted element would be placed to the right of the element wrapped by this
-   * DropZoneWrapper. By default elements would be added to the left of the wrapped element.
- * @returns 
+ * so an inserted element would be placed to the right of the element wrapped by this
+ * DropZoneWrapper. By default elements would be added to the left of the wrapped element.
+ * @returns
  */
 
 const DropZoneWrapper: React.FC<ComponentProps> = ({
@@ -56,14 +56,13 @@ const DropZoneWrapper: React.FC<ComponentProps> = ({
   const handleMouseMove = () => {
     if (!dragged) return;
     if (isDropDisabled) return;
-    if(isDraggingOver) return;
+    if (isDraggingOver) return;
     setIsDraggingOver(true);
     let calculatedIndex;
-    if(insertToTheRight) {
-      calculatedIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, providedIndex + 1) : providedIndex + 1
-    }
-    else {
-      calculatedIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, providedIndex) : providedIndex
+    if (insertToTheRight) {
+      calculatedIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, providedIndex + 1) : providedIndex + 1;
+    } else {
+      calculatedIndex = numElementsAt !== undefined ? indexToMapped(numElementsAt, providedIndex) : providedIndex;
     }
     dispatch(onDragUpdate({ index: calculatedIndex, containerId: id }));
   };
@@ -97,7 +96,8 @@ const DropZoneWrapper: React.FC<ComponentProps> = ({
 };
 
 const mapStateToProps = (state: RootState, ownProps: DropZoneWrapperProps) => {
-  const { draggedId, dragContainerExpand } = state;
+  const { dragContainerExpand, draggedState } = state;
+  const { draggedId } = draggedState;
   // let isDraggingOver = undefined;
 
   // if (draggedState.destination) {

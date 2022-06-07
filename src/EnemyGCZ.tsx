@@ -50,7 +50,8 @@ const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
 };
 
 const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
-  const { gameSnapshot, newSnapshots, draggedId, highlights, draggedHandCard } = state;
+  const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
+  const {draggedId } = draggedState
   const { id, player } = ownProps;
 
   let enemyGCZCards = gameSnapshot.players[player].places.GCZ.cards;

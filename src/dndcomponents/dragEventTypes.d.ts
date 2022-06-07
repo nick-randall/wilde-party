@@ -12,6 +12,7 @@ type DragDestinationData = {
 }
 
 type DraggedState = {
+  draggedId?: string;
   source?: DragSourceData;
   destination?: DragDestinationData;
 }

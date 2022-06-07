@@ -100,8 +100,10 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 /* isDropDisabled={!allowDropping}*/
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
-  const { gameSnapshot, newSnapshots, draggedId, highlights, draggedHandCard } = state;
+  const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
+  const { draggedId } = draggedState;
   const { id } = ownProps;
+  console.log(draggedId)
 
   let isDraggingOver = false;
   let placeholder = undefined;
@@ -113,8 +115,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
 
   if (newSnapshots.length > 0) {
     newSnapshots[0].transitionTemplates.forEach(template => {
-
-      const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
+      const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???
 
       // if place contains a card transitioning to or from it..
       if (placeId === id) {
@@ -155,7 +156,6 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
           case "underway":
             cards = newSnapshots[0].players[0].places["GCZ"].cards;
             cardGroups = getCardGroupsObjsnew(cards);
-
         }
       }
     });

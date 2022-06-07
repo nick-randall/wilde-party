@@ -250,7 +250,8 @@ const DraggerContainer: React.FC<ComponentProps> = ({
 };
 
 const mapStateToProps = (state: RootState, ownProps: DraggerContainerProps) => {
-  const { draggedState, draggedId, dragContainerExpand } = state;
+  const { draggedState, dragContainerExpand } = state;
+  const { draggedId } = draggedState
   const { numElementsAt, elementWidthAt } = ownProps;
   let draggedOverIndex,
     sourceIndex = 0,

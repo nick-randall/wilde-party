@@ -1,13 +1,12 @@
 import { RootState } from "../redux/store";
-import { setDraggedId, setInitialDraggedState, setDragContainerExpand, updateDragDestination, cleanUpDragState } from "./dragEventActionCreators";
+import { setInitialDraggedState, setDragContainerExpand,  } from "./dragEventActionCreators";
 
 // Thunks
 
 export const onDragStart =
-  (id: string, source: DragSourceData, destination: LocationData, dragContainerExpand: { width: number; height: number }) =>
+  (draggedId: string, source: DragSourceData, destination: LocationData, dragContainerExpand: { width: number; height: number }) =>
   (dispatch: Function, getState: () => RootState) => {
-    dispatch(setDraggedId(id));
-    dispatch(setInitialDraggedState(source, destination));
+    dispatch(setInitialDraggedState(draggedId, source, destination));
     dispatch(setDragContainerExpand(dragContainerExpand));
   };
 

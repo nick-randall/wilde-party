@@ -20,7 +20,6 @@ export interface State {
   gameSnapshot: GameSnapshot;
   newSnapshots: NewSnapshot[];
   draggedState: DraggedState;
-  draggedId?: string;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   // snapshotChangeData: SnapshotCh[];
@@ -35,8 +34,7 @@ export interface State {
 }
 
 const initialDragState = {
-  draggedId: undefined,
-  draggedState: { source: undefined, destination: undefined },
+  draggedState: { draggedId: undefined, source: undefined, destination: undefined },
   dragContainerExpand: { width: 0, height: 0 },
 };
 
@@ -45,7 +43,6 @@ export const stateReducer = (
     gameSnapshot: createGameSnapshot(),
     newSnapshots: [],
     screenSize: getScreenSize(),
-    draggedId: initialDragState.draggedId,
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
     // snapshotChangeData: [],
@@ -68,7 +65,9 @@ export const stateReducer = (
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
       return { ...state, draggedId: draggedId, draggedHandCard: draggedHandCard };
     case "SET_INITIAL_DRAGGED_STATE": {
-      const { source, destination } = action.payload;
+      const { draggedId, source, destination } = action.payload;
+      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
+
       // TODO remove this code!!!!
       // It is only here so that adding to GCZ is possible for any card.
       // we need a proper check before adding highlights!!!
@@ -77,7 +76,8 @@ export const stateReducer = (
       //
       return {
         ...state,
-        draggedState: { source: source, destination: destination },
+        draggedState: { draggedId: draggedId, source: source, destination: destination },
+        draggedHandCard: draggedHandCard,
         //
         highlights: [GCZId],
         ///
@@ -91,7 +91,7 @@ export const stateReducer = (
       return {
         ...state,
         draggedState: initialDragState.draggedState,
-        draggedId: initialDragState.draggedId,
+        draggedHandCard: undefined,
         dragContainerExpand: initialDragState.dragContainerExpand,
         highlights: [],
       };
