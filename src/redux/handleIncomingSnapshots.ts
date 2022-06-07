@@ -1,4 +1,4 @@
-import addTransitionTemplatesToNewestSnapshot from "../transitionFunctions.ts/addTransitionTemplatesToNewestSnapshot";
+import addTransitionTemplatesToNewestSnapshot from "../transitionFunctions/addTransitionTemplatesToNewestSnapshot";
 import { addNewGameSnapshots } from "./newSnapshotActions";
 import { RootState } from "./store";
 

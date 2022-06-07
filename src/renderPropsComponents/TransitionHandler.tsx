@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { rotate } from "../helperFunctions/equations";
 import { RootState } from "../redux/store";
-import handleTransitionEnd from "../transitionFunctions.ts/handleTransitionEnd";
+import handleTransitionEnd from "../transitionFunctions/handleTransitionEnd";
 
 interface TransitionHandlerProps {
   index: number;

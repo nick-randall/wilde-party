@@ -7,7 +7,7 @@ import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
-import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
+import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 import Hand from "./Hand";
 import HandCardEmissary from "./HandCardEmissary";
 import TableCardEmissary from "./TableCardEmissary";

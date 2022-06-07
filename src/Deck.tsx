@@ -6,7 +6,7 @@ import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";
 import TableCardEmissary from "./TableCardEmissary";
-import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
+import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 
 interface DeckProps {
   id: string;

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { DraggedCardScreenLocation } from "../../transitionFunctions.ts/handleNewSnapshotFromUserAction";
+import { DraggedCardScreenLocation } from "../../transitionFunctions/handleNewSnapshotFromUserAction";
 
 const orderTransitions = {
   addDragged: { addDragged: 0 },

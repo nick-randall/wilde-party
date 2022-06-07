@@ -2,7 +2,7 @@ import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import CardEmissary from "./TableCardEmissary";
-import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
+import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 
 interface DiscardPileProps {
   id: string;

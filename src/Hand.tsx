@@ -6,7 +6,7 @@ import { RootState } from "./redux/store";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
 import HandCardEmissary from "./HandCardEmissary";
-import EmissaryHandler from "./transitionFunctions.ts/EmissaryHandler";
+import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 interface HandProps {
   id: string;
   playerZoneSize: { width: number; height: number };

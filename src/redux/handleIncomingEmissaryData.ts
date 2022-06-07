@@ -1,4 +1,4 @@
-import createTransitionFromTemplate from "../transitionFunctions.ts/createTransitionFromTemplate";
+import createTransitionFromTemplate from "../transitionFunctions/createTransitionFromTemplate";
 import { RootState } from "./store";
 import {  addTransition, updateTransitionTemplate } from "./transitionQueueActionCreators";
 

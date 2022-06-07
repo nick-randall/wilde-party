@@ -9,7 +9,7 @@ import "./css/global.css";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import handleIncomingSnapshots from "./redux/handleIncomingSnapshots";
 import { useEffect, useState } from "react";
-import { dealInitialHands } from "./transitionFunctions.ts/simulateIncomingDealCardSnapshots";
+import { dealInitialHands } from "./transitionFunctions/simulateIncomingDealCardSnapshots";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;
