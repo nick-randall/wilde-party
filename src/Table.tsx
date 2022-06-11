@@ -33,7 +33,8 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[2].places["GCZ"].id, index: 1 };
     snapshotUpdater.addChange({ source: dragSource, destination: dragDestination });
     snapshotUpdater.begin();
-    const newSnapshot = snapshotUpdater.getNewSnapshot();
+    const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();
+    const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType: "addDragged"}
     dispatch(handleIncomingSnapshots([newSnapshot]));
   };
 

@@ -75,8 +75,8 @@ export default class SnapshotUpdater {
   }
 
   public begin() {
-   
     this.newSnapshot = produce(this.snapshot, draft => {
+      draft.id++;
       if (this.snapshotUpdate !== undefined) {
         const { from, to } = this.snapshotUpdate;
         const { player: originPlayer, place: originPlace, index: originIndex } = from;
@@ -97,23 +97,23 @@ export default class SnapshotUpdater {
       } else if (this.snapshotUpdates.length > 0) {
         this.snapshotUpdates.forEach(update => {
           // this.newSnapshot = produce(this.snapshot, draft => {
-            const { from, to } = update;
-            const { player: originPlayer, place: originPlace, index: originIndex } = from;
+          const { from, to } = update;
+          const { player: originPlayer, place: originPlace, index: originIndex } = from;
 
-            let splicedCard;
-            if (originPlayer !== null) {
-              splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
-            } else {
-              splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
-            }
+          let splicedCard;
+          if (originPlayer !== null) {
+            splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
+          } else {
+            splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
+          }
 
-            const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
-            if (destinationPlayer !== null) {
-              draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
-            } else {
-              draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
-            }
-          });
+          const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
+          if (destinationPlayer !== null) {
+            draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
+          } else {
+            draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
+          }
+        });
         // });
       }
     });

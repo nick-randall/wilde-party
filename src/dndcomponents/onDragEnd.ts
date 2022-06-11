@@ -9,25 +9,29 @@ import { v4 as uuidv4 } from "uuid";
 import handleNewSnapshotFromUserAction from "../transitionFunctions/handleNewSnapshotFromUserAction";
 
 export const onDragEnd = () => (dispatch: Function, getState: () => RootState) => {
-  const {  source, destination } = getState().draggedState;
+  const { source, destination } = getState().draggedState;
   const { gameSnapshot } = getState();
   console.log(" start of ondragend");
 
   // if drag of no consequence
   if (!destination || destination === source) {
-    console.log("drag of no consequence")
+    console.log("drag of no consequence");
     dispatch(cleanUpDragState());
     return;
   }
   // if rearrange...not implemented yet
   if (destination.containerId === source?.containerId) {
+    const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+    snapshotUpdater.addChange({ source: source, destination: destination });
+    snapshotUpdater.begin();
+    const newSnapshot = snapshotUpdater.getNewSnapshot();
+    dispatch(handleNewSnapshotFromUserAction(newSnapshot, "rearrangingTablePlace"));
     dispatch(cleanUpDragState());
-    // handle rearrange
     return;
   }
 
   if (source && destination) {
-    console.log("in body of ondragend")
+    console.log("in body of ondragend");
     // if(isRearrange){// TODO: rearrange of GCZ
     // rearrange of GCZ has to use snapshotupdater.addchanges() --plural
     const { numDraggedElements } = source;
@@ -56,17 +60,16 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
         // if (draggedId) {
         //   const { xPosition, yPosition } = lastLocation;
         //   const dimensions: AllDimensions = getAllDimensions(draggedId);
-          // const rotation = 0; // handcards shouldn't have a rotation
-          // const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
-          // const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
+        // const rotation = 0; // handcards shouldn't have a rotation
+        // const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
+        // const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
 
-          // dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
+        // dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
 
-          // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
-          
+        // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
 
-          dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType))
-        // }
+        dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType));
+      // }
       // dispatch(updateSnapshot(newSnapshot))
     }
   }

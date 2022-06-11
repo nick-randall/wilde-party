@@ -19,6 +19,7 @@ const handleNewSnapshotFromUserAction =
     // where it is supposed to be), then:
     // Skip all the steps of creating and enacting a transition:
     if (transitionTemplates.length === 0) {
+      console.log(" no transition templates")
       dispatch(replaceCurrentSnapshotWithNewSnapshot(snapshot));
     } else {
       dispatch(addNewGameSnapshots([snapshot]));
