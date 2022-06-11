@@ -50,6 +50,7 @@ const HandCard = (props: HandCardProps) => {
           boxShadow: "10px 10px 10px black",
         }
       : {
+          position: "absolute",
           transform: "",
           transition: "300ms",
           width: dimensions.tableCardWidth,
@@ -94,7 +95,6 @@ const HandCard = (props: HandCardProps) => {
                 left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
                 transition: "300ms",
                 ...transitionStyles,
-
               }}
             >
               <CardInspector

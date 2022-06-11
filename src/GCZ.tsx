@@ -66,6 +66,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
                 backgroundColor: "yellowgreen",
                 boxShadow: "0px 0px 30px 30px yellowgreen",
                 transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+                transitionDelay: "100ms"
               }
             : {}
         }
