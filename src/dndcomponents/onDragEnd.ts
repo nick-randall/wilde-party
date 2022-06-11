@@ -8,12 +8,15 @@ import { cleanUpDragState } from "./dragEventActionCreators";
 import { v4 as uuidv4 } from "uuid";
 import handleNewSnapshotFromUserAction from "../transitionFunctions/handleNewSnapshotFromUserAction";
 
-export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, getState: () => RootState) => {
-  const { draggedId, source, destination } = getState().draggedState;
+export const onDragEnd = () => (dispatch: Function, getState: () => RootState) => {
+  const {  source, destination } = getState().draggedState;
   const { gameSnapshot } = getState();
+  console.log(" start of ondragend");
 
   // if drag of no consequence
   if (!destination || destination === source) {
+    console.log("drag of no consequence")
+    dispatch(cleanUpDragState());
     return;
   }
   // if rearrange...not implemented yet
@@ -24,6 +27,7 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
   }
 
   if (source && destination) {
+    console.log("in body of ondragend")
     // if(isRearrange){// TODO: rearrange of GCZ
     // rearrange of GCZ has to use snapshotupdater.addchanges() --plural
     const { numDraggedElements } = source;
@@ -49,9 +53,9 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
         const newSnapshot = snapshotUpdater.getNewSnapshot();
         // NOTE: findChanges() doesn't find changes of index within the same place.
         const [change] = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
-        if (draggedId) {
-          const { xPosition, yPosition } = lastLocation;
-          const dimensions: AllDimensions = getAllDimensions(draggedId);
+        // if (draggedId) {
+        //   const { xPosition, yPosition } = lastLocation;
+        //   const dimensions: AllDimensions = getAllDimensions(draggedId);
           // const rotation = 0; // handcards shouldn't have a rotation
           // const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
           // const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
@@ -61,15 +65,15 @@ export const onDragEnd = (lastLocation: LastLocation) => (dispatch: Function, ge
           // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
           
 
-          dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType, lastLocation, dimensions))
-        }
+          dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType))
+        // }
       // dispatch(updateSnapshot(newSnapshot))
     }
   }
 
   // console.log("drag source " + source);
   // console.log("drag destination " + destination);
-  // console.log(lastLocation);
+  console.log(" before clean up drag state");
 
   dispatch(cleanUpDragState());
 };

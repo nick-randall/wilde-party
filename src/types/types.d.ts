@@ -41,6 +41,7 @@ type AllDimensions = {
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;
+  tableCardWidth: number;
   tableCardHeight: number;
   tableCardWidth: number;
   // leftOffset: number;

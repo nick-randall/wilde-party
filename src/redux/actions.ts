@@ -1,3 +1,4 @@
+import { DragAction } from "../types/dragDataTypes";
 import { NewSnapshotActions } from "./newSnapshotActions";
 import { TransitionQueueActions } from "./transitionQueueActionCreators";
 import { UpdateSnapshotTypes } from "./updateSnapshotActionCreators";
@@ -5,6 +6,11 @@ import { UpdateSnapshotTypes } from "./updateSnapshotActionCreators";
 export type LocationData = {
   index: number;
   droppableId: string;
+};
+
+export type SetInitialDraggedState = {
+  type: "SET_INITIAL_DRAGGED_STATE";
+  payload: { draggedId: string; source: DragSourceData; destination: LocationData };
 };
 
 export type SetScreenSize = {
@@ -87,5 +93,5 @@ export type Action =
   | SetAiPlaying
   | UpdateSnapshotTypes
   | TransitionQueueActions
-  | NewSnapshotActions
+  | NewSnapshotActions;
 //| //Thunk;

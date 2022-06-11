@@ -1,6 +1,9 @@
 import { pipe } from "ramda";
 import React, { CSSProperties, Ref, useEffect, useRef, useState } from "react";
 import { connect, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import { resetDragEndTarget, setDragEndTarget } from "./dragEventActionCreators";
+
 import {
   addZeroAtFirstIndex,
   getCumulativeSum,
@@ -10,7 +13,6 @@ import {
   indexFromMapped,
   removeSourceIndex,
 } from "./dragEventHelperFunctions";
-import { RootState } from "../redux/store";
 import { onDragUpdate } from "./onDragUpdate";
 
 const usePrevious = (value: any) => {
@@ -35,31 +37,34 @@ interface ComponentReduxProps {
   placeHolder?: JSX.Element;
 }
 type DraggerContainerProps = {
-  // children: React.FC<DraggerProps>[];
   children: JSX.Element[];
   elementWidth: number;
   id: string;
   isLayoutDisabled?: boolean;
   isDropDisabled?: boolean;
   /**
-   *  The index map is an array of the number of elements
-   *  in each index. Using it allows returning meaningful indexes
-   *  from elements that are stacked on top of one another, for example.
+   *  An array expressing the number of elements at each index.
+   *  Using it allows returning meaningful indexes
+   *  from elements that are, for example, stacked on top of one another.
    *  eg. [1, 1, 3, 4]
    */
 
   numElementsAt: number[];
-  /** The width map is an array of the width of each elemnt */
+  /** An array describing the width factor of each element.
+   * eg. [1, 1 ,1 , 2, 1]
+   * with an element width of 100 will be translated into [100, 100, 100, 200, 100]
+   */
   elementWidthAt?: number[];
   containerStyles?: CSSProperties;
 };
 type ComponentProps = ComponentReduxProps & DraggerContainerProps;
-
-// This Component has several jobs:
-// 1. It listens to dragEvents and updates the redux dragState (draggedOverIndex and draggedOVerId)
-// 2. It moves its children around to give the user feedback about where they are placing the dragged item
-// 3. to improve UX, it expands a hidden box so that dragEvents can be detected based on the dragged item position,
-// NOT based only on the mouse position
+/**
+ * This Component has several jobs:
+ * 1. It listens to dragEvents and updates the redux dragState (draggedOverIndex and draggedOVerId)
+ * 2. It moves its children around to give the user feedback about where they are placing the dragged item
+ * 3. to improve UX, it expands a hidden box so that dragEvents can be detected based on the dragged item position,
+ * NOT based only on the mouse position
+ */
 
 const DraggerContainer: React.FC<ComponentProps> = ({
   children,
@@ -87,6 +92,10 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const containerRef: Ref<HTMLDivElement> = useRef(null);
   const dragged = draggedId !== undefined;
   const isInitialRearrange = usePrevious(draggedId) === undefined && draggedId !== undefined;
+  let dropTargetX = draggedOverIndex !== undefined ? distFromLeftMap[draggedOverIndex] * elementWidth : 0;
+
+  // console.log(distFromLeftMap);
+  // console.log(draggedOverIndex);
 
   useEffect(() => {
     if (!draggedOverIndex) setBreakPoints([]);
@@ -99,7 +108,9 @@ const DraggerContainer: React.FC<ComponentProps> = ({
 
     const containerElement = containerRef.current;
     if (containerElement) {
-      const { left: boundingBoxLeft } = containerElement.getBoundingClientRect();
+      const { left: boundingBoxLeft, top: boundingBoxTop } = containerElement.getBoundingClientRect();
+      // offsetTop returns the amount of padding/margin applied by
+      const { offsetTop } = containerElement;
       const touchedX = clientX - boundingBoxLeft;
 
       // Set rowShape if this is the first time the container is being dragged over
@@ -133,8 +144,12 @@ const DraggerContainer: React.FC<ComponentProps> = ({
         newDraggedOverIndex = findNewDraggedOverIndex(breakPoints, touchedX);
       }
       if (draggedOverIndex !== newDraggedOverIndex) {
+        dropTargetX = distFromLeftMap[newDraggedOverIndex] * elementWidth;
+
         newDraggedOverIndex = draggedOverindexToMapped(newDraggedOverIndex, numElementsAt, isRearrange, sourceIndex);
         dispatch(onDragUpdate({ index: newDraggedOverIndex, containerId: id }));
+
+        dispatch(setDragEndTarget(dropTargetX + boundingBoxLeft, boundingBoxTop - offsetTop));
       }
     }
   };
@@ -143,6 +158,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
     if (isDraggingOver) {
       dispatch(onDragUpdate(undefined));
       setBreakPoints([]);
+      dispatch(resetDragEndTarget());
     }
   };
   const draggedElementWidth = isRearrange ? elementWidthAt[sourceIndex] * elementWidth : elementWidth;
@@ -168,6 +184,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
       return draggedElementWidth;
     } else return 0;
   };
+  console.log(dropTargetX);
 
   return (
     <div
@@ -210,7 +227,6 @@ const DraggerContainer: React.FC<ComponentProps> = ({
             draggable="false"
           >
             <div
-              // This is the placeholder (ghost card comes in here)
               // This code causes card before dragged element to left to expand
               style={{
                 width: figureOutWhetherToExpand(index),
@@ -240,10 +256,8 @@ const DraggerContainer: React.FC<ComponentProps> = ({
           }}
           draggable="false"
         />
-        {draggedOverIndex !== undefined && (
-          <div style={{ position: "absolute", transform: `translateX(${distFromLeftMap[draggedOverIndex] * elementWidth}px)`, transition: "200ms ease" }}>{placeHolder}</div>
-        )}
-        {draggedOverIndex}
+        {draggedOverIndex !== undefined && <div style={{ position: "absolute", left: dropTargetX, transition: "200ms ease" }}>{placeHolder}</div>}
+        DRAGGED? {dragged? "true" : false}
       </div>
     </div>
   );
@@ -251,7 +265,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
 
 const mapStateToProps = (state: RootState, ownProps: DraggerContainerProps) => {
   const { draggedState, dragContainerExpand } = state;
-  const { draggedId } = draggedState
+  const { draggedId } = draggedState;
   const { numElementsAt, elementWidthAt } = ownProps;
   let draggedOverIndex,
     sourceIndex = 0,

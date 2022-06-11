@@ -6,11 +6,11 @@ import { RootState } from "../redux/store";
 export type DraggedCardScreenLocation = { xPosition: number; yPosition: number } | null;
 
 const handleNewSnapshotFromUserAction =
-  (newSnapshot: GameSnapshot, snapshotUpdateType: SnapshotUpdateType, draggedCardScreenLocation: DraggedCardScreenLocation, dimensions: AllDimensions) =>
+  (newSnapshot: GameSnapshot, snapshotUpdateType: SnapshotUpdateType) =>
   (dispatch: Function, getState: () => RootState) => {
     const { gameSnapshot } = getState();
     const differences = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
-    const transitionTemplates = createTransitionTemplates(differences, snapshotUpdateType, draggedCardScreenLocation, dimensions);
+    const transitionTemplates = createTransitionTemplates(differences, snapshotUpdateType);
     const snapshot = { ...newSnapshot, transitionTemplates, snapshotUpdateType };
     dispatch(addNewGameSnapshots([snapshot]));
   };

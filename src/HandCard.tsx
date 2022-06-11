@@ -1,5 +1,4 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
@@ -37,34 +36,25 @@ const HandCard = (props: HandCardProps) => {
 
   const [shortHover, setShortHover] = useState(false);
 
-  const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
-    isDragging
+  const mainStyles = (draggedOrDropping: boolean): CSSProperties =>
+    !draggedOrDropping
       ? {
-          left: "",
-          transform: `rotate(0deg)`,
-          pointerEvents: "none",
-          // This width causes cards to move aside and make room in other droppables.
-          // When not dragging it tucks cards together
-
-          // height: 168,
-          // width: 105,
-          //left: 125 * (index - (numHandCards / 2 - 0.5))
+          // should be in dimensions
+          zIndex: shortHover ? 30 : tableCardzIndex,
+          position: "absolute",
+          transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 : 1})`,
+          // transition: `left 250ms, width 180ms, transform 180ms`,
+          transition: "300ms",
+          width: cardWidth,
+          pointerEvents: "auto",
+          boxShadow: "10px 10px 10px black",
         }
-      : {};
-  const normalStyles: CSSProperties = {
-    // should be in dimensions
-    zIndex: shortHover ? 30 : tableCardzIndex,
-    width: cardWidth,
-    height: cardHeight,
-    top: index * cardTopSpread,
-    left: spread * index - (spread * numHandCards) / 2,
-    position: "absolute",
-    transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 : 1})`,
-    transition: `left 250ms, width 180ms, transform 180ms`,
-    pointerEvents: "auto",
-    boxShadow: "10px 10px 10px black",
-  };
-
+      : {
+          transform: "",
+          transition: "300ms",
+          width: dimensions.tableCardWidth,
+          // zIndex: draggerProps.dragged ? 10 : 0,
+        };
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();
     setShortHover(false);
@@ -77,7 +67,7 @@ const HandCard = (props: HandCardProps) => {
     if (newSnapshots.length === 0) return;
     newSnapshots[0].transitionTemplates.forEach(template => {
       if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-        console.group("AWAITING")
+        console.log("AWAITING");
         if (emissaryRef !== null && emissaryRef.current !== null) {
           const element = emissaryRef.current;
           const { left, top } = element.getBoundingClientRect();
@@ -91,38 +81,46 @@ const HandCard = (props: HandCardProps) => {
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
-      {draggerRenderProps => (
-        //  <div style= {{left: spread * index - (spread * numHandCards) / 2, position:"absolute"}}>
-        <CardInspector
-          dimensions={dimensions}
-          cardRotation={10 * index - rotation(index)}
-          render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
-            <TransitionHandler
-              index={index}
-              id={id}
-              render={(transitionStyles: CSSProperties) => (
-                <div ref={emissaryRef} style={{ position: "relative" }}>
-                  <img
-                    alt={image}
-                    src={`./images/${image}.jpg`}
-                    draggable="false"
-                    ref={draggerRenderProps.draggerRef}
-                    onClick={handleClick}
-                    onMouseDown={draggerRenderProps.handleDragStart}
-                    onMouseEnter={() => setShortHover(true)}
-                    onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
-                    id={id}
-                    style={{
-                      ...normalStyles,
-                      ...inspectedStyles,
-                      ...dragStyles(draggerRenderProps.isDragging),
-                      ...transitionStyles,
-                      // ...droppingStyles(snapshot, provided.draggableProps),
-                    }}
-                  />
-                </div>
-              )}
-            />
+      {draggerProps => (
+        <TransitionHandler
+          index={index}
+          id={id}
+          render={(transitionStyles: CSSProperties) => (
+            <div
+              // This div manages the spread (left positioning) for the Hand card.
+              ref={draggerProps.ref}
+              style={{
+                position: "absolute",
+                left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
+                transition: "300ms",
+                ...transitionStyles,
+
+              }}
+            >
+              <CardInspector
+                dimensions={dimensions}
+                cardRotation={10 * index - rotation(index)}
+                render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
+                  <div ref={emissaryRef} style={{ position: "relative" }}>
+                    <div ref={draggerProps.unrotatedElementRef} />
+                    <img
+                      alt={image}
+                      src={`./images/${image}.jpg`}
+                      draggable="false"
+                      onClick={handleClick}
+                      onMouseDown={draggerProps.handleDragStart}
+                      onMouseEnter={() => setShortHover(true)}
+                      onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
+                      id={id}
+                      style={{
+                        ...mainStyles(draggerProps.dragged || draggerProps.dropping),
+                        ...transitionStyles,
+                      }}
+                    />
+                  </div>
+                )}
+              />
+            </div>
           )}
         />
       )}

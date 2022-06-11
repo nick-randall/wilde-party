@@ -65,6 +65,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
       <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
       <button onClick={simulateDestroy}>Simulate destroy!</button>
       <button onClick={logNewSnapshot}>Log New Snapshot</button>
+      
     </div>
   );
 };
@@ -94,6 +95,9 @@ export const Table = () => {
     }
   }, [dispatch, gameStarted]);
 
+  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard?.name)
+  const dragEndTarget = useSelector((state: RootState) => state.dragEndTarget)
+
   return (
     <div>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
@@ -102,6 +106,8 @@ export const Table = () => {
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
         draggerId: {draggerId} */}
+        draggedHandCard: {draggedHandCard}
+        DRAGENDTARGET: {dragEndTarget ? dragEndTarget.x : "undefined"}
         <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} />
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer

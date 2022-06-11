@@ -20,14 +20,15 @@ export interface State {
   gameSnapshot: GameSnapshot;
   newSnapshots: NewSnapshot[];
   draggedState: DraggedState;
+  dragEndTarget?: DragEndTarget;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   // snapshotChangeData: SnapshotCh[];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
-  BFFdraggedOverSide: string | undefined;
+  BFFdraggedOverSide?: string;
   rearrangingData: SimpleRearrangingData;
-  draggedHandCard: GameCard | undefined;
+  draggedHandCard?: GameCard;
   highlights: string[];
   highlightType: string;
   aiPlaying: string;
@@ -36,6 +37,7 @@ export interface State {
 const initialDragState = {
   draggedState: { draggedId: undefined, source: undefined, destination: undefined },
   dragContainerExpand: { width: 0, height: 0 },
+  dragEndTarget: undefined,
 };
 
 export const stateReducer = (
@@ -45,6 +47,7 @@ export const stateReducer = (
     screenSize: getScreenSize(),
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
+    dragEndTarget: initialDragState.dragEndTarget,
     // snapshotChangeData: [],
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
@@ -60,10 +63,6 @@ export const stateReducer = (
   switch (action.type) {
     case "SET_SCREEN_SIZE":
       return { ...state, screenSize: getScreenSize() };
-    case "SET_DRAGGED_ID":
-      const draggedId = action.payload;
-      const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
-      return { ...state, draggedId: draggedId, draggedHandCard: draggedHandCard };
     case "SET_INITIAL_DRAGGED_STATE": {
       const { draggedId, source, destination } = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
@@ -83,16 +82,19 @@ export const stateReducer = (
         ///
       };
     }
-
     case "UPDATE_DRAG_DESTINATION":
       const { destination } = action.payload;
       return { ...state, draggedState: { ...state.draggedState, destination: destination } };
+
+    case "SET_DRAG_END_TARGET":
+      return { ...state, dragEndTarget: action.payload };
     case "CLEAN_UP_DRAG_STATE":
       return {
         ...state,
         draggedState: initialDragState.draggedState,
         draggedHandCard: undefined,
         dragContainerExpand: initialDragState.dragContainerExpand,
+        dragEndTarget: initialDragState.dragEndTarget,
         highlights: [],
       };
     case "REMOVE_NEW_SNAPSHOT":
@@ -106,11 +108,11 @@ export const stateReducer = (
       const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
       return { ...state, ...newSnapshots };
     }
-    case "SET_NEW_GAME_SNAPSHOTS" : {
-      return {...state, newSnapshots: action.payload}
+    case "SET_NEW_GAME_SNAPSHOTS": {
+      return { ...state, newSnapshots: action.payload };
     }
     case "OVERWRITE_CURRENT_SNAPSHOT":
-      console.log("overwriting current snapshot")
+      console.log("overwriting current snapshot");
       return { ...state, gameSnapshot: action.payload };
 
     case "SET_DRAG_CONTAINER_EXPAND":
@@ -129,7 +131,7 @@ export const stateReducer = (
       const currentTemplates = state.newSnapshots[0].transitionTemplates;
       const transitionTemplates = currentTemplates.map(e => (e.id === id ? template : e));
       const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, transitionTemplates } : e));
-      console.log("update transition template, new snapshots: ", newSnapshots)
+      console.log("update transition template, new snapshots: ", newSnapshots);
 
       return { ...state, newSnapshots };
     }

@@ -39,4 +39,9 @@ type UpdateDragDestination = {
   payload: { destination: LocationData | undefined };
 };
 
+export type SetDragEndTarget = {
+  type: "SET_DRAG_END_TARGET";
+  payload: DragEndTarget  | undefined;
+};
+
 type DragAction = UpdateDragDestination | SetDragContainerExpand | CleanUpDragState | SetInitialDraggedState | SetDraggedId 

@@ -26,7 +26,7 @@ const createTransitionTemplatesFromSnapshotDifferences = (
   draggedCardScreenLocation: DraggedCardScreenLocation = null,
   dimensions: AllDimensions | null = null
 ): TransitionTemplate[] => {
-  let templates = createTransitionTemplates(differences, snapshotUpdateType, draggedCardScreenLocation, dimensions);
+  let templates = createTransitionTemplates(differences, snapshotUpdateType);
 
   // If the user played a card to change the gameSnapshot, remove the initial transition,
   // where the card transitions from the players' hand to the card's target location.
@@ -42,8 +42,6 @@ const createTransitionTemplatesFromSnapshotDifferences = (
 const createTransitionTemplates = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
-  draggedCardScreenLocation: DraggedCardScreenLocation = null,
-  dimensions: AllDimensions | null = null
 ): TransitionTemplate[] => {
   switch (snapshotUpdateType) {
     case "addDragged":
@@ -54,16 +52,16 @@ const createTransitionTemplates = (
         id: uuidv4(),
         status: "awaitingEmissaryData",
       };
-      if (draggedCardScreenLocation !== null && dimensions !== null) {
-        const { xPosition, yPosition } = draggedCardScreenLocation;
-        const { from } = transitionTemplate;
-        const dimensionswithoutrotation = { ...dimensions, rotation: () => 0 };
-        transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition, rotation: 0, dimensions: dimensionswithoutrotation } };
+      // if (draggedCardScreenLocation !== null && dimensions !== null) {
+      //   const { xPosition, yPosition } = draggedCardScreenLocation;
+      //   const { from } = transitionTemplate;
+      //   const dimensionswithoutrotation = { ...dimensions, rotation: () => 0 };
+      //   transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition, rotation: 0, dimensions: dimensionswithoutrotation } };
 
-        console.log(transitionTemplate);
-        // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
-        // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
-      }
+      //   console.log(transitionTemplate);
+      //   // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
+      //   // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
+      // }
       return [transitionTemplate];
     // case "rearrangingHand":
     //   break;

@@ -66,6 +66,7 @@ export const getAllDimensions = (placeId: string, gameSnapshot: GameSnapshot | n
     // leftOffset: 0,
     // topOffset: 65,
   };
+  console.log(tableCardWidth)
   if (placeType === "hand") return handDimensions;
   return dimensions;
 };

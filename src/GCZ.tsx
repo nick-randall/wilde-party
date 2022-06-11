@@ -82,7 +82,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
           ) : (
             <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
               {draggerProps => (
-                <div ref={draggerProps.draggerRef} onMouseDown={draggerProps.handleDragStart}>
+                <div ref={draggerProps.ref} onMouseDown={draggerProps.handleDragStart}>
                   <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id} />
                 </div>
               )}
