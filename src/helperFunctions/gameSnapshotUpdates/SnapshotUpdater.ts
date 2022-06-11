@@ -12,9 +12,9 @@ export default class SnapshotUpdater {
 
   private numElements: number = 1;
 
-  constructor(snapshot: GameSnapshot) {
+  constructor(snapshot: GameSnapshot, snapshotUpdateType: SnapshotUpdateType) {
     this.snapshot = { ...snapshot };
-    this.newSnapshot = { ...snapshot };
+    this.newSnapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
   }
 
   public addChange(change: DraggedResult) {

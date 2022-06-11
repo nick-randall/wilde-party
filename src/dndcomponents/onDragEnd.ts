@@ -21,11 +21,11 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
   }
   // if rearrange...not implemented yet
   if (destination.containerId === source?.containerId) {
-    const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+    const snapshotUpdater = new SnapshotUpdater(gameSnapshot, "rearrangingTablePlace");
     snapshotUpdater.addChange({ source: source, destination: destination });
     snapshotUpdater.begin();
     const newSnapshot = snapshotUpdater.getNewSnapshot();
-    dispatch(handleNewSnapshotFromUserAction(newSnapshot, "rearrangingTablePlace"));
+    dispatch(handleNewSnapshotFromUserAction(newSnapshot));
     dispatch(cleanUpDragState());
     return;
   }
@@ -49,7 +49,7 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
       playedCard = gameSnapshot.players[sourcePlayer].places[sourcePlace].cards[source.index];
     }
 
-    const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+    const snapshotUpdater = new SnapshotUpdater(gameSnapshot, playedCard.action.actionType);
     switch (playedCard.action.actionType) {
       case "addDragged":
         snapshotUpdater.addChange({ source: source, destination: destination });
@@ -68,7 +68,7 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
 
         // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
 
-        dispatch(handleNewSnapshotFromUserAction(newSnapshot, playedCard.action.actionType));
+        dispatch(handleNewSnapshotFromUserAction(newSnapshot));
       // }
       // dispatch(updateSnapshot(newSnapshot))
     }

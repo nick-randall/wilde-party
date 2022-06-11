@@ -28,7 +28,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
   }
 
   const simulateHandToGCZ = () => {
-    const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "addDragged");
     const dragSource: DragSourceData = { containerId: currentSnapshot.players[2].places["hand"].id, index: 0, numDraggedElements: 1 };
     const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[2].places["GCZ"].id, index: 1 };
     snapshotUpdater.addChange({ source: dragSource, destination: dragDestination });
@@ -50,7 +50,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const change2 = { source: destroyedGCZCardSource, destination: destroyedGCZCardDestination };
     changes.push(change2);
 
-    const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "destroy");
     snapshotUpdater.addChangesFromDifferentPlaces(changes);
     snapshotUpdater.begin();
     const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();

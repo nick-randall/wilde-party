@@ -33,7 +33,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       currentSnapshot = lastSnapshotAsGameSnapshot;
     }
 
-    const snapshotUpdater = new SnapshotUpdater(currentSnapshot);
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "dealingInitialCard");
     //const update: SnapshotUpdate = { from: { player: 0, place: "hand", index: 0 }, to: { player: 0, place: "GCZ", index: 1 } };
     const dragSource: DragSourceData = { containerId: currentSnapshot.nonPlayerPlaces["deck"].id, index: 0, numDraggedElements: 1 };
     const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[player].places["hand"].id, index: 0 };
