@@ -92,6 +92,10 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const containerRef: Ref<HTMLDivElement> = useRef(null);
   const dragged = draggedId !== undefined;
   const isInitialRearrange = usePrevious(draggedId) === undefined && draggedId !== undefined;
+  const isDragEnd = usePrevious(isDraggingOver) && !isDraggingOver;
+  const isNotJustLeavingDragArea = usePrevious(draggedId) !== undefined && draggedId === undefined;
+  const isActualDragEnd = isDragEnd && isNotJustLeavingDragArea;
+  if(isActualDragEnd) console.log("then EEEENNNNND")
   let dropTargetX = draggedOverIndex !== undefined ? distFromLeftMap[draggedOverIndex] * elementWidth : 0;
 
   // console.log(distFromLeftMap);
@@ -232,8 +236,8 @@ const DraggerContainer: React.FC<ComponentProps> = ({
                 width: figureOutWhetherToExpand(index),
                 // height: 150,
                 // Suppress transition if this is the first time an element is being dragged in this container
-                // transition: isInitialRearrange || isDragEnd ? "" : "200ms ease",
-                transition: isInitialRearrange ? "" : "200ms ease",
+                // OR if the drag is ending here, for example when rearranging or when a new card is added.
+                transition: isInitialRearrange|| isActualDragEnd ? "" : "200ms ease",
 
                 // transitionDelay: "120ms"
               }}
@@ -249,10 +253,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
             width: figureOutWhetherToExpandFinal(),
             height: 150,
             // Suppress transition if this is the first time an element is being dragged in this container
-            // transition: isInitialRearrange || isDragEnd ? "" : "200ms ease",
-            transition: isInitialRearrange ? "" : "200ms ease",
-
-            // transitionDelay: "120ms"
+            transition: isInitialRearrange  ? "" : "200ms ease",
           }}
           draggable="false"
         />
