@@ -20,7 +20,6 @@ export type UpdateSnapshotTypes = ReplaceCurrentSnapshotWithNewSnapshot | SetNew
 /**
  * Replaces the snapshot with a new one (for example)
  * @param newSnapshot 
- * @param changes 
  * @returns 
  */
 export const  setNewSnapshot = (newSnapshot: NewSnapshot): SetNewSnapshot => ({

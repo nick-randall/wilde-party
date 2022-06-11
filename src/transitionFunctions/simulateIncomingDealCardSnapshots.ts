@@ -50,7 +50,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       newSnapshot = { ...snapshot, transitionTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
     } else {
       const changes = findChanges({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
-      const templates = createTransitionTemplates(changes, "dealingInitialCard");
+      const templates = createTransitionTemplates(changes, "dealingInitialCard", "server");
       newSnapshot = { ...snapshot, transitionTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
     }
     dispatch(addNewGameSnapshots([newSnapshot]));

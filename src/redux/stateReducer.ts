@@ -104,6 +104,7 @@ export const stateReducer = (
       return { ...state, newSnapshots };
     case "SET_NEW_SNAPSHOT": {
       const newSnapshot = action.payload;
+      console.log("setting new snapshot")
       const { id } = newSnapshot;
       const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
       return { ...state, ...newSnapshots };

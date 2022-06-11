@@ -14,7 +14,7 @@ const addTransitionTemplatesToNewestSnapshot = () => (dispatch: Function, getSta
   const newestSnapshot = newSnapshots.shift();
   if (newestSnapshot !== undefined) {
     const changes = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
-    const transitionTemplates = createTransitionTemplatesFromChanges(changes, newestSnapshot.snapshotUpdateType);
+    const transitionTemplates = createTransitionTemplatesFromChanges(changes, newestSnapshot.snapshotUpdateType, "server");
     const newestSnapshotWithTemplate = { ...newestSnapshot, transitionTemplates } as NewSnapshot;
     const updatedNewSnapshots = [ newestSnapshotWithTemplate, ...newSnapshots ]
     console.log("new snapshot to be set", updatedNewSnapshots)

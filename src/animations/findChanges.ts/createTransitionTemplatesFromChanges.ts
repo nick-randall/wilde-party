@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { DraggedCardScreenLocation } from "../../transitionFunctions/handleNewSnapshotFromUserAction";
 
+export type SnapshotUpdateSource = "localUser" | "server";
+
 const orderTransitions = {
   addDragged: { addDragged: 0 },
   destroy: { flyTodestroyedcard: 0, discard: 1, destroyedDiscard: 1 },
@@ -14,7 +16,7 @@ const orderTransitions = {
  * @param differences 
  * @param snapshotUpdateType 
  * If snapshot update came from the user (true) or from the server.
- * @param snapshotChangeSourceIsUser 
+ * @param snapshotUpdateSource 
  * @param draggedCardScreenLocation 
  * @param dimensions 
  * @returns 
@@ -22,7 +24,7 @@ const orderTransitions = {
 const createTransitionTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
-  snapshotChangeSourceIsUser: boolean = false,
+  snapshotUpdateSource: SnapshotUpdateSource,
   draggedCardScreenLocation: DraggedCardScreenLocation = null,
   dimensions: AllDimensions | null = null
 ): TransitionTemplate[] => {
@@ -32,7 +34,7 @@ const createTransitionTemplatesFromSnapshotDifferences = (
   // where the card transitions from the players' hand to the card's target location.
   // This is because the user has already dragged the card to its target location. 
 
-  if (snapshotChangeSourceIsUser) {
+  if (snapshotUpdateSource === "localUser") {
     const templatesWithoutUserAction = templates.filter(template => template.orderOfExecution !== 0);
     templates = templatesWithoutUserAction.map(template => ({ ...template, orderOfExecution: template.orderOfExecution - 1 }));
   }
@@ -128,4 +130,4 @@ const createTransitionTemplates = (
   return [];
 };
 
-export default createTransitionTemplates;
+export default createTransitionTemplatesFromSnapshotDifferences;
