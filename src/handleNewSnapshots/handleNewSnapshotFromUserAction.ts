@@ -1,5 +1,5 @@
-import createTransitionTemplates from "./createTransitionTemplatesFromSnapshotDifferences";
-import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotDifferences";
+import createTransitionTemplates from "../transitionFunctions/createTransitionTemplatesFromSnapshotDifferences";
+import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
 import { setNewGameSnapshots } from "../redux/transitionQueueActionCreators";

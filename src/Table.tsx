@@ -7,9 +7,9 @@ import NonPlayerPlaces from "./NonPlayerPlaces";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import handleIncomingSnapshots from "./redux/handleIncomingSnapshots";
 import { useEffect, useState } from "react";
 import { dealInitialHands } from "./transitionFunctions/simulateIncomingDealCardSnapshots";
+import handleIncomingSnapshots from "./handleNewSnapshots/handleIncomingSnapshots";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;

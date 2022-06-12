@@ -1,6 +1,7 @@
+import { addNewGameSnapshots } from "../redux/newSnapshotActions";
+import { RootState } from "../redux/store";
 import addTransitionTemplatesToNewestSnapshot from "../transitionFunctions/addTransitionTemplatesToNewestSnapshot";
-import { addNewGameSnapshots } from "./newSnapshotActions";
-import { RootState } from "./store";
+
 
 /**
  * Converts the snapshots to type NewSnapshot

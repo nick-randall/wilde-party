@@ -5,7 +5,7 @@ import { RootState } from "../redux/store";
 import { setNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import { cleanUpDragState } from "./dragEventActionCreators";
 import { v4 as uuidv4 } from "uuid";
-import handleNewSnapshotFromUserAction from "../transitionFunctions/handleNewSnapshotFromUserAction";
+import handleNewSnapshotFromUserAction from "../handleNewSnapshots/handleNewSnapshotFromUserAction";
 
 export const onDragEnd = () => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { DraggedCardScreenLocation } from "./handleNewSnapshotFromUserAction";
+import { DraggedCardScreenLocation } from "../handleNewSnapshots/handleNewSnapshotFromUserAction";
 
 export type SnapshotUpdateSource = "localUser" | "server";
 
