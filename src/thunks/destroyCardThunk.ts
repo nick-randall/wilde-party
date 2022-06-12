@@ -1,4 +1,4 @@
-import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
+import { buildTransitionFromChanges } from "../transitionFunctions/findSnapshotDifferences/buildTransitionFromSnapshotDifferences";
 import { DropResult } from "react-beautiful-dnd";
 import { RootState } from "../redux/store";
 import { endCurrentTurnThunk, shouldEndTurn } from "../redux/thunks";

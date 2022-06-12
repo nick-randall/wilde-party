@@ -1,5 +1,5 @@
-import createTransitionTemplates from "../animations/findChanges.ts/createTransitionTemplatesFromChanges";
-import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
+import createTransitionTemplates from "./createTransitionTemplatesFromSnapshotDifferences";
+import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotDifferences";
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
 import { setNewGameSnapshots } from "../redux/transitionQueueActionCreators";
@@ -11,7 +11,7 @@ const handleNewSnapshotFromUserAction =
   (newSnapshot: GameSnapshot) => (dispatch: Function, getState: () => RootState) => {
     const { gameSnapshot } = getState();
     const {snapshotUpdateType } = newSnapshot
-    const differences = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
+    const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
     const transitionTemplates = createTransitionTemplates(differences, snapshotUpdateType, "localUser");
     const snapshot = { ...newSnapshot, transitionTemplates, snapshotUpdateType: snapshotUpdateType };
 

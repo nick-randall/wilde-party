@@ -1,6 +1,6 @@
-import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
-import createTransitionTemplates from "../animations/findChanges.ts/createTransitionTemplatesFromChanges";
-import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
+import { buildTransitionFromChanges } from "./findSnapshotDifferences/buildTransitionFromSnapshotDifferences";
+import createTransitionTemplates from "./createTransitionTemplatesFromSnapshotDifferences";
+import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotDifferences";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
@@ -49,7 +49,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const currentWithPlayPhase: Current = {...current, phase: "playPhase"}
       newSnapshot = { ...snapshot, transitionTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
     } else {
-      const changes = findChanges({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
+      const changes = findSnapshotDifferences({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
       const templates = createTransitionTemplates(changes, "dealingInitialCard", "server");
       newSnapshot = { ...snapshot, transitionTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
     }

@@ -1,5 +1,5 @@
-import createTransitionTemplatesFromChanges from "../animations/findChanges.ts/createTransitionTemplatesFromChanges";
-import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
+import createTransitionTemplatesFromChanges from "./createTransitionTemplatesFromSnapshotDifferences";
+import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotDifferences";
 import { RootState } from "../redux/store";
 import { setNewGameSnapshots } from "../redux/transitionQueueActionCreators";
 
@@ -13,8 +13,8 @@ const addTransitionTemplatesToNewestSnapshot = () => (dispatch: Function, getSta
   // Newest Snapshot should already be the first in the array
   const newestSnapshot = newSnapshots.shift();
   if (newestSnapshot !== undefined) {
-    const changes = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
-    const transitionTemplates = createTransitionTemplatesFromChanges(changes, newestSnapshot.snapshotUpdateType, "server");
+    const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
+    const transitionTemplates = createTransitionTemplatesFromChanges(differences, newestSnapshot.snapshotUpdateType, "server");
     const newestSnapshotWithTemplate = { ...newestSnapshot, transitionTemplates } as NewSnapshot;
     const updatedNewSnapshots = [ newestSnapshotWithTemplate, ...newSnapshots ]
     console.log("new snapshot to be set", updatedNewSnapshots)

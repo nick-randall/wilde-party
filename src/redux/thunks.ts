@@ -1,8 +1,7 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
 import { DropResult } from "react-beautiful-dnd";
-import { buildTransitionFromChanges } from "../animations/findChanges.ts/buildTransitionFromChanges";
-import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
+import { buildTransitionFromChanges } from "../transitionFunctions/findSnapshotDifferences/buildTransitionFromSnapshotDifferences";
 import { buildTransition } from "../dimensions/buildTransition";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
@@ -12,6 +11,7 @@ import { RootState } from "./store";
 import enactAiPlayerTurnThunk from "../thunks/enactAiPlayerTurnThunk";
 import { compareProps } from "../helperFunctions/tests";
 import { addTransition } from "./transitionQueueActionCreators";
+import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
 
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 export const shouldEndDrawPhase = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1;
@@ -58,7 +58,7 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
     locate(destination.containerId, gameSnapshot);
     console.log("origin player !=0");
     //compareProps(gameSnapshot.players[player])
-    console.log(findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }));
+    console.log(findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }));
     const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
     console.log("followoing newTransition");
     console.log(newTransition);

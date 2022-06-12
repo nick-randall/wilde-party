@@ -1,4 +1,3 @@
-import { findChanges } from "../animations/findChanges.ts/findSnapshotChanges";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { locate } from "../helperFunctions/locateFunctions";
@@ -56,7 +55,7 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
         // NOTE: findChanges() doesn't find changes of index within the same place.
-        const [change] = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
+        // const [change] = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
         // if (draggedId) {
         //   const { xPosition, yPosition } = lastLocation;
         //   const dimensions: AllDimensions = getAllDimensions(draggedId);
