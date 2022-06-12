@@ -5,7 +5,7 @@ import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
-import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
+import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 
 export interface HandCardProps {
   id: string;

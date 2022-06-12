@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./animations/animations.css";
 import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
-import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
+import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 

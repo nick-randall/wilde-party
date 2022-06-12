@@ -1,6 +1,6 @@
-import createTransitionFromTemplate from "../transitionFunctions/createTransitionFromTemplate";
-import { RootState } from "./store";
-import {  addTransition, updateTransitionTemplate } from "./transitionQueueActionCreators";
+import createTransitionFromTemplate from "./createTransitionFromTemplate";
+import { RootState } from "../redux/store";
+import {  addTransition, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
 
 /**
  * This function iscalled when emissary to or from data is received.

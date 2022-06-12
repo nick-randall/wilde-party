@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import "./animations/animations.css";
-import { handleEmissaryToData } from "./redux/handleIncomingEmissaryData";
+import { handleEmissaryToData } from "./transitionFunctions/handleIncomingEmissaryData";
 
 export interface HandCardEmissaryProps {
   id: string;

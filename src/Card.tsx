@@ -7,7 +7,7 @@ import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
-import { handleEmissaryFromData } from "./redux/handleIncomingEmissaryData";
+import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 
 export interface CardProps {
   id: string;
