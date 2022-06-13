@@ -3,23 +3,23 @@ import React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../redux/store";
 
-interface EmissaryHandlerProps {
-  children: (cards: GameCard[], emissaryCardIndex: number | undefined) => JSX.Element;
+interface MultiEmissaryHandlerProps {
+  children: (cards: GameCard[], emissaryCards: string[]) => JSX.Element;
   player: number | null;
   placeType: PlaceType;
   placeId: string;
 }
 
-type ReduxEmissaryHandlerProps = {
+type ReduxMultiEmissaryHandlerProps = {
   cards: GameCard[];
-  emissaryCardIndex: number | undefined;
+  emissaryCards: string[];
 };
 
-const EmissaryHandler: React.FC<EmissaryHandlerProps & ReduxEmissaryHandlerProps> = ({ cards, children, emissaryCardIndex }) => {
-  return children(cards, emissaryCardIndex);
+const EmissaryHandler: React.FC<MultiEmissaryHandlerProps & ReduxMultiEmissaryHandlerProps> = ({ cards, children, emissaryCards }) => {
+  return children(cards, emissaryCards);
 };
 
-const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
+const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) => {
   const { gameSnapshot, newSnapshots } = state;
   const { player, placeType } = ownProps;
   // this path should be figured out with
@@ -30,7 +30,7 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
   } else {
     cards = gameSnapshot.players[player].places[placeType].cards;
   }
-  let emissaryCardIndex;
+  let emissaryCards: string[] = [];
 
   if (newSnapshots.length > 0) {
     newSnapshots[0].transitionTemplates
@@ -39,8 +39,9 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
       .forEach(template => {
         // if place contains a card transitioning to or from it..
 
-        const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
-        if(placeType === "hand") console.log("hand " + newSnapshots[0].transitionTemplates[0].status + placeId)
+        // in operator returns true if "placeId" attribute in template.to
+        const placeId = "placeId" in template.to ? template.to.placeId : undefined;
+        if (placeType === "hand") console.log("hand " + newSnapshots[0].transitionTemplates[0].status + placeId);
 
         if (placeId === ownProps.placeId) {
           switch (template.status) {
@@ -50,12 +51,17 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               } else {
                 cards = newSnapshots[0].players[player].places[placeType].cards;
               }
-              console.log("status is awaitingEmissaryData--> listening to newSnapshot...with ID " + newSnapshots[0].id);
-              emissaryCardIndex = cards.map(handCard => handCard.id).indexOf(template.to.cardId);
+              emissaryCards = cards.map(handCard => handCard.id);
+              break;
+            case "awaitingSimultaneousTemplates":
+              if (player === null) {
+                cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+              } else {
+                cards = newSnapshots[0].players[player].places[placeType].cards;
+              }
+              emissaryCards = cards.map(handCard => handCard.id);
               break;
             case "underway":
-              console.log("status is underway--> listening to newSnapshot");
-
               if (player === null) {
                 cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
               } else {
@@ -63,7 +69,6 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               }
               break;
             case "complete":
-
               console.log("status is complete--> listening to newSnapshot");
 
               if (player === null) {
@@ -80,7 +85,7 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
         .filter(t => t.status !== "waitingInLine")
         // newSnapshots[0].transitionTemplates
         .forEach(template => {
-          const placeId = "placeId" in template.from ? template.from.placeId : undefined // will this work???
+          const placeId = "placeId" in template.from ? template.from.placeId : undefined; // will this work???
 
           if (placeId === ownProps.placeId) {
             console.log("template from");
@@ -105,6 +110,6 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
         });
     }
   }
-  return { cards, emissaryCardIndex };
+  return { cards, emissaryCards };
 };
 export default connect(mapStateToProps)(EmissaryHandler);

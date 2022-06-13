@@ -9,17 +9,16 @@ const orderTransitions = {
   steal: { flyToStolenCard: 0, discard: 1, stolenCardToNewHome: 1 },
 };
 
-// type TransitionTemplate = SnapshotChange & { id: string; orderOfExecution: number; animation?: string};
 /**
  * Can be used for both local snapshot updates and snapshot updates from the server.
- * 
- * @param differences 
- * @param snapshotUpdateType 
+ *
+ * @param differences
+ * @param snapshotUpdateType
  * If snapshot update came from the user (true) or from the server.
- * @param snapshotUpdateSource 
- * @param draggedCardScreenLocation 
- * @param dimensions 
- * @returns 
+ * @param snapshotUpdateSource
+ * @param draggedCardScreenLocation
+ * @param dimensions
+ * @returns
  */
 const createTransitionTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
@@ -30,10 +29,10 @@ const createTransitionTemplatesFromSnapshotDifferences = (
 ): TransitionTemplate[] => {
   let templates = createTransitionTemplates(differences, snapshotUpdateType);
 
-  // If the user played a card to change the gameSnapshot, remove the initial transition,
-  // where the card transitions from the players' hand to the card's target location.
-  // This is because the user has already dragged the card to its target location. 
-
+  /** If the user played a card to change the gameSnapshot, removes the initial transition,
+  where the card transitions from the players' hand to the card's target location.
+  This is necessary because the user has already dragged the card to its target location. 
+  */
   if (snapshotUpdateSource === "localUser") {
     const templatesWithoutUserAction = templates.filter(template => template.orderOfExecution !== 0);
     templates = templatesWithoutUserAction.map(template => ({ ...template, orderOfExecution: template.orderOfExecution - 1 }));
@@ -41,10 +40,7 @@ const createTransitionTemplatesFromSnapshotDifferences = (
   return templates;
 };
 
-const createTransitionTemplates = (
-  differences: SnapshotDifference[],
-  snapshotUpdateType: SnapshotUpdateType,
-): TransitionTemplate[] => {
+const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): TransitionTemplate[] => {
   switch (snapshotUpdateType) {
     case "addDragged":
       let transitionTemplate: TransitionTemplate = {

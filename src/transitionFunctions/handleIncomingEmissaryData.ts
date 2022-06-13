@@ -1,9 +1,25 @@
 import createTransitionFromTemplate from "./createTransitionFromTemplate";
 import { RootState } from "../redux/store";
-import {  addTransition, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
+import { addMultipleTransitions, addTransition, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
 
 /**
- * This function iscalled when emissary to or from data is received.
+ * Helper function for creating all transitions parallel to current completed one.
+ */
+
+export const createAllParallelTransitions =
+  (currTemplate: TransitionTemplate, transitionTemplates: TransitionTemplate[]) => (dispatch: Function) => {
+    currTemplate.status = "underway";
+    const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate);
+    const allOtherTemplates = transitionTemplates.filter(template => template.id !== currTemplate.id);
+    const templates = allOtherTemplates.map(template => ({ ...template, status: "underway" } as CompleteTransitionTemplate));
+    const parallelTransitions = templates.map(template => createTransitionFromTemplate(template));
+    dispatch(addMultipleTransitions([newTransition, ...parallelTransitions]));
+    // dispatch(addTransition(newTransition));
+    return;
+  };
+
+/**
+ * This function is called when emissary to or from data is received.
  * */
 
 export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatch: Function, getState: () => RootState) => {
@@ -16,15 +32,23 @@ export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatc
     currTemplate.to = { ...currTemplate.to, ...emissaryToData };
 
     // if Template has already had fromData added, create a new transition from it
-    console.log(currTemplate)
     if (currTemplate.from.xPosition !== undefined) {
-      // could add IF clause here to check that others with its
-      // orderOFExecution are also ready
-      currTemplate.status = "underway";
-      console.log("TO: currentTemplate should dispatch new transitionData")
-      const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)
-      console.log(newTransition)
-      dispatch(addTransition(newTransition))
+      // UNLESS there are others with the same order of execution
+      // still waiting for emissary data
+      const parallelTemplates = transitionTemplates.filter(template => currTemplate.orderOfExecution === template.orderOfExecution);
+      const pendingParallelTemplates = parallelTemplates.filter(template => template.status === "awaitingEmissaryData");
+      if (pendingParallelTemplates.length > 1) {
+        console.log("in handleincomingemissary data");
+        console.log("there are pending parralel templates");
+        console.log(" pendingParallelTemplates.length " + pendingParallelTemplates.length)
+        currTemplate.status = "awaitingSimultaneousTemplates";
+      } else {
+        console.log("creating all parallel transitions");
+        dispatch(createAllParallelTransitions(currTemplate, transitionTemplates));
+
+        // dispatch(addTransition(newTransition));
+        return;
+      }
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }
@@ -40,11 +64,16 @@ export const handleEmissaryFromData = (emissaryFromData: EmissaryFromData) => (d
 
     // if Template has already had toData added, create a new transition from it
     if (currTemplate.to.xPosition !== undefined) {
-      currTemplate.status = "underway";
-      console.log("FROM: currentTemplate should dispatch new transitionData")
-      console.log(currTemplate)
-      const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate)
-      dispatch(addTransition(newTransition))
+      const parallelTemplates = transitionTemplates.filter(template => currTemplate.orderOfExecution === template.orderOfExecution);
+      const pendingParallelTemplates = parallelTemplates.filter(template => template.status === "awaitingEmissaryData");
+      if (pendingParallelTemplates.length > 0) {
+        currTemplate.status = "awaitingSimultaneousTemplates";
+      } else {
+        dispatch(createAllParallelTransitions(currTemplate, transitionTemplates));
+
+        // dispatch(addTransition(newTransition));
+        return;
+      }
     }
     dispatch(updateTransitionTemplate(currTemplate));
   }

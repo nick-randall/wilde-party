@@ -139,7 +139,12 @@ export const stateReducer = (
     case "ADD_TRANSITION":
       const newTransition = action.payload;
       return { ...state, transitionData: [...state.transitionData, newTransition] };
-    case "SET_HIGHLIGHTS": {
+    case "ADD_MULTIPLE_TRANSITIONS":
+      console.log("adding multiple transitions")
+      console.log(action.payload)
+      const newTransitions = action.payload;
+      return {...state, transitionData: [...state.transitionData, ...newTransitions]}
+      case "SET_HIGHLIGHTS": {
       // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {
