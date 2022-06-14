@@ -10,6 +10,7 @@ import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdat
 import { useEffect, useState } from "react";
 import { dealInitialHands } from "./transitionFunctions/simulateIncomingDealCardSnapshots";
 import handleIncomingSnapshots from "./handleNewSnapshots/handleIncomingSnapshots";
+import dealTwoCards from "./tests/simulateDealingTwoCards";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;
@@ -61,11 +62,17 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
   };
 
+  const dealTwoCardsNow = () => dispatch(dealTwoCards());
+
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
       <button onClick={simulateDestroy}>Simulate destroy!</button>
       <button onClick={logNewSnapshot}>Log New Snapshot</button>
+      <button onClick={dealTwoCardsNow}>Deal Two Cards</button>
+
       
     </div>
   );

@@ -12,9 +12,12 @@ import { replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotAc
 const addTransitionTemplatesToNewestSnapshot = () => (dispatch: Function, getState: () => RootState) => {
   const { gameSnapshot, newSnapshots } = getState();
   // Newest Snapshot should already be the first in the array
+  console.log(newSnapshots)
   const newestSnapshot = newSnapshots.shift();
   if (newestSnapshot !== undefined) {
+    console.log(newestSnapshot) 
     const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
+    console.log(differences)
 
     const transitionTemplates = createTransitionTemplatesFromSnapshotDifferences(differences, newestSnapshot.snapshotUpdateType, "server");
     if (transitionTemplates.length === 0) {

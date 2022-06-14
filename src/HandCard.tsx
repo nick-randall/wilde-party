@@ -6,6 +6,7 @@ import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
+import { getAllDimensions } from "./helperFunctions/getDimensions";
 
 export interface HandCardProps {
   id: string;
@@ -18,10 +19,9 @@ export interface HandCardProps {
 }
 
 const HandCard = (props: HandCardProps) => {
-  const { id, index, image, dimensions, handId, spread, numHandCards } = props;
+  const { id, index, image, handId, spread, numHandCards, dimensions } = props;
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
-
   // const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -35,6 +35,9 @@ const HandCard = (props: HandCardProps) => {
   const canPlay = player === 0 && phase === "playPhase" && !transitionUnderway;
 
   const [shortHover, setShortHover] = useState(false);
+  console.log(rotation)
+  console.log(index)
+  console.log(rotation(index))
 
   const mainStyles = (draggedOrDropping: boolean): CSSProperties =>
     !draggedOrDropping
@@ -101,7 +104,7 @@ const HandCard = (props: HandCardProps) => {
                 dimensions={dimensions}
                 cardRotation={10 * index - rotation(index)}
                 render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
-                  <div ref={emissaryRef} style={{ position: "relative" }}>
+                  <div ref={emissaryRef}>
                     <div ref={draggerProps.unrotatedElementRef} />
                     <img
                       alt={image}

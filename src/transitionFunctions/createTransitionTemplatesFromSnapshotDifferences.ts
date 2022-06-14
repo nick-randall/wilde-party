@@ -23,9 +23,7 @@ const orderTransitions = {
 const createTransitionTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
-  snapshotUpdateSource: SnapshotUpdateSource,
-  draggedCardScreenLocation: DraggedCardScreenLocation = null,
-  dimensions: AllDimensions | null = null
+  snapshotUpdateSource: SnapshotUpdateSource
 ): TransitionTemplate[] => {
   let templates = createTransitionTemplates(differences, snapshotUpdateType);
 
@@ -41,8 +39,10 @@ const createTransitionTemplatesFromSnapshotDifferences = (
 };
 
 const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): TransitionTemplate[] => {
+  console.log("numDifferences is " + differences.length);
+
   switch (snapshotUpdateType) {
-    case "addDragged":
+    case "addDragged": {
       let transitionTemplate: TransitionTemplate = {
         ...differences[0],
         animation: "flip",
@@ -61,10 +61,11 @@ const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUp
       //   // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
       // }
       return [transitionTemplate];
+    }
     // case "rearrangingHand":
     //   break;
     // return "rearrangingHand";
-    case "destroy":
+    case "destroy": {
       // step One: find changed Card.
       const destroyedCard: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
       if (destroyedCard) {
@@ -83,8 +84,8 @@ const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUp
         });
         return [handCardFliesToDestroyedCard, handCardFliesToDiscardPile, destroyedCardFliesToDiscardPile];
       }
-      break;
-
+      return [];
+    }
     // case "steal":
     // case "enchant":
     // case "protectSelf":
@@ -99,6 +100,22 @@ const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUp
         status: "awaitingEmissaryData",
       };
       return [transitionTemplate];
+    }
+    case "dealingCards": {
+      const templates: TransitionTemplate[] = [];
+      differences.forEach((difference, index) => {
+        const transitionTemplate: TransitionTemplate = {
+          ...difference,
+          animation: "flip",
+          orderOfExecution: 0,
+          id: uuidv4(),
+          status: "awaitingEmissaryData",
+          delay: index * 200
+        };
+        templates.push(transitionTemplate);
+      });
+
+      return templates;
     }
   }
   // if (from.placeType === "deck") {

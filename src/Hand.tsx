@@ -7,6 +7,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
 import HandCardEmissary from "./HandCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
+import MultiEmissaryHandler from "./transitionFunctions/MultiEmissaryHandler";
 interface HandProps {
   id: string;
   playerZoneSize: { width: number; height: number };
@@ -58,13 +59,14 @@ const Hand = (props: HandProps) => {
       }}
     >
       {" "}
-      <EmissaryHandler player={0} placeType="hand" placeId={id}>
-        {(handCards, emissaryCardIndex) => (
+      <MultiEmissaryHandler player={0} placeType="hand" placeId={id}>
+        {(handCards, emissaryCards, silentEmissaryCards) => (
           <NoLayoutDragContainer>
             {handCards.map((card, index) =>
-              emissaryCardIndex === index ? (
+              emissaryCards.includes(card.id) || silentEmissaryCards.includes(card.id) ? (
                 <HandCardEmissary
                   id={card.id}
+                  silent={silentEmissaryCards.includes(card.id)}
                   index={index}
                   image={card.image}
                   dimensions={dimensions}
@@ -80,14 +82,14 @@ const Hand = (props: HandProps) => {
                   dimensions={dimensions}
                   numHandCards={handCards.length}
                   key={card.id}
-                  handId={id}
+                  handId={id} // TODO: need to use NewSnapshotID somehow (maybe in getDimensions???)
                   spread={spread}
                 />
               )
             )}
           </NoLayoutDragContainer>
         )}
-      </EmissaryHandler>
+      </MultiEmissaryHandler>
     </div>
   );
 };

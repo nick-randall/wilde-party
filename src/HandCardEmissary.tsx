@@ -5,6 +5,7 @@ import { handleEmissaryToData } from "./transitionFunctions/handleIncomingEmissa
 
 export interface HandCardEmissaryProps {
   id: string;
+  silent: boolean;
   index: number;
   image: string;
   dimensions: AllDimensions;
@@ -13,7 +14,7 @@ export interface HandCardEmissaryProps {
 }
 
 const HandCardEmissary = (props: HandCardEmissaryProps) => {
-  const { id, index, image, dimensions, spread, numHandCards } = props;
+  const { id, silent, index, image, dimensions, spread, numHandCards } = props;
   const { cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -24,8 +25,8 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     top: index * cardTopSpread,
     left: 0,//spread * index,
     position: "absolute",
-    transform: `rotate(${rotation(index)}deg)`,
-    // backgroundColor: "black"
+    // transform: `rotate(${rotation(index)}deg)`,
+    backgroundColor: "black"
   };
 
   /**
@@ -33,13 +34,13 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
    * the SnapshotChanges object...
    */
   useEffect(() => {
-    if (emissaryRef !== null && emissaryRef.current !== null) {
+    if (!silent && emissaryRef !== null && emissaryRef.current !== null) {
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
       console.log("handCard EmissaryTo Data---left: " + left, " ---top: " + top);
       dispatch(handleEmissaryToData({cardId: id, xPosition: left, yPosition: top}));
     }
-  }, [dispatch, id]);
+  }, [silent, dispatch, id]);
 
   return (
     <div

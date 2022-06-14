@@ -13,8 +13,9 @@ export default class SnapshotUpdater {
   private numElements: number = 1;
 
   constructor(snapshot: GameSnapshot, snapshotUpdateType: SnapshotUpdateType) {
-    this.snapshot = { ...snapshot };
+    this.snapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
     this.newSnapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
+    console.log("new SnapshotUpdater with newSnapshot update type as " + snapshotUpdateType);
   }
 
   public addChange(change: DraggedResult) {
@@ -85,9 +86,10 @@ export default class SnapshotUpdater {
         if (originPlayer !== null) {
           splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
         } else {
-          splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
+          splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, this.numElements);
         }
-
+        console.log("SnapshotUpdater spliced card(s) ");
+        splicedCard.forEach(c => console.log(c))
         const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
         if (destinationPlayer !== null) {
           draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
@@ -95,6 +97,7 @@ export default class SnapshotUpdater {
           draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
         }
       } else if (this.snapshotUpdates.length > 0) {
+        console.log("multiple snapshot updates")
         this.snapshotUpdates.forEach(update => {
           // this.newSnapshot = produce(this.snapshot, draft => {
           const { from, to } = update;
@@ -104,7 +107,7 @@ export default class SnapshotUpdater {
           if (originPlayer !== null) {
             splicedCard = draft.players[originPlayer].places[originPlace].cards.splice(originIndex, this.numElements);
           } else {
-            splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, 1);
+            splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, this.numElements);
           }
 
           const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;

@@ -1,35 +1,33 @@
 /**
- * All the data needed to create a transition, though either 
+ * All the data needed to create a transition, though either
  * the screen data of xPosition/yPosition at origin
  * or destination is still missing.
  */
 type TransitionTemplate = {
-  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData; 
+  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData;
   from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
-} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string };
+} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string, delay?: number };
 
-
-type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData"| "awaitingSimultaneousTemplates" | "underway" | "complete";
+type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
 
 type CompleteTransitionTemplate = {
-  id: string
+  id: string;
   status: TransitionTemplateStatus;
   animation?: string;
+  delay?: number;
   to: ToWithScreenData | ToViaWithScreenData;
-  from: FromWithScreenData | FromViaWithScreenData; 
+  from: FromWithScreenData | FromViaWithScreenData;
 };
 
-type ToWithScreenData = ToOrFrom & CompleteScreenToData
-type FromWithScreenData = ToOrFrom & CompleteScreenFromData
-type ToViaWithScreenData = Via & CompleteScreenToData
-type FromViaWithScreenData = Via & CompleteScreenFromData
+type ToWithScreenData = ToOrFrom & CompleteScreenToData;
+type FromWithScreenData = ToOrFrom & CompleteScreenFromData;
+type ToViaWithScreenData = Via & CompleteScreenToData;
+type FromViaWithScreenData = Via & CompleteScreenFromData;
 
-type ToWithPossibleScreenData = ToOrFrom & ScreenToData
-type FromWithPossibleScreenData = ToOrFrom & ScreenFromData
-type ToViaWithPossibleScreenData = Via & ScreenToData
-type FromViaWithPossibleScreenData = Via & ScreenFromData
-
-
+type ToWithPossibleScreenData = ToOrFrom & ScreenToData;
+type FromWithPossibleScreenData = ToOrFrom & ScreenFromData;
+type ToViaWithPossibleScreenData = Via & ScreenToData;
+type FromViaWithPossibleScreenData = Via & ScreenFromData;
 
 type ScreenToData = {
   xPosition?: number;
@@ -44,12 +42,12 @@ type ScreenFromData = ScreenToData & {
 type CompleteScreenToData = {
   xPosition: number;
   yPosition: number;
-}
+};
 
 type CompleteScreenFromData = CompleteScreenToData & {
   rotation: number;
   dimensions: AllDimensions;
-}
+};
 
 type TransitionData = {
   cardId: string;

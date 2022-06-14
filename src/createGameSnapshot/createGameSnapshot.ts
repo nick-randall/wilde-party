@@ -44,7 +44,7 @@ export const createGameSnapshot = () => {
           cards: [],
         },
         hand: {
-          id: uuidv4(),
+          id: `hand${i}`,
           playerId: playerId,
           placeType: "hand",
           cards: [],
