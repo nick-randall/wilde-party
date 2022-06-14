@@ -1,7 +1,7 @@
 import { connect, useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";

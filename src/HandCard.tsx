@@ -6,7 +6,7 @@ import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 
 export interface HandCardProps {
   id: string;

@@ -1,5 +1,5 @@
 import { widthOfRotated } from "../helperFunctions/equations";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getAllDimensions";
 import { sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";

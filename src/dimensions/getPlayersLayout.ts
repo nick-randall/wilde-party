@@ -1,4 +1,4 @@
-import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getAllDimensions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import store, { RootState } from "../redux/store";
 

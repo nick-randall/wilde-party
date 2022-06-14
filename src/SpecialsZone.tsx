@@ -5,7 +5,7 @@ import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
 import { RootState } from "./redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";

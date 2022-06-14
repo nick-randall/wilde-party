@@ -4,7 +4,7 @@ import Card from "./Card";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { RootState } from "./redux/store";
 
 interface UWZProps {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
@@ -8,6 +8,7 @@ import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
 import HandCardEmissary from "./HandCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 import MultiEmissaryHandler from "./transitionFunctions/MultiEmissaryHandler";
+import { getDimensions } from "./helperFunctions/getDimensions";
 interface HandProps {
   id: string;
   playerZoneSize: { width: number; height: number };
@@ -24,7 +25,7 @@ interface HandProps {
 const Hand = (props: HandProps) => {
   const { id, playerZoneSize } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions("hand", 0);
   const { cardLeftSpread } = dimensions;
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
@@ -69,7 +70,7 @@ const Hand = (props: HandProps) => {
                   silent={silentEmissaryCards.includes(card.id)}
                   index={index}
                   image={card.image}
-                  dimensions={dimensions}
+                  dimensions={getDimensions("hand", 0, handCards.length)}
                   numHandCards={handCards.length}
                   spread={spread}
                   key={"emissary" + card.id}
@@ -79,7 +80,7 @@ const Hand = (props: HandProps) => {
                   id={card.id}
                   index={index}
                   image={card.image}
-                  dimensions={dimensions}
+                  dimensions={getDimensions("hand", 0, handCards.length)}
                   numHandCards={handCards.length}
                   key={card.id}
                   handId={id} // TODO: need to use NewSnapshotID somehow (maybe in getDimensions???)

@@ -4,7 +4,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import Dragger from "./dndcomponents/Dragger";
 import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCardGroup from "./GhostCardGroup";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";

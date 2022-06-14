@@ -1,6 +1,6 @@
 import { getSettings } from "../gameSettings/uiSettings";
 import { measureDistance, widthOfRotated } from "../helperFunctions/equations";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getAllDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";

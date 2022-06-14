@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { RootState } from "./redux/store";
 import TableCardEmissary from "./TableCardEmissary";
 

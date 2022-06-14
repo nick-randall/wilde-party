@@ -1,6 +1,6 @@
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import CardEmissary from "./TableCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 
