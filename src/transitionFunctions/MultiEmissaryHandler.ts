@@ -55,9 +55,6 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
         .map(card => card.id)
         .filter(id => templatesWithTransitionToThisPlace.find(t => t.status === "awaitingSimultaneousTemplates" && t.to.cardId === id));
     }
-    console.log(silentEmissaryCards);
-    console.log(emissaryCards);
-    console.log(cards);
   }
   return { cards, emissaryCards, silentEmissaryCards };
 };

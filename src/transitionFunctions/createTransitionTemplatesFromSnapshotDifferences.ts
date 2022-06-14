@@ -110,7 +110,7 @@ const createTransitionTemplates = (differences: SnapshotDifference[], snapshotUp
           orderOfExecution: 0,
           id: uuidv4(),
           status: "awaitingEmissaryData",
-          delay: index * 200
+          delay: differences.length * 100 - (index * 100)
         };
         templates.push(transitionTemplate);
       });

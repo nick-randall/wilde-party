@@ -19,10 +19,6 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
   const { index, id } = props;
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
-  // if(data){
-  //   console.log(useSelector((state:RootState)=> stat))
-  //   console.log(data)}
-  if(data)console.log(data)
   let transitionStyles: TransitionStylesObj = data
     ? {
         entering: {
@@ -52,7 +48,13 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
       appear={true}
       addEndListener={(node: HTMLElement) => {
         ////TODO: data can only be TransitionData
-        node.addEventListener("transitionend", () => {if(data)dispatch(handleTransitionEnd(data))}, false);
+        node.addEventListener(
+          "transitionend",
+          () => {
+            if (data) dispatch(handleTransitionEnd(data));
+          },
+          false
+        );
       }}
     >
       {state => props.render(transitionStyles[state])}

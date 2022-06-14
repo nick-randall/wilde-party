@@ -1,17 +1,15 @@
 import createTransitionFromTemplate from "./createTransitionFromTemplate";
 import { RootState } from "../redux/store";
-import { addMultipleTransitions, addTransition, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
+import { addMultipleTransitions, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
 
 /**
  * Helper function for creating all transitions parallel to current completed one.
  */
 
 export const createAllParallelTransitions = (currTemplate: TransitionTemplate, transitionTemplates: TransitionTemplate[]) => (dispatch: Function) => {
-  console.log("creating all ParallelTransitions");
   currTemplate.status = "underway";
   const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate);
   const allOtherTemplates = transitionTemplates.filter(template => template.id !== currTemplate.id);
-  console.log(allOtherTemplates);
   const templates = allOtherTemplates.map(template => ({ ...template, status: "underway" } as CompleteTransitionTemplate));
   const parallelTransitions = templates.map(template => createTransitionFromTemplate(template));
   allOtherTemplates.forEach(t => {

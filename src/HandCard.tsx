@@ -35,9 +35,6 @@ const HandCard = (props: HandCardProps) => {
   const canPlay = player === 0 && phase === "playPhase" && !transitionUnderway;
 
   const [shortHover, setShortHover] = useState(false);
-  console.log(rotation)
-  console.log(index)
-  console.log(rotation(index))
 
   const mainStyles = (draggedOrDropping: boolean): CSSProperties =>
     !draggedOrDropping
@@ -96,6 +93,7 @@ const HandCard = (props: HandCardProps) => {
               style={{
                 position: "absolute",
                 left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
+                top: 0,
                 transition: "300ms",
                 ...transitionStyles,
               }}

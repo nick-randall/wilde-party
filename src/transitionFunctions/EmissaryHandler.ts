@@ -40,7 +40,6 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
         // if place contains a card transitioning to or from it..
 
         const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
-        if(placeType === "hand") console.log("hand " + newSnapshots[0].transitionTemplates[0].status + placeId)
 
         if (placeId === ownProps.placeId) {
           switch (template.status) {
@@ -50,11 +49,9 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               } else {
                 cards = newSnapshots[0].players[player].places[placeType].cards;
               }
-              console.log("status is awaitingEmissaryData--> listening to newSnapshot...with ID " + newSnapshots[0].id);
               emissaryCardIndex = cards.map(handCard => handCard.id).indexOf(template.to.cardId);
               break;
             case "underway":
-              console.log("status is underway--> listening to newSnapshot");
 
               if (player === null) {
                 cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
@@ -63,8 +60,6 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
               }
               break;
             case "complete":
-
-              console.log("status is complete--> listening to newSnapshot");
 
               if (player === null) {
                 cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
@@ -83,7 +78,6 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
           const placeId = "placeId" in template.from ? template.from.placeId : undefined // will this work???
 
           if (placeId === ownProps.placeId) {
-            console.log("template from");
             switch (template.status) {
               case "underway":
                 if (player === null) {
