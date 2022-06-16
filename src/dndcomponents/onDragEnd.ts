@@ -54,28 +54,9 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
         snapshotUpdater.addChange({ source: source, destination: destination });
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
-        // NOTE: findChanges() doesn't find changes of index within the same place.
-        // const [change] = findChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
-        // if (draggedId) {
-        //   const { xPosition, yPosition } = lastLocation;
-        //   const dimensions: AllDimensions = getAllDimensions(draggedId);
-        // const rotation = 0; // handcards shouldn't have a rotation
-        // const from: FromWithScreenData = { ...change.from, xPosition, yPosition, dimensions, rotation };
-        // const transitionTemplate: TransitionTemplate = { ...change, ...from, orderOfExecution: 0, id: uuidv4(), status: "awaitingEmissaryData" };
-
-        // dispatch(setNewSnapshot({ ...newSnapshot, transitionTemplates: [transitionTemplate] }));
-
-        // TO need to pass lastLocation, dimesions and rotation as an object rather than as individual propertiies
-
         dispatch(handleNewSnapshotFromUserAction(newSnapshot));
-      // }
-      // dispatch(updateSnapshot(newSnapshot))
     }
   }
-
-  // console.log("drag source " + source);
-  // console.log("drag destination " + destination);
-  console.log(" before clean up drag state");
 
   dispatch(cleanUpDragState());
 };

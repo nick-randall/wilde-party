@@ -43,8 +43,8 @@ const HandCard = (props: HandCardProps) => {
           zIndex: shortHover ? 30 : tableCardzIndex,
           position: "absolute",
           transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 : 1})`,
-          // transition: `left 250ms, width 180ms, transform 180ms`,
-          transition: "300ms",
+          transition: `left 250ms, top 250ms, width 180ms, transform 180ms`,
+          // transition: "300ms",
           width: cardWidth,
           pointerEvents: "auto",
           boxShadow: "10px 10px 10px black",
@@ -54,7 +54,7 @@ const HandCard = (props: HandCardProps) => {
           transform: "",
           transition: "300ms",
           width: dimensions.tableCardWidth,
-          // zIndex: draggerProps.dragged ? 10 : 0,
+          zIndex: 10
         };
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();

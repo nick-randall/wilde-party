@@ -206,12 +206,13 @@ const Dragger: React.FC<CombinedProps> = ({
     zIndex: 10,
     transition: "280ms",
   };
-
+  //TODO have this as prop
+const undragggedZIndex =10;
   const notDraggedStyles: CSSProperties = {
     transform: "",
     pointerEvents: "auto",
     position: "relative",
-    zIndex: isReturning ? 9 : 0,
+    zIndex: isReturning ? 9 : undragggedZIndex,
     transition: "280ms",
     left: "",
     cursor: isDragDisabled ? "auto" : "grab",

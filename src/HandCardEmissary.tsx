@@ -12,7 +12,15 @@ export interface HandCardEmissaryProps {
   numHandCards: number;
   spread: number;
 }
-
+/**
+ * Emissaries are objects rendered invisibly by their parent component.
+ * Their purpose is to use the rendering engine to determine where an
+ * object (usually a Card) will be rendered. As soon as it is invisibly
+ * rendered, it sends its location back to Redux, providing the coordinates
+ * needed for building a transition (following a rebuild by React).
+ * @param props 
+ * @returns 
+ */
 const HandCardEmissary = (props: HandCardEmissaryProps) => {
   const { id, silent, index, image, dimensions, spread, numHandCards } = props;
   const { cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
@@ -26,7 +34,7 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     left: 0,//spread * index,
     position: "absolute",
     // transform: `rotate(${rotation(index)}deg)`,
-    backgroundColor: "black"
+    // backgroundColor: "black"
   };
 
   /**
