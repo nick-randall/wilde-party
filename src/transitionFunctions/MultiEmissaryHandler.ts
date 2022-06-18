@@ -39,10 +39,11 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
   let silentEmissaryCards: string[] = [];
 
   if (newSnapshots.length > 0) {
-    const templatesWithTransitionToThisPlace = newSnapshots[0].transitionTemplates
-      .filter(t => t.status !== "waitingInLine")
-      .filter(t => ("placeId" in t.to ? t.to.placeId === placeId : false));
-    if (templatesWithTransitionToThisPlace.length > 0) {
+    const templatesWithAnimationToThisPlace = newSnapshots[0].animationTemplates
+      .filter(a => a.status !== "waitingInLine")
+      .filter(a => ("placeId" in a.to ? a.to.placeId === placeId : false));
+      console.log(templatesWithAnimationToThisPlace.length)
+    if (templatesWithAnimationToThisPlace.length > 0) {
       if (player === null) {
         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
       } else {
@@ -50,10 +51,10 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
       }
       emissaryCards = cards
         .map(card => card.id)
-        .filter(id => templatesWithTransitionToThisPlace.find(t => t.status === "awaitingEmissaryData" && t.to.cardId === id));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingEmissaryData" && a.to.cardId === id));
       silentEmissaryCards = cards
         .map(card => card.id)
-        .filter(id => templatesWithTransitionToThisPlace.find(t => t.status === "awaitingSimultaneousTemplates" && t.to.cardId === id));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingSimultaneousTemplates" && a.to.cardId === id));
     }
   }
   return { cards, emissaryCards, silentEmissaryCards };
@@ -61,9 +62,9 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
 export default connect(mapStateToProps)(EmissaryHandler);
 
 // if (newSnapshots.length > 0) {
-//   newSnapshots[0].transitionTemplates
-//     .filter(t => t.status !== "waitingInLine")
-//     // newSnapshots[0].transitionTemplates
+//   newSnapshots[0].animationTemplates
+//     .filter(a => a.status !== "waitingInLine")
+//     // newSnapshots[0].animationTemplates
 //     .forEach(template => {
 //       const placeId = "placeId" in template.from ? template.from.placeId : undefined; // will this work???
 

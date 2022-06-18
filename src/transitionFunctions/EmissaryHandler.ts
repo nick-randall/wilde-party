@@ -33,7 +33,7 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
   let emissaryCardIndex;
 
   if (newSnapshots.length > 0) {
-    newSnapshots[0].transitionTemplates
+    newSnapshots[0].animationTemplates
       .filter(t => t.status !== "waitingInLine")
       // newSnapshots[0].transitionTemplates
       .forEach(template => {
@@ -71,7 +71,7 @@ const mapStateToProps = (state: RootState, ownProps: EmissaryHandlerProps) => {
       });
 
     if (newSnapshots.length > 0) {
-      newSnapshots[0].transitionTemplates
+      newSnapshots[0].animationTemplates
         .filter(t => t.status !== "waitingInLine")
         // newSnapshots[0].transitionTemplates
         .forEach(template => {

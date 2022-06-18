@@ -42,10 +42,13 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
    * the SnapshotChanges object...
    */
   useEffect(() => {
-    if (!silent && emissaryRef !== null && emissaryRef.current !== null) {
+    console.log("inside use effect")
+    if (emissaryRef !== null && emissaryRef.current !== null) {
+      console.log("!silent && emissaryRef !== null && emissaryRef.current !== null")
+
       const element = emissaryRef.current;
       const { left, top } = element.getBoundingClientRect();
-      console.log("handCard EmissaryTo Data---left: " + left, " ---top: " + top);
+      console.log("handCard EmissaryTo cardId: " + id);
       dispatch(handleEmissaryToData({cardId: id, xPosition: left, yPosition: top}));
     }
   }, [silent, dispatch, id]);

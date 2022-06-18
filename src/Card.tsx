@@ -8,6 +8,8 @@ import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
+import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
 
 export interface CardProps {
   id: string;
@@ -22,7 +24,7 @@ export interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image} = props;
+  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
@@ -61,20 +63,18 @@ const Card = (props: CardProps) => {
     userSelect: "none",
   };
 
-
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
 
-
   useEffect(() => {
     if (newSnapshots.length === 0) return;
-    newSnapshots[0].transitionTemplates.forEach(template => {
+    newSnapshots[0].animationTemplates.forEach(template => {
       if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
         if (emissaryRef !== null && emissaryRef.current !== null) {
           const element = emissaryRef.current;
           const { left, top } = element.getBoundingClientRect();
-          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
+          console.log("TableCardEmissaryData---cardId: " + id);
           dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
         }
       }
@@ -82,54 +82,52 @@ const Card = (props: CardProps) => {
   }, [dimensions, dispatch, id, newSnapshots]);
 
   return (
-      <div style={{ position: "absolute" }} ref={emissaryRef}>
-        <CardInspector
-          dimensions={dimensions}
-          cardRotation={messinessRotation}
-          render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
-            <TransitionHandler
-              index={index}
-              id={id}
-              render={(transitionStyles: CSSProperties) => (
-                <div ref={cardRef}>
-                  <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
-                    {isDraggingOver => (
-                      <div>
-                        <img
-                          alt={image}
-                          draggable="false"
-                          src={`./images/${image}.jpg`}
-                          onClick={handleClick}
-                          onMouseLeave={handleMouseLeave}
-                          id={id}
-                          style={{
-                            WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                            boxShadow: "2px 2px 2px black",
-                            transition: "box-shadow 180ms",
-                            ...normalStyles,
-                            ...inspectingStyles,
-                            ...transitionStyles,
-                          }}
+    <div style={{ position: "absolute" }} ref={emissaryRef}>
+      <CardInspector
+        dimensions={dimensions}
+        cardRotation={messinessRotation}
+        render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
+          <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
+            {animationProvidedProps => (
+              <div ref={cardRef}>
+                <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
+                  {isDraggingOver => (
+                    <div>
+                      <img
+                        alt={image}
+                        draggable="false"
+                        src={`./images/${image}.jpg`}
+                        onClick={handleClick}
+                        onMouseLeave={handleMouseLeave}
+                        id={id}
+                        style={{
+                          WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                          boxShadow: "2px 2px 2px black",
+                          transition: "box-shadow 180ms",
+                          ...normalStyles,
+                          ...inspectingStyles,
+                        }}
+                        onAnimationEnd={() => dispatch(handleAnimationEnd(id))}
+                        className={animationProvidedProps.className}
+                      />
+                      {isDraggingOver && draggedHandCard ? (
+                        <GhostCard
+                          offsetLeft={cardLeftSpread * BFFOffset}
+                          offsetTop={cardHeight / 2}
+                          image={draggedHandCard.image}
+                          dimensions={dimensions}
+                          zIndex={5}
                         />
-                        {isDraggingOver && draggedHandCard ? (
-                          <GhostCard
-                            offsetLeft={cardLeftSpread * BFFOffset}
-                            offsetTop={cardHeight / 2}
-                            image={draggedHandCard.image}
-                            dimensions={dimensions}
-                            zIndex={5}
-                          />
-                        ) : null}
-                      </div>
-                    )}
-                  </DropZoneWrapper>
-                </div>
-              )}
-            />
-          )}
-        />
-      </div>
-      
+                      ) : null}
+                    </div>
+                  )}
+                </DropZoneWrapper>
+              </div>
+            )}
+          </AnimationHandler>
+        )}
+      />
+    </div>
   );
 };
 export default Card;

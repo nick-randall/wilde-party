@@ -114,7 +114,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   let emissaryCardGroupIndex: number = -1;
 
   if (newSnapshots.length > 0) {
-    newSnapshots[0].transitionTemplates.forEach(template => {
+    newSnapshots[0].animationTemplates.forEach(template => {
       const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???
 
       // if place contains a card transitioning to or from it..

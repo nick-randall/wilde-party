@@ -47,11 +47,11 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       // the playPhase will be automatically updated after ALL snapshots have been animated
       const { current } = snapshot
       const currentWithPlayPhase: Current = {...current, phase: "playPhase"}
-      newSnapshot = { ...snapshot, transitionTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
+      newSnapshot = { ...snapshot, animationTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
     } else {
       const changes = findSnapshotDifferences({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
       const templates = createTransitionTemplates(changes, "dealingInitialCard", "server");
-      newSnapshot = { ...snapshot, transitionTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
+      newSnapshot = { ...snapshot, animationTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
     }
     dispatch(addNewGameSnapshots([newSnapshot]));
   };

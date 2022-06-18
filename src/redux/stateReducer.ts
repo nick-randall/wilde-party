@@ -23,7 +23,7 @@ export interface State {
   dragEndTarget?: DragEndTarget;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
-  // snapshotChangeData: SnapshotCh[];
+  animationData: AnimationData[];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide?: string;
@@ -48,7 +48,7 @@ export const stateReducer = (
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
     dragEndTarget: initialDragState.dragEndTarget,
-    // snapshotChangeData: [],
+    animationData: [],
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],
@@ -126,12 +126,12 @@ export const stateReducer = (
       // have added transitionTemplates already---if there weren't already
       // others in the stack
       return { ...state, newSnapshots: state.newSnapshots.concat(action.payload) };
-    case "UPDATE_TRANSITION_TEMPLATE": {
+    case "UPDATE_ANIMATION_TEMPLATE": {
       const template = action.payload;
       const { id } = template;
-      const currentTemplates = state.newSnapshots[0].transitionTemplates;
-      const transitionTemplates = currentTemplates.map(e => (e.id === id ? template : e));
-      const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, transitionTemplates } : e));
+      const currentTemplates = state.newSnapshots[0].animationTemplates;
+      const animationTemplates = currentTemplates.map(e => (e.id === id ? template : e));
+      const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, animationTemplates } : e));
       console.log("update transition template, new snapshots: ", newSnapshots);
 
       return { ...state, newSnapshots };
@@ -144,6 +144,14 @@ export const stateReducer = (
       console.log(action.payload)
       const newTransitions = action.payload;
       return {...state, transitionData: [...state.transitionData, ...newTransitions]}
+      case "ADD_ANIMATION":
+      const newAnimation = action.payload;
+      return { ...state, animationData: [...state.animationData, newAnimation] };
+    case "ADD_MULTIPLE_ANIMATIONS":
+      console.log("adding multiple animations")
+      console.log(action.payload)
+      const newAnimations = action.payload;
+      return {...state, animationData: [...state.animationData, ...newAnimations]}
       case "SET_HIGHLIGHTS": {
       // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
@@ -184,9 +192,9 @@ export const stateReducer = (
         BFFdraggedOverSide: undefined,
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
-    case "REMOVE_TRANSITION":
-      const transitionData = state.transitionData.filter(td => td.cardId !== action.payload);
-      return { ...state, transitionData };
+    case "REMOVE_ANIMATION":
+      const animationData = state.animationData.filter(ad => ad.cardId !== action.payload);
+      return { ...state, animationData };
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {

@@ -1,24 +1,25 @@
-import createTransitionFromTemplate from "./createTransitionFromTemplate";
 import { RootState } from "../redux/store";
-import { addMultipleTransitions, updateTransitionTemplate } from "../redux/transitionQueueActionCreators";
+import { addMultipleAnimations, updateAnimationTemplate } from "../redux/transitionQueueActionCreators";
+import createAnimationFromTemplate from "../thunks/animationFunctions/createAnimationFromTemplate";
 
 /**
- * Helper function for creating all transitions parallel to current completed one.
+ * Helper function for creating all Animations parallel to current completed one.
  */
 
-export const createAllParallelTransitions = (currTemplate: TransitionTemplate, transitionTemplates: TransitionTemplate[]) => (dispatch: Function) => {
+export const createAllParallelAnimations = (currTemplate: AnimationTemplate, animationTemplates: AnimationTemplate[]) => (dispatch: Function) => {
+  console.log("inside createallparallelanimations")
   currTemplate.status = "underway";
-  const newTransition = createTransitionFromTemplate(currTemplate as CompleteTransitionTemplate);
-  const allOtherTemplates = transitionTemplates.filter(template => template.id !== currTemplate.id);
-  const templates = allOtherTemplates.map(template => ({ ...template, status: "underway" } as CompleteTransitionTemplate));
-  const parallelTransitions = templates.map(template => createTransitionFromTemplate(template));
+  const newAnimation = createAnimationFromTemplate(currTemplate as CompleteAnimationTemplate);
+  const allOtherTemplates = animationTemplates.filter(template => template.id !== currTemplate.id);
+  const templates = allOtherTemplates.map(template => ({ ...template, status: "underway" } as CompleteAnimationTemplate));
+  const parallelAnimations = templates.map(template => createAnimationFromTemplate(template));
   allOtherTemplates.forEach(t => {
-    const updatedTemplate: TransitionTemplate = { ...t, status: "underway" };
-    dispatch(updateTransitionTemplate(updatedTemplate));
+    const updatedTemplate: AnimationTemplate = { ...t, status: "underway" };
+    dispatch(updateAnimationTemplate(updatedTemplate));
   });
-
-  dispatch(addMultipleTransitions([newTransition, ...parallelTransitions]));
-  // dispatch(addTransition(newTransition));
+  console.log(newAnimation);
+  dispatch(addMultipleAnimations([newAnimation, ...parallelAnimations]));
+  // dispatch(addTransition(newAnimation));
   return;
 };
 
@@ -28,53 +29,64 @@ export const createAllParallelTransitions = (currTemplate: TransitionTemplate, t
 
 export const handleEmissaryToData = (emissaryToData: EmissaryToData) => (dispatch: Function, getState: () => RootState) => {
   const { cardId } = emissaryToData;
-  const { transitionTemplates } = getState().newSnapshots[0];
-
-  const currTemplate = transitionTemplates.find(template => template.from.cardId === cardId);
+  const { animationTemplates } = getState().newSnapshots[0];
+  console.log("+++++++++++++++++++")
+  const currTemplate = animationTemplates.find(template => template.from.cardId === cardId);
   if (currTemplate) {
     // update Template with emissary data
-    currTemplate.to = { ...currTemplate.to, ...emissaryToData };
-
+    // currTemplate.to = { ...currTemplate.to, ...emissaryToData };
+    let currTemplateCopy = { ...currTemplate, to: { ...currTemplate.to, ...emissaryToData } };
     // if Template has already had fromData added, create a new transition from it
-    if (currTemplate.from.xPosition !== undefined) {
+    console.log("---------------")
+    console.log("xPosition" in currTemplateCopy.from);
+    console.log("xposition in currTemplate.from");
+    if (currTemplateCopy.from.xPosition !== undefined) {
       // UNLESS there are others with the same order of execution
       // still waiting for emissary data
-      const simultaneousTemplates = transitionTemplates.filter(template => currTemplate.orderOfExecution === template.orderOfExecution);
+      const simultaneousTemplates = animationTemplates.filter(template => currTemplate.orderOfExecution === template.orderOfExecution);
       const pendingsimultaneousTemplates = simultaneousTemplates.filter(template => template.status === "awaitingEmissaryData");
       if (pendingsimultaneousTemplates.length > 1) {
-        currTemplate.status = "awaitingSimultaneousTemplates";
+        currTemplateCopy.status = "awaitingSimultaneousTemplates";
       } else {
-        dispatch(createAllParallelTransitions(currTemplate, transitionTemplates));
+        console.log("creating all parralel animations");
+        dispatch(createAllParallelAnimations(currTemplateCopy, animationTemplates));
 
-        // dispatch(addTransition(newTransition));
+        // dispatch(addTransition(newAnimation));
         return;
       }
     }
-    dispatch(updateTransitionTemplate(currTemplate));
+    console.log(currTemplateCopy);
+    dispatch(updateAnimationTemplate(currTemplateCopy));
   }
 };
 
 export const handleEmissaryFromData = (emissaryFromData: EmissaryFromData) => (dispatch: Function, getState: () => RootState) => {
   const { cardId } = emissaryFromData;
-  const { transitionTemplates } = getState().newSnapshots[0];
-  const currTemplate = transitionTemplates.find(template => template.from.cardId === cardId);
+  const { newSnapshots } = getState();
+  if(newSnapshots.length < 1) return;
+  const { animationTemplates } = getState().newSnapshots[0];
+  const currTemplate = animationTemplates.find(template => template.from.cardId === cardId);
   if (currTemplate) {
     // update Template with emissary data
-    currTemplate.from = { ...currTemplate.from, ...emissaryFromData };
+    let currTemplateCopy = { ...currTemplate, from: { ...currTemplate.from, ...emissaryFromData } };
 
     // if Template has already had toData added, create a new transition from it
-    if (currTemplate.to.xPosition !== undefined) {
-      const simultaneousTemplates = transitionTemplates.filter(template => currTemplate.orderOfExecution === template.orderOfExecution);
+    console.log("currTemplateCopy.to.xPosition !== undefined");
+    console.log(currTemplateCopy.to.xPosition !== undefined);
+    if (currTemplateCopy.to.xPosition !== undefined) {
+      const simultaneousTemplates = animationTemplates.filter(template => currTemplateCopy.orderOfExecution === template.orderOfExecution);
       const pendingsimultaneousTemplates = simultaneousTemplates.filter(template => template.status === "awaitingEmissaryData");
       if (pendingsimultaneousTemplates.length > 1) {
-        currTemplate.status = "awaitingSimultaneousTemplates";
+        currTemplateCopy.status = "awaitingSimultaneousTemplates";
       } else {
-        dispatch(createAllParallelTransitions(currTemplate, transitionTemplates));
+        console.log("++++  ++++++", currTemplateCopy);
+        dispatch(createAllParallelAnimations(currTemplateCopy, animationTemplates));
 
-        // dispatch(addTransition(newTransition));
+        // dispatch(addTransition(newAnimation));
         return;
       }
     }
-    dispatch(updateTransitionTemplate(currTemplate));
+    console.log(currTemplateCopy);
+    dispatch(updateAnimationTemplate(currTemplateCopy));
   }
 };

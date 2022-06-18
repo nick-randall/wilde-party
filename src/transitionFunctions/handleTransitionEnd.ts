@@ -23,9 +23,9 @@ const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Fun
 
   // check if the current transition is the last active transition:
   if (getState().transitionData.length === 0) {
-    // first check if more transitionTemplates are waiting in the stack
-    const waitingTransitionTemplates = newSnapshots[0].transitionTemplates.filter(template => template.status === "waitingInLine");
-    // const underWayTemplates = newSnapshots[0].transitionTemplates.filter(template => template.status === "underway");
+    // first check if more animationTemplates are waiting in the stack
+    const waitingTransitionTemplates = newSnapshots[0].animationTemplates.filter(template => template.status === "waitingInLine");
+    // const underWayTemplates = newSnapshots[0].animationTemplates.filter(template => template.status === "underway");
     // if(underWayTemplates.length > 0) return;
     if (waitingTransitionTemplates.length > 0) {
       // if so "activate" them so the UI renders the emissaries and the
@@ -40,7 +40,7 @@ const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Fun
     console.log("no waiting transition templates ");
     console.log("current NewSnapshot: ", newSnapshots[0]);
 
-    // if NO transitionTemplates waiting, go ahead and delete the
+    // if NO animationTemplates waiting, go ahead and delete the
     // newGameSnapshot and copy its contents to the currSnapshot
     dispatch(removeNewSnapshot(newSnapshots[0].id));
     dispatch(replaceCurrentSnapshotWithNewSnapshot(newSnapshots[0]));
@@ -53,7 +53,7 @@ const handleTransitionEnd = (endingTransition: TransitionData) => (dispatch: Fun
 
     // if (!isThisLastSnapshotInQueue) {
       console.log("handleTransitionEnd: adding TransitinTemplates to newestSnapshot");
-      // Now create the transitionTemplates for the next newSnapshot in the stack.
+      // Now create the animationTemplates for the next newSnapshot in the stack.
       dispatch(addTransitionTemplatesToNewestSnapshot());
     // }
   }

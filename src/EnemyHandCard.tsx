@@ -46,7 +46,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (newSnapshots.length === 0) return;
-    newSnapshots[0].transitionTemplates.forEach(template => {
+    newSnapshots[0].animationTemplates.forEach(template => {
       if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
         if (emissaryRef !== null && emissaryRef.current !== null) {
           const element = emissaryRef.current;

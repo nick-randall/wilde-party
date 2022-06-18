@@ -7,6 +7,7 @@ import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 
 export interface HandCardProps {
   id: string;
@@ -54,7 +55,7 @@ const HandCard = (props: HandCardProps) => {
           transform: "",
           transition: "300ms",
           width: dimensions.tableCardWidth,
-          zIndex: 10
+          zIndex: 10,
         };
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();
@@ -66,7 +67,7 @@ const HandCard = (props: HandCardProps) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (newSnapshots.length === 0) return;
-    newSnapshots[0].transitionTemplates.forEach(template => {
+    newSnapshots[0].animationTemplates.forEach(template => {
       if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
         console.log("AWAITING");
         if (emissaryRef !== null && emissaryRef.current !== null) {
@@ -83,10 +84,8 @@ const HandCard = (props: HandCardProps) => {
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
       {draggerProps => (
-        <TransitionHandler
-          index={index}
-          id={id}
-          render={(transitionStyles: CSSProperties) => (
+        <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
+          {transitionStyles => (
             <div
               // This div manages the spread (left positioning) for the Hand card.
               ref={draggerProps.ref}
@@ -123,7 +122,7 @@ const HandCard = (props: HandCardProps) => {
               />
             </div>
           )}
-        />
+        </AnimationHandler>
       )}
     </Dragger>
   );

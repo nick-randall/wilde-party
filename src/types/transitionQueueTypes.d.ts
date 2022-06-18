@@ -6,7 +6,7 @@
 type TransitionTemplate = {
   to: ToWithPossibleScreenData | ToViaWithPossibleScreenData;
   from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
-} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string, delay?: number };
+} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string; delay?: number };
 
 type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
 
@@ -14,6 +14,22 @@ type CompleteTransitionTemplate = {
   id: string;
   status: TransitionTemplateStatus;
   animation?: string;
+  delay?: number;
+  to: ToWithScreenData | ToViaWithScreenData;
+  from: FromWithScreenData | FromViaWithScreenData;
+};
+
+type AnimationTemplate = {
+  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData;
+  from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
+} & { id: string; status: AnimationTemplateStatus; orderOfExecution: number; animation?: string; delay?: number };
+
+type AnimationTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
+
+type CompleteAnimationTemplate = {
+  id: string;
+  status: AnimationTemplateStatus;
+  startAnimation?: string;
   delay?: number;
   to: ToWithScreenData | ToViaWithScreenData;
   from: FromWithScreenData | FromViaWithScreenData;
@@ -61,4 +77,16 @@ type TransitionData = {
   startAnimation: string;
 };
 
-type NewSnapshot = GameSnapshot & { transitionTemplates: TransitionTemplate[] };
+type AnimationData = {
+  cardId: string;
+  originDimensions: AllDimensions;
+  originDelta: { x: number; y: number };
+  transitionDuration: number;
+  transitionCurve: string;
+  initialRotation?: number;
+  startAnimation?: string;
+  startAnimationDuration?: number;
+  wait: number;
+};
+
+type NewSnapshot = GameSnapshot & { transitionTemplates?: TransitionTemplate[]; animationTemplates: AnimationTemplate[] };
