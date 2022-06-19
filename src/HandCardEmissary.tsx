@@ -31,9 +31,9 @@ const HandCardEmissary = (props: HandCardEmissaryProps) => {
     width: cardWidth,
     height: cardHeight,
     top: index * cardTopSpread,
-    left: 0,//spread * index,
+    left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
-    // transform: `rotate(${rotation(index)}deg)`,
+    transform: `rotate(${rotation(index)}deg)`,
     // backgroundColor: "black"
   };
 

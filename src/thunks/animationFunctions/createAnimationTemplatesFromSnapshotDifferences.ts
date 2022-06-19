@@ -93,7 +93,7 @@ const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "dealingInitialCard": {
       const transitionTemplate: AnimationTemplate = {
         ...differences[0],
-        animation: "flip",
+        animation: "",
         orderOfExecution: 0,
         id: uuidv4(),
         status: "awaitingEmissaryData",
@@ -105,7 +105,7 @@ const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       differences.forEach((difference, index) => {
         const transitionTemplate: AnimationTemplate = {
           ...difference,
-          animation: "flip",
+          animation: "flipGrow",
           orderOfExecution: 0,
           id: uuidv4(),
           status: "awaitingEmissaryData",

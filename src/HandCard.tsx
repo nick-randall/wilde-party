@@ -8,6 +8,7 @@ import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
 
 export interface HandCardProps {
   id: string;
@@ -85,7 +86,7 @@ const HandCard = (props: HandCardProps) => {
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
       {draggerProps => (
         <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
-          {transitionStyles => (
+          {animationProvidedProps => (
             <div
               // This div manages the spread (left positioning) for the Hand card.
               ref={draggerProps.ref}
@@ -94,7 +95,6 @@ const HandCard = (props: HandCardProps) => {
                 left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
                 top: 0,
                 transition: "300ms",
-                ...transitionStyles,
               }}
             >
               <CardInspector
@@ -114,8 +114,9 @@ const HandCard = (props: HandCardProps) => {
                       id={id}
                       style={{
                         ...mainStyles(draggerProps.dragged || draggerProps.dropping),
-                        ...transitionStyles,
                       }}
+                      onAnimationEnd={() => dispatch(handleAnimationEnd(id))}
+                        className={animationProvidedProps.className}
                     />
                   </div>
                 )}

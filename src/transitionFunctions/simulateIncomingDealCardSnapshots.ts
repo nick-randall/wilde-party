@@ -59,7 +59,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
   // for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);
   // for(let i = 0; i < 4; i++)
   // dealStartingGuest(0)
-  for (let i = 0; i < numPlayers; i++) for (let j = 0; i!== 0 ? j < numCardsInHand : j < 1; j++) dealCard(i, i === 0 && j === 0, i * numCardsInHand + (j + 1) + 1);
+  for (let i = 0; i < numPlayers; i++) for (let j = 0; i!== 0 ? j < numCardsInHand : j < 7; j++) dealCard(i, i === 0 && j === 0, i * numCardsInHand + (j + 1) + 1);
   //create playPhase snapshot
   // const gameSnapshot = getState().gameSnapshot;
   // const { current } = gameSnapshot;

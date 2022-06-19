@@ -103,10 +103,10 @@ const dynamicAnimation = (originDelta: { x: number; y: number }, backImgSrc: str
 
   }
   ${wait}% {
-    transform: translate(0px, 0px) rotate3d(0, 0, 0, 0deg) rotate(0deg);
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(0deg) rotate(${initialRotation}deg);
   }
    100% {
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 0, 0, 0deg) rotate(${initialRotation}deg);
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 0, 0, 0deg);
 
   }
 `;
@@ -119,19 +119,19 @@ const flipGrowThenMoveAnimation = (
   wait?: number
 ) => keyframes`
   0% {
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg) scale(1);
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg) scale(1);
     content: url("${backImgSrc}");
   }
   ${wait}% {
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg) scale(1);
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg) scale(1);
     content: url("${backImgSrc}");
   }
    ${startAnimationDuration}% {
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 0deg) rotate(0deg) scale(2.6);
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate3d(0, 1, 0, 0deg) rotate(0deg) scale(2.6);
     content: url("${frontImgSrc}");
   }
   100% {
-    transform: translate(0px, 0px) rotate3d(0, 1, 0, 00deg) rotate(0deg) scale(1);
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(0deg) scale(1);
     content: url("${frontImgSrc}");
   }
 `;
