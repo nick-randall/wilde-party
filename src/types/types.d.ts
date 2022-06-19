@@ -193,3 +193,6 @@ type NewCardGroupObj = {
 };
 
 type Hover = "shortHover" | "longHover" | "none";
+
+type SnapshotUpdateSource = "localUser" | "server";
+
