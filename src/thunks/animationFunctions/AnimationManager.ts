@@ -4,7 +4,6 @@ import { produce } from "immer";
 import { RootState } from "../../redux/store";
 
 class AnimationManager {
-
   currSnapshot: GameSnapshot;
 
   newSnapshot: NewSnapshot;
@@ -36,22 +35,12 @@ class AnimationManager {
     });
   };
 
-  updateAnimationTemplateStatus = (animationTemplate: AnimationTemplate, status: AnimationTemplateStatus) => {
-    const animationToUpdate = this.newSnapshot.animationTemplates.find(t => animationTemplate.id === t.id);
-    if (animationToUpdate) {
-      return { ...animationTemplate, status };
-    }
-  };
-
-  // updateAnimationTemplateStatus = () => {};
   // TODO probably have to update EmissaryTOData to also include dimensions and rotation
-  handleNewAnimationTemplateScreenData = (emissaryData: EmissaryToData | EmissaryFromData, toOrFrom: string) => {
+  public handleNewAnimationTemplateScreenData = (emissaryData: EmissaryToData | EmissaryFromData, toOrFrom: string) => {
     const { cardId } = emissaryData;
     const currTemplate = this.newSnapshot.animationTemplates.find(template => template.from.cardId === cardId);
 
     if (currTemplate) {
-      // Set currUpdating
-
       let updatedTemplate = produce(currTemplate, draft => {
         if (toOrFrom === "to") {
           draft.to = { ...draft.to, ...emissaryData };
@@ -61,46 +50,137 @@ class AnimationManager {
         }
       });
 
-      this.updateAnimationTemplateScreenData(updatedTemplate);
+      this.updateTemplateStatus(updatedTemplate);
 
-      if (this.isTemplateComplete(updatedTemplate)) {
-        this.updateAllSimultaneousTemplatesIfReady(updatedTemplate);
-      }
+      //updatedTemplate is now updated in state: (this.newSnapshot.animationTemplates)
+
+      this.updateAllSimultaneousTemplatesIfReady(updatedTemplate);
+
+      this.createAnimationsFromTemplates();
     } else {
       console.log("currTemplate not found!");
     }
   };
 
-  updateAllSimultaneousTemplatesIfReady = (updatedTemplate: AnimationTemplate) => {
+  private updateAllSimultaneousTemplatesIfReady = (updatedTemplate: AnimationTemplate) => {
     const { orderOfExecution } = updatedTemplate;
-    const simultaneousTemplates = this.newSnapshot.animationTemplates.filter(template => template.orderOfExecution === orderOfExecution);
+    const simultaneous = (template: AnimationTemplate) => template.orderOfExecution === orderOfExecution;
+    const simultaneousTemplates = this.newSnapshot.animationTemplates.filter(t => simultaneous(t));
+    const otherTemplates = this.newSnapshot.animationTemplates.filter(t => !simultaneous(t));
     if (simultaneousTemplates.every(template => template.status === "awaitingSimultaneousTemplates")) {
-      simultaneousTemplates.map(template => ({ ...template, status: "underway" }));
+      ///
+      const updatedSimultaneousTemplates: AnimationTemplate[] = simultaneousTemplates.map(template => ({ ...template, status: "underway" }));
+      this.newSnapshot.animationTemplates = [...updatedSimultaneousTemplates, ...otherTemplates];
     }
-  };  
+  };
 
-  isTemplateComplete = (animationTemplate: AnimationTemplate): boolean => {
+  private isTemplateComplete = (animationTemplate: AnimationTemplate): boolean => {
     return "xPosition" in animationTemplate.to && "xPosition" in animationTemplate.from;
   };
 
-  updateAnimationTemplateScreenData = (animationTemplate: AnimationTemplate) => {
-    let updatedCopy = { ...animationTemplate };
-    if (this.isTemplateComplete(animationTemplate)) {
-      updatedCopy = { ...animationTemplate, status: "awaitingSimultaneousTemplates" };
-    }
-    const withoutUpdatedTemplate = this.newSnapshot.animationTemplates.filter(t => t.id !== animationTemplate.id);
-    const withUpdated = [...withoutUpdatedTemplate, updatedCopy];
-
-    this.newSnapshot.animationTemplates = withUpdated;
+  private areAllOtherSimultaneousAnimationsReady = (animationTemplate: AnimationTemplate) => {
+    const otherTemplates = this.newSnapshot.animationTemplates.filter(
+      t => t.id !== animationTemplate.id && t.orderOfExecution === animationTemplate.orderOfExecution
+    );
+    if (otherTemplates.length === 0) return true;
+    if (otherTemplates.find(t => t.status === "awaitingEmissaryData") !== undefined) return false;
   };
 
-  createAnimationFromTemplate = () => {};
+  /**
+   * Update the template to underway or awaitingSimultaneousTemplates
+   * Then update the newSnapshot.animationTemplates
+   * @param animationTemplate
+   */
+  private updateTemplateStatus = (animationTemplate: AnimationTemplate) => {
+    let updatedTemplate = { ...animationTemplate };
+    if (this.isTemplateComplete(updatedTemplate)) {
+      // First need to check if there are others waiting.
+      const status = this.hasSimultaneousAnimations(animationTemplate) ? "awaitingSimultaneousTemplates" : "underway";
+      updatedTemplate = { ...animationTemplate, status };
+      console.log("updated template " + updatedTemplate.id + " status to " + status);
+    }
+    const withoutUpdatedTemplate = this.newSnapshot.animationTemplates.filter(t => t.id !== animationTemplate.id);
+    const withUpdatedTemplate = [...withoutUpdatedTemplate, updatedTemplate];
 
-  removeAnimation = () => {};
+    this.newSnapshot.animationTemplates = withUpdatedTemplate;
+  };
+
+  private hasSimultaneousAnimations = (animationTemplate: AnimationTemplate): boolean =>
+    this.newSnapshot.animationTemplates.filter(t => t.orderOfExecution === animationTemplate.orderOfExecution).length > 1;
+
+  private createAnimationsFromTemplates = () => {
+    const readyTemplates = this.newSnapshot.animationTemplates.filter(t => t.status === "underway");
+    const readyAndCompleteTemplates = readyTemplates.map(t => t as CompleteAnimationTemplate);
+    //
+    readyAndCompleteTemplates.forEach(template => {
+      const { to, from } = template;
+      console.log(template.startAnimation);
+      const xDelta = to.xPosition - from.xPosition;
+      const yDelta = to.yPosition - from.yPosition;
+      let newAnimationData: AnimationData = { cardId: to.cardId } as AnimationData;
+      newAnimationData.originDelta = { x: xDelta, y: yDelta };
+      newAnimationData.transitionCurve = "ease-out";
+      newAnimationData.initialRotation = from.rotation;
+      newAnimationData.transitionDuration = 1300; // Should be calculated based on distance of originDelta
+      newAnimationData.originDimensions = from.dimensions;
+      newAnimationData.startAnimation = template.startAnimation ?? "";
+      newAnimationData.startAnimationDuration = 0;
+      newAnimationData.wait = template.delay ?? 0;
+
+      this.animationData.push(newAnimationData);
+    });
+  };
+
+  handleAnimationEnd = (endingCardId: string) => {
+    const animationData = this.animationData.find(animation => animation.cardId === endingCardId);
+    const animationTemplate = this.newSnapshot.animationTemplates.find(t => t.from.cardId === endingCardId);
+
+    if (animationData && animationTemplate) {
+      //
+      this.removeAnimation(endingCardId);
+
+      if (this.animationData.length === 0) {
+        const { orderOfExecution } = animationTemplate;
+        // first check if more animationTemplates are waiting in the stack
+        const nextInLineTemplates = this.newSnapshot.animationTemplates.filter(
+          template => template.status === "waitingInLine" && template.orderOfExecution === orderOfExecution + 1
+        );
+        if (nextInLineTemplates.length > 0) {
+          // if so "activate" them so the UI renders the emissaries and the
+          // animations can be created
+          nextInLineTemplates.forEach(template => {
+            this.updateTemplateStatus(template);
+          });
+
+          this.createAnimationsFromTemplates();
+          return;
+        }
+      }
+
+    // if NO animationTemplates waiting, go ahead and delete the
+    // newGameSnapshot and copy its contents to the currSnapshot
+    this.endNewSnapshot();
+    // get newest copy of newSnapshots, with newestSnapshot removed
+    // newSnapshots = getState().newSnapshots;
+
+    // // if (!isThisLastSnapshotInQueue) {
+    //   console.log("handleAnimationEnd: adding TransitinTemplates to newestSnapshot");
+    //   // Now create the animationTemplates for the next newSnapshot in the stack.
+    //   dispatch(addAnimationTemplatesToNewestSnapshot());
+    }
+    console.log("animation data doesn't exist in state");
+  };
+
+  private removeAnimation = (endingCardId: string) => {
+    this.animationData = this.animationData.filter(a => a.cardId !== endingCardId);
+  };
+
   /**
    * Set currSnapshot to newSnapshot and remove newSnapshot from the queue
    */
-  endNewSnapshot = () => {};
+  private endNewSnapshot = () => {
+    this.currSnapshot = this.newSnapshot;
+  };
 
   createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateSource: SnapshotUpdateSource): AnimationTemplate[] => {
     let animationTemplates: AnimationTemplate[] = [];

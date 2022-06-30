@@ -51,10 +51,10 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
       }
       emissaryCards = cards
         .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingEmissaryData" && a.to.cardId === id));
-      silentEmissaryCards = cards
-        .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingSimultaneousTemplates" && a.to.cardId === id));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => (a.status === "awaitingEmissaryData" || a.status === "awaitingSimultaneousTemplates") && a.to.cardId === id));
+      // silentEmissaryCards = cards
+      //   .map(card => card.id)
+      //   .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingSimultaneousTemplates" && a.to.cardId === id));
     }
   }
   return { cards, emissaryCards, silentEmissaryCards };

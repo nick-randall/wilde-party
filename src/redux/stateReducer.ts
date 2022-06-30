@@ -24,6 +24,7 @@ export interface State {
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   animationData: AnimationData[];
+  animationTemplates: AnimationTemplate[];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide?: string;
@@ -49,6 +50,7 @@ export const stateReducer = (
     draggedState: initialDragState.draggedState,
     dragEndTarget: initialDragState.dragEndTarget,
     animationData: [],
+    animationTemplates: [],
     dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],
@@ -104,7 +106,7 @@ export const stateReducer = (
       return { ...state, newSnapshots };
     case "SET_NEW_SNAPSHOT": {
       const newSnapshot = action.payload;
-      console.log("setting new snapshot")
+      console.log("setting new snapshot");
       const { id } = newSnapshot;
       const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
       return { ...state, ...newSnapshots };
@@ -140,19 +142,19 @@ export const stateReducer = (
       const newTransition = action.payload;
       return { ...state, transitionData: [...state.transitionData, newTransition] };
     case "ADD_MULTIPLE_TRANSITIONS":
-      console.log("adding multiple transitions")
-      console.log(action.payload)
+      console.log("adding multiple transitions");
+      console.log(action.payload);
       const newTransitions = action.payload;
-      return {...state, transitionData: [...state.transitionData, ...newTransitions]}
-      case "ADD_ANIMATION":
+      return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
+    case "ADD_ANIMATION":
       const newAnimation = action.payload;
       return { ...state, animationData: [...state.animationData, newAnimation] };
     case "ADD_MULTIPLE_ANIMATIONS":
-      console.log("adding multiple animations")
-      console.log(action.payload)
+      console.log("adding multiple animations");
+      console.log(action.payload);
       const newAnimations = action.payload;
-      return {...state, animationData: [...state.animationData, ...newAnimations]}
-      case "SET_HIGHLIGHTS": {
+      return { ...state, animationData: [...state.animationData, ...newAnimations] };
+    case "SET_HIGHLIGHTS": {
       // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
       if (draggedHandCard) {

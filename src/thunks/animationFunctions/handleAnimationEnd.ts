@@ -48,8 +48,8 @@ const handleAnimationEnd = (endingCardId: string) => (dispatch: Function, getSta
     console.log("current snapshot: ", getState().gameSnapshot);
     console.log("newSnapshots: ", getState().newSnapshots);
     // get newest copy of newSnapshots, with newestSnapshot removed
-    newSnapshots = getState().newSnapshots;
-    const isThisLastSnapshotInQueue = newSnapshots.length === 1;
+    // newSnapshots = getState().newSnapshots;
+    // const isThisLastSnapshotInQueue = newSnapshots.length === 1;
 
     // if (!isThisLastSnapshotInQueue) {
       console.log("handleAnimationEnd: adding TransitinTemplates to newestSnapshot");
