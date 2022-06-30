@@ -49,7 +49,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const currentWithPlayPhase: Current = {...current, phase: "playPhase"}
       newSnapshot = { ...snapshot, animationTemplates: [], snapshotUpdateType: "dealingInitialCard", id: id, current: currentWithPlayPhase };
     } else {
-      const changes = findSnapshotDifferences({ prevSnapshot: currentSnapshot, newSnapshot: snapshot });
+      const changes = findSnapshotDifferences(currentSnapshot, snapshot );
       const templates = createTransitionTemplates(changes, "dealingInitialCard", "server");
       newSnapshot = { ...snapshot, animationTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
     }

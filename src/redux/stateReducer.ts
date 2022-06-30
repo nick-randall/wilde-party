@@ -19,12 +19,13 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
 export interface State {
   gameSnapshot: GameSnapshot;
   newSnapshots: NewSnapshot[];
+  newSnapshotsNewVersion: GameSnapshot[];
   draggedState: DraggedState;
   dragEndTarget?: DragEndTarget;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   animationData: AnimationData[];
-  animationTemplates: AnimationTemplate[];
+  animationTemplates: AnimationTemplateNewVersion[][];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide?: string;
@@ -45,6 +46,7 @@ export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
     newSnapshots: [],
+    newSnapshotsNewVersion: [],
     screenSize: getScreenSize(),
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
@@ -111,13 +113,26 @@ export const stateReducer = (
       const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
       return { ...state, ...newSnapshots };
     }
+    case "SET_NEW_SNAPSHOTS_NEW_VERSION": {
+      const newSnapshots: GameSnapshot[] = action.payload;
+      const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id + b.id);
+      console.log("setting new snapshots");
+      return { ...state, newSnapshotsNewVersion: sortedNewSnapshots };
+    }
     case "SET_NEW_GAME_SNAPSHOTS": {
       return { ...state, newSnapshots: action.payload };
     }
+
     case "OVERWRITE_CURRENT_SNAPSHOT":
       console.log("overwriting current snapshot");
       return { ...state, gameSnapshot: action.payload };
-
+    case "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION": {
+      const newSnapshotsNewVersion = state.newSnapshotsNewVersion.filter((a, i) => i > 0);
+      return { ...state, newSnapshotsNewVersion, gameSnapshot: action.payload };
+    }
+    case "SET_ANIMATION_TEMPLATES": {
+      return { ...state, animationTemplates: action.payload };
+    }
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
 
@@ -138,6 +153,13 @@ export const stateReducer = (
 
       return { ...state, newSnapshots };
     }
+    case "UPDATE_ANIMATION_TEMPLATE_NEW_VERSION": {
+      const template = action.payload;
+      const { id } = template;
+      const animationTemplates = state.animationTemplates.map(group => group.map(t => (t.id === id ? template : t)));
+      return { ...state, animationTemplates };
+    }
+
     case "ADD_TRANSITION":
       const newTransition = action.payload;
       return { ...state, transitionData: [...state.transitionData, newTransition] };
@@ -146,6 +168,12 @@ export const stateReducer = (
       console.log(action.payload);
       const newTransitions = action.payload;
       return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
+      case "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION":{
+        console.log(action.payload);
+        const newAnimations = action.payload;
+        // Pop first animation template group.
+        const animationTemplates = state.animationTemplates.filter((t, i) => i > 0)
+        return { ...state, animationTemplates, transitionData: [...state.animationData, ...newAnimations] };}
     case "ADD_ANIMATION":
       const newAnimation = action.payload;
       return { ...state, animationData: [...state.animationData, newAnimation] };

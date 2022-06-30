@@ -58,7 +58,7 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
     locate(destination.containerId, gameSnapshot);
     console.log("origin player !=0");
     //compareProps(gameSnapshot.players[player])
-    console.log(findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }));
+    console.log(findSnapshotDifferences(gameSnapshot, newSnapshot));
     const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
     console.log("followoing newTransition");
     console.log(newTransition);

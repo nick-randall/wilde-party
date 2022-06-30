@@ -16,7 +16,7 @@ const addAnimationTemplatesToNewestSnapshots = () => (dispatch: Function, getSta
   const newestSnapshot = newSnapshots.shift();
   if (newestSnapshot !== undefined) {
     console.log(newestSnapshot) 
-    const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
+    const differences = findSnapshotDifferences(gameSnapshot, newestSnapshot);
     console.log(differences)
 
     const animationTemplates = createAnimationTemplatesFromSnapshotDifferences(differences, newestSnapshot.snapshotUpdateType, "server");

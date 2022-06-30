@@ -13,7 +13,7 @@ import { nonPlayerPlacesTypes, playerPlacesTypes } from "../../helperFunctions/l
  */
 
 
-export const findSnapshotDifferences = ({ prevSnapshot, newSnapshot }: { prevSnapshot: GameSnapshot; newSnapshot: GameSnapshot }) => {
+export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot: GameSnapshot ) => {
   //if (prevSnapshot.players.length === 0) return [];
   const snapshotDifferences = [];
   const players = prevSnapshot.players;

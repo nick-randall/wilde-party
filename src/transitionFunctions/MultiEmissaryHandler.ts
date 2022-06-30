@@ -40,18 +40,16 @@ const mapStateToProps = (state: RootState, ownProps: MultiEmissaryHandlerProps) 
 
   if (newSnapshots.length > 0) {
     const templatesWithAnimationToThisPlace = newSnapshots[0].animationTemplates
-      .filter(a => a.status !== "waitingInLine")
+      .filter(a => a.status === "awaitingEmissaryData" || a.status === "awaitingSimultaneousTemplates")
       .filter(a => ("placeId" in a.to ? a.to.placeId === placeId : false));
-      console.log(templatesWithAnimationToThisPlace.length)
+    console.log(templatesWithAnimationToThisPlace.length);
     if (templatesWithAnimationToThisPlace.length > 0) {
       if (player === null) {
         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
       } else {
         cards = newSnapshots[0].players[player].places[placeType].cards;
       }
-      emissaryCards = cards
-        .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => (a.status === "awaitingEmissaryData" || a.status === "awaitingSimultaneousTemplates") && a.to.cardId === id));
+      emissaryCards = cards.map(card => card.id).filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id));
       // silentEmissaryCards = cards
       //   .map(card => card.id)
       //   .filter(id => templatesWithAnimationToThisPlace.find(a => a.status === "awaitingSimultaneousTemplates" && a.to.cardId === id));

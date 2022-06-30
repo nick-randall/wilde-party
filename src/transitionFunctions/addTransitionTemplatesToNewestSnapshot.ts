@@ -16,7 +16,7 @@ const addTransitionTemplatesToNewestSnapshot = () => (dispatch: Function, getSta
   const newestSnapshot = newSnapshots.shift();
   if (newestSnapshot !== undefined) {
     console.log(newestSnapshot) 
-    const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newestSnapshot });
+    const differences = findSnapshotDifferences(gameSnapshot, newestSnapshot );
     console.log(differences)
 
     const transitionTemplates = createTransitionTemplatesFromSnapshotDifferences(differences, newestSnapshot.snapshotUpdateType, "server");

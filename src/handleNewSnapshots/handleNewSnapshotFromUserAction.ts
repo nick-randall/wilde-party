@@ -12,7 +12,7 @@ const handleNewSnapshotFromUserAction =
   (newSnapshot: GameSnapshot) => (dispatch: Function, getState: () => RootState) => {
     const { gameSnapshot } = getState();
     const {snapshotUpdateType } = newSnapshot
-    const differences = findSnapshotDifferences({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot });
+    const differences = findSnapshotDifferences( gameSnapshot, newSnapshot );
     const animationTemplates = createAnimationTemplatesFromSnapshotDifferences(differences, snapshotUpdateType, "localUser");
     const snapshot = { ...newSnapshot, animationTemplates, snapshotUpdateType: snapshotUpdateType };
 

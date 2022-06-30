@@ -89,4 +89,43 @@ type AnimationData = {
   wait: number;
 };
 
+//
+type ScreenData = {
+  xPosition?: number;
+  yPosition?: number;
+  rotation?: number;
+  dimensions?: AllDimensions;
+};
+
+type CompleteScreenData = {
+  xPosition: number;
+  yPosition: number;
+  rotation: number;
+  dimensions: AllDimensions;
+};
+
+type ToOrFromWithPossibleScreenData = ToOrFrom & ScreenData;
+type ViaWithPossibleScreenData = Via & ScreenData;
+
+type ToOrFromWithScreenData = ToOrFrom & CompleteScreenData;
+type ViaWithScreenData = Via & CompleteScreenData;
+
+type AnimationTemplateNewVersion = {
+  to: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData
+  from: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData;
+} & { id: string; status: AnimationTemplateStatus; animation?: string; delay?: number };
+
+type MockRenderData = ScreenData & { templateId: string }
+
+type CompleteAnimationTemplateNewVersion = {
+  id: string;
+  status: AnimationTemplateStatus;
+  startAnimation?: string;
+  delay?: number;
+  to: ToOrFromWithScreenData | ViaWithScreenData;
+  from: ToOrFromWithScreenData | ViaWithScreenData;
+};
+
+//
+
 type NewSnapshot = GameSnapshot & { transitionTemplates?: TransitionTemplate[]; animationTemplates: AnimationTemplate[] };
