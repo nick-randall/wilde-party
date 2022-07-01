@@ -31,7 +31,7 @@ type SetNewGameSnapshots = { type: "SET_NEW_GAME_SNAPSHOTS"; payload: NewSnapsho
 
 export const removeTransition = (transitionId: string): RemoveTransition => ({ type: "REMOVE_TRANSITION", payload: transitionId });
 
-export const removeAnimation = (transitionId: string): RemoveAnimation => ({ type: "REMOVE_ANIMATION", payload: transitionId });
+export const removeAnimation = (cardId: string): RemoveAnimation => ({ type: "REMOVE_ANIMATION", payload: cardId });
 
 export const addTransition = (newTransitionData: TransitionData): AddTransition => ({ type: "ADD_TRANSITION", payload: newTransitionData });
 

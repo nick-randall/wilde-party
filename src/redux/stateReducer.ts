@@ -7,6 +7,7 @@ import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
 import { remove } from "ramda";
+import { changeGroupStatus } from "../animations/handleEndAnimation";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -15,6 +16,11 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
   const numPlayers = gameSnapshot.players.length;
   return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
 };
+
+const isTemplateComplete = (currTemplate: AnimationTemplateNewVersion) =>
+  currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
+
+  const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationTemplateNewVersion[][]) => array.map(group => group.map(t => (t.id === template.id ? template : t)));
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -154,9 +160,14 @@ export const stateReducer = (
       return { ...state, newSnapshots };
     }
     case "UPDATE_ANIMATION_TEMPLATE_NEW_VERSION": {
-      const template = action.payload;
-      const { id } = template;
-      const animationTemplates = state.animationTemplates.map(group => group.map(t => (t.id === id ? template : t)));
+      let currTemplate = action.payload;
+
+      if (isTemplateComplete(currTemplate)) {
+        currTemplate = { ...currTemplate, status: "awaitingSimultaneousTemplates" };
+      }
+
+      const animationTemplates = updateTemplate(currTemplate, state.animationTemplates);
+
       return { ...state, animationTemplates };
     }
 
@@ -168,12 +179,13 @@ export const stateReducer = (
       console.log(action.payload);
       const newTransitions = action.payload;
       return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
-      case "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION":{
-        console.log(action.payload);
-        const newAnimations = action.payload;
-        // Pop first animation template group.
-        const animationTemplates = state.animationTemplates.filter((t, i) => i > 0)
-        return { ...state, animationTemplates, transitionData: [...state.animationData, ...newAnimations] };}
+    case "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION": {
+      console.log(action.payload);
+      const newAnimations = action.payload;
+      const updatedTemplatesGroup = changeGroupStatus("underway", state.animationTemplates[0]);
+      const animationTemplates = state.animationTemplates.map((t, i) => (i === 0 ? updatedTemplatesGroup : t));
+      return { ...state, animationTemplates, transitionData: [...state.animationData, ...newAnimations] };
+    }
     case "ADD_ANIMATION":
       const newAnimation = action.payload;
       return { ...state, animationData: [...state.animationData, newAnimation] };

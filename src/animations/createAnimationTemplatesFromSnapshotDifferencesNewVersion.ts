@@ -1,11 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
+import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
+import { changeGroupStatus } from "./handleEndAnimation";
 
 export type SnapshotUpdateSource = "localUser" | "server";
 
-const orderTransitions = {
-  addDragged: { addDragged: 0 },
-  destroy: { flyTodestroyedcard: 0, discard: 1, destroyedDiscard: 1 },
-  steal: { flyToStolenCard: 0, discard: 1, stolenCardToNewHome: 1 },
+const createAnimationTemplates = (currSnapshot: GameSnapshot, newSnapshot: GameSnapshot): AnimationTemplateNewVersion[][] => {
+  const snapshotDifferences = findSnapshotDifferences(currSnapshot, newSnapshot);
+  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(snapshotDifferences, newSnapshot.snapshotUpdateType, "server");
+  return animationTemplates;
 };
 
 /**
@@ -24,21 +26,21 @@ const createAnimationTemplatesFromSnapshotDifferencesNewVersion = (
   snapshotUpdateType: SnapshotUpdateType,
   snapshotUpdateSource: SnapshotUpdateSource
 ): AnimationTemplateNewVersion[][] => {
-  let templateGroups = createAnimationTemplates(differences, snapshotUpdateType);
+  let templateGroups = returnAnimationTemplates(differences, snapshotUpdateType);
 
   /** If the user played a card to change the gameSnapshot, removes the initial transition,
   where the card transitions from the players' hand to the card's target location.
   This is necessary because the user has already dragged the card to its target location. 
   */
   if (snapshotUpdateSource === "localUser") {
-    templateGroups.shift();
+    const updatedTemplateGroups = changeGroupStatus("awaitingEmissaryData", templateGroups[1]);
+    templateGroups = [updatedTemplateGroups, ...templateGroups.slice(1)];
   }
   return templateGroups;
 };
 
-const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplateNewVersion[][] => {
-  console.log("numDifferences is " + differences.length);
-
+const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplateNewVersion[][] => {
+ 
   switch (snapshotUpdateType) {
     case "addDragged": {
       let transitionTemplate: AnimationTemplateNewVersion = {
@@ -47,25 +49,17 @@ const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         status: "awaitingEmissaryData",
         id: uuidv4(),
       };
-      // if (draggedCardScreenLocation !== null && dimensions !== null) {
-      //   const { xPosition, yPosition } = draggedCardScreenLocation;
-      //   const { from } = transitionTemplate;
-      //   const dimensionswithoutrotation = { ...dimensions, rotation: () => 0 };
-      //   transitionTemplate = { ...transitionTemplate, from: { ...from, xPosition, yPosition, rotation: 0, dimensions: dimensionswithoutrotation } };
-
-      //   console.log(transitionTemplate);
-      //   // transitionTemplate.from.xPosition = draggedCardScreenLocation.xPosition
-      //   // transitionTemplate.from.yPosition = draggedCardScreenLocation.yPosition
-      // }
       return [[transitionTemplate]];
     }
     // case "rearrangingHand":
     //   break;
     // return "rearrangingHand";
     case "destroy": {
-      // step One: find changed Card.
-      const destroyedCard: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
-      if (destroyedCard) {
+      const destroyedCardFromData: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
+      if (destroyedCardFromData) {
+
+        const destroyedCard: Via = { cardId: destroyedCardFromData.cardId, targetId: destroyedCardFromData.cardId };
+
         let handCardFliesToDestroyedCard: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
         let handCardFliesToDiscardPile: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
         let destroyedCardFliesToDiscardPile: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
@@ -84,6 +78,7 @@ const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       return [];
     }
     // case "steal":
+    // case "swap":
     // case "enchant":
     // case "protectSelf":
     // case "drawingWildeParty":
@@ -113,29 +108,8 @@ const createAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       return [templates];
     }
   }
-  // if (from.placeType === "deck") {
-  //   return "drawCard";
-  // }
 
-  // if (from.placeType === "hand") {
-  //   switch (to.placeType) {
-  // case "discardPile":
-  //   return "discard";
-  // case "GCZ":
-  //   return "addDragged"; // enchant is logically the same
-  // case ""
-  // }
-
-  // if (from.placeType === "GCZ") {
-  //   switch (to.placeType) {
-  //     case "discardPile":
-  //       return "destroy";
-  //     case "GCZ": // assuming we have already checked it is not just a rearrange
-  //       return "swap";
-  //   }
-
-  // }
   return [];
 };
 
-export default createAnimationTemplatesFromSnapshotDifferencesNewVersion;
+export default createAnimationTemplates;
