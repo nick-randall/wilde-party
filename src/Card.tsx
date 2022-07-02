@@ -10,6 +10,7 @@ import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
+import useMockRender from "./mockRender/useMockRender";
 
 export interface CardProps {
   id: string;
@@ -81,6 +82,7 @@ const Card = (props: CardProps) => {
     });
   }, [dimensions, dispatch, id, newSnapshots]);
 
+  useMockRender(id, dimensions, 0, emissaryRef);
   return (
     <div style={{ position: "absolute" }} ref={emissaryRef}>
       <CardInspector

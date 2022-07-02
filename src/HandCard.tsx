@@ -9,6 +9,7 @@ import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmis
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
+import useMockRender from "./mockRender/useMockRender";
 
 export interface HandCardProps {
   id: string;
@@ -66,21 +67,23 @@ const HandCard = (props: HandCardProps) => {
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (newSnapshots.length === 0) return;
-    newSnapshots[0].animationTemplates.forEach(template => {
-      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-        console.log("AWAITING");
-        if (emissaryRef !== null && emissaryRef.current !== null) {
-          const element = emissaryRef.current;
-          const { left, top } = element.getBoundingClientRect();
-          console.log("handCardEmissary FromData---left: " + left, " ---top: " + top);
+  // useEffect(() => {
+  //   if (newSnapshots.length === 0) return;
+  //   newSnapshots[0].animationTemplates.forEach(template => {
+  //     if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
+  //       console.log("AWAITING");
+  //       if (emissaryRef !== null && emissaryRef.current !== null) {
+  //         const element = emissaryRef.current;
+  //         const { left, top } = element.getBoundingClientRect();
+  //         console.log("handCardEmissary FromData---left: " + left, " ---top: " + top);
 
-          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
-        }
-      }
-    });
-  }, [dimensions, dispatch, id, index, newSnapshots, rotation]);
+  //         dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
+  //       }
+  //     }
+  //   });
+  // }, [dimensions, dispatch, id, index, newSnapshots, rotation]);
+
+  useMockRender(id, dimensions, rotation(index), emissaryRef);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
@@ -116,7 +119,7 @@ const HandCard = (props: HandCardProps) => {
                         ...mainStyles(draggerProps.dragged || draggerProps.dropping),
                       }}
                       onAnimationEnd={() => dispatch(handleAnimationEnd(id))}
-                        className={animationProvidedProps.className}
+                      className={animationProvidedProps.className}
                     />
                   </div>
                 )}

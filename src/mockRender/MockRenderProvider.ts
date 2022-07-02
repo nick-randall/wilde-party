@@ -14,7 +14,7 @@ type DerivedMockRenderProviderProps = {
   mockRenderIds: string[];
 };
 
-const EmissaryHandler: React.FC<MockRenderProviderProps & DerivedMockRenderProviderProps> = ({ cards, children, mockRenderIds }) => {
+const MockRenderProvider: React.FC<MockRenderProviderProps & DerivedMockRenderProviderProps> = ({ cards, children, mockRenderIds }) => {
   return children(cards, mockRenderIds);
 };
 
@@ -52,4 +52,4 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
   }
   return { cards, mockRenderIds };
 };
-export default connect(mapStateToProps)(EmissaryHandler);
+export default connect(mapStateToProps)(MockRenderProvider);

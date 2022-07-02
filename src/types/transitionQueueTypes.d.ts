@@ -115,7 +115,7 @@ type AnimationTemplateNewVersion = {
   from: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData;
 } & { id: string; status: AnimationTemplateStatus; animation?: string; delay?: number };
 
-type MockRenderData = ScreenData & { templateId: string }
+type MockRenderData = ScreenData & { cardId: string }
 
 type CompleteAnimationTemplateNewVersion = {
   id: string;

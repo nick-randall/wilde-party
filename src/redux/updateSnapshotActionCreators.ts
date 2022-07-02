@@ -16,7 +16,7 @@ type SetNewSnapshot = {
 };
 
 type SetNewSnapshotsNewVersion = {
-  type: "SET_NEW_SNAPSHOTS";
+  type: "SET_NEW_SNAPSHOTS_NEW_VERSION";
   payload: GameSnapshot[];
 }
 
@@ -37,9 +37,9 @@ export const  setNewSnapshot = (newSnapshot: NewSnapshot): SetNewSnapshot => ({
   payload: newSnapshot,
 });
 
-export const  setNewSnapshotsNewVersion = (newSnapshot: GameSnapshot[]): SetNewSnapshotsNewVersion => ({
-  type: "SET_NEW_SNAPSHOTS",
-  payload: newSnapshot,
+export const  setNewSnapshotsNewVersion = (newSnapshots: GameSnapshot[]): SetNewSnapshotsNewVersion => ({
+  type: "SET_NEW_SNAPSHOTS_NEW_VERSION",
+  payload: newSnapshots,
 });
 
 export const removeNewSnapshot = (id: number): RemoveNewSnapshot => ({type: "REMOVE_NEW_SNAPSHOT", payload: id})

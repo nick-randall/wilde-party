@@ -2,6 +2,8 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import MockRenderProvider from "./mockRender/MockRenderProvider";
+import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";
@@ -36,25 +38,24 @@ const Deck = (props: DeckProps) => {
     : {};
 
   return (
-    <EmissaryHandler player={null} placeType={"deck"} placeId={id}>
-      {(cards, emissaryCardIndex) => (
+    <MockRenderProvider player={null} placeType={"deck"} placeId={id}>
+      {(cards, mockRenderIds) => (
         <div
           style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }}
           onClick={handleClick}
         >
           {Array.from(cards)
             .reverse()
-            .slice(1)
             .map((card, index) =>
-              index === emissaryCardIndex ? (
-                <TableCardEmissary dimensions={dimensions} id={card.id} image="back" index={index} />
+              mockRenderIds.includes(card.id) ? (
+                <TableCardMockRender dimensions={dimensions} cardId={card.id} image="back" index={index} />
               ) : (
                 <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id} />
               )
             )}
         </div>
       )}
-    </EmissaryHandler>
+    </MockRenderProvider>
   );
 };
 export default Deck;

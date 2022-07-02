@@ -186,7 +186,7 @@ export const stateReducer = (
       const newAnimations = action.payload;
       const updatedTemplatesGroup = changeGroupStatus("underway", state.animationTemplates[0]);
       const animationTemplates = state.animationTemplates.map((t, i) => (i === 0 ? updatedTemplatesGroup : t));
-      return { ...state, animationTemplates, transitionData: [...state.animationData, ...newAnimations] };
+      return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
     }
     case "ADD_ANIMATION":
       const newAnimation = action.payload;

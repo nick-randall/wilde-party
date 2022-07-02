@@ -1,11 +1,9 @@
 import  { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import handleNewMockRenderData from "../animations/handleNewMockRenderData";
-import "./animations/animations.css";
 
 export interface HandCardMockRenderProps {
-  id: string;
-  animationTemplateId: string;
+  cardId: string;
   silent: boolean;
   index: number;
   dimensions: AllDimensions;
@@ -21,7 +19,7 @@ export interface HandCardMockRenderProps {
  * @param props
  * @returns
  */
-const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ id, animationTemplateId, index, dimensions, spread, numHandCards }) => {
+const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, dimensions, spread, numHandCards }) => {
   // const { id, animationTemplateId, index, dimensions, spread, numHandCards } = props;
   const { cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
   const mockRenderRef = useRef<HTMLDivElement>(null);
@@ -50,17 +48,17 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ id, animationTe
       const { left, top } = element.getBoundingClientRect();
       dispatch(
         handleNewMockRenderData(
-          { templateId: animationTemplateId, xPosition: left, yPosition: top, dimensions: dimensions, rotation: rotation(index) },
-          "from"
+          { cardId, xPosition: left, yPosition: top, dimensions: dimensions, rotation: rotation(index) },
+          "to"
         )
       );
     }
-  }, [animationTemplateId, dimensions, dispatch, index, rotation]);
+  }, [cardId, dimensions, dispatch, index, rotation]);
 
   return  (
     <div
       ref={mockRenderRef}
-      id={id}
+      id={cardId}
       style={{
         ...normalStyles,
       }}
