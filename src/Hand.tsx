@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
-import HandCardEmissary from "./HandCardEmissary";
-import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
-import MultiEmissaryHandler from "./transitionFunctions/MultiEmissaryHandler";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import HandCardMockRender from "./mockRender/HandCardMockRender";
@@ -69,7 +65,6 @@ const Hand = (props: HandProps) => {
               emissaryCards.includes(card.id) ? (
                 <HandCardMockRender
                   cardId={card.id}
-                  silent={false}
                   index={index}
                   dimensions={getDimensions("hand", 0, handCards.length)}
                   numHandCards={handCards.length}

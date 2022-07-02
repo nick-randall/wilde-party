@@ -4,7 +4,6 @@ import handleNewMockRenderData from "../animations/handleNewMockRenderData";
 
 export interface HandCardMockRenderProps {
   cardId: string;
-  silent: boolean;
   index: number;
   dimensions: AllDimensions;
   numHandCards: number;

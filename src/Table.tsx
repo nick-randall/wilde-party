@@ -18,7 +18,7 @@ interface SimulateNewSnapshotButtonProps {
 
 const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
   const dispatch = useDispatch();
-  const newSnapshotcurrent = useSelector((state: RootState) => state.newSnapshotsNewVersion[0]);
+  const newSnapshotcurrent = useSelector((state: RootState) => state.newSnapshotsNewVersion);
   const animationTemplates = useSelector((state: RootState) => state.animationTemplates);
   const logNewSnapshot = () => {
     console.log(newSnapshotcurrent);
@@ -73,7 +73,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     <div style={{ display: "flex", flexDirection: "column" }}>
       <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
       {/* <button onClick={simulateDestroy}>Simulate destroy!</button> */}
-      <button onClick={logNewSnapshot} style={{color: newSnapshotcurrent === undefined ? "red" : "black"}}>Log New Snapshot NEw version</button>
+      <button onClick={logNewSnapshot} style={{color: newSnapshotcurrent === undefined ? "red" : "black"}}>Log New Snapshots NEw version</button>
       <button onClick={logAnimationTemplates}>Log Animation Templates</button>
 
       <button onClick={dealTwoCardsNow}>Deal Two Cards</button>

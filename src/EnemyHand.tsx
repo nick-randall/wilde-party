@@ -11,6 +11,9 @@ import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 import Hand from "./Hand";
 import HandCardEmissary from "./HandCardEmissary";
 import TableCardEmissary from "./TableCardEmissary";
+import MockRenderProvider from "./mockRender/MockRenderProvider";
+import TableCardMockRender from "./mockRender/TableCardMockRender";
+import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface EnemyHandProps {
   id: string;
   player: number | null
@@ -30,8 +33,8 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <EmissaryHandler placeId={id} player={player} placeType={placeType}>
-      {(handCards, emissaryCardIndex) => (
+    <MockRenderProvider placeId={id} player={player} placeType={placeType}>
+      {(handCards, mockRenderIds) => (
         
         <div
           id={id}
@@ -48,12 +51,12 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
           }}
         >
           {handCards.map((card, index) => (
-            emissaryCardIndex === index ? <TableCardEmissary dimensions={dimensions} id= {card.id} index={index} image={card.image}/> :
+            mockRenderIds.includes(card.id) ? <HandCardMockRender dimensions={dimensions} cardId= {card.id} index={index} numHandCards={handCards.length} spread={spread}/> :
             <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
           ))}
         </div>
       )}
-    </EmissaryHandler>
+    </MockRenderProvider>
   );
 };
 

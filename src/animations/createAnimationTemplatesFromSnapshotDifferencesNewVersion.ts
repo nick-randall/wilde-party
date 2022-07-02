@@ -97,7 +97,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       differences.forEach((difference, index) => {
         const transitionTemplate: AnimationTemplateNewVersion = {
           ...difference,
-          animation: "flipGrow",
+          animation: "",
           id: uuidv4(),
           status: "awaitingEmissaryData",
           delay: differences.length * 100 - index * 100,
