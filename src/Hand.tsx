@@ -9,6 +9,7 @@ import HandCardEmissary from "./HandCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 import MultiEmissaryHandler from "./transitionFunctions/MultiEmissaryHandler";
 import { getDimensions } from "./helperFunctions/getDimensions";
+import MockRenderProvider from "./mockRender/MockRenderProvider";
 interface HandProps {
   id: string;
   playerZoneSize: { width: number; height: number };
@@ -60,14 +61,14 @@ const Hand = (props: HandProps) => {
       }}
     >
       {" "}
-      <MultiEmissaryHandler player={0} placeType="hand" placeId={id}>
-        {(handCards, emissaryCards, silentEmissaryCards) => (
+      <MockRenderProvider player={0} placeType="hand" placeId={id}>
+        {(handCards, emissaryCards) => (
           <NoLayoutDragContainer>
             {handCards.map((card, index) =>
-              emissaryCards.includes(card.id) || silentEmissaryCards.includes(card.id) ? (
+              emissaryCards.includes(card.id) ? (
                 <HandCardEmissary
                   id={card.id}
-                  silent={silentEmissaryCards.includes(card.id)}
+                  silent={false}
                   index={index}
                   image={card.image}
                   dimensions={getDimensions("hand", 0, handCards.length)}
@@ -90,7 +91,7 @@ const Hand = (props: HandProps) => {
             )}
           </NoLayoutDragContainer>
         )}
-      </MultiEmissaryHandler>
+      </MockRenderProvider>
     </div>
   );
 };

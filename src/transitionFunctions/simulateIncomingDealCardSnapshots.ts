@@ -4,7 +4,8 @@ import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotD
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
-import { addTransition } from "../redux/transitionQueueActionCreators";
+import { addTransition, setNewGameSnapshots } from "../redux/transitionQueueActionCreators";
+import { setNewSnapshotsNewVersion } from "../redux/updateSnapshotActionCreators";
 
 export const dealInitialHands = () => (dispatch: Function, getState: () => RootState) => {
   const numCardsInHand = 7;
@@ -53,7 +54,7 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const templates = createTransitionTemplates(changes, "dealingInitialCard", "server");
       newSnapshot = { ...snapshot, animationTemplates: templates, snapshotUpdateType: "dealingInitialCard", id: id };
     }
-    dispatch(addNewGameSnapshots([newSnapshot]));
+    dispatch(setNewSnapshotsNewVersion([newSnapshot]));
   };
 
   // for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);

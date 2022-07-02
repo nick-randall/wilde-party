@@ -19,7 +19,7 @@ const EmissaryHandler: React.FC<MockRenderProviderProps & DerivedMockRenderProvi
 };
 
 const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) => {
-  const { gameSnapshot, newSnapshots, animationTemplates } = state;
+  const { gameSnapshot, newSnapshotsNewVersion, animationTemplates } = state;
   const { player, placeType, placeId } = ownProps;
 
   let cards;
@@ -30,8 +30,8 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
   }
   let mockRenderIds: string[] = [];
 
-  if (newSnapshots.length > 0 && animationTemplates.length > 0) {
-    const templatesWithAnimationToThisPlace = animationTemplates
+  if (newSnapshotsNewVersion.length > 0 && animationTemplates.length > 0) {
+    const templatesWithAnimationToThisPlace = animationTemplates[0]
       .filter(a => a.status === "awaitingEmissaryData" || a.status === "awaitingSimultaneousTemplates")
       .filter(a => ("placeId" in a.to ? a.to.placeId === placeId : false));
 
@@ -39,12 +39,16 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
       console.log("should mock render to place: " + placeType);
 
       if (player === null) {
-        cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
+        cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
       } else {
-        cards = newSnapshots[0].players[player].places[placeType].cards;
+        cards = newSnapshotsNewVersion[0].players[player].places[placeType].cards;
       }
       mockRenderIds = cards.map(card => card.id).filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id));
     }
+  }
+  else {
+    console.log( "new  snapshots.length " +newSnapshotsNewVersion.length)
+    console.log(animationTemplates[0])
   }
   return { cards, mockRenderIds };
 };

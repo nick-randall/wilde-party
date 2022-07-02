@@ -1,3 +1,4 @@
+import handleNewSnapshots from "../animations/handleNewSnapshots";
 import handleIncomingSnapshots from "../handleNewSnapshots/handleIncomingSnapshots";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { RootState } from "../redux/store";
@@ -20,6 +21,7 @@ const dealTwoCards = () => (dispatch: Function, getState: () => RootState) => {
   // newSnapshot = {...newSnapshot, snapshotUpdateType: "dealingCards"}
   console.log(newSnapshot.snapshotUpdateType);
   
-  dispatch(handleIncomingSnapshots([newSnapshot]));
+  // dispatch(handleIncomingSnapshots([newSnapshot]));
+  dispatch(handleNewSnapshots([newSnapshot]));
 };
 export default dealTwoCards;

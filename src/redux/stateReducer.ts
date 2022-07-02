@@ -137,6 +137,8 @@ export const stateReducer = (
       return { ...state, newSnapshotsNewVersion, gameSnapshot: action.payload };
     }
     case "SET_ANIMATION_TEMPLATES": {
+      console.log("setting these animation templates")
+      console.log(action.payload)
       return { ...state, animationTemplates: action.payload };
     }
     case "SET_DRAG_CONTAINER_EXPAND":
