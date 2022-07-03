@@ -10,9 +10,14 @@ type UpdateAnimationTemplate = { type: "UPDATE_ANIMATION_TEMPLATE"; payload: Ani
 
 type SetAnimationTemplates = { type: "SET_ANIMATION_TEMPLATES"; payload: AnimationTemplateNewVersion[][] };
 
-type UpdateAnimationTemplateNewVersion = { type: "UPDATE_ANIMATION_TEMPLATE_NEW_VERSION"; payload: AnimationTemplateNewVersion };
+type UpdateAnimationTemplateNewVersion = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplateNewVersion };
 
 type UpdateTransitionTemplate = { type: "UPDATE_TRANSITION_TEMPLATE"; payload: TransitionTemplate };
+
+type EndAnimationTemplateNewVersion = {type: "END_ANIMATION_TEMPLATE_NEW_VERSION", payload: AnimationTemplateNewVersion}
+
+type EndAnimationTemplateGroup = {type: "END_ANIMATION_TEMPLATE_GROUP"}
+
 
 type RemoveTransition = { type: "REMOVE_TRANSITION"; payload: string };
 
@@ -33,6 +38,7 @@ export const removeTransition = (transitionId: string): RemoveTransition => ({ t
 
 export const removeAnimation = (cardId: string): RemoveAnimation => ({ type: "REMOVE_ANIMATION", payload: cardId });
 
+export const endAnimationTemplateGroup = () : EndAnimationTemplateGroup => ({type: "END_ANIMATION_TEMPLATE_GROUP"})
 export const addTransition = (newTransitionData: TransitionData): AddTransition => ({ type: "ADD_TRANSITION", payload: newTransitionData });
 
 export const addMultipleTransitions = (newTransitionData: TransitionData[]): AddMultipleTransitions => ({
@@ -58,7 +64,12 @@ export const updateAnimationTemplate = (template: AnimationTemplate): UpdateAnim
 });
 
 export const updateAnimationTemplateNewVersion = (template: AnimationTemplateNewVersion): UpdateAnimationTemplateNewVersion => ({
-  type: "UPDATE_ANIMATION_TEMPLATE_NEW_VERSION",
+  type: "ADD_SCREEN_DATA_TO_TEMPLATE",
+  payload: template,
+});
+
+export const endAnimationTemplateNewVersion = (template: AnimationTemplateNewVersion): EndAnimationTemplateNewVersion => ({
+  type: "END_ANIMATION_TEMPLATE_NEW_VERSION",
   payload: template,
 });
 
@@ -75,4 +86,6 @@ export type TransitionQueueActions =
   | RemoveTransition
   | UpdateTransitionTemplate
   | CreateNewAnimations
-  | SetNewGameSnapshots;
+  | SetNewGameSnapshots
+  | EndAnimationTemplateGroup
+  | EndAnimationTemplateNewVersion;

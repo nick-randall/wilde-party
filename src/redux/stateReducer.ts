@@ -7,7 +7,8 @@ import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
 import { remove } from "ramda";
-import { changeGroupStatus } from "../animations/handleEndAnimation";
+import { changeGroupStatus, removeFirstElement } from "../animations/handleEndAnimation";
+import { stat } from "fs";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -20,7 +21,8 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
 const isTemplateComplete = (currTemplate: AnimationTemplateNewVersion) =>
   currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
 
-  const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationTemplateNewVersion[][]) => array.map(group => group.map(t => (t.id === template.id ? template : t)));
+const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationTemplateNewVersion[][]) =>
+  array.map(group => group.map(t => (t.id === template.id ? template : t)));
 
 export interface State {
   gameSnapshot: GameSnapshot;
@@ -132,13 +134,16 @@ export const stateReducer = (
     case "OVERWRITE_CURRENT_SNAPSHOT":
       console.log("overwriting current snapshot");
       return { ...state, gameSnapshot: action.payload };
+
     case "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION": {
       const newSnapshotsNewVersion = state.newSnapshotsNewVersion.filter((a, i) => i > 0);
+      console.log(newSnapshotsNewVersion);
+      console.log("#s############");
       return { ...state, newSnapshotsNewVersion, gameSnapshot: action.payload };
     }
     case "SET_ANIMATION_TEMPLATES": {
-      console.log("setting these animation templates")
-      console.log(action.payload)
+      console.log("setting these animation templates");
+      console.log(action.payload);
       return { ...state, animationTemplates: action.payload };
     }
     case "SET_DRAG_CONTAINER_EXPAND":
@@ -151,28 +156,31 @@ export const stateReducer = (
       // have added transitionTemplates already---if there weren't already
       // others in the stack
       return { ...state, newSnapshots: state.newSnapshots.concat(action.payload) };
-    case "UPDATE_ANIMATION_TEMPLATE": {
-      const template = action.payload;
-      const { id } = template;
-      const currentTemplates = state.newSnapshots[0].animationTemplates;
-      const animationTemplates = currentTemplates.map(e => (e.id === id ? template : e));
-      const newSnapshots = state.newSnapshots.map((e, i) => (i === 0 ? { ...e, animationTemplates } : e));
-      console.log("update transition template, new snapshots: ", newSnapshots);
 
-      return { ...state, newSnapshots };
-    }
-    case "UPDATE_ANIMATION_TEMPLATE_NEW_VERSION": {
+    case "ADD_SCREEN_DATA_TO_TEMPLATE": {
       let currTemplate = action.payload;
-
       if (isTemplateComplete(currTemplate)) {
         currTemplate = { ...currTemplate, status: "awaitingSimultaneousTemplates" };
       }
-
       const animationTemplates = updateTemplate(currTemplate, state.animationTemplates);
-
       return { ...state, animationTemplates };
     }
+    // case "END_ANIMATION_TEMPLATE_NEW_VERSION": {
+      case "REMOVE_ANIMATION": {
+      const cardId = action.payload
+      const animationData = state.animationData.filter(ad => ad.cardId !== action.payload);
+      
+      let animationTemplates = state.animationTemplates.map(group => group.filter(t => t.from.cardId !== cardId));
+      if (animationTemplates[0].length === 0) {
+        animationTemplates = removeFirstElement(state.animationTemplates);
+        animationTemplates = animationTemplates.map((g, i) => (i !== 0 ? g : changeGroupStatus("awaitingEmissaryData", g)));
+      }
+      return { ...state, animationData, animationTemplates };
+    }
 
+    case "END_ANIMATION_TEMPLATE_GROUP": {
+      return { ...state, animationTemplates: removeFirstElement(state.animationTemplates) };
+    }
     case "ADD_TRANSITION":
       const newTransition = action.payload;
       return { ...state, transitionData: [...state.transitionData, newTransition] };
@@ -236,9 +244,7 @@ export const stateReducer = (
         BFFdraggedOverSide: undefined,
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
-    case "REMOVE_ANIMATION":
-      const animationData = state.animationData.filter(ad => ad.cardId !== action.payload);
-      return { ...state, animationData };
+    
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {

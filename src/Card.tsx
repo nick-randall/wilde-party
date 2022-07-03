@@ -9,8 +9,8 @@ import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
-import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
 import useMockRender from "./mockRender/useMockRender";
+import handleEndAnimation from "./animations/handleEndAnimation";
 
 export interface CardProps {
   id: string;
@@ -109,7 +109,7 @@ const Card = (props: CardProps) => {
                           ...normalStyles,
                           ...inspectingStyles,
                         }}
-                        onAnimationEnd={() => dispatch(handleAnimationEnd(id))}
+                        onAnimationEnd={() => dispatch(handleEndAnimation(id))}
                         className={animationProvidedProps.className}
                       />
                       {isDraggingOver && draggedHandCard ? (
