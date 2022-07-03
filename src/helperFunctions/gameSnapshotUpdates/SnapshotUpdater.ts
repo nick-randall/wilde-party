@@ -88,8 +88,7 @@ export default class SnapshotUpdater {
         } else {
           splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, this.numElements);
         }
-        console.log("SnapshotUpdater spliced card(s) ");
-        splicedCard.forEach(c => console.log(c))
+        splicedCard.forEach(c => console.log(c));
         const { player: destinationPlayer, place: destinationPlace, index: destIndex } = to;
         if (destinationPlayer !== null) {
           draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
@@ -97,9 +96,7 @@ export default class SnapshotUpdater {
           draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
         }
       } else if (this.snapshotUpdates.length > 0) {
-        console.log("multiple snapshot updates")
         this.snapshotUpdates.forEach(update => {
-          // this.newSnapshot = produce(this.snapshot, draft => {
           const { from, to } = update;
           const { player: originPlayer, place: originPlace, index: originIndex } = from;
 
@@ -117,7 +114,6 @@ export default class SnapshotUpdater {
             draft.nonPlayerPlaces[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);
           }
         });
-        // });
       }
     });
   }
@@ -126,5 +122,11 @@ export default class SnapshotUpdater {
   }
   public getNewSnapshot() {
     return this.newSnapshot;
+  }
+  public setPhase(phase: Phase) {
+    this.newSnapshot = {
+      ...this.newSnapshot,
+      current: { ...this.newSnapshot.current, phase },
+    };
   }
 }

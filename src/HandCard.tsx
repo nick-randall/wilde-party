@@ -8,8 +8,8 @@ import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
-import handleAnimationEnd from "./thunks/animationFunctions/handleAnimationEnd";
 import useMockRender from "./mockRender/useMockRender";
+import handleEndAnimation from "./animations/handleEndAnimation";
 
 export interface HandCardProps {
   id: string;
@@ -118,7 +118,7 @@ const HandCard = (props: HandCardProps) => {
                       style={{
                         ...mainStyles(draggerProps.dragged || draggerProps.dropping),
                       }}
-                      onAnimationEnd={() => dispatch(handleAnimationEnd(id))}
+                      onAnimationEnd={() => dispatch(handleEndAnimation(id))}
                       className={animationProvidedProps.className}
                     />
                   </div>

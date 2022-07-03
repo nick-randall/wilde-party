@@ -46,10 +46,6 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
       mockRenderIds = cards.map(card => card.id).filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id));
     }
   }
-  else {
-    console.log( "new  snapshots.length " +newSnapshotsNewVersion.length)
-    console.log(animationTemplates[0])
-  }
   return { cards, mockRenderIds };
 };
 export default connect(mapStateToProps)(MockRenderProvider);

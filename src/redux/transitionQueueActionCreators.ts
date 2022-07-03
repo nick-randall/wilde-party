@@ -23,6 +23,8 @@ type RemoveTransition = { type: "REMOVE_TRANSITION"; payload: string };
 
 type RemoveAnimation = { type: "REMOVE_ANIMATION"; payload: string };
 
+type ClearAnimationTemplates = { type: "CLEAR_ANIMATION_TEMPLATES"}
+
 export type AddMultipleAnimationsNewVersion = { type: "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION"; payload: AnimationData[] };
 
 export const addMultipleAnimationsNewVersion = (animationData: AnimationData[]): AddMultipleAnimationsNewVersion => ({
@@ -62,6 +64,8 @@ export const updateAnimationTemplate = (template: AnimationTemplate): UpdateAnim
   type: "UPDATE_ANIMATION_TEMPLATE",
   payload: template,
 });
+
+export const clearAnimationTemplates = (): ClearAnimationTemplates => ({type: "CLEAR_ANIMATION_TEMPLATES"})
 
 export const updateAnimationTemplateNewVersion = (template: AnimationTemplateNewVersion): UpdateAnimationTemplateNewVersion => ({
   type: "ADD_SCREEN_DATA_TO_TEMPLATE",

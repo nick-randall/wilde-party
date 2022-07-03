@@ -14,6 +14,7 @@ const dealHand = (currentSnapshot: GameSnapshot, player: number) => {
   const handStart: DragDestinationData = { containerId: currentSnapshot.players[player].places["hand"].id, index: 0 };
   snapshotUpdater.addChanges({ source: deckTop, destination: handStart }, numCardsInHand);
   snapshotUpdater.begin();
+  snapshotUpdater.setPhase("playPhase");
   let newSnapshot = snapshotUpdater.getNewSnapshot();
   return newSnapshot;
   ///

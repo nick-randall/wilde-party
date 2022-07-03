@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { RootState } from "../../redux/store";
-import handleAnimationEnd from "./handleAnimationEnd";
 
 interface AnimationHandlerProvidedProps {
   animated: boolean;

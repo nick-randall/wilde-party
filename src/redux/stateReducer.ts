@@ -166,20 +166,31 @@ export const stateReducer = (
       return { ...state, animationTemplates };
     }
     // case "END_ANIMATION_TEMPLATE_NEW_VERSION": {
-      case "REMOVE_ANIMATION": {
-      const cardId = action.payload
+    case "REMOVE_ANIMATION": {
+      const cardId = action.payload;
+
       const animationData = state.animationData.filter(ad => ad.cardId !== action.payload);
-      
-      let animationTemplates = state.animationTemplates.map(group => group.filter(t => t.from.cardId !== cardId));
-      if (animationTemplates[0].length === 0) {
-        animationTemplates = removeFirstElement(state.animationTemplates);
-        animationTemplates = animationTemplates.map((g, i) => (i !== 0 ? g : changeGroupStatus("awaitingEmissaryData", g)));
-      }
+
+      let nextGroupIndex = -1;
+      const animationTemplates = state.animationTemplates.map((group, index) => {
+        if (index === nextGroupIndex) {
+          return changeGroupStatus("awaitingEmissaryData", group);
+        }
+        return group.map(a => {
+          if (a.from.cardId === cardId) {
+            nextGroupIndex = index + 1;
+            return { ...a, status: "complete" };
+          }
+          return a;
+        });
+      });
+
       return { ...state, animationData, animationTemplates };
     }
+    
 
-    case "END_ANIMATION_TEMPLATE_GROUP": {
-      return { ...state, animationTemplates: removeFirstElement(state.animationTemplates) };
+    case "CLEAR_ANIMATION_TEMPLATES": {
+      return { ...state, animationTemplates: []};
     }
     case "ADD_TRANSITION":
       const newTransition = action.payload;
@@ -244,7 +255,7 @@ export const stateReducer = (
         BFFdraggedOverSide: undefined,
         rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
       };
-    
+
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {
