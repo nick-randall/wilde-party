@@ -100,7 +100,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           animation: "",
           id: uuidv4(),
           status: "awaitingEmissaryData",
-          delay: differences.length * 200 - index * 200,
+          delay: differences.length * 300 - index * 300,
         };
         templates.push(transitionTemplate);
       });

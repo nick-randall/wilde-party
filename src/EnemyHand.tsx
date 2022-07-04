@@ -24,7 +24,7 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <MockRenderProvider placeId={id} player={player} placeType={placeType}>
+    <MockRenderProvider placeId={id} player={player} placeType={"hand"}>
       {(handCards, mockRenderIds) => (
         
         <div

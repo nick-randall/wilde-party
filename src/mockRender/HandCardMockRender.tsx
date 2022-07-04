@@ -27,11 +27,11 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
   const normalStyles: CSSProperties = {
     width: cardWidth,
     height: cardHeight,
-    top: index * cardTopSpread,
+    // top: index * cardTopSpread,
     left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
-    backgroundColor: "black"
+    // backgroundColor: "black"
   };
 
   /**

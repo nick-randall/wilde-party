@@ -1,8 +1,5 @@
-import createTransitionTemplates from "./createTransitionTemplatesFromSnapshotDifferences";
-import { findSnapshotDifferences } from "./findSnapshotDifferences/findSnapshotDifferences";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { RootState } from "../redux/store";
-import { setNewSnapshotsNewVersion } from "../redux/updateSnapshotActionCreators";
 import handleNewSnapshots from "../animations/handleNewSnapshots";
 
 const dealHand = (currentSnapshot: GameSnapshot, player: number) => {

@@ -57,7 +57,6 @@ const Hand = (props: HandProps) => {
         height: dimensions.cardHeight,
       }}
     >
-      {" "}
       <MockRenderProvider player={0} placeType="hand" placeId={id}>
         {(handCards, emissaryCards) => (
           <NoLayoutDragContainer>

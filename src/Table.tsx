@@ -9,8 +9,8 @@ import "./css/global.css";
 import SnapshotUpdater from "./helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { useEffect, useState } from "react";
 import { dealInitialHands } from "./transitionFunctions/simulateIncomingDealCardSnapshots";
-import handleIncomingSnapshots from "./handleNewSnapshots/handleIncomingSnapshots";
 import dealTwoCards from "./tests/simulateDealingTwoCards";
+import handleNewSnapshots from "./animations/handleNewSnapshots";
 
 interface SimulateNewSnapshotButtonProps {
   currentSnapshot: GameSnapshot;
@@ -39,7 +39,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     snapshotUpdater.begin();
     const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();
     const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType: "addDragged"}
-    dispatch(handleIncomingSnapshots([newSnapshot]));
+    dispatch(handleNewSnapshots([newSnapshot]));
   };
 
   const simulateDestroy = () => {
@@ -61,7 +61,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType : "destroy"}
     console.log(newSnapshot)
 
-    dispatch(handleIncomingSnapshots([newSnapshot]));
+    dispatch(handleNewSnapshots([newSnapshot]));
 
   };
 

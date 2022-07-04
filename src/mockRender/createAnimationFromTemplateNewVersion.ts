@@ -7,7 +7,7 @@ const createAnimationFromTemplate = (template: CompleteAnimationTemplateNewVersi
   newAnimationData.transitionCurve = "ease-out";
   newAnimationData.finalRotation = to.rotation;
   newAnimationData.initialRotation = from.rotation;
-  newAnimationData.transitionDuration = 500; // Should be calculated based on distance of originDelta
+  newAnimationData.transitionDuration = 900; // Should be calculated based on distance of originDelta
   newAnimationData.originDimensions = from.dimensions;
   newAnimationData.finalDimensinos = to.dimensions;
 

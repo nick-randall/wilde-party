@@ -1,17 +1,13 @@
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
-import { Droppable } from "react-beautiful-dnd";
+import React, { CSSProperties, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
-import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
-import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 import useMockRender from "./mockRender/useMockRender";
 import handleEndAnimation from "./animations/handleEndAnimation";
-import { getPlaceType } from "./helperFunctions/locateFunctions";
 
 export interface CardProps {
   id: string;
@@ -56,8 +52,8 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft ? +offsetLeft + messinessOffset.x : messinessOffset.x,
-    top: offsetTop ? offsetTop + messinessOffset.y : messinessOffset.y,
+    // left: offsetLeft ? + offsetLeft + messinessOffset.x : messinessOffset.x,
+    // top: offsetTop ? offsetTop + messinessOffset.y : messinessOffset.y,
     position: "absolute",
     transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",

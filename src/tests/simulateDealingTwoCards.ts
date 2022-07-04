@@ -1,5 +1,4 @@
 import handleNewSnapshots from "../animations/handleNewSnapshots";
-import handleIncomingSnapshots from "../handleNewSnapshots/handleIncomingSnapshots";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { RootState } from "../redux/store";
 

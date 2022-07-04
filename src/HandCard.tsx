@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
-import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 import Dragger from "./dndcomponents/Dragger";
 import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
@@ -64,27 +63,10 @@ const HandCard = (props: HandCardProps) => {
     setShortHover(false);
   };
 
-  console.log(image)
 
 
-  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (newSnapshots.length === 0) return;
-  //   newSnapshots[0].animationTemplates.forEach(template => {
-  //     if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-  //       console.log("AWAITING");
-  //       if (emissaryRef !== null && emissaryRef.current !== null) {
-  //         const element = emissaryRef.current;
-  //         const { left, top } = element.getBoundingClientRect();
-  //         console.log("handCardEmissary FromData---left: " + left, " ---top: " + top);
-
-  //         dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
-  //       }
-  //     }
-  //   });
-  // }, [dimensions, dispatch, id, index, newSnapshots, rotation]);
 
   useMockRender(id, dimensions, rotation(index), emissaryRef);
 

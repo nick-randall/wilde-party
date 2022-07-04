@@ -188,7 +188,6 @@ const DraggerContainer: React.FC<ComponentProps> = ({
       return draggedElementWidth;
     } else return 0;
   };
-  console.log(dropTargetX);
 
   return (
     <div

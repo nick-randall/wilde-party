@@ -1,10 +1,11 @@
-import { CSSProperties, useEffect, useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./animations/animations.css";
 import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
-import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
 import { RootState } from "./redux/store";
-import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
+import useMockRender from "./mockRender/useMockRender";
+import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import handleEndAnimation from "./animations/handleEndAnimation";
 
 export interface EnemyHandCardProps {
   id: string;
@@ -19,14 +20,13 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
 
-
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
 
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
-    top:  cardTopSpread,
+    top: cardTopSpread,
     left: index * cardLeftSpread,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
@@ -37,51 +37,37 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   const cardPlayer = locatePlayer(id);
   const ownerIsCurrentPlayer = useSelector((state: RootState) => state.gameSnapshot.current.player === cardPlayer);
   const currentPhaseIsDeal = useSelector((state: RootState) => state.gameSnapshot.current.phase === "dealPhase");
-  const disappearingStyles = ownerIsCurrentPlayer || currentPhaseIsDeal ? {
-    opacity : 1
-  } :{ opacity:0}
+  const disappearingStyles =
+    ownerIsCurrentPlayer || currentPhaseIsDeal
+      ? {
+          opacity: 1,
+        }
+      : { opacity: 0 };
 
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (newSnapshots.length === 0) return;
-    newSnapshots[0].animationTemplates.forEach(template => {
-      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-        if (emissaryRef !== null && emissaryRef.current !== null) {
-          const element = emissaryRef.current;
-          const { left, top } = element.getBoundingClientRect();
-          console.log("handCardEmissaryData---left: " + left, " ---top: " + top);
 
-          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
-        }
-      }
-    });
-  }, [dimensions, dispatch, id, newSnapshots]);
+  useMockRender(id, dimensions, rotation(index), emissaryRef);
 
   return (
-   
-      <TransitionHandler
-        index={index}
-        id={id}
-        render={(transitionStyles: CSSProperties) => (
-          <img
-           ref={emissaryRef}
-            alt={image}
-             src={"./images/back.jpg"}
-            // src={`./images/${image}.jpg`}
-            draggable = "false"
+    <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={"./images/back.jpg"} cardId={id}>
+      {animationProvidedProps => (
+        <img
+          ref={emissaryRef}
+          alt={image}
+          src={`./images/${image}.jpg`}
+          draggable="false"
+          id={id}
+          style={{
+            ...normalStyles,
+          }}
+          className={animationProvidedProps.className}
+          onAnimationEnd={() => dispatch(handleEndAnimation(id))}
 
-            id={id}
-            style={{
-              ...normalStyles,
-              ...transitionStyles,
-              // ...disappearingStyles
-            }}
-          />
-        )}
-      />
-
+        />
+      )}
+    </AnimationHandler>
   );
 };
 export default EnemyHandCard;

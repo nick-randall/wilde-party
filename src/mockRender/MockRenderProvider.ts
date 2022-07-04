@@ -36,7 +36,6 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
       .filter(a => "placeId" in a.to && a.to.placeId === placeId) 
 
     if (templatesWithAnimationToThisPlace.length > 0) {
-      // console.log("should mock render to place: " + placeType);
 
       if (player === null) {
         cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
@@ -49,18 +48,16 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
         .filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id && a.status === "awaitingEmissaryData"));
     }
 
-    // const templatesWithAnimationFromThisPlace = animationTemplates[0]
-    //   .filter(a => a.status === "underway")
-    //   .filter(a => "placeId" in a.from && a.from.placeId === placeId);
-    // if (templatesWithAnimationFromThisPlace) {
-    //   console.log("template from this place, "  + placeType)
-    //   console.log(animationTemplates[0])
-    //   if (player === null) {
-    //     cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
-    //   } else {
-    //     cards = newSnapshotsNewVersion[0].players[player].places[placeType].cards;
-    //   }
-    // }
+    const templatesWithAnimationFromThisPlace = animationTemplates[0]
+      .filter(a => a.status === "underway")
+      .filter(a => "placeId" in a.from && a.from.placeId === placeId);
+    if (templatesWithAnimationFromThisPlace.length > 0) {
+      if (player === null) {
+        cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
+      } else {
+        cards = newSnapshotsNewVersion[0].players[player].places[placeType].cards;
+      }
+    }
   }
   return { cards, mockRenderIds };
 };
