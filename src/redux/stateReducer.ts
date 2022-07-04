@@ -1,14 +1,9 @@
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
 import { Action } from "./actions";
-import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
-import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
-import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
-import { remove } from "ramda";
-import { changeGroupStatus, removeFirstElement } from "../animations/handleEndAnimation";
-import { stat } from "fs";
+import { changeGroupStatus } from "../animations/handleEndAnimation";
 import createAnimationFromTemplateNewVersion from "../mockRender/createAnimationFromTemplateNewVersion";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -237,27 +232,6 @@ export const stateReducer = (
         return { ...state, highlights, highlightType };
       } else return state;
     }
-    case "DEAL_STARTING_GUEST": {
-      console.log("deal starting guest");
-      const player = action.payload;
-      const gameSnapshot = dealStartingGuestUpdateSnapshot(player, state.gameSnapshot);
-      return { ...state, gameSnapshot };
-    }
-    case "DESTROY_CARD": {
-      const targetCardId = action.payload;
-      console.log("destroy card", targetCardId);
-
-      const gameSnapshot = destroyCardUpdateSnapshot(targetCardId, state.gameSnapshot);
-
-      return { ...state, gameSnapshot };
-    }
-    case "DRAW_CARD":
-      if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
-      const { player, handId } = action.payload;
-      const gameSnapshot = drawCardUpdateSnapshot(handId, player, state.gameSnapshot);
-      return { ...state, gameSnapshot };
-
-    // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
     case "END_DRAG_CLEANUP":
       return {
         ...state,

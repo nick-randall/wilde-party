@@ -32,8 +32,8 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
 
   if (newSnapshotsNewVersion.length > 0 && animationTemplates.length > 0) {
     const templatesWithAnimationToThisPlace = animationTemplates[0]
-      .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates"  && a.status !== "underway")
-      .filter(a => "placeId" in a.to && a.to.placeId === placeId);
+      .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
+      .filter(a => "placeId" in a.to && a.to.placeId === placeId) 
 
     if (templatesWithAnimationToThisPlace.length > 0) {
       // console.log("should mock render to place: " + placeType);
