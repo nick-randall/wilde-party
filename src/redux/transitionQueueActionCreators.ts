@@ -10,20 +10,19 @@ type UpdateAnimationTemplate = { type: "UPDATE_ANIMATION_TEMPLATE"; payload: Ani
 
 type SetAnimationTemplates = { type: "SET_ANIMATION_TEMPLATES"; payload: AnimationTemplateNewVersion[][] };
 
-type UpdateAnimationTemplateNewVersion = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplateNewVersion };
+type AddScreenDataToTemplate = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplateNewVersion };
 
 type UpdateTransitionTemplate = { type: "UPDATE_TRANSITION_TEMPLATE"; payload: TransitionTemplate };
 
-type EndAnimationTemplateNewVersion = {type: "END_ANIMATION_TEMPLATE_NEW_VERSION", payload: AnimationTemplateNewVersion}
+type EndAnimationTemplateNewVersion = { type: "END_ANIMATION_TEMPLATE_NEW_VERSION"; payload: AnimationTemplateNewVersion };
 
-type EndAnimationTemplateGroup = {type: "END_ANIMATION_TEMPLATE_GROUP"}
-
+type EndAnimationTemplateGroup = { type: "END_ANIMATION_TEMPLATE_GROUP" };
 
 type RemoveTransition = { type: "REMOVE_TRANSITION"; payload: string };
 
 type RemoveAnimation = { type: "REMOVE_ANIMATION"; payload: string };
 
-type ClearAnimationTemplates = { type: "CLEAR_ANIMATION_TEMPLATES"}
+type ClearAnimationTemplates = { type: "CLEAR_ANIMATION_TEMPLATES" };
 
 export type AddMultipleAnimationsNewVersion = { type: "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION"; payload: AnimationData[] };
 
@@ -31,6 +30,10 @@ export const addMultipleAnimationsNewVersion = (animationData: AnimationData[]):
   type: "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION",
   payload: animationData,
 });
+type CreateAnimationsFromTemplates = {
+  type: "CREATE_ANIMATIONS_FROM_TEMPLATES",
+  payload: CompleteAnimationTemplateNewVersion[],
+};
 
 export type CreateNewAnimations = { type: "CREATE_NEW_ANIMATIONS" };
 
@@ -40,7 +43,7 @@ export const removeTransition = (transitionId: string): RemoveTransition => ({ t
 
 export const removeAnimation = (cardId: string): RemoveAnimation => ({ type: "REMOVE_ANIMATION", payload: cardId });
 
-export const endAnimationTemplateGroup = () : EndAnimationTemplateGroup => ({type: "END_ANIMATION_TEMPLATE_GROUP"})
+export const endAnimationTemplateGroup = (): EndAnimationTemplateGroup => ({ type: "END_ANIMATION_TEMPLATE_GROUP" });
 export const addTransition = (newTransitionData: TransitionData): AddTransition => ({ type: "ADD_TRANSITION", payload: newTransitionData });
 
 export const addMultipleTransitions = (newTransitionData: TransitionData[]): AddMultipleTransitions => ({
@@ -65,9 +68,14 @@ export const updateAnimationTemplate = (template: AnimationTemplate): UpdateAnim
   payload: template,
 });
 
-export const clearAnimationTemplates = (): ClearAnimationTemplates => ({type: "CLEAR_ANIMATION_TEMPLATES"})
+export const clearAnimationTemplates = (): ClearAnimationTemplates => ({ type: "CLEAR_ANIMATION_TEMPLATES" });
 
-export const updateAnimationTemplateNewVersion = (template: AnimationTemplateNewVersion): UpdateAnimationTemplateNewVersion => ({
+export const createAnimationsFromTemplates = (templates: CompleteAnimationTemplateNewVersion[]): CreateAnimationsFromTemplates => ({
+  type: "CREATE_ANIMATIONS_FROM_TEMPLATES",
+  payload: templates,
+});
+
+export const addScreenDataToTemplate = (template: AnimationTemplateNewVersion): AddScreenDataToTemplate => ({
   type: "ADD_SCREEN_DATA_TO_TEMPLATE",
   payload: template,
 });

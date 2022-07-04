@@ -19,7 +19,6 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotation: numb
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();
-            console.log("mockRenderProps cardId: " + cardId);
             dispatch(handleNewMockRenderData({ cardId, xPosition: left, yPosition: top, rotation, dimensions }, "from"));
           }
         }

@@ -105,7 +105,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         templates.push(transitionTemplate);
       });
 
-      return [templates];
+      return [templates.reverse()];
     }
   }
 

@@ -24,10 +24,13 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
   const numPlayers = getState().gameSnapshot.players.length;
 
   let currentSnapshot = getState().gameSnapshot;
+  const newSnapshotList = [];
 
   for (let i = 0; i < numPlayers; i++) {
     const newSnapshot = dealHand(currentSnapshot, i);
-    dispatch(handleNewSnapshots([newSnapshot]));
+    newSnapshotList.push(newSnapshot);
     currentSnapshot = newSnapshot;
   }
+  dispatch(handleNewSnapshots(newSnapshotList));
+
 };

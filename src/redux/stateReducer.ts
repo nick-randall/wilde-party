@@ -9,6 +9,7 @@ import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdate
 import { remove } from "ramda";
 import { changeGroupStatus, removeFirstElement } from "../animations/handleEndAnimation";
 import { stat } from "fs";
+import createAnimationFromTemplateNewVersion from "../mockRender/createAnimationFromTemplateNewVersion";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -123,7 +124,7 @@ export const stateReducer = (
     }
     case "SET_NEW_SNAPSHOTS_NEW_VERSION": {
       const newSnapshots: GameSnapshot[] = action.payload;
-      const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id + b.id);
+      const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id - b.id);
       console.log("setting new snapshots");
       return { ...state, newSnapshotsNewVersion: sortedNewSnapshots };
     }
@@ -162,7 +163,7 @@ export const stateReducer = (
       if (isTemplateComplete(currTemplate)) {
         currTemplate = { ...currTemplate, status: "awaitingSimultaneousTemplates" };
       }
-      const animationTemplates = updateTemplate(currTemplate, state.animationTemplates);
+      const animationTemplates = state.animationTemplates.map(group => group.map(t => (t.id === currTemplate.id ? currTemplate : t))); //updateTemplate(currTemplate, state.animationTemplates);
       return { ...state, animationTemplates };
     }
     // case "END_ANIMATION_TEMPLATE_NEW_VERSION": {
@@ -187,10 +188,9 @@ export const stateReducer = (
 
       return { ...state, animationData, animationTemplates };
     }
-    
 
     case "CLEAR_ANIMATION_TEMPLATES": {
-      return { ...state, animationTemplates: []};
+      return { ...state, animationTemplates: [] };
     }
     case "ADD_TRANSITION":
       const newTransition = action.payload;
@@ -200,11 +200,24 @@ export const stateReducer = (
       console.log(action.payload);
       const newTransitions = action.payload;
       return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
+    // Called after all templates for the group have received their screen data (all are "awaitingSimultaneousTemplates")
     case "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION": {
       console.log(action.payload);
       const newAnimations = action.payload;
       const updatedTemplatesGroup = changeGroupStatus("underway", state.animationTemplates[0]);
       const animationTemplates = state.animationTemplates.map((t, i) => (i === 0 ? updatedTemplatesGroup : t));
+      console.log(animationTemplates);
+      return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
+    }
+    case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
+      console.log("new animation templates ready")
+      const currTemplates: CompleteAnimationTemplateNewVersion[] = action.payload;
+      const newAnimations = currTemplates.map(t => createAnimationFromTemplateNewVersion(t));
+      const animationTemplates = state.animationTemplates.map(group =>
+        group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group
+      );
+      console.log(newAnimations)
+      console.log(animationTemplates)
       return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
     }
     case "ADD_ANIMATION":

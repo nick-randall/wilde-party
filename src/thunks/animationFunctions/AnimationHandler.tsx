@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import Transition from "react-transition-group/Transition";
 import styled, { keyframes } from "styled-components";
 import { RootState } from "../../redux/store";
 
@@ -20,9 +21,12 @@ interface CalculatedAnimationData {
   originDelta: { x: number; y: number };
   transitionCurve: string;
   initialRotation: number;
+  finalRotation: number;
   totalDuration: number;
   waitAsPercent: number;
   startAnimation: string;
+  originWidth: number;
+  finalWidth: number;
   startAnimationDurationAsPercent: number;
   frontImgSrc: string;
   backImgSrc: string;
@@ -38,10 +42,13 @@ const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children, f
   const originDelta = animationData?.originDelta || { x: 0, y: 0 };
   let transitionDuration = animationData?.transitionDuration || 0;
   const initialRotation = animationData?.initialRotation || 0;
+  const finalRotation = animationData?.finalRotation || 0;
   const startAnimation = animationData?.startAnimation || "";
   let startAnimationDuration = animationData?.startAnimationDuration || 0;
   let wait = animationData?.wait || 0;
   const transitionCurve = animationData?.transitionCurve || "";
+  const originWidth = animationData?.originDimensions.cardWidth || 0;
+  const finalWidth = animationData?.originDimensions.cardWidth || 0;
 
   // derived values
 
@@ -53,13 +60,15 @@ const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children, f
   const startAnimationDurationAsPercent = (startAnimationDuration / totalDuration) * 100;
   const waitAsPercent = (wait / totalDuration) * 100;
 
-
   return (
     <InjectedAnimationHandler
       id={cardId}
       originDelta={originDelta}
       transitionCurve={transitionCurve}
       initialRotation={initialRotation}
+      finalRotation={finalRotation}
+      originWidth={originWidth}
+      finalWidth={finalWidth}
       totalDuration={totalDuration}
       waitAsPercent={waitAsPercent}
       startAnimation={startAnimation}
@@ -87,25 +96,46 @@ type InjectedAnimationHandlerProps = CalculatedAnimationData & {
  * @param param0
  * @returns
  */
-const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, children, animated, id}) => {
-
+const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, children, animated, id }) => {
   const providedProps: AnimationHandlerProvidedProps = {
     animated: animated,
     className: className,
   };
-  return <div>{children(providedProps)}</div>;
+  return (
+    //  <>{children(providedProps)}</>;
+    <Transition in={true} addEndListener={() => {}}>
+      {state => (state !== "entering" && state !== "entered" ? children({ animated: animated, className: "" }) : children(providedProps))}
+    </Transition>
+  );
 };
 
-const dynamicAnimation = (originDelta: { x: number; y: number }, backImgSrc: string, frontImgSrc: string, initialRotation?: number, wait?: number) => keyframes`
+const dynamicAnimation = (
+  originDelta: { x: number; y: number },
+  backImgSrc: string,
+  frontImgSrc: string,
+  initialRotation: number,
+  finalRotation: number,
+  originWidth: number,
+  finalWidth: number,
+  wait?: number
+) => keyframes`
   0% {
-    transform: translate(0px, 0px) rotate3d(0, 0, 0, 0deg) rotate(0deg);
+    width: ${originWidth}px;
+    transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+    content: url("${frontImgSrc}");
+
 
   }
   ${wait}% {
-    transform: translate(0px, 0px) rotate3d(0, 0, 0, 0deg) rotate(0deg);
+    width: ${originWidth}px;
+    transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+    content: url("${backImgSrc}");
+
   }
    100% {
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 0, 0, 0deg) rotate(${initialRotation}deg);
+    width: ${finalWidth}px;
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(${finalRotation}deg);
+    content: url("${backImgSrc}");
 
   }
 `;
@@ -130,7 +160,7 @@ const flipGrowThenMoveAnimation = (
     content: url("${frontImgSrc}");
   }
   100% {
-    transform: translate(0px, 0px) rotate3d(0, 1, 0, 00deg) rotate(0deg) scale(1);
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(0deg) scale(1);
     content: url("${frontImgSrc}");
   }
 `;
@@ -147,7 +177,16 @@ const InjectedAnimationHandler = styled(AnimationLoader)<InjectedAnimationHandle
             props.startAnimationDurationAsPercent,
             props.waitAsPercent
           )
-        : dynamicAnimation(props.originDelta, props.backImgSrc, props.frontImgSrc, props.initialRotation, props.waitAsPercent)}
+        : dynamicAnimation(
+            props.originDelta,
+            props.backImgSrc,
+            props.frontImgSrc,
+            props.initialRotation,
+            props.finalRotation,
+            props.originWidth,
+            props.finalWidth,
+            props.waitAsPercent
+          )}
     ${props => props.totalDuration}ms;
 `;
 

@@ -17,11 +17,12 @@ const handleEndAnimation = (cardId: string) => (dispatch: Function, getState: ()
   const isEveryTemplateComplete = getState()
     .animationTemplates.flat()
     .every(a => a.status === "complete");
+    console.log(isEveryTemplateComplete? "every template complete" : "not every template complete")
   if (isEveryTemplateComplete && newSnapshotsNewVersion.length > 0) {
     dispatch(clearAnimationTemplates());
     dispatch(replaceCurrentSnapshotWithNewSnapshotNewVersion(newSnapshotsNewVersion[0]));
-    console.log("now new snapshots lenght = " + newSnapshotsNewVersion.length);
-    handleNewSnapshots(getState().newSnapshotsNewVersion);
+    console.log("now new snapshots lenght = " + getState().newSnapshotsNewVersion.length);
+    dispatch(handleNewSnapshots(getState().newSnapshotsNewVersion));
   }
 };
 

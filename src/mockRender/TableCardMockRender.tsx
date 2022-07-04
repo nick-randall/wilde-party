@@ -5,7 +5,6 @@ import handleNewMockRenderData from "../animations/handleNewMockRenderData";
 export interface TableCardMockRenderProps {
   cardId: string;
   index: number;
-  image: string;
   dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
@@ -19,7 +18,7 @@ export interface TableCardMockRenderProps {
  * @returns
  */
 
-const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, image, dimensions, offsetLeft, offsetTop }) => {
+const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimensions, offsetLeft, offsetTop }) => {
   const { tableCardzIndex, cardHeight, cardWidth } = dimensions;
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();

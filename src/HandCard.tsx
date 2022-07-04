@@ -64,6 +64,9 @@ const HandCard = (props: HandCardProps) => {
     setShortHover(false);
   };
 
+  console.log(image)
+
+
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();

@@ -31,7 +31,7 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
     left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
-    // backgroundColor: "black"
+    backgroundColor: "black"
   };
 
   /**
@@ -39,10 +39,7 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
    * the SnapshotChanges object...
    */
   useEffect(() => {
-    console.log("inside use effect");
     if (mockRenderRef !== null && mockRenderRef.current !== null) {
-      console.log("!silent && mockRenderRef !== null && mockRenderRef.current !== null");
-
       const element = mockRenderRef.current;
       const { left, top } = element.getBoundingClientRect();
       dispatch(

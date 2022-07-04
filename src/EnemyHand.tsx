@@ -1,18 +1,9 @@
-import { useEffect, useState } from "react";
-import HandCard from "./HandCard";
-import { Droppable } from "react-beautiful-dnd";
 import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
-import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
-import Hand from "./Hand";
-import HandCardEmissary from "./HandCardEmissary";
-import TableCardEmissary from "./TableCardEmissary";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
-import TableCardMockRender from "./mockRender/TableCardMockRender";
 import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface EnemyHandProps {
   id: string;

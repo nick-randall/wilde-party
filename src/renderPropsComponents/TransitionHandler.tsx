@@ -42,7 +42,7 @@ export const TransitionHandler = (props: TransitionHandlerProps) => {
 
   return (
     <Transition
-      in={true}
+      in={true} 
       //timeout={0}
       timeout={data !== undefined ? data.wait : 0}
       appear={true}

@@ -80,10 +80,12 @@ type TransitionData = {
 type AnimationData = {
   cardId: string;
   originDimensions: AllDimensions;
+  finalDimensinos: AllDimensions;
   originDelta: { x: number; y: number };
   transitionDuration: number;
   transitionCurve: string;
   initialRotation?: number;
+  finalRotation: number;
   startAnimation?: string;
   startAnimationDuration?: number;
   wait: number;

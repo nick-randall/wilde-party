@@ -16,7 +16,7 @@ const dealTwoCards = () => (dispatch: Function, getState: () => RootState) => {
   );
   snapshotUpdater.begin();
   let newSnapshot = snapshotUpdater.getNewSnapshot();
-  newSnapshot.current.phase = "playPhase"
+
   console.log("after simulating newSnapshot, here it is")
   console.log(newSnapshot)
   // newSnapshot = {...newSnapshot, snapshotUpdateType: "dealingCards"}

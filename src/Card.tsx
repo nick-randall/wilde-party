@@ -11,6 +11,7 @@ import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmis
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 import useMockRender from "./mockRender/useMockRender";
 import handleEndAnimation from "./animations/handleEndAnimation";
+import { getPlaceType } from "./helperFunctions/locateFunctions";
 
 export interface CardProps {
   id: string;
@@ -66,21 +67,8 @@ const Card = (props: CardProps) => {
 
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
+  console.log(image)
 
-  useEffect(() => {
-    if (newSnapshots.length === 0) return;
-    newSnapshots[0].animationTemplates.forEach(template => {
-      if (template.from.cardId === id && template.status === "awaitingEmissaryData") {
-        if (emissaryRef !== null && emissaryRef.current !== null) {
-          const element = emissaryRef.current;
-          const { left, top } = element.getBoundingClientRect();
-          console.log("TableCardEmissaryData---cardId: " + id);
-          dispatch(handleEmissaryFromData({ cardId: id, xPosition: left, yPosition: top, dimensions: dimensions }));
-        }
-      }
-    });
-  }, [dimensions, dispatch, id, newSnapshots]);
 
   useMockRender(id, dimensions, 0, emissaryRef);
   return (
