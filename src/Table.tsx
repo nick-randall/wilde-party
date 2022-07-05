@@ -110,6 +110,7 @@ export const Table = () => {
 
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard?.name)
   const dragEndTarget = useSelector((state: RootState) => state.dragEndTarget)
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshotsNewVersion);
 
   return (
     <div>
@@ -136,7 +137,7 @@ export const Table = () => {
           screenSize={screenSize}
           places={gameSnapshot.players[2].places}
           current={player === 2}
-        />
+        />{newSnapshots.length}
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>

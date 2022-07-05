@@ -80,7 +80,7 @@ type TransitionData = {
 type AnimationData = {
   cardId: string;
   originDimensions: AllDimensions;
-  finalDimensinos: AllDimensions;
+  finalDimensions: AllDimensions;
   originDelta: { x: number; y: number };
   transitionDuration: number;
   transitionCurve: string;

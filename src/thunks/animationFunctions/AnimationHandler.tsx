@@ -27,6 +27,8 @@ interface CalculatedAnimationData {
   startAnimation: string;
   originWidth: number;
   finalWidth: number;
+  originHeight: number;
+  finalHeight: number;
   startAnimationDurationAsPercent: number;
   frontImgSrc: string;
   backImgSrc: string;
@@ -48,7 +50,9 @@ const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children, f
   let wait = animationData?.wait || 0;
   const transitionCurve = animationData?.transitionCurve || "";
   const originWidth = animationData?.originDimensions.cardWidth || 0;
-  const finalWidth = animationData?.originDimensions.cardWidth || 0;
+  const finalWidth = animationData?.finalDimensions.cardWidth || 0;
+  const originHeight = animationData?.originDimensions.cardHeight || 0;
+  const finalHeight = animationData?.finalDimensions.cardHeight || 0;
 
   // derived values
 
@@ -69,6 +73,8 @@ const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children, f
       finalRotation={finalRotation}
       originWidth={originWidth}
       finalWidth={finalWidth}
+      originHeight={originHeight}
+      finalHeight={finalHeight}
       totalDuration={totalDuration}
       waitAsPercent={waitAsPercent}
       startAnimation={startAnimation}
@@ -117,18 +123,20 @@ const dynamicAnimation = (
   finalRotation: number,
   originWidth: number,
   finalWidth: number,
+  originHeight: number,
+  finalHeight: number,
   wait?: number
 ) => keyframes`
   0% {
    width: ${originWidth}px;
-    transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
     content: url("${backImgSrc}");
 
 
   }
   ${wait}% {
    width: ${originWidth}px;
-   transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+   transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
    content: url("${backImgSrc}");
 
   }
@@ -185,6 +193,8 @@ const InjectedAnimationHandler = styled(AnimationLoader)<InjectedAnimationHandle
             props.finalRotation,
             props.originWidth,
             props.finalWidth,
+            props.originHeight,
+            props.finalHeight,
             props.waitAsPercent
           )}
     ${props => props.totalDuration}ms;

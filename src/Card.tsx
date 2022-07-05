@@ -63,9 +63,8 @@ const Card = (props: CardProps) => {
 
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-
-
   useMockRender(id, dimensions, 0, emissaryRef);
+  
   return (
     <div style={{ position: "absolute" }} ref={emissaryRef}>
       <CardInspector

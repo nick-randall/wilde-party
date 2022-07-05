@@ -38,7 +38,7 @@ const HandCard = (props: HandCardProps) => {
 
   const [shortHover, setShortHover] = useState(false);
 
-  const mainStyles = (draggedOrDropping: boolean): CSSProperties =>
+  const mainStyles = (draggedOrDropping: boolean, rear?: boolean): CSSProperties =>
     !draggedOrDropping
       ? {
           // should be in dimensions
@@ -63,7 +63,7 @@ const HandCard = (props: HandCardProps) => {
     setShortHover(false);
   };
 
-  const emissaryRef = useRef<HTMLDivElement>(null);
+  const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
 
   useMockRender(id, dimensions, rotation(index), emissaryRef);
@@ -83,22 +83,21 @@ const HandCard = (props: HandCardProps) => {
                 transition: "300ms",
               }}
             >
-              <div ref={emissaryRef}>
-                <div ref={draggerProps.unrotatedElementRef} />
-                <img
-                  alt={image}
-                  src={`./images/${image}.jpg`}
-                  draggable="false"
-                  onMouseDown={draggerProps.handleDragStart}
-                  onMouseEnter={() => setShortHover(true)}
-                  id={id}
-                  style={{
-                    ...mainStyles(draggerProps.dragged || draggerProps.dropping),
-                  }}
-                  onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-                  className={animationProvidedProps.className}
-                />
-              </div>
+              <div ref={draggerProps.unrotatedElementRef} />
+              <img
+                ref={emissaryRef}
+                alt={image}
+                src={`./images/${image}.jpg`}
+                draggable="false"
+                onMouseDown={draggerProps.handleDragStart}
+                onMouseEnter={() => setShortHover(true)}
+                id={id}
+                style={{
+                  ...mainStyles(draggerProps.dragged || draggerProps.dropping),
+                }}
+                onAnimationEnd={() => dispatch(handleEndAnimation(id))}
+                className={animationProvidedProps.className}
+              />
             </div>
           )}
         </AnimationHandler>
