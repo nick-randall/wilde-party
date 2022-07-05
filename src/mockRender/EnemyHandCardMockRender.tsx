@@ -2,7 +2,7 @@ import  { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import handleNewMockRenderData from "../animations/handleNewMockRenderData";
 
-export interface HandCardMockRenderProps {
+export interface EnemyHandCardMockRenderProps {
   cardId: string;
   index: number;
   dimensions: AllDimensions;
@@ -18,9 +18,9 @@ export interface HandCardMockRenderProps {
  * @param props
  * @returns
  */
-const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, dimensions, spread, numHandCards }) => {
+const EnemyHandCardMockRender: React.FC<EnemyHandCardMockRenderProps> = ({ cardId, index, dimensions, spread, numHandCards }) => {
   // const { id, animationTemplateId, index, dimensions, spread, numHandCards } = props;
-  const { cardWidth, rotation, cardHeight } = dimensions;
+  const { cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
   const mockRenderRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -61,4 +61,4 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
     />)
   
 };
-export default HandCardMockRender;
+export default EnemyHandCardMockRender;

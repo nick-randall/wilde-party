@@ -18,14 +18,12 @@ export interface EnemyHandCardProps {
 const EnemyHandCard = (props: EnemyHandCardProps) => {
   const { id, index, image, dimensions } = props;
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
+  const { zIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
 
   const normalStyles: CSSProperties = {
-    zIndex: tableCardzIndex,
+    zIndex: zIndex,
     width: cardWidth,
     height: cardHeight,
-
-    //left: - 100 * (index - (numHandCards / 2 - 0.5)),
     top: cardTopSpread,
     left: index * cardLeftSpread,
     position: "absolute",
@@ -34,6 +32,8 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
   };
+
+
   const cardPlayer = locatePlayer(id);
   const ownerIsCurrentPlayer = useSelector((state: RootState) => state.gameSnapshot.current.player === cardPlayer);
   const currentPhaseIsDeal = useSelector((state: RootState) => state.gameSnapshot.current.phase === "dealPhase");
@@ -44,27 +44,25 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         }
       : { opacity: 0 };
 
-  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
   const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
-
   useMockRender(id, dimensions, rotation(index), emissaryRef);
 
+
   return (
-    <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={"./images/back.jpg"} cardId={id}>
+    <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>
       {animationProvidedProps => (
         <img
           ref={emissaryRef}
           alt={image}
-          src={`./images/${image}.jpg`}
+          src={`./images/back.jpg`}
           draggable="false"
           id={id}
           style={{
             ...normalStyles,
           }}
-          className={animationProvidedProps.className}
           onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-
+          className={animationProvidedProps.className}
         />
       )}
     </AnimationHandler>

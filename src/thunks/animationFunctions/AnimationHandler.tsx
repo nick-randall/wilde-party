@@ -104,7 +104,7 @@ const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, c
   return (
     //  <>{children(providedProps)}</>;
     <Transition in={true} addEndListener={() => {}}>
-      {state => (state === "entering"  ? children({ animated: animated, className: "" }) : children(providedProps))}
+      {state => (state === "entering" ? children({ animated: animated, className: "" }) : children(providedProps))}
     </Transition>
   );
 };
@@ -120,22 +120,22 @@ const dynamicAnimation = (
   wait?: number
 ) => keyframes`
   0% {
-    width: ${originWidth}px;
+   width: ${originWidth}px;
     transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
     content: url("${backImgSrc}");
 
 
   }
   ${wait}% {
-    width: ${originWidth}px;
-    transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
-     content: url("${backImgSrc}");
+   width: ${originWidth}px;
+   transform: translate(-${originDelta.x}px, -${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+   content: url("${backImgSrc}");
 
   }
    100% {
     width: ${finalWidth}px;
-    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(${finalRotation}deg) scale(1.2);
-     content: url("${frontImgSrc}");
+    transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(${finalRotation}deg);
+    content: url("${frontImgSrc}");
 
   }
 `;

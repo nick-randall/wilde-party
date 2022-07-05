@@ -119,8 +119,8 @@ export const Table = () => {
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
         draggerId: {draggerId} */}
-        draggedHandCard: {draggedHandCard}
-        DRAGENDTARGET: {dragEndTarget ? dragEndTarget.x : "undefined"}
+        {/* draggedHandCard: {draggedHandCard}
+        DRAGENDTARGET: {dragEndTarget ? dragEndTarget.x : "undefined"} */}
         <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} />
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer

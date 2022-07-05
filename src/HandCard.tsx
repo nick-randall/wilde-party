@@ -63,8 +63,6 @@ const HandCard = (props: HandCardProps) => {
     setShortHover(false);
   };
 
-
-
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -85,30 +83,22 @@ const HandCard = (props: HandCardProps) => {
                 transition: "300ms",
               }}
             >
-              <CardInspector
-                dimensions={dimensions}
-                cardRotation={10 * index - rotation(index)}
-                render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
-                  <div ref={emissaryRef}>
-                    <div ref={draggerProps.unrotatedElementRef} />
-                    <img
-                      alt={image}
-                      src={`./images/${image}.jpg`}
-                      draggable="false"
-                      onClick={handleClick}
-                      onMouseDown={draggerProps.handleDragStart}
-                      onMouseEnter={() => setShortHover(true)}
-                      onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
-                      id={id}
-                      style={{
-                        ...mainStyles(draggerProps.dragged || draggerProps.dropping),
-                      }}
-                      onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-                      className={animationProvidedProps.className}
-                    />
-                  </div>
-                )}
-              />
+              <div ref={emissaryRef}>
+                <div ref={draggerProps.unrotatedElementRef} />
+                <img
+                  alt={image}
+                  src={`./images/${image}.jpg`}
+                  draggable="false"
+                  onMouseDown={draggerProps.handleDragStart}
+                  onMouseEnter={() => setShortHover(true)}
+                  id={id}
+                  style={{
+                    ...mainStyles(draggerProps.dragged || draggerProps.dropping),
+                  }}
+                  onAnimationEnd={() => dispatch(handleEndAnimation(id))}
+                  className={animationProvidedProps.className}
+                />
+              </div>
             </div>
           )}
         </AnimationHandler>

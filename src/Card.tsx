@@ -63,7 +63,6 @@ const Card = (props: CardProps) => {
 
   const emissaryRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  console.log(image)
 
 
   useMockRender(id, dimensions, 0, emissaryRef);

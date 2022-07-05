@@ -68,7 +68,7 @@ const Hand = (props: HandProps) => {
                   dimensions={getDimensions("hand", 0, handCards.length)}
                   numHandCards={handCards.length}
                   spread={spread}
-                  key={"emissary" + card.id}
+                  key={"mock_render" + card.id}
                 />
               ) : (
                 <HandCard

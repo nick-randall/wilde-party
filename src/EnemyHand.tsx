@@ -4,17 +4,17 @@ import { RootState } from "./redux/store";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
-import HandCardMockRender from "./mockRender/HandCardMockRender";
+import EnemyHandCardMockRender from "./mockRender/EnemyHandCardMockRender";
 interface EnemyHandProps {
   id: string;
-  player: number | null
-  placeType: PlaceType
+  player: number | null;
+  placeType: PlaceType;
   playerZoneSize: { width: number; height: number };
 }
 
 const transitionData: TransitionData[] = [];
 
-const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, placeType}) => {
+const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, placeType }) => {
   // const { id,  playerZoneSize } = props;
   const dimensions = getAllDimensions(id);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
@@ -26,7 +26,6 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
   return (
     <MockRenderProvider placeId={id} player={player} placeType={"hand"}>
       {(handCards, mockRenderIds) => (
-        
         <div
           id={id}
           style={{
@@ -34,17 +33,20 @@ const EnemyHand: React.FC<EnemyHandProps> =  ({id, playerZoneSize, player, place
             // display: "flex",
             bottom: 30,
             // This causes whole card row to move left on spread
-            left: 0- (spread / 2 - 0.5) * handCards.length,
+            left: spread / 2 - 0.5 * handCards.length,
             //left: x - (spread / 2) * handCards.length,
             top: y,
             transition: "180ms",
             height: dimensions.cardHeight,
           }}
         >
-          {handCards.map((card, index) => (
-            mockRenderIds.includes(card.id) ? <HandCardMockRender dimensions={dimensions} cardId= {card.id} index={index} numHandCards={handCards.length} spread={spread}/> :
-            <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
-          ))}
+          {handCards.map((card, index) =>
+            mockRenderIds.includes(card.id) ? (
+              <EnemyHandCardMockRender dimensions={dimensions} cardId={card.id} index={index} numHandCards={handCards.length} spread={spread} />
+            ) : (
+              <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+            )
+          )}
         </div>
       )}
     </MockRenderProvider>
