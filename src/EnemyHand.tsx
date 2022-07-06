@@ -5,9 +5,11 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import EnemyHandCardMockRender from "./mockRender/EnemyHandCardMockRender";
+import { getDimensions } from "./helperFunctions/getDimensions";
+import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface EnemyHandProps {
   id: string;
-  player: number | null;
+  player: number;
   placeType: PlaceType;
   playerZoneSize: { width: number; height: number };
 }
@@ -16,7 +18,8 @@ const transitionData: TransitionData[] = [];
 
 const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, placeType }) => {
   // const { id,  playerZoneSize } = props;
-  const dimensions = getAllDimensions(id);
+  // const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(placeType, player);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
@@ -31,20 +34,33 @@ const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, place
           style={{
             position: "absolute",
             // display: "flex",
-            bottom: 30,
             // This causes whole card row to move left on spread
-            left: spread / 2 - 0.5 * handCards.length,
+            // left: 0- spread / 2 - 0.5 * handCards.length,
             //left: x - (spread / 2) * handCards.length,
             top: y,
             transition: "180ms",
-            height: dimensions.cardHeight,
+            // height: dimensions.cardHeight,
           }}
         >
           {handCards.map((card, index) =>
             mockRenderIds.includes(card.id) ? (
-              <EnemyHandCardMockRender dimensions={dimensions} cardId={card.id} index={index} numHandCards={handCards.length} spread={spread} />
+              <HandCardMockRender
+                dimensions={getDimensions(placeType, player, handCards.length)}
+                cardId={card.id}
+                index={index}
+                numHandCards={handCards.length}
+                spread={spread}
+              />
             ) : (
-              <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+              <EnemyHandCard
+                id={card.id}
+                index={index}
+                image={card.image}
+                dimensions={getDimensions(placeType, player, handCards.length)}
+                numHandCards={handCards.length}
+                key={card.id}
+                spread={spread}
+              />
             )
           )}
         </div>

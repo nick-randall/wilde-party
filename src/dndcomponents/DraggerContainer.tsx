@@ -257,7 +257,6 @@ const DraggerContainer: React.FC<ComponentProps> = ({
           draggable="false"
         />
         {draggedOverIndex !== undefined && <div style={{ position: "absolute", left: dropTargetX, transition: "200ms ease" }}>{placeHolder}</div>}
-        DRAGGED? {dragged? "true" : false}
       </div>
     </div>
   );

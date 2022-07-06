@@ -98,6 +98,7 @@ const HandCard = (props: HandCardProps) => {
                 onAnimationEnd={() => dispatch(handleEndAnimation(id))}
                 className={animationProvidedProps.className}
               />
+             
             </div>
           )}
         </AnimationHandler>

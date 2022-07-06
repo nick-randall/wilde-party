@@ -30,8 +30,8 @@ const EnemyHandCardMockRender: React.FC<EnemyHandCardMockRenderProps> = ({ cardI
     // top: index * cardTopSpread,
     left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
-    // transform: `rotate(${rotation(index)}deg)`,
-    backgroundColor: "black"
+    transform: `rotate(${rotation(index)}deg)`,
+    // backgroundColor: "black"
   };
 
   /**

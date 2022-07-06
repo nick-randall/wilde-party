@@ -13,26 +13,24 @@ export interface EnemyHandCardProps {
   image: string;
   dimensions: AllDimensions;
   numHandCards: number;
+  spread: number;
 }
 
 const EnemyHandCard = (props: EnemyHandCardProps) => {
-  const { id, index, image, dimensions } = props;
+  const { id, index, image, dimensions, numHandCards, spread } = props;
 
   const { zIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
 
   const normalStyles: CSSProperties = {
     zIndex: zIndex,
     width: cardWidth,
-    height: cardHeight,
-    top: cardTopSpread,
-    left: index * cardLeftSpread,
-    position: "absolute",
+    // top: cardTopSpread,
+    left: spread * index - (spread * numHandCards) / 2,    position: "absolute",
     transform: `rotate(${rotation(index)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms, opacity 300ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
   };
-
 
   const cardPlayer = locatePlayer(id);
   const ownerIsCurrentPlayer = useSelector((state: RootState) => state.gameSnapshot.current.player === cardPlayer);
@@ -48,22 +46,22 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   const dispatch = useDispatch();
   useMockRender(id, dimensions, rotation(index), emissaryRef);
 
-
   return (
     <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>
       {animationProvidedProps => (
-        <img
-          ref={emissaryRef}
-          alt={image}
-          src={`./images/back.jpg`}
-          draggable="false"
-          id={id}
-          style={{
-            ...normalStyles,
-          }}
-          onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-          className={animationProvidedProps.className}
-        />
+        <div ref={emissaryRef}>
+          <img
+            alt={image}
+            src={`./images/back.jpg`}
+            draggable="false"
+            id={id}
+            style={{
+              ...normalStyles,
+            }}
+            onAnimationEnd={() => dispatch(handleEndAnimation(id))}
+            className={animationProvidedProps.className}
+          />
+        </div>
       )}
     </AnimationHandler>
   );
