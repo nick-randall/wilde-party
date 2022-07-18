@@ -5,7 +5,7 @@ import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import { getDimensions } from "./helperFunctions/getDimensions";
 import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
 import { RootState } from "./redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
@@ -18,7 +18,7 @@ interface SpecialsZoneProps {
 
 export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZoneProps) => {
   const { specialsCards, id, playerZoneSize } = props;
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(0, "specialsZone");
   const { cardWidth, cardHeight } = dimensions;
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const { x, y } = getPlacesLayout(id, playerZoneSize);

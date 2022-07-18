@@ -26,7 +26,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     width: cardWidth,
     // top: cardTopSpread,
     left: spread * index - (spread * numHandCards) / 2,    position: "absolute",
-    transform: `rotate(${rotation(index)}deg)`,
+    transform: `rotate(${rotation(index, numHandCards)}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms, opacity 300ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
@@ -44,7 +44,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
 
   const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
-  useMockRender(id, dimensions, rotation(index), emissaryRef);
+  useMockRender(id, dimensions, rotation(index, numHandCards), emissaryRef);
 
   return (
     <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>

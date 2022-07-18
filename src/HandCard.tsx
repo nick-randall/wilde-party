@@ -4,8 +4,6 @@ import { RootState } from "./redux/store";
 import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import Dragger from "./dndcomponents/Dragger";
-import { handleEmissaryFromData } from "./transitionFunctions/handleIncomingEmissaryData";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
 import useMockRender from "./mockRender/useMockRender";
 import handleEndAnimation from "./animations/handleEndAnimation";
@@ -44,7 +42,7 @@ const HandCard = (props: HandCardProps) => {
           // should be in dimensions
           zIndex: shortHover ? 30 : tableCardzIndex,
           position: "absolute",
-          transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 : 1})`,
+          transform: `rotate(${rotation(index, numHandCards)}deg) scale(${shortHover ? 1.1 : 1})`,
           transition: `left 250ms, top 250ms, width 180ms, transform 180ms`,
           // transition: "300ms",
           width: cardWidth,
@@ -66,7 +64,7 @@ const HandCard = (props: HandCardProps) => {
   const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
 
-  useMockRender(id, dimensions, rotation(index), emissaryRef);
+  useMockRender(id, dimensions, rotation(index, numHandCards), emissaryRef);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>

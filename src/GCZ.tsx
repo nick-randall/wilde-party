@@ -4,7 +4,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import Dragger from "./dndcomponents/Dragger";
 import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCardGroup from "./GhostCardGroup";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import { getDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
 import { RootState } from "./redux/store";
@@ -33,7 +33,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   const { id, isHighlighted, playerZoneSize, placeholder, isRearranging, numElementsAt, elementWidthAt, cardGroups, emissaryCardGroupIndex } = props;
 
   const allowDropping = isHighlighted || isRearranging; // || containsTargetedCard; // better name!°
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(0, "GCZ");
   const { cardHeight, cardWidth } = dimensions;
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   if (emissaryCardGroupIndex) console.log(emissaryCardGroupIndex + "is received emissary index GCZ");

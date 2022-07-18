@@ -1,7 +1,7 @@
 import { connect, useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import { getDimensions } from "./helperFunctions/getDimensions";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { enactDrawCardEvent } from "./redux/actionCreators";
@@ -20,7 +20,7 @@ const Deck = (props: DeckProps) => {
   const { id, zoneSize, cards } = props;
   const { x, y } = getPlacesLayout(id, zoneSize);
   const dispatch = useDispatch();
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(null, "deck");
   const { player, draws, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
   const handleClick = () => {

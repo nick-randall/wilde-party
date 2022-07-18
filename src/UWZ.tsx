@@ -4,7 +4,7 @@ import Card from "./Card";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import { getDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
 
 interface UWZProps {
@@ -30,7 +30,7 @@ export const UWZ = (props: UWZProps) => {
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(0, "UWZ");
   const { cardWidth, cardHeight, cardTopSpread } = dimensions;
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (

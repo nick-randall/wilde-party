@@ -23,7 +23,7 @@ interface HandProps {
 const Hand = (props: HandProps) => {
   const { id, playerZoneSize } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
-  const dimensions = getDimensions("hand", 0);
+  const dimensions = getDimensions(0, "hand");
   const { cardLeftSpread } = dimensions;
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
@@ -65,7 +65,7 @@ const Hand = (props: HandProps) => {
                 <HandCardMockRender
                   cardId={card.id}
                   index={index}
-                  dimensions={getDimensions("hand", 0, handCards.length)}
+                  dimensions={dimensions}
                   numHandCards={handCards.length}
                   spread={spread}
                   key={"mock_render" + card.id}
@@ -75,7 +75,7 @@ const Hand = (props: HandProps) => {
                   id={card.id}
                   index={index}
                   image={card.image}
-                  dimensions={getDimensions("hand", 0, handCards.length)}
+                  dimensions={dimensions}
                   numHandCards={handCards.length}
                   key={card.id}
                   handId={id} // TODO: need to use NewSnapshotID somehow (maybe in getDimensions???)

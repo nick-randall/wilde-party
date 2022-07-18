@@ -1,10 +1,8 @@
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
-import EnemyHandCardMockRender from "./mockRender/EnemyHandCardMockRender";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface EnemyHandProps {
@@ -18,8 +16,7 @@ const transitionData: TransitionData[] = [];
 
 const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, placeType }) => {
   // const { id,  playerZoneSize } = props;
-  // const dimensions = getAllDimensions(id);
-  const dimensions = getDimensions(placeType, player);
+  const dimensions = getDimensions(player, placeType);
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
@@ -45,7 +42,7 @@ const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, place
           {handCards.map((card, index) =>
             mockRenderIds.includes(card.id) ? (
               <HandCardMockRender
-                dimensions={getDimensions(placeType, player, handCards.length)}
+                dimensions={dimensions}
                 cardId={card.id}
                 index={index}
                 numHandCards={handCards.length}
@@ -56,7 +53,7 @@ const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, place
                 id={card.id}
                 index={index}
                 image={card.image}
-                dimensions={getDimensions(placeType, player, handCards.length)}
+                dimensions={dimensions}
                 numHandCards={handCards.length}
                 key={card.id}
                 spread={spread}

@@ -1,6 +1,6 @@
 import Card from "./Card";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { getAllDimensions } from "./helperFunctions/getAllDimensions";
+import { getDimensions } from "./helperFunctions/getDimensions";
 import CardEmissary from "./TableCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 
@@ -10,7 +10,7 @@ interface DiscardPileProps {
 }
 
 const DiscardPile: React.FC<DiscardPileProps> = ({ id, zoneSize }) => {
-  const dimensions = getAllDimensions(id);
+  const dimensions = getDimensions(null, "discardPile")
   const { x, y } = getPlacesLayout(id, zoneSize);
   return (
     <EmissaryHandler player={null} placeType={"discardPile"} placeId={id}>

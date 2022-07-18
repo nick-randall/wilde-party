@@ -1,4 +1,4 @@
-export const getDimensions = (place: string, player: number, numCards: number = 0) => {
+export const getDimensions = (player: number | null, place: PlaceType, numCards: number = 0) => {
 
   const tableCardHeights = { enemy: 120, self: 148 };
   const handCardHeights = { enemy: 100, self: 180 };
@@ -46,7 +46,7 @@ export const getDimensions = (place: string, player: number, numCards: number = 
     draggedCardWidth: 112,
     draggedCardzIndex: 7,
     tableCardzIndex: 10,
-    rotation: (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
+    rotation: (index: number, numCards: number) => 10 * index - (numCards / 2 - 0.5) * 10,
     scale: 2,
     handToTableScaleFactor: handToTableScaleFactor,
   };
