@@ -1,4 +1,3 @@
-import { Draggable } from "react-beautiful-dnd";
 import Card from "./Card";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 

@@ -1,4 +1,4 @@
-import { getAllDimensions } from "../helperFunctions/getAllDimensions";
+import { getDimensions } from "../helperFunctions/getDimensions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import store, { RootState } from "../redux/store";
 
@@ -13,7 +13,7 @@ const getEnemyPlayerHeight = (player: number | null, gameSnapshot: GameSnapshot,
   if(player === null) return 0;
   // increases player height when it is players' turn, so the player's hand can be seen
   const playerIsCurrentPlayer = gameSnapshot.current.player === player;
-  const handHeight = getAllDimensions(gameSnapshot.players[player].places["hand"].id).cardHeight;
+  const handHeight = getDimensions(player, "hand").cardHeight;
   return (screenHeight / 2) + (playerIsCurrentPlayer ? handHeight : 0)
 }
 

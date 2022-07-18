@@ -6,7 +6,6 @@ import MockRenderProvider from "./mockRender/MockRenderProvider";
 import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
-import { drawCardThunk } from "./redux/thunks";
 import TableCardEmissary from "./TableCardEmissary";
 import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 
@@ -24,7 +23,7 @@ const Deck = (props: DeckProps) => {
   const { player, draws, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
   const handleClick = () => {
-    if (canDraw) dispatch(drawCardThunk(0));
+    // if (canDraw) dispatch(drawCardThunk(0));
   };
 
   // const cardsInReverseOrder = Array.from(cards).reverse();

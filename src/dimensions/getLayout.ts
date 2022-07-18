@@ -1,5 +1,5 @@
 import { widthOfRotated } from "../helperFunctions/equations";
-import { getAllDimensions } from "../helperFunctions/getAllDimensions";
+import { getDimensions } from "../helperFunctions/getDimensions";
 import { sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
@@ -9,7 +9,7 @@ export const getLayout = (id: string, screenSize: { width: number; height: numbe
   state =  store.getState();
   const { gameSnapshot, dragUpdate, draggedHandCard } = state;
   const { player, place } = locate(id, gameSnapshot);
-  const dimensions = getAllDimensions(id, gameSnapshot);
+  const dimensions = getDimensions(player, place);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   let numCards = getNumCards(id, gameSnapshot);
   const draggedOver = draggedHandCard && dragUpdate.droppableId === id;

@@ -1,6 +1,6 @@
 import { getSettings } from "../gameSettings/uiSettings";
 import { measureDistance, widthOfRotated } from "../helperFunctions/equations";
-import { getAllDimensions } from "../helperFunctions/getAllDimensions";
+import { getDimensions } from "../helperFunctions/getDimensions";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";
@@ -10,7 +10,7 @@ import getPlayersLayout from "./getPlayersLayout";
 
 const getCardOffsetWithinPlace = (index: number, placeId: string, gameSnapshot: GameSnapshot): { x: number; y: number } => {
   const { player, place } = locate(placeId, gameSnapshot);
-  const { cardLeftSpread, cardWidth } = getAllDimensions(placeId, gameSnapshot);
+  const { cardLeftSpread, cardWidth } = getDimensions(player, place);
   const numCards = getNumCards(placeId, gameSnapshot);
   switch (place) {
     case "hand":
@@ -116,9 +116,12 @@ export const buildTransition: (
   state: RootState
 ) => {
   const { gameSnapshot, screenSize } = state;
-  const originDimensions = getAllDimensions(originPlaceId, gameSnapshot);
   const destinationPlayer = locatePlayer(destinationPlaceId, gameSnapshot);
   const originPlayer = locatePlayer(originPlaceId, gameSnapshot);
+  const { place: originPlace } = locate(originPlaceId, gameSnapshot);
+
+  const originDimensions = getDimensions(originPlayer, originPlace);
+
 
   //const destinationPlayerId = gameSnapshot.players[destinationPlayer]
 

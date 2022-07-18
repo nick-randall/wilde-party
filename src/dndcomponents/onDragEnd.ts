@@ -1,6 +1,5 @@
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import { getAllDimensions } from "../helperFunctions/getAllDimensions";
-import { locate } from "../helperFunctions/locateFunctions";
+  import { locate } from "../helperFunctions/locateFunctions";
 import { RootState } from "../redux/store";
 import { setNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import { cleanUpDragState } from "./dragEventActionCreators";
