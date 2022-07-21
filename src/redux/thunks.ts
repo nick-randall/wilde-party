@@ -1,8 +1,6 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
 import { DropResult } from "react-beautiful-dnd";
-import { buildTransitionFromChanges } from "../transitionFunctions/findSnapshotDifferences/buildTransitionFromSnapshotDifferences";
-import { buildTransition } from "../dimensions/buildTransition";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
 import { LocationData } from "./actions";
@@ -16,28 +14,28 @@ import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDiff
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 export const shouldEndDrawPhase = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1;
 
-export const drawCardThunk = (player: number) => (dispatch: Function, getState: Function) => {
-  const state: RootState = getState();
-  const { gameSnapshot } = state;
+// export const drawCardThunk = (player: number) => (dispatch: Function, getState: Function) => {
+//   const state: RootState = getState();
+//   const { gameSnapshot } = state;
 
-  const deckId = gameSnapshot.nonPlayerPlaces["deck"].id;
-  const originIndex = 0;
-  const handId = gameSnapshot.players[player].places.hand.id;
-  const cardId = gameSnapshot.nonPlayerPlaces["deck"].cards[0].id;
-  const handIndex = 0;
-  const transitionType = "drawCard";
-  const newTransition = buildTransition(cardId, transitionType, 0, deckId, originIndex, handId, handIndex, state);
-  dispatch({
-    type: "DRAW_CARD",
-    payload: { player: player, handId: handId },
-  });
-  dispatch({ type: "CHANGE_NUM_DRAWS", payload: -1 });
-  console.log(newTransition);
+//   const deckId = gameSnapshot.nonPlayerPlaces["deck"].id;
+//   const originIndex = 0;
+//   const handId = gameSnapshot.players[player].places.hand.id;
+//   const cardId = gameSnapshot.nonPlayerPlaces["deck"].cards[0].id;
+//   const handIndex = 0;
+//   const transitionType = "drawCard";
+//   const newTransition = buildTransition(cardId, transitionType, 0, deckId, originIndex, handId, handIndex, state);
+//   dispatch({
+//     type: "DRAW_CARD",
+//     payload: { player: player, handId: handId },
+//   });
+//   dispatch({ type: "CHANGE_NUM_DRAWS", payload: -1 });
+//   console.log(newTransition);
 
-  dispatch(addTransition(newTransition));
-  if (shouldEndDrawPhase(getState().gameSnapshot)) dispatch({ type: "END_CURRENT_PHASE" });
-  if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
-};
+//   dispatch(addTransition(newTransition));
+//   if (shouldEndDrawPhase(getState().gameSnapshot)) dispatch({ type: "END_CURRENT_PHASE" });
+//   if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
+// };
 
 export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Function, getState: () => RootState) => {
   const state = getState();
@@ -59,11 +57,11 @@ export const addDraggedThunk = (dropResult: DropResultEvent) => (dispatch: Funct
     console.log("origin player !=0");
     //compareProps(gameSnapshot.players[player])
     console.log(findSnapshotDifferences(gameSnapshot, newSnapshot));
-    const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
-    console.log("followoing newTransition");
-    console.log(newTransition);
+    // const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
+    // console.log("followoing newTransition");
+    // console.log(newTransition);
 
-    dispatch(addTransition(newTransition));
+    // dispatch(addTransition(newTransition));
     // console.log(originPlayer)
     // if (originPlayer !== null && originPlace !== null) {
     //   const cardId = gameSnaphot.players[originPlayer].places[originPlace].cards[source.index];
@@ -90,7 +88,7 @@ export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => Ro
   const { gameSnapshot } = getState();
   console.log("turn ended");
   // TODO: change back to allow player 0 to play
-  if (gameSnapshot.current.player !== 0)
+  // if (gameSnapshot.current.player !== 0)
     //dispatch({ type: "ENACT_AI_PLAYER_TURN", payload: gameSnapshot.current.player });
-    dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
+    // dispatch(enactAiPlayerTurnThunk(gameSnapshot.current.player));
 };

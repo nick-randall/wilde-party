@@ -3,7 +3,7 @@ import { getSettings } from "../gameSettings/uiSettings";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
-import { addDraggedThunk, drawCardThunk, enchantThunk, endCurrentTurnThunk } from "../redux/thunks";
+import { addDraggedThunk, enchantThunk, endCurrentTurnThunk } from "../redux/thunks";
 import destroyCardThunk from "./destroyCardThunk";
 
 const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState: () => RootState) => {
@@ -22,7 +22,9 @@ const enactAiPlayerTurnThunk = (player: number) => (dispatch: Function, getState
   if(settings.logVerbose)console.log("ai waiting");
 
   const waitThenDraw = () => {
-    if (getState().transitionData.length < 1 || numTimesWaited > 10) dispatch(drawCardThunk(player));
+    if (getState().transitionData.length < 1 || numTimesWaited > 10) 
+    {}
+    // dispatch(drawCardThunk(player));
     else
       setTimeout(() => {
         numTimesWaited += 1;

@@ -1,6 +1,5 @@
 import { connect, useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import Dragger from "./dndcomponents/Dragger";
 import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCardGroup from "./GhostCardGroup";
@@ -14,7 +13,7 @@ interface GCZProps {
   id: string;
   // enchantmentsRowCards: GameCard[];
   // GCZCards: GameCard[];
-  playerZoneSize: { width: number; height: number };
+  // playerZoneSize: { width: number; height: number };
 }
 
 interface GCZReduxProps {
@@ -30,12 +29,11 @@ interface GCZReduxProps {
 }
 
 function GCZ(props: GCZProps & GCZReduxProps) {
-  const { id, isHighlighted, playerZoneSize, placeholder, isRearranging, numElementsAt, elementWidthAt, cardGroups, emissaryCardGroupIndex } = props;
+  const { id, isHighlighted, placeholder, isRearranging, numElementsAt, elementWidthAt, cardGroups, emissaryCardGroupIndex } = props;
 
   const allowDropping = isHighlighted || isRearranging; // || containsTargetedCard; // better name!°
   const dimensions = getDimensions(0, "GCZ");
   const { cardHeight, cardWidth } = dimensions;
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   if (emissaryCardGroupIndex) console.log(emissaryCardGroupIndex + "is received emissary index GCZ");
   return (
     <div
@@ -47,7 +45,6 @@ function GCZ(props: GCZProps & GCZReduxProps) {
         margin: 0,
         // left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
         left: 0,
-        top: y,
         height: cardHeight * 1.5, // should grow when bffs/ zwilling in group
         minWidth: dimensions.cardWidth,
         verticalAlign: "center",

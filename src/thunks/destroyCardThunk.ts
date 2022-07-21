@@ -1,4 +1,3 @@
-import { buildTransitionFromChanges } from "../transitionFunctions/findSnapshotDifferences/buildTransitionFromSnapshotDifferences";
 import { DropResult } from "react-beautiful-dnd";
 import { RootState } from "../redux/store";
 import { endCurrentTurnThunk, shouldEndTurn } from "../redux/thunks";
@@ -12,9 +11,9 @@ const destroyCardThunk = (dropResult: DropResultEvent) => (dispatch: Function, g
     const { containerId } = destination;
     dispatch({ type: "DESTROY_CARD", payload: containerId });
     const newSnapshot = getState().gameSnapshot;
-    const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
-    console.log(newTransition);
-    dispatch(addTransition(newTransition));
+    // const newTransition = buildTransitionFromChanges({ prevSnapshot: gameSnapshot, newSnapshot: newSnapshot }, "drawCard", 0, state);
+    // console.log(newTransition);
+    // dispatch(addTransition(newTransition));
     dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
     if (shouldEndTurn(getState().gameSnapshot)) dispatch(endCurrentTurnThunk());
   }

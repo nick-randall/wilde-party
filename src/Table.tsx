@@ -113,7 +113,7 @@ export const Table = () => {
   const newSnapshots = useSelector((state: RootState) => state.newSnapshotsNewVersion);
 
   return (
-    <div id="table" style={{display: "grid", gridTemplateColumns: "2fr 1fr 2fr" }}>
+    <div id="table" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
         {/* numDraggedElements: {draggedState.source?.numDraggedElements}
         sourceIndex: {draggedState.source?.index}
@@ -129,7 +129,7 @@ export const Table = () => {
           places={gameSnapshot.players[1].places}
           current={player === 1}
         />
-        <div>empty div</div>
+        <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer
           id={gameSnapshot.players[2].id}
@@ -139,7 +139,6 @@ export const Table = () => {
           current={player === 2}
         />
 
-        <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
 
        
         

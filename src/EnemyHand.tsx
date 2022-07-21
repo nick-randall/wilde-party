@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import { getDimensions } from "./helperFunctions/getDimensions";
@@ -9,12 +8,11 @@ interface EnemyHandProps {
   id: string;
   player: number;
   placeType: PlaceType;
-  playerZoneSize: { width: number; height: number };
 }
 
 const transitionData: TransitionData[] = [];
 
-const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, placeType }) => {
+const EnemyHand: React.FC<EnemyHandProps> = ({ id, player, placeType }) => {
   // const { id,  playerZoneSize } = props;
   const dimensions = getDimensions(player, placeType);
   const { cardLeftSpread } = dimensions;

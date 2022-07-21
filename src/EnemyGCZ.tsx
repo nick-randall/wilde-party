@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import Card from "./Card";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
 import TableCardEmissary from "./TableCardEmissary";
@@ -10,7 +9,6 @@ type EnemyGCZProps = {
   enchantmentsRowCards: GameCard[];
   // GCZCards: GameCard[];
   player: number;
-  playerZoneSize: { width: number; height: number };
 };
 
 type EnemyGCZReduxProps = {
@@ -19,11 +17,10 @@ type EnemyGCZReduxProps = {
 };
 
 const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
-  const { enemyGCZCards, enchantmentsRowCards, id, playerZoneSize, emissaryCardIndex, player } = props;
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
+  const { enemyGCZCards, enchantmentsRowCards, id, emissaryCardIndex, player } = props;
   const dimensions = getDimensions(player, "GCZ");
   return (
-    <div style={{ left: 200, top: y, position: "relative", height: dimensions.cardHeight }}>
+    <div style={{ left: 200, position: "relative", height: dimensions.cardHeight }}>
       {enemyGCZCards.map((card, index) => (
          emissaryCardIndex === index ? (
           <TableCardEmissary

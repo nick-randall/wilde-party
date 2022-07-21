@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import getPlayersLayout from "./dimensions/getPlayersLayout";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
 import countPlayerPoints from "./helperFunctions/locateFunctions/countPlayerPoints";
@@ -16,7 +15,6 @@ interface PlayerProps {
 
 const Player = (props: PlayerProps) => {
   const { screenSize, id, places, current } = props;
-  const { width, height, x, y } = getPlayersLayout(screenSize, id);
   const playerPoints = countPlayerPoints(id);
 
   return (
@@ -35,9 +33,9 @@ const Player = (props: PlayerProps) => {
     >
       {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
      
-      <GCZ id={places.GCZ.id} playerZoneSize={{ width, height }} />
+      <GCZ id={places.GCZ.id} />
 
-      <Hand id={places.hand.id} playerZoneSize={{ width, height }} />
+      <Hand id={places.hand.id} />
 
       {/* <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} /> */}
 

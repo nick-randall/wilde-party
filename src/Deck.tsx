@@ -1,6 +1,5 @@
 import { connect, useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import TableCardMockRender from "./mockRender/TableCardMockRender";
@@ -12,12 +11,10 @@ import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
 interface DeckProps {
   id: string;
   cards: GameCard[];
-  zoneSize: { width: number; height: number };
 }
 
 const Deck = (props: DeckProps) => {
-  const { id, zoneSize, cards } = props;
-  const { x, y } = getPlacesLayout(id, zoneSize);
+  const { id, cards } = props;
   const dispatch = useDispatch();
   const dimensions = getDimensions(null, "deck");
   const { player, draws, phase } = useSelector((state: RootState) => state.gameSnapshot.current);

@@ -1,8 +1,6 @@
 import { flatten } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { getLayout } from "./dimensions/getLayout";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import GhostCard from "./GhostCard";
 import { getDimensions } from "./helperFunctions/getDimensions";
@@ -13,15 +11,13 @@ import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 interface SpecialsZoneProps {
   specialsCards: GameCard[];
   id: string;
-  playerZoneSize: { width: number; height: number };
 }
 
 export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZoneProps) => {
-  const { specialsCards, id, playerZoneSize } = props;
+  const { specialsCards, id } = props;
   const dimensions = getDimensions(0, "specialsZone");
   const { cardWidth, cardHeight } = dimensions;
   const screenSize = useSelector((state: RootState) => state.screenSize);
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id));
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
@@ -45,8 +41,6 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
             display: "flex",
             position: "absolute",
             margin:0,
-            top: y,
-            left: x,
             // flexDirection: "row",
             backgroundColor: allowDropping ? "yellowgreen" : "",
             boxShadow: allowDropping ? "0px 0px 30px 30px yellowgreen" : "",

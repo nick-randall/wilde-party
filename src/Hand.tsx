@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import MockRenderProvider from "./mockRender/MockRenderProvider";
 import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface HandProps {
   id: string;
-  playerZoneSize: { width: number; height: number };
 }
 
 // type HandReduxProps = {
@@ -21,7 +19,7 @@ interface HandProps {
 // };
 
 const Hand = (props: HandProps) => {
-  const { id, playerZoneSize } = props;
+  const { id } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
   const dimensions = getDimensions(0, "hand");
   const { cardLeftSpread } = dimensions;
@@ -39,7 +37,6 @@ const Hand = (props: HandProps) => {
     }
   }, [transitionsUnderway, shouldSpread, handCardDragged, maxCardLeftSpread, cardLeftSpread, enemysTurn]);
 
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
     
       <MockRenderProvider player={0} placeType="hand" placeId={id}>

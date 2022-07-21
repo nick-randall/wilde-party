@@ -1,4 +1,3 @@
-import getPlayersLayout from "./dimensions/getPlayersLayout";
 import EnemyGCZ from "./EnemyGCZ";
 import EnemyHand from "./EnemyHand";
 import GCZ from "./GCZ";
@@ -17,7 +16,6 @@ interface PlayerProps {
 
 const EnemyPlayer = (props: PlayerProps) => {
   const { screenSize, id, places, current, player } = props;
-  const { width, height, x, y } = getPlayersLayout(screenSize, id);
   const playerPoints = countPlayerPoints(id);
 
   return (
@@ -36,12 +34,11 @@ const EnemyPlayer = (props: PlayerProps) => {
         enchantmentsRowCards={places.enchantmentsRow.cards}
         // GCZCards={places.GCZ.cards}
         player={player}
-        playerZoneSize={{ width, height }}
       />
-        <EnemyHand id={places.hand.id} player={player} placeType="hand" playerZoneSize={{ width, height }} />
-        {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
+        <EnemyHand id={places.hand.id} player={player} placeType="hand" />
+        <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} />
 
-      <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
+      <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} />
       <div style={{ color: "white", fontSize: 50, position: "relative" }}>
         {playerPoints}
         {playerPoints === 1 ? "Punkt" : "Punkte"}
