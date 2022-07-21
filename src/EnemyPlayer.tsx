@@ -11,8 +11,8 @@ interface PlayerProps {
   id: string;
   screenSize: { width: number; height: number };
   places: PlayerPlaces;
-  player: number
-  current: boolean
+  player: number;
+  current: boolean;
 }
 
 const EnemyPlayer = (props: PlayerProps) => {
@@ -20,32 +20,32 @@ const EnemyPlayer = (props: PlayerProps) => {
   const { width, height, x, y } = getPlayersLayout(screenSize, id);
   const playerPoints = countPlayerPoints(id);
 
-
-
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, 
-    // border: "thin black solid", display:"block"
-    }}>
-        <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
-        <div>
-          {/* <GCZ
-            id={places.GCZ.id}
-            enchantmentsRowCards={places.enchantmentsRow.cards}
-            GCZCards={places.GCZ.cards}
-            playerZoneSize={{ width, height }}
-          /> */}
-          <EnemyGCZ
-            id={places.GCZ.id}
-            enchantmentsRowCards={places.enchantmentsRow.cards}
-            // GCZCards={places.GCZ.cards}
-            player = {player}
-            playerZoneSize={{ width, height }}
-          />
-        </div>
+    <div
+      style={{
+        //position: "absolute", left: x, top: y, width: width, height:height,
+        border: "thin black solid",
+        display: "grid",
+        justifyContent: "center",
+        gridTemplateColumns: "1fr 1 fr",
+      }}
+    >
+
+      <EnemyGCZ
+        id={places.GCZ.id}
+        enchantmentsRowCards={places.enchantmentsRow.cards}
+        // GCZCards={places.GCZ.cards}
+        player={player}
+        playerZoneSize={{ width, height }}
+      />
         <EnemyHand id={places.hand.id} player={player} placeType="hand" playerZoneSize={{ width, height }} />
-     
+        {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
+
       <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
-      <div style={{color: "white", fontSize:50, position: "relative"}}>{playerPoints}{playerPoints === 1 ? "Punkt" : "Punkte" }</div>
+      <div style={{ color: "white", fontSize: 50, position: "relative" }}>
+        {playerPoints}
+        {playerPoints === 1 ? "Punkt" : "Punkte"}
+      </div>
       {/* <Player player = {gameSnapshot.players[0]}/> */}
     </div>
   );

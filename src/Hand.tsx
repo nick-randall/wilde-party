@@ -41,27 +41,30 @@ const Hand = (props: HandProps) => {
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <div
-      id={props.id}
-      onMouseEnter={() => setShouldSpread(true)}
-      onMouseLeave={() => setShouldSpread(false)}
-      style={{
-        position: "absolute",
-        display: "flex",
-        bottom: 30,
-        // This causes whole card row to move left on spread
-        // left: x - (spread / 2 - 0.5) * handCards.length,
-        //left: x - (spread / 2) * handCards.length,
-        top: y,
-        transition: "180ms",
-        height: dimensions.cardHeight,
-      }}
-    >
+    
       <MockRenderProvider player={0} placeType="hand" placeId={id}>
-        {(handCards, emissaryCards) => (
+        {(handCards, mockRenderIds) => (
+          <div
+          id={props.id}
+          onMouseEnter={() => setShouldSpread(true)}
+          onMouseLeave={() => setShouldSpread(false)}
+          style={{
+            // position: "relative",
+            // display: "flex",
+            // alignContent: "center",
+            // bottom: 30,
+            // This causes whole card row to move left on spread
+            // left: cardLeftSpread * handCards.length,
+            //left: x - (spread / 2) * handCards.length,
+            // top: y,
+            border: "blue solid 2px",
+            transition: "380ms",
+            height: dimensions.cardHeight,
+          }}
+        >
           <NoLayoutDragContainer>
             {handCards.map((card, index) =>
-              emissaryCards.includes(card.id) ? (
+              mockRenderIds.includes(card.id) ? (
                 <HandCardMockRender
                   cardId={card.id}
                   index={index}
@@ -84,9 +87,9 @@ const Hand = (props: HandProps) => {
               )
             )}
           </NoLayoutDragContainer>
-        )}
+          </div>  )}  
       </MockRenderProvider>
-    </div>
+  
   );
 };
 export default Hand;

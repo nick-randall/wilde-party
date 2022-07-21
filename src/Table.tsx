@@ -113,17 +113,15 @@ export const Table = () => {
   const newSnapshots = useSelector((state: RootState) => state.newSnapshotsNewVersion);
 
   return (
-    <div>
+    <div id="table" style={{display: "grid", gridTemplateColumns: "2fr 1fr 2fr" }}>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
-        <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
         {/* numDraggedElements: {draggedState.source?.numDraggedElements}
         sourceIndex: {draggedState.source?.index}
         destinationINdex: {draggedState.destination?.index}
         draggerId: {draggerId} */}
         {/* draggedHandCard: {draggedHandCard}
         DRAGENDTARGET: {dragEndTarget ? dragEndTarget.x : "undefined"} */}
-        <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} />
-        <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
+        {/* <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} /> */}
         <EnemyPlayer
           id={gameSnapshot.players[1].id}
           player={1}
@@ -131,13 +129,22 @@ export const Table = () => {
           places={gameSnapshot.players[1].places}
           current={player === 1}
         />
+        <div>empty div</div>
+        <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
         <EnemyPlayer
           id={gameSnapshot.players[2].id}
           player={2}
           screenSize={screenSize}
           places={gameSnapshot.players[2].places}
           current={player === 2}
-        />{newSnapshots.length}
+        />
+
+        <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
+
+       
+        
+        
+       
         {/* <UWZ id={ids.pl1UWZ} unwantedCards={gameSnapshot.players[1].places.UWZ.cards} /> */}
       </DragDropContext>
     </div>

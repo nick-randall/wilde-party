@@ -11,7 +11,7 @@ interface PlayerProps {
   id: string;
   screenSize: { width: number; height: number };
   places: PlayerPlaces;
-  current: boolean
+  current: boolean;
 }
 
 const Player = (props: PlayerProps) => {
@@ -19,27 +19,33 @@ const Player = (props: PlayerProps) => {
   const { width, height, x, y } = getPlayersLayout(screenSize, id);
   const playerPoints = countPlayerPoints(id);
 
-
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: width, height:height, 
-    // border: "thin black solid", 
-    display:"block"}}>
-      
-        <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} />
-        <div>
-          <GCZ
-            id={places.GCZ.id}
-            playerZoneSize={{ width, height }}
-          />
-        </div>
-        <Hand id={places.hand.id} playerZoneSize={{ width, height }} />
+    <div
+      style={{
+        //position: "absolute", left: x, top: y, width: width, height:height,
+        border: "thin black solid",
+        // gridRowStart: "span 2",
+        gridRowEnd: "span 2",
+        display: "flex",
+        justifyContent: "space-between",
+        alignContent: "center",
+        flexDirection: "column"
+        // gridTemplateColumns: "1fr 1fr",
+      }}
+    >
+      {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
      
-      <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} />
-      <div style={{color: "white", fontSize:50, position: "absolute"}}>Punkte:
-      <span>{playerPoints}</span>
-      </div>
+      <GCZ id={places.GCZ.id} playerZoneSize={{ width, height }} />
+
+      <Hand id={places.hand.id} playerZoneSize={{ width, height }} />
+
+      {/* <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} playerZoneSize={{ width, height }} /> */}
+
+      {/* <div style={{ color: "white", fontSize: 50, position: "absolute" }}>
+        Punkte:
+        <span>{playerPoints}</span> */}
+      {/* </div> */}
       {/* <Player player = {gameSnapshot.players[0]}/> */}
-      
     </div>
   );
 };

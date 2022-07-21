@@ -17,37 +17,32 @@ const transitionData: TransitionData[] = [];
 const EnemyHand: React.FC<EnemyHandProps> = ({ id, playerZoneSize, player, placeType }) => {
   // const { id,  playerZoneSize } = props;
   const dimensions = getDimensions(player, placeType);
+  const { cardLeftSpread } = dimensions;
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
-  const spread = dimensions.cardLeftSpread;
+  const spread = cardLeftSpread;
 
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
     <MockRenderProvider placeId={id} player={player} placeType={"hand"}>
       {(handCards, mockRenderIds) => (
         <div
           id={id}
           style={{
-            position: "absolute",
+            position: "relative",
             // display: "flex",
             // This causes whole card row to move left on spread
-            // left: 0- spread / 2 - 0.5 * handCards.length,
-            //left: x - (spread / 2) * handCards.length,
-            top: y,
+            // left: cardLeftSpread * handCards.length,
+            // left: (spread / 2) * handCards.length,
+            // top: y,  
+            border: "dotted blue thick",
             transition: "180ms",
-            // height: dimensions.cardHeight,
+            height: dimensions.cardHeight,
           }}
         >
           {handCards.map((card, index) =>
             mockRenderIds.includes(card.id) ? (
-              <HandCardMockRender
-                dimensions={dimensions}
-                cardId={card.id}
-                index={index}
-                numHandCards={handCards.length}
-                spread={spread}
-              />
+              <HandCardMockRender dimensions={dimensions} cardId={card.id} index={index} numHandCards={handCards.length} spread={spread} />
             ) : (
               <EnemyHandCard
                 id={card.id}

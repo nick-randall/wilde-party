@@ -40,7 +40,11 @@ const Deck = (props: DeckProps) => {
     <MockRenderProvider player={null} placeType={"deck"} placeId={id}>
       {(cards, mockRenderIds) => (
         <div
-          style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }}
+          style={{
+            //left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute",
+            height: dimensions.cardHeight,
+            ...highlightStyles,
+          }}
           onClick={handleClick}
         >
           {Array.from(cards)

@@ -41,17 +41,17 @@ function GCZ(props: GCZProps & GCZReduxProps) {
     <div
       className="pl0GCZ"
       style={{
-        // display: "flex",
+        display: "flex",
         // top: 100,
-        position: "absolute",
+        position: "relative",
         margin: 0,
         // left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
         left: 0,
         top: y,
         height: cardHeight * 1.5, // should grow when bffs/ zwilling in group
         minWidth: dimensions.cardWidth,
-
-        // border: "thin red solid"
+        verticalAlign: "center",
+        border: "thin red solid"
       }}
     >
       <DraggerContainer

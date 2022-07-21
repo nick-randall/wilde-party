@@ -76,7 +76,7 @@ const HandCard = (props: HandCardProps) => {
               ref={draggerProps.ref}
               style={{
                 position: "absolute",
-                left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
+                left: draggerProps.dragged || draggerProps.dropping ? "" :  spread * index - (spread * numHandCards) / 2,
                 top: 0,
                 transition: "300ms",
               }}
