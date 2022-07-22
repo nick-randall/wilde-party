@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Card from "./Card";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
@@ -12,29 +12,26 @@ type EnemyGCZProps = {
 };
 
 type EnemyGCZReduxProps = {
-  emissaryCardIndex?: number
-  enemyGCZCards: GameCard[]
+  emissaryCardIndex?: number;
+  enemyGCZCards: GameCard[];
 };
 
 const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
   const { enemyGCZCards, enchantmentsRowCards, id, emissaryCardIndex, player } = props;
   const dimensions = getDimensions(player, "GCZ");
+  const devSettings = useSelector((state: RootState) => state.devSettings);
+
   return (
-    <div style={{ left: 200, position: "relative", height: dimensions.cardHeight }}>
-      {enemyGCZCards.map((card, index) => (
-         emissaryCardIndex === index ? (
-          <TableCardEmissary
-            id={card.id}
-            index={index}
-            image={card.image}
-            dimensions={dimensions}
-            key={"emissary" + card.id}
-          />
-        ) :
-        <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
-          <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} />)
-        </div>
-      ))}
+    <div className={devSettings.grid.on ? "place-grid" : ""} style={{ left: 200, position: "relative", height: dimensions.cardHeight }}>
+      {enemyGCZCards.map((card, index) =>
+        emissaryCardIndex === index ? (
+          <TableCardEmissary id={card.id} index={index} image={card.image} dimensions={dimensions} key={"emissary" + card.id} />
+        ) : (
+          <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
+            <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} />)
+          </div>
+        )
+      )}
       <div style={{ top: dimensions.cardHeight / 2, position: "absolute" }}>
         {enchantmentsRowCards.map(card => (
           <div style={{ left: card.index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
@@ -48,7 +45,7 @@ const EnemyGCZ = (props: EnemyGCZProps & EnemyGCZReduxProps) => {
 
 const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
   const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
-  const {draggedId } = draggedState
+  const { draggedId } = draggedState;
   const { id, player } = ownProps;
 
   let enemyGCZCards = gameSnapshot.players[player].places.GCZ.cards;
@@ -56,9 +53,9 @@ const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
   if (newSnapshots.length > 0) {
     newSnapshots[0].animationTemplates.forEach(template => {
       // if place contains a card transitioning to or from it..
-    
-      const placeId = "placeId" in template.to ? template.to.placeId : undefined // will this work???
-      if (placeId  === id) {
+
+      const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???
+      if (placeId === id) {
         //TODO sort somtehing like this:
         // if (template.to.placeId === id || template.from.placeId === id) {
 
@@ -77,7 +74,7 @@ const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
       }
     });
   }
-  return {emissaryCardIndex, enemyGCZCards}
+  return { emissaryCardIndex, enemyGCZCards };
 };
 
 export default connect(mapStateToProps)(EnemyGCZ);

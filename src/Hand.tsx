@@ -28,6 +28,7 @@ const Hand = (props: HandProps) => {
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
   const enemysTurn = useSelector((state: RootState) => state.gameSnapshot.current.player !== 0);
+  const devSettings = useSelector((state: RootState) => state.devSettings);
 
   useEffect(() => {
     if (shouldSpread) {
@@ -42,6 +43,7 @@ const Hand = (props: HandProps) => {
       <MockRenderProvider player={0} placeType="hand" placeId={id}>
         {(handCards, mockRenderIds) => (
           <div
+          className={devSettings.grid.on ? "place-grid hand-grid" : ""}
           id={props.id}
           onMouseEnter={() => setShouldSpread(true)}
           onMouseLeave={() => setShouldSpread(false)}

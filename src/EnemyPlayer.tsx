@@ -38,7 +38,7 @@ const EnemyPlayer = (props: PlayerProps) => {
         <EnemyHand id={places.hand.id} player={player} placeType="hand" />
         <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} />
 
-      <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} />
+      {/* <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} /> */}
       <div style={{ color: "white", fontSize: 50, position: "relative" }}>
         {playerPoints}
         {playerPoints === 1 ? "Punkt" : "Punkte"}

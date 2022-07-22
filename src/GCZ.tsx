@@ -35,9 +35,12 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   const dimensions = getDimensions(0, "GCZ");
   const { cardHeight, cardWidth } = dimensions;
   if (emissaryCardGroupIndex) console.log(emissaryCardGroupIndex + "is received emissary index GCZ");
+  const devSettings = useSelector((state: RootState) => state.devSettings);
+
   return (
     <div
-      className="pl0GCZ"
+      id="pl0GCZ"
+      className= {devSettings.grid.on ? "place-grid" : ""}
       style={{
         display: "flex",
         // top: 100,
@@ -48,7 +51,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
         height: cardHeight * 1.5, // should grow when bffs/ zwilling in group
         minWidth: dimensions.cardWidth,
         verticalAlign: "center",
-        border: "thin red solid"
+        // border: "thin red solid"
       }}
     >
       <DraggerContainer
@@ -63,7 +66,8 @@ function GCZ(props: GCZProps & GCZReduxProps) {
                 backgroundColor: "yellowgreen",
                 boxShadow: "0px 0px 30px 30px yellowgreen",
                 transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-                transitionDelay: "100ms"
+                transitionDelay: "100ms",
+                minWidth: cardWidth
               }
             : {}
         }

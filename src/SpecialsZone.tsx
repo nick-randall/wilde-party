@@ -25,9 +25,10 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
-  const allowDropping = isHighlighted && draggedHandCard?.specialsCardType && missingSpecialsCardsTypes.includes(draggedHandCard?.specialsCardType) ;
+  const allowDropping = isHighlighted && draggedHandCard?.specialsCardType && missingSpecialsCardsTypes.includes(draggedHandCard?.specialsCardType);
   const draggedOver = useSelector((state: RootState) => state.dragUpdate);
   const ghostCard = draggedOver.droppableId === id && draggedOver.index !== -1 ? draggedHandCard : undefined;
+  const devSettings = useSelector((state: RootState) => state.devSettings);
 
   // const allowDropping = rearranging;
 
@@ -37,10 +38,11 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
+          className={devSettings.grid.on ? "place-grid" : ""}
           style={{
             display: "flex",
             position: "absolute",
-            margin:0,
+            margin: 0,
             // flexDirection: "row",
             backgroundColor: allowDropping ? "yellowgreen" : "",
             boxShadow: allowDropping ? "0px 0px 30px 30px yellowgreen" : "",
@@ -51,11 +53,10 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
             transition: "left 250ms",
           }}
         >
-         
           {specialsCardsColumns.map((cards, index) => (
             <SpecialsCardsColumn cards={cards} columnIndex={index} dimensions={dimensions} key={cards[0].id + index} specialsZoneId={id} />
           ))}
-           {/* {specialsCardsColumns.length < 4 ? (
+          {/* {specialsCardsColumns.length < 4 ? (
             <EmptySpecialsColumn
               index={specialsCards.length}
               acceptedSpecialsTypes={missingSpecialsCardsTypes}
@@ -63,7 +64,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null} */}
-                    {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+          {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

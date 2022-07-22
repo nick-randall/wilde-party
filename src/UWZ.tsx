@@ -28,11 +28,21 @@ export const UWZ = (props: UWZProps) => {
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getDimensions(0, "UWZ");
+  const devSettings = useSelector((state: RootState) => state.devSettings);
+
   const { cardWidth, cardHeight, cardTopSpread } = dimensions;
   return (
-    <div style={{transition:"left 180ms" }}>
+    <div className={devSettings.grid.on ? "place-grid" : ""} style={{ transition: "left 180ms" }}>
       {unwantedCards.map((card, index) => (
-        <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} placeId={id}/>
+        <Card
+          id={card.id}
+          image={card.image}
+          index={index}
+          dimensions={dimensions}
+          offsetTop={index * dimensions.cardTopSpread}
+          key={card.id}
+          placeId={id}
+        />
       ))}
       <Droppable droppableId={id} isDropDisabled={!allowDropping}>
         {provided => (
@@ -41,7 +51,7 @@ export const UWZ = (props: UWZProps) => {
             ref={provided.innerRef}
             style={{
               position: "relative",
-              top: (unwantedCards.length) * cardTopSpread,
+              top: unwantedCards.length * cardTopSpread,
               height: cardHeight,
               minWidth: cardWidth,
               backgroundColor: isHighlighted ? "yellowgreen" : "",
@@ -50,8 +60,13 @@ export const UWZ = (props: UWZProps) => {
             }}
           >
             {provided.placeholder}
-            {ghostCard ? <GhostCard //index={ghostCardIndex} 
-            image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+            {ghostCard ? (
+              <GhostCard //index={ghostCardIndex}
+                image={ghostCard.image}
+                dimensions={dimensions}
+                zIndex={9}
+              />
+            ) : null}
           </div>
         )}
       </Droppable>

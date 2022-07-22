@@ -19,12 +19,15 @@ const EnemyHand: React.FC<EnemyHandProps> = ({ id, player, placeType }) => {
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
+  const devSettings = useSelector((state: RootState) => state.devSettings);
+
   const spread = cardLeftSpread;
 
   return (
     <MockRenderProvider placeId={id} player={player} placeType={"hand"}>
       {(handCards, mockRenderIds) => (
         <div
+        className= {devSettings.grid.on ? "place-grid hand-grid" : ""}
           id={id}
           style={{
             position: "relative",

@@ -5,6 +5,7 @@ import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { changeGroupStatus } from "../animations/handleEndAnimation";
 import createAnimationFromTemplateNewVersion from "../mockRender/createAnimationFromTemplateNewVersion";
+import { initDevSettings } from "../helperFunctions/devSettings/devSettings";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -26,6 +27,7 @@ export interface State {
   newSnapshotsNewVersion: GameSnapshot[];
   draggedState: DraggedState;
   dragEndTarget?: DragEndTarget;
+  devSettings: DevSettings;
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   animationData: AnimationData[];
@@ -52,6 +54,7 @@ export const stateReducer = (
     newSnapshots: [],
     newSnapshotsNewVersion: [],
     screenSize: getScreenSize(),
+    devSettings: initDevSettings,
     dragContainerExpand: initialDragState.dragContainerExpand,
     draggedState: initialDragState.draggedState,
     dragEndTarget: initialDragState.dragEndTarget,
@@ -71,6 +74,11 @@ export const stateReducer = (
   switch (action.type) {
     case "SET_SCREEN_SIZE":
       return { ...state, screenSize: getScreenSize() };
+    case "TOGGLE_DEV_SETTING": {
+      const id = action.payload;
+      const devSettings = { ...state.devSettings, [id]: { name: initDevSettings.id.name, on: !id.on } };
+      return { ...state, devSettings };
+    }
     case "SET_INITIAL_DRAGGED_STATE": {
       const { draggedId, source, destination } = action.payload;
       const draggedHandCard = state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggedId);
@@ -205,14 +213,14 @@ export const stateReducer = (
       return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
     }
     case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
-      console.log("new animation templates ready")
+      console.log("new animation templates ready");
       const currTemplates: CompleteAnimationTemplateNewVersion[] = action.payload;
       const newAnimations = currTemplates.map(t => createAnimationFromTemplateNewVersion(t));
       const animationTemplates = state.animationTemplates.map(group =>
         group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group
       );
-      console.log(newAnimations)
-      console.log(animationTemplates)
+      console.log(newAnimations);
+      console.log(animationTemplates);
       return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
     }
     case "ADD_ANIMATION":
