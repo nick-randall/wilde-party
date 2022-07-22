@@ -16,23 +16,25 @@ interface PlayerProps {
 const Player = (props: PlayerProps) => {
   const { screenSize, id, places, current } = props;
   const playerPoints = countPlayerPoints(id);
+  const devSettings = useSelector((state: RootState) => state.devSettings);
 
   return (
     <div
+      className={devSettings.grid.on ? "player-grid" : ""}
       style={{
         //position: "absolute", left: x, top: y, width: width, height:height,
-        border: "thin black solid",
+        // border: "thin black solid",
         // gridRowStart: "span 2",
         gridRowEnd: "span 2",
         display: "flex",
         justifyContent: "space-between",
         alignContent: "center",
-        flexDirection: "column"
+        flexDirection: "column",
         // gridTemplateColumns: "1fr 1fr",
       }}
     >
       {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
-     
+
       <GCZ id={places.GCZ.id} />
 
       <Hand id={places.hand.id} />

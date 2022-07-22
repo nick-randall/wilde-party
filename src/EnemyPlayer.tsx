@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
 import EnemyGCZ from "./EnemyGCZ";
 import EnemyHand from "./EnemyHand";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
 import countPlayerPoints from "./helperFunctions/locateFunctions/countPlayerPoints";
+import { RootState } from "./redux/store";
 import { SpecialsZone } from "./SpecialsZone";
 import UWZ from "./UWZ";
 
@@ -17,9 +19,11 @@ interface PlayerProps {
 const EnemyPlayer = (props: PlayerProps) => {
   const { screenSize, id, places, current, player } = props;
   const playerPoints = countPlayerPoints(id);
+  const devSettings = useSelector((state: RootState) => state.devSettings);
 
   return (
     <div
+      className={devSettings.grid.on ? "player-grid" : ""}
       style={{
         //position: "absolute", left: x, top: y, width: width, height:height,
         border: "thin black solid",
@@ -28,15 +32,14 @@ const EnemyPlayer = (props: PlayerProps) => {
         gridTemplateColumns: "1fr 1 fr",
       }}
     >
-
       <EnemyGCZ
         id={places.GCZ.id}
         enchantmentsRowCards={places.enchantmentsRow.cards}
         // GCZCards={places.GCZ.cards}
         player={player}
       />
-        <EnemyHand id={places.hand.id} player={player} placeType="hand" />
-        <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} />
+      <EnemyHand id={places.hand.id} player={player} placeType="hand" />
+      <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} />
 
       {/* <UWZ id={places.UWZ.id} unwantedCards={places.UWZ.cards} /> */}
       <div style={{ color: "white", fontSize: 50, position: "relative" }}>

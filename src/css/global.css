@@ -20,3 +20,14 @@ body{
   font-family: wilde-party-font;
   src: url('Grandstander-clean.otf');
 }
+
+.player-grid {
+  border: red solid 2px;
+}
+
+.place-grid {
+  border: black solid 1px;
+}
+.hand-grid{
+  border: blue solid 1px;
+}
