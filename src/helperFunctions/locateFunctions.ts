@@ -1,5 +1,5 @@
 import store from "../redux/store";
-import { getGCZTotalWidth } from "./groupGCZCardNew";
+import { getGCZTotalWidth } from "./groupGCZCards";
 
 
 

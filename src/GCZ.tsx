@@ -4,8 +4,7 @@ import Dragger from "./dndcomponents/Dragger";
 import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCardGroup from "./GhostCardGroup";
 import { getDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
-import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
+import { getCardGroupsObjs } from "./helperFunctions/groupGCZCards";
 import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { RootState } from "./redux/store";
 
@@ -105,7 +104,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   // this path should be figured out with
   // player slash place data;
   let cards = gameSnapshot.players[0].places.GCZ.cards;
-  let cardGroups = getCardGroupsObjsnew(cards);
+  let cardGroups = getCardGroupsObjs(cards);
   let emissaryCardGroupIndex: number = -1;
 
   if (newSnapshots.length > 0 && animationTemplates.length > 0) {
@@ -115,7 +114,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
 
     if (templatesWithAnimationToThisPlace.length > 0) {
       cards = newSnapshots[0].players[0].places["GCZ"].cards;
-      cardGroups = getCardGroupsObjsnew(cards);
+      cardGroups = getCardGroupsObjs(cards);
     }
   }
 
