@@ -8,7 +8,7 @@ const createAnimationTemplates = (
   currSnapshot: GameSnapshot,
   newSnapshot: GameSnapshot,
   snapshotUpdateSource: SnapshotUpdateSource
-): AnimationTemplateNewVersion[][] => {
+): AnimationTemplate[][] => {
   const snapshotDifferences = findSnapshotDifferences(currSnapshot, newSnapshot);
   const animationTemplates = createAnimationTemplatesFromSnapshotDifferences(
     snapshotDifferences,
@@ -33,7 +33,7 @@ const createAnimationTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
   snapshotUpdateSource: SnapshotUpdateSource
-): AnimationTemplateNewVersion[][] => {
+): AnimationTemplate[][] => {
   let templateGroups = returnAnimationTemplates(differences, snapshotUpdateType);
 
   /** If the user played a card to change the gameSnapshot, removes the initial transition,
@@ -51,10 +51,10 @@ const createAnimationTemplatesFromSnapshotDifferences = (
   return templateGroups;
 };
 
-const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplateNewVersion[][] => {
+const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplate[][] => {
   switch (snapshotUpdateType) {
     case "addDragged": {
-      let transitionTemplate: AnimationTemplateNewVersion = {
+      let transitionTemplate: AnimationTemplate = {
         ...differences[0],
         animation: "flip",
         status: "awaitingEmissaryData",
@@ -70,9 +70,9 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       if (destroyedCardFromData) {
         const destroyedCard: Via = { cardId: destroyedCardFromData.cardId, targetId: destroyedCardFromData.cardId };
 
-        let handCardFliesToDestroyedCard: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
-        let handCardFliesToDiscardPile: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
-        let destroyedCardFliesToDiscardPile: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;
+        let handCardFliesToDestroyedCard: AnimationTemplate = {} as AnimationTemplate;
+        let handCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
+        let destroyedCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
         differences.forEach(change => {
           if (change.from.place === "hand") {
             // create two differences with orderOfExecution 0 and 1
@@ -94,7 +94,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     // case "drawingWildeParty":
     // case "initialSnapshot":
     case "dealingInitialCard": {
-      const transitionTemplate: AnimationTemplateNewVersion = {
+      const transitionTemplate: AnimationTemplate = {
         ...differences[0],
         animation: "",
         id: uuidv4(),
@@ -103,9 +103,9 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       return [[transitionTemplate]];
     }
     case "dealingCards": {
-      const templates: AnimationTemplateNewVersion[] = [];
+      const templates: AnimationTemplate[] = [];
       differences.forEach((difference, index) => {
-        const transitionTemplate: AnimationTemplateNewVersion = {
+        const transitionTemplate: AnimationTemplate = {
           ...difference,
           animation: "",
           id: uuidv4(),

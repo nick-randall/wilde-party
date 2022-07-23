@@ -6,11 +6,11 @@ type AddAnimation = { type: "ADD_ANIMATION"; payload: AnimationData };
 
 type AddMultipleAnimations = { type: "ADD_MULTIPLE_ANIMATIONS"; payload: AnimationData[] };
 
-type SetAnimationTemplates = { type: "SET_ANIMATION_TEMPLATES"; payload: AnimationTemplateNewVersion[][] };
+type SetAnimationTemplates = { type: "SET_ANIMATION_TEMPLATES"; payload: AnimationTemplate[][] };
 
-type AddScreenDataToTemplate = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplateNewVersion };
+type AddScreenDataToTemplate = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplate };
 
-type EndAnimationTemplateNewVersion = { type: "END_ANIMATION_TEMPLATE_NEW_VERSION"; payload: AnimationTemplateNewVersion };
+type EndAnimationTemplateNewVersion = { type: "END_ANIMATION_TEMPLATE_NEW_VERSION"; payload: AnimationTemplate };
 
 type EndAnimationTemplateGroup = { type: "END_ANIMATION_TEMPLATE_GROUP" };
 
@@ -28,7 +28,7 @@ export const addMultipleAnimationsNewVersion = (animationData: AnimationData[]):
 });
 type CreateAnimationsFromTemplates = {
   type: "CREATE_ANIMATIONS_FROM_TEMPLATES",
-  payload: CompleteAnimationTemplateNewVersion[],
+  payload: CompleteAnimationTemplate[],
 };
 
 export type CreateNewAnimations = { type: "CREATE_NEW_ANIMATIONS" };
@@ -55,22 +55,22 @@ export const addMultipleAnimations = (newAnimationData: AnimationData[]): AddMul
 
 export const clearAnimationTemplates = (): ClearAnimationTemplates => ({ type: "CLEAR_ANIMATION_TEMPLATES" });
 
-export const createAnimationsFromTemplates = (templates: CompleteAnimationTemplateNewVersion[]): CreateAnimationsFromTemplates => ({
+export const createAnimationsFromTemplates = (templates: CompleteAnimationTemplate[]): CreateAnimationsFromTemplates => ({
   type: "CREATE_ANIMATIONS_FROM_TEMPLATES",
   payload: templates,
 });
 
-export const addScreenDataToTemplate = (template: AnimationTemplateNewVersion): AddScreenDataToTemplate => ({
+export const addScreenDataToTemplate = (template: AnimationTemplate): AddScreenDataToTemplate => ({
   type: "ADD_SCREEN_DATA_TO_TEMPLATE",
   payload: template,
 });
 
-export const endAnimationTemplateNewVersion = (template: AnimationTemplateNewVersion): EndAnimationTemplateNewVersion => ({
+export const endAnimationTemplateNewVersion = (template: AnimationTemplate): EndAnimationTemplateNewVersion => ({
   type: "END_ANIMATION_TEMPLATE_NEW_VERSION",
   payload: template,
 });
 
-export const setAnimationTemplates = (animationTemplates: AnimationTemplateNewVersion[][]): SetAnimationTemplates => ({
+export const setAnimationTemplates = (animationTemplates: AnimationTemplate[][]): SetAnimationTemplates => ({
   type: "SET_ANIMATION_TEMPLATES",
   payload: animationTemplates,
 });

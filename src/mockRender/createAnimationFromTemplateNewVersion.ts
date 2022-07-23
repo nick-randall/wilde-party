@@ -1,4 +1,4 @@
-const createAnimationFromTemplate = (template: CompleteAnimationTemplateNewVersion): AnimationData => {
+const createAnimationFromTemplate = (template: CompleteAnimationTemplate): AnimationData => {
   const { to, from } = template;
   const xDelta = from.xPosition - to.xPosition;
   const yDelta = from.yPosition - to.yPosition;

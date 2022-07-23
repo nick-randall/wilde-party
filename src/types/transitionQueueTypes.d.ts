@@ -83,14 +83,14 @@ type ViaWithPossibleScreenData = Via & ScreenData;
 type ToOrFromWithScreenData = ToOrFrom & CompleteScreenData;
 type ViaWithScreenData = Via & CompleteScreenData;
 
-type AnimationTemplateNewVersion = {
+type AnimationTemplate = {
   to: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData
   from: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData;
 } & { id: string; status: AnimationTemplateStatus; animation?: string; delay?: number };
 
 type MockRenderData = ScreenData & { cardId: string }
 
-type CompleteAnimationTemplateNewVersion = {
+type CompleteAnimationTemplate = {
   id: string;
   status: AnimationTemplateStatus;
   startAnimation?: string;

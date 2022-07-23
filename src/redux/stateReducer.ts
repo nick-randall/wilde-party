@@ -15,10 +15,10 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
   return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
 };
 
-const isTemplateComplete = (currTemplate: AnimationTemplateNewVersion) =>
+const isTemplateComplete = (currTemplate: AnimationTemplate) =>
   currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
 
-const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationTemplateNewVersion[][]) =>
+const updateTemplate = (template: AnimationTemplate, array: AnimationTemplate[][]) =>
   array.map(group => group.map(t => (t.id === template.id ? template : t)));
 
 export interface State {
@@ -30,7 +30,7 @@ export interface State {
   dragContainerExpand: { width: number; height: number };
   screenSize: { width: number; height: number };
   animationData: AnimationData[];
-  animationTemplates: AnimationTemplateNewVersion[][];
+  animationTemplates: AnimationTemplate[][];
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
   BFFdraggedOverSide?: string;
@@ -194,7 +194,7 @@ export const stateReducer = (
     }
     case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
       console.log("new animation templates ready");
-      const currTemplates: CompleteAnimationTemplateNewVersion[] = action.payload;
+      const currTemplates: CompleteAnimationTemplate[] = action.payload;
       const newAnimations = currTemplates.map(t => createAnimationFromTemplateNewVersion(t));
       const animationTemplates = state.animationTemplates.map(group =>
         group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group

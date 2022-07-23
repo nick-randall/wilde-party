@@ -16,7 +16,7 @@ const handleNewMockRenderData = (mockRenderData: MockRenderData, toOrFrom: "to" 
   const currTemplates = getState().animationTemplates.find(group => group.map(t => t.id === currTemplate.id));
 
   if (currTemplates && currTemplates.every(t => t.status === "awaitingSimultaneousTemplates")) {
-    dispatch(createAnimationsFromTemplates(currTemplates.map(t => t as CompleteAnimationTemplateNewVersion)))
+    dispatch(createAnimationsFromTemplates(currTemplates.map(t => t as CompleteAnimationTemplate)))
   }
 };
 

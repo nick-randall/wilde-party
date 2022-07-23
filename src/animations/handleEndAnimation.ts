@@ -3,7 +3,7 @@ import { clearAnimationTemplates, removeAnimation } from "../redux/transitionQue
 import { replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import handleNewSnapshots from "./handleNewSnapshots";
 
-export const changeGroupStatus = (status: AnimationTemplateStatus, array: AnimationTemplateNewVersion[]) =>
+export const changeGroupStatus = (status: AnimationTemplateStatus, array: AnimationTemplate[]) =>
   array.map(t => ({ ...t, status: status }));
 
 export const removeFirstElement = (array: any[]) => array.slice(1);
