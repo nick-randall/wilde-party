@@ -1,7 +1,6 @@
 import { DragAction } from "../types/dragDataTypes";
 import { NewSnapshotActions } from "./newSnapshotActions";
 import { TransitionQueueActions } from "./transitionQueueActionCreators";
-import { UpdateSnapshotTypes } from "./updateSnapshotActionCreators";
 
 export type LocationData = {
   index: number;
@@ -91,7 +90,6 @@ export type Action =
   | DestroyCard
   | DiscardPlayedCard
   | SetAiPlaying
-  | UpdateSnapshotTypes
   | TransitionQueueActions
   | NewSnapshotActions;
 //| //Thunk;

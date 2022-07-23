@@ -1,11 +1,5 @@
 
-
- type ReplaceCurrentSnapshotWithNewSnapshot = {
-  type: "OVERWRITE_CURRENT_SNAPSHOT";
-  payload: NewSnapshot;
-};
-
-type ReplaceCurrentSnapshotWithNewSnapshotNewVersion = {
+type ReplaceCurrentSnapshotWithNewSnapshot = {
   type: "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION";
   payload: GameSnapshot;
 };
@@ -25,8 +19,6 @@ type RemoveNewSnapshot = {
   payload: number
 }
 
-export type UpdateSnapshotTypes = ReplaceCurrentSnapshotWithNewSnapshot | SetNewSnapshot | SetNewSnapshotsNewVersion | RemoveNewSnapshot;
-
 /**
  * Replaces the snapshot with a new one (for example)
  * @param newSnapshot 
@@ -44,6 +36,5 @@ export const  setNewSnapshotsNewVersion = (newSnapshots: GameSnapshot[]): SetNew
 
 export const removeNewSnapshot = (id: number): RemoveNewSnapshot => ({type: "REMOVE_NEW_SNAPSHOT", payload: id})
 
-export const replaceCurrentSnapshotWithNewSnapshot = (newSnapshot: NewSnapshot): ReplaceCurrentSnapshotWithNewSnapshot => ({type: "OVERWRITE_CURRENT_SNAPSHOT", payload: newSnapshot});
 
-export const replaceCurrentSnapshotWithNewSnapshotNewVersion = (newSnapshot: GameSnapshot): ReplaceCurrentSnapshotWithNewSnapshotNewVersion => ({type: "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION", payload: newSnapshot});
+export const replaceCurrentSnapshotWithNewSnapshot = (newSnapshot: GameSnapshot): ReplaceCurrentSnapshotWithNewSnapshot => ({type: "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION", payload: newSnapshot});

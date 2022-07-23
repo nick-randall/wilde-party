@@ -1,6 +1,6 @@
 import { RootState } from "../redux/store";
 import { clearAnimationTemplates, removeAnimation } from "../redux/transitionQueueActionCreators";
-import { replaceCurrentSnapshotWithNewSnapshotNewVersion } from "../redux/updateSnapshotActionCreators";
+import { replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import handleNewSnapshots from "./handleNewSnapshots";
 
 export const changeGroupStatus = (status: AnimationTemplateStatus, array: AnimationTemplateNewVersion[]) =>
@@ -20,7 +20,7 @@ const handleEndAnimation = (cardId: string) => (dispatch: Function, getState: ()
     console.log(isEveryTemplateComplete? "every template complete" : "not every template complete")
   if (isEveryTemplateComplete && newSnapshots.length > 0) {
     dispatch(clearAnimationTemplates());
-    dispatch(replaceCurrentSnapshotWithNewSnapshotNewVersion(newSnapshots[0]));
+    dispatch(replaceCurrentSnapshotWithNewSnapshot(newSnapshots[0]));
     console.log("now new snapshots lenght = " + getState().newSnapshots.length);
     dispatch(handleNewSnapshots(getState().newSnapshots));
   }

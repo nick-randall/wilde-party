@@ -2,7 +2,7 @@ import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDiff
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
 import { setNewGameSnapshots } from "../redux/transitionQueueActionCreators";
-import { replaceCurrentSnapshotWithNewSnapshot, replaceCurrentSnapshotWithNewSnapshotNewVersion } from "../redux/updateSnapshotActionCreators";
+import {  replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import createAnimationTemplatesFromSnapshotDifferencesNewVersion from "../animations/createAnimationTemplatesFromSnapshotDifferences";
 
 export type DraggedCardScreenLocation = { xPosition: number; yPosition: number } | null;
@@ -18,7 +18,7 @@ const handleNewSnapshotFromUserAction =
     // where it is supposed to be), then:
     // Skip all the steps of creating and enacting a transition:
     if (animationTemplates.length === 0) {
-      dispatch(replaceCurrentSnapshotWithNewSnapshotNewVersion(snapshot));
+      dispatch(replaceCurrentSnapshotWithNewSnapshot(snapshot));
     } else {
       console.log("just adding new game snapshots")
       dispatch(addNewGameSnapshots([snapshot]));
