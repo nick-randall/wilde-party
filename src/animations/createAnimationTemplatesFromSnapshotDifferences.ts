@@ -10,7 +10,7 @@ const createAnimationTemplates = (
   snapshotUpdateSource: SnapshotUpdateSource
 ): AnimationTemplateNewVersion[][] => {
   const snapshotDifferences = findSnapshotDifferences(currSnapshot, newSnapshot);
-  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(
+  const animationTemplates = createAnimationTemplatesFromSnapshotDifferences(
     snapshotDifferences,
     newSnapshot.snapshotUpdateType,
     snapshotUpdateSource
@@ -29,7 +29,7 @@ const createAnimationTemplates = (
  * @param dimensions
  * @returns
  */
-const createAnimationTemplatesFromSnapshotDifferencesNewVersion = (
+const createAnimationTemplatesFromSnapshotDifferences = (
   differences: SnapshotDifference[],
   snapshotUpdateType: SnapshotUpdateType,
   snapshotUpdateSource: SnapshotUpdateSource

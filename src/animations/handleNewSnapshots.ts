@@ -1,7 +1,7 @@
 import { RootState } from "../redux/store";
 import { setAnimationTemplates } from "../redux/transitionQueueActionCreators";
 import { replaceCurrentSnapshotWithNewSnapshotNewVersion, setNewSnapshotsNewVersion } from "../redux/updateSnapshotActionCreators";
-import createAnimationTemplates from "./createAnimationTemplatesFromSnapshotDifferencesNewVersion";
+import createAnimationTemplates from "./createAnimationTemplatesFromSnapshotDifferences";
 
 const handleNewSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function, getState: () => RootState) => {
 
