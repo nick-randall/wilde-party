@@ -1,7 +1,7 @@
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
 import {  replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
-import createAnimationTemplatesFromSnapshotDifferences from "../animations/createAnimationTemplatesFromSnapshotDifferences";
+import createAnimationTemplatesFromSnapshotDifferences from "./createAnimationTemplatesFromSnapshotDifferences";
 
 export type DraggedCardScreenLocation = { xPosition: number; yPosition: number } | null;
 

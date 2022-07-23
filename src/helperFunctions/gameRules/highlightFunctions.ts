@@ -1,6 +1,6 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
-import { locate } from "../locateFunctions";
+import { locate } from "../locateFunctions/locateFunctions";
 import { getCardFunctions } from "./cardHighlightFunctions";
 import { HighlightCardFunction, HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 

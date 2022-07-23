@@ -7,7 +7,7 @@ import NonPlayerPlaces from "./NonPlayerPlaces";
 import "../css/global.css";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { useEffect, useState } from "react";
-import { dealInitialHands } from "../transitionFunctions/simulateIncomingDealCardSnapshots";
+import { dealInitialHands } from "../animations/simulateIncomingDealCardSnapshots";
 import dealTwoCards from "../tests/simulateDealingTwoCards";
 import handleNewSnapshots from "../animations/handleNewSnapshots";
 import EnemyPlayer from "./EnemyPlayer";

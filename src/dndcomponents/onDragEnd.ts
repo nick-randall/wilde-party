@@ -1,8 +1,8 @@
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-  import { locate } from "../helperFunctions/locateFunctions";
+  import { locate } from "../helperFunctions/locateFunctions/locateFunctions";
 import { RootState } from "../redux/store";
 import { cleanUpDragState } from "./dragEventActionCreators";
-import handleNewSnapshotFromUserAction from "../handleNewSnapshots/handleNewSnapshotFromUserAction";
+import handleNewSnapshotFromUserAction from "../animations/handleNewSnapshotFromUserAction";
 
 export const onDragEnd = () => (dispatch: Function, getState: () => RootState) => {
   const { source, destination } = getState().draggedState;

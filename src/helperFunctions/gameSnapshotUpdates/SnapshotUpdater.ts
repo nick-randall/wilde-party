@@ -1,4 +1,4 @@
-import { locate } from "../locateFunctions";
+import { locate } from "../locateFunctions/locateFunctions";
 import { produce } from "immer";
 
 export default class SnapshotUpdater {

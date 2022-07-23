@@ -1,4 +1,4 @@
-import { locate } from "./locateFunctions";
+import { locate } from "./locateFunctions/locateFunctions";
 
 const hasRightNeighbour = (index: number, array: GameCard[]) => index < array.length - 1;
 

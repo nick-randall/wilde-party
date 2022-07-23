@@ -2,7 +2,7 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import produce from "immer";
 import { DropResult } from "react-beautiful-dnd";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { locate } from "../helperFunctions/locateFunctions";
+import { locate } from "../helperFunctions/locateFunctions/locateFunctions";
 import { LocationData } from "./actions";
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { RootState } from "./store";

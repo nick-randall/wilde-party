@@ -1,7 +1,7 @@
 import { cleverGetNextAiCard } from "../ai/getNextAiCard";
 import { getSettings } from "../gameSettings/uiSettings";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { locate } from "../helperFunctions/locateFunctions";
+import { locate } from "../helperFunctions/locateFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
 import { addDraggedThunk, enchantThunk, endCurrentTurnThunk } from "../redux/thunks";
 import destroyCardThunk from "./destroyCardThunk";

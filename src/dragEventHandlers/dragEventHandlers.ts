@@ -1,5 +1,5 @@
 import { DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locate } from "../helperFunctions/locateFunctions";
+import { locate } from "../helperFunctions/locateFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk, enchantThunk } from "../redux/thunks";
 import destroyCardThunk from "../thunks/destroyCardThunk";

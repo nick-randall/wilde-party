@@ -1,11 +1,11 @@
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { locate } from "../helperFunctions/locateFunctions";
+import { locate } from "../helperFunctions/locateFunctions/locateFunctions";
 import { Action } from "./actions";
 import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { changeGroupStatus } from "../animations/handleEndAnimation";
 import createAnimationFromTemplate from "../mockRender/createAnimationFromTemplate";
-import { initDevSettings } from "../helperFunctions/devSettings/devSettings";
+import { initDevSettings } from "../gameSettings/devSettings";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
