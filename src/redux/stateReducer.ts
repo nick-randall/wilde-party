@@ -4,7 +4,7 @@ import { Action } from "./actions";
 import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { changeGroupStatus } from "../animations/handleEndAnimation";
-import createAnimationFromTemplateNewVersion from "../mockRender/createAnimationFromTemplateNewVersion";
+import createAnimationFromTemplate from "../mockRender/createAnimationFromTemplate";
 import { initDevSettings } from "../helperFunctions/devSettings/devSettings";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -111,7 +111,7 @@ export const stateReducer = (
         dragEndTarget: initialDragState.dragEndTarget,
         highlights: [],
       };
-    case "SET_NEW_SNAPSHOTS_NEW_VERSION": {
+    case "SET_NEW_SNAPSHOTS": {
       const newSnapshots: GameSnapshot[] = action.payload;
       const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id - b.id);
       console.log("setting new snapshots");
@@ -127,7 +127,7 @@ export const stateReducer = (
       return { ...state, newSnapshotsVersion: state.newSnapshots.concat(action.payload) };
 
 
-    case "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION": {
+    case "OVERWRITE_CURRENT_SNAPSHOT": {
       const newSnapshots = state.newSnapshots.filter((a, i) => i > 0);
       return { ...state, newSnapshots, gameSnapshot: action.payload };
     }
@@ -147,7 +147,6 @@ export const stateReducer = (
       const animationTemplates = state.animationTemplates.map(group => group.map(t => (t.id === currTemplate.id ? currTemplate : t))); //updateTemplate(currTemplate, state.animationTemplates);
       return { ...state, animationTemplates };
     }
-    // case "END_ANIMATION_TEMPLATE_NEW_VERSION": {
     case "REMOVE_ANIMATION": {
       const cardId = action.payload;
 
@@ -184,7 +183,7 @@ export const stateReducer = (
       const newTransitions = action.payload;
       return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
     // Called after all templates for the group have received their screen data (all are "awaitingSimultaneousTemplates")
-    case "ADD_MULTIPLE_ANIMATIONS_NEW_VERSION": {
+    case "ADD_MULTIPLE_ANIMATIONS": {
       console.log(action.payload);
       const newAnimations = action.payload;
       const updatedTemplatesGroup = changeGroupStatus("underway", state.animationTemplates[0]);
@@ -195,7 +194,7 @@ export const stateReducer = (
     case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
       console.log("new animation templates ready");
       const currTemplates: CompleteAnimationTemplate[] = action.payload;
-      const newAnimations = currTemplates.map(t => createAnimationFromTemplateNewVersion(t));
+      const newAnimations = currTemplates.map(t => createAnimationFromTemplate(t));
       const animationTemplates = state.animationTemplates.map(group =>
         group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group
       );
@@ -206,11 +205,6 @@ export const stateReducer = (
     case "ADD_ANIMATION":
       const newAnimation = action.payload;
       return { ...state, animationData: [...state.animationData, newAnimation] };
-    case "ADD_MULTIPLE_ANIMATIONS":
-      console.log("adding multiple animations");
-      console.log(action.payload);
-      const newAnimations = action.payload;
-      return { ...state, animationData: [...state.animationData, ...newAnimations] };
     case "SET_HIGHLIGHTS": {
       // if(!phaseNormalTurnIsYours) return state;
       const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);

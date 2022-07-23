@@ -1,7 +1,7 @@
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
 import {  replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
-import createAnimationTemplatesFromSnapshotDifferencesNewVersion from "../animations/createAnimationTemplatesFromSnapshotDifferences";
+import createAnimationTemplatesFromSnapshotDifferences from "../animations/createAnimationTemplatesFromSnapshotDifferences";
 
 export type DraggedCardScreenLocation = { xPosition: number; yPosition: number } | null;
 
@@ -9,7 +9,7 @@ const handleNewSnapshotFromUserAction =
   (newSnapshot: GameSnapshot) => (dispatch: Function, getState: () => RootState) => {
     const { gameSnapshot } = getState();
     const {snapshotUpdateType } = newSnapshot
-    const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(gameSnapshot, newSnapshot, "localUser");
+    const animationTemplates = createAnimationTemplatesFromSnapshotDifferences(gameSnapshot, newSnapshot, "localUser");
     const snapshot: GameSnapshot = { ...newSnapshot,  snapshotUpdateType: snapshotUpdateType };
     // If the snapshot update doesn't involve a transition, 
     // (for example because when adding a card it should aready be 

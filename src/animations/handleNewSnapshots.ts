@@ -1,6 +1,6 @@
 import { RootState } from "../redux/store";
 import { setAnimationTemplates } from "../redux/transitionQueueActionCreators";
-import { replaceCurrentSnapshotWithNewSnapshot, setNewSnapshotsNewVersion } from "../redux/updateSnapshotActionCreators";
+import { replaceCurrentSnapshotWithNewSnapshot, setNewSnapshots } from "../redux/updateSnapshotActionCreators";
 import createAnimationTemplates from "./createAnimationTemplatesFromSnapshotDifferences";
 
 const handleNewSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function, getState: () => RootState) => {
@@ -9,7 +9,7 @@ const handleNewSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function
 
   const { gameSnapshot } = getState();
 
-  dispatch(setNewSnapshotsNewVersion(newSnapshots));
+  dispatch(setNewSnapshots(newSnapshots));
   console.log("this many new snapshots: " + newSnapshots.length)
   console.log(newSnapshots)
   const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0], "server");
