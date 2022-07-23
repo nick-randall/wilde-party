@@ -1,10 +1,10 @@
 import { connect, useDispatch, useSelector } from "react-redux";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
+import TableCardMockRender from "../mockRender/TableCardMockRender";
+import { RootState } from "../redux/store";
 import Card from "./Card";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import MockRenderProvider from "./mockRender/MockRenderProvider";
-import TableCardMockRender from "./mockRender/TableCardMockRender";
-import { enactDrawCardEvent } from "./redux/actionCreators";
-import { RootState } from "./redux/store";
+
 interface DeckProps {
   id: string;
   cards: GameCard[];

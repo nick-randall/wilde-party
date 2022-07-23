@@ -2,7 +2,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
 import GhostCard from "./GhostCard";
-import { RootState } from "./redux/store";
+import { RootState } from "../redux/store";
 
 interface SpecialsCardsColumnProps {
   cards: GameCard[];

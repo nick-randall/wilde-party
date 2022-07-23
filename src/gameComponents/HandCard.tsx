@@ -1,12 +1,12 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { RootState } from "../redux/store";
 // import "./animations/animations.css";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
-import Dragger from "./dndcomponents/Dragger";
-import AnimationHandler from "./animations/AnimationHandler";
-import useMockRender from "./mockRender/useMockRender";
-import handleEndAnimation from "./animations/handleEndAnimation";
+import { CardInspector } from "../renderPropsComponents/CardInspector";
+import Dragger from "../dndcomponents/Dragger";
+import AnimationHandler from "../animations/AnimationHandler";
+import useMockRender from "../mockRender/useMockRender";
+import handleEndAnimation from "../animations/handleEndAnimation";
 
 export interface HandCardProps {
   id: string;

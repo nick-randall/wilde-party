@@ -1,13 +1,10 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { getSettings } from "./gameSettings/uiSettings";
-import { Transition, TransitionStatus } from "react-transition-group";
 import { Droppable } from "react-beautiful-dnd";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
-import GhostCard from "./GhostCard";
 import React from "react";
-import AnimationHandler from "./animations/AnimationHandler";
+import { getSettings } from "../gameSettings/uiSettings";
+import AnimationHandler from "../animations/AnimationHandler";
+import { RootState } from "../redux/store";
 
 export interface EnemyCardProps {
   id: string;

@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import HandCardMockRender from "../mockRender/HandCardMockRender";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
+import { RootState } from "../redux/store";
 import EnemyHandCard from "./EnemyHandCard";
-import MockRenderProvider from "./mockRender/MockRenderProvider";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import HandCardMockRender from "./mockRender/HandCardMockRender";
 interface EnemyHandProps {
   id: string;
   player: number;

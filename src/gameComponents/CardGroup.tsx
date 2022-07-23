@@ -1,5 +1,4 @@
 import Card from "./Card";
-import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
 
 export interface CardGroupProps {
   cardGroup: NewCardGroupObj;

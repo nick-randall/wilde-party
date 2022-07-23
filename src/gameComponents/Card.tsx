@@ -1,13 +1,13 @@
 import React, { CSSProperties, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
-import { getSettings } from "./gameSettings/uiSettings";
+import { CardInspector } from "../renderPropsComponents/CardInspector";
+import { getSettings } from "../gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
-import { RootState } from "./redux/store";
-import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
-import AnimationHandler from "./animations/AnimationHandler";
-import useMockRender from "./mockRender/useMockRender";
-import handleEndAnimation from "./animations/handleEndAnimation";
+import { RootState } from "../redux/store";
+import DropZoneWrapper from "../dndcomponents/DropZoneWrapper";
+import AnimationHandler from "../animations/AnimationHandler";
+import useMockRender from "../mockRender/useMockRender";
+import handleEndAnimation from "../animations/handleEndAnimation";
 
 export interface CardProps {
   id: string;

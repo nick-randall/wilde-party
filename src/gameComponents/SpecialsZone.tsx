@@ -1,11 +1,10 @@
 import { flatten } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { EmptySpecialsColumn } from "./EmptySpecialsColumn";
 import GhostCard from "./GhostCard";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import { getSpecialsOfType, sortSpecials2 } from "./helperFunctions/getSpecialsOfType";
-import { RootState } from "./redux/store";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import { getSpecialsOfType, sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
+import { RootState } from "../redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 
 interface SpecialsZoneProps {

@@ -1,12 +1,12 @@
 import { connect, useSelector } from "react-redux";
+import Dragger from "../dndcomponents/Dragger";
+import DraggerContainer from "../dndcomponents/DraggerContainer";
 import CardGroup from "./CardGroup";
-import Dragger from "./dndcomponents/Dragger";
-import DraggerContainer from "./dndcomponents/DraggerContainer";
 import GhostCardGroup from "./GhostCardGroup";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupsObjs } from "./helperFunctions/groupGCZCards";
-import TableCardMockRender from "./mockRender/TableCardMockRender";
-import { RootState } from "./redux/store";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import { getCardGroupsObjs } from "../helperFunctions/groupGCZCards";
+import TableCardMockRender from "../mockRender/TableCardMockRender";
+import { RootState } from "../redux/store";
 
 interface GCZProps {
   id: string;

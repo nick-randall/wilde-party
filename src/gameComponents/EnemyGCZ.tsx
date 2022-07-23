@@ -1,9 +1,9 @@
 import { connect, useSelector } from "react-redux";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
+import TableCardMockRender from "../mockRender/TableCardMockRender";
+import { RootState } from "../redux/store";
 import Card from "./Card";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import MockRenderProvider from "./mockRender/MockRenderProvider";
-import TableCardMockRender from "./mockRender/TableCardMockRender";
-import { RootState } from "./redux/store";
 
 type EnemyGCZProps = {
   id: string;

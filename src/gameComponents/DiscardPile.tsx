@@ -1,7 +1,7 @@
+import { getDimensions } from "../helperFunctions/getDimensions";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
+import TableCardMockRender from "../mockRender/TableCardMockRender";
 import Card from "./Card";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import MockRenderProvider from "./mockRender/MockRenderProvider";
-import TableCardMockRender from "./mockRender/TableCardMockRender";
 
 interface DiscardPileProps {
   id: string;

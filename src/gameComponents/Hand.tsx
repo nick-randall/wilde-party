@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { NoLayoutDragContainer } from "./dndcomponents/NoLayoutDragContainer";
-import { getDimensions } from "./helperFunctions/getDimensions";
-import MockRenderProvider from "./mockRender/MockRenderProvider";
-import HandCardMockRender from "./mockRender/HandCardMockRender";
+import { RootState } from "../redux/store";
+import { NoLayoutDragContainer } from "../dndcomponents/NoLayoutDragContainer";
+import { getDimensions } from "../helperFunctions/getDimensions";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
+import HandCardMockRender from "../mockRender/HandCardMockRender";
 interface HandProps {
   id: string;
 }

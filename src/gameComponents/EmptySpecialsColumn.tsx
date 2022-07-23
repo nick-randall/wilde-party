@@ -1,7 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import GhostCard from "./GhostCard";
-import { RootState } from "./redux/store";
+import { RootState } from "../redux/store";
 
 interface EmptySpecialsColumnProps {
   acceptedSpecialsTypes: GuestCardType[];

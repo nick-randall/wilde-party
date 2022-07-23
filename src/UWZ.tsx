@@ -1,7 +1,7 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import Card from "./Card";
-import GhostCard from "./GhostCard";
+import Card from "./gameComponents/Card";
+import GhostCard from "./gameComponents/GhostCard";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
 

@@ -1,12 +1,9 @@
 import { useSelector } from "react-redux";
+import countPlayerPoints from "../helperFunctions/locateFunctions/countPlayerPoints";
+import { RootState } from "../redux/store";
+import { SpecialsZone } from "./SpecialsZone";
 import EnemyGCZ from "./EnemyGCZ";
 import EnemyHand from "./EnemyHand";
-import GCZ from "./GCZ";
-import Hand from "./Hand";
-import countPlayerPoints from "./helperFunctions/locateFunctions/countPlayerPoints";
-import { RootState } from "./redux/store";
-import { SpecialsZone } from "./SpecialsZone";
-import UWZ from "./UWZ";
 
 interface PlayerProps {
   id: string;

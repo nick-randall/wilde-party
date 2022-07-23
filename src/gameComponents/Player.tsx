@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
-import countPlayerPoints from "./helperFunctions/locateFunctions/countPlayerPoints";
-import { RootState } from "./redux/store";
+import countPlayerPoints from "../helperFunctions/locateFunctions/countPlayerPoints";
+import { RootState } from "../redux/store";
 import { SpecialsZone } from "./SpecialsZone";
 import SimulateNewSnapshotButton from "./Table";
-import UWZ from "./UWZ";
+import UWZ from "../UWZ";
 
 interface PlayerProps {
   id: string;
