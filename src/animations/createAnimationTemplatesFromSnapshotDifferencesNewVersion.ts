@@ -4,9 +4,17 @@ import { changeGroupStatus } from "./handleEndAnimation";
 
 export type SnapshotUpdateSource = "localUser" | "server";
 
-const createAnimationTemplates = (currSnapshot: GameSnapshot, newSnapshot: GameSnapshot, snapshotUpdateSource: SnapshotUpdateSource): AnimationTemplateNewVersion[][] => {
+const createAnimationTemplates = (
+  currSnapshot: GameSnapshot,
+  newSnapshot: GameSnapshot,
+  snapshotUpdateSource: SnapshotUpdateSource
+): AnimationTemplateNewVersion[][] => {
   const snapshotDifferences = findSnapshotDifferences(currSnapshot, newSnapshot);
-  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(snapshotDifferences, newSnapshot.snapshotUpdateType, snapshotUpdateSource);
+  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(
+    snapshotDifferences,
+    newSnapshot.snapshotUpdateType,
+    snapshotUpdateSource
+  );
   return animationTemplates;
 };
 
@@ -34,7 +42,9 @@ const createAnimationTemplatesFromSnapshotDifferencesNewVersion = (
   */
   if (snapshotUpdateSource === "localUser") {
     //TODO weird code, havven't i handled this better somewhere??
-    if(templateGroups.length < 2) return [];
+    if (templateGroups.length < 2) {
+      return [];
+    }
     const updatedTemplateGroups = changeGroupStatus("awaitingEmissaryData", templateGroups[1]);
     templateGroups = [updatedTemplateGroups, ...templateGroups.slice(1)];
   }
@@ -42,7 +52,6 @@ const createAnimationTemplatesFromSnapshotDifferencesNewVersion = (
 };
 
 const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplateNewVersion[][] => {
- 
   switch (snapshotUpdateType) {
     case "addDragged": {
       let transitionTemplate: AnimationTemplateNewVersion = {
@@ -59,7 +68,6 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "destroy": {
       const destroyedCardFromData: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
       if (destroyedCardFromData) {
-
         const destroyedCard: Via = { cardId: destroyedCardFromData.cardId, targetId: destroyedCardFromData.cardId };
 
         let handCardFliesToDestroyedCard: AnimationTemplateNewVersion = {} as AnimationTemplateNewVersion;

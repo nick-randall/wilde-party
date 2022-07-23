@@ -157,12 +157,14 @@ export const stateReducer = (
       const animationData = state.animationData.filter(ad => ad.cardId !== action.payload);
 
       let nextGroupIndex = -1;
-      const animationTemplates = state.animationTemplates.map((group, index) => {
+      const animationTemplates = state.animationTemplates.map((animationTemplateGroup, index) => {
+        // identify the "next in line" animationTemplateGroup to be updated after previous animationTemplateGroup is set to "complete"
         if (index === nextGroupIndex) {
-          return changeGroupStatus("awaitingEmissaryData", group);
+          return changeGroupStatus("awaitingEmissaryData", animationTemplateGroup);
         }
-        return group.map(a => {
+        return animationTemplateGroup.map(a => {
           if (a.from.cardId === cardId) {
+            // set the animationTemplateGroup to "complete"
             nextGroupIndex = index + 1;
             return { ...a, status: "complete" };
           }
