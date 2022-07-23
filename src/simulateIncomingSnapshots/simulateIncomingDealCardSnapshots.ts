@@ -1,6 +1,6 @@
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { RootState } from "../redux/store";
-import handleNewSnapshots from "./handleNewSnapshots";
+import handleNewSnapshots from "../animations/handleNewSnapshots";
 
 const dealHand = (currentSnapshot: GameSnapshot, player: number) => {
   ///
