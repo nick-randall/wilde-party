@@ -18,7 +18,7 @@ const handleNewSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function
   if (animationTemplates.length === 0) {
     console.log("no animation templates")
     replaceCurrentSnapshotWithNewSnapshotNewVersion(newSnapshots[0]);
-    handleNewSnapshots(getState().newSnapshotsNewVersion);
+    handleNewSnapshots(getState().newSnapshots);
     return;
   }
   console.log(animationTemplates.length + " animation template groups")

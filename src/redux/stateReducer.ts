@@ -23,7 +23,7 @@ const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationT
 
 export interface State {
   gameSnapshot: GameSnapshot;
-  newSnapshotsNewVersion: GameSnapshot[];
+  newSnapshots: GameSnapshot[];
   draggedState: DraggedState;
   dragEndTarget?: DragEndTarget;
   devSettings: DevSettings;
@@ -50,7 +50,7 @@ const initialDragState = {
 export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
-    newSnapshotsNewVersion: [],
+    newSnapshots: [],
     screenSize: getScreenSize(),
     devSettings: initDevSettings,
     dragContainerExpand: initialDragState.dragContainerExpand,
@@ -115,24 +115,21 @@ export const stateReducer = (
       const newSnapshots: GameSnapshot[] = action.payload;
       const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id - b.id);
       console.log("setting new snapshots");
-      return { ...state, newSnapshotsNewVersion: sortedNewSnapshots };
-    }
-    case "SET_NEW_GAME_SNAPSHOTS": {
-      return { ...state, newSnapshots: action.payload };
+      return { ...state, newSnapshots: sortedNewSnapshots };
     }
     case "ADD_NEW_GAME_SNAPSHOTS":
-      console.log(state.newSnapshotsNewVersion);
+      console.log(state.newSnapshots);
       console.log("adding new game snapshot");
       console.log(action.payload)
       // they should already be in the right order and the first snapshot should
       // have added transitionTemplates already---if there weren't already
       // others in the stack
-      return { ...state, newSnapshots: state.newSnapshotsNewVersion.concat(action.payload) };
+      return { ...state, newSnapshotsVersion: state.newSnapshots.concat(action.payload) };
 
 
     case "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION": {
-      const newSnapshotsNewVersion = state.newSnapshotsNewVersion.filter((a, i) => i > 0);
-      return { ...state, newSnapshotsNewVersion, gameSnapshot: action.payload };
+      const newSnapshots = state.newSnapshots.filter((a, i) => i > 0);
+      return { ...state, newSnapshots, gameSnapshot: action.payload };
     }
     case "SET_ANIMATION_TEMPLATES": {
       console.log("setting these animation templates");

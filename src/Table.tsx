@@ -18,7 +18,7 @@ interface SimulateNewSnapshotButtonProps {
 
 const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ currentSnapshot }) => {
   const dispatch = useDispatch();
-  const newSnapshotcurrent = useSelector((state: RootState) => state.newSnapshotsNewVersion);
+  const newSnapshotcurrent = useSelector((state: RootState) => state.newSnapshots);
   const animationTemplates = useSelector((state: RootState) => state.animationTemplates);
   const logNewSnapshot = () => {
     console.log(newSnapshotcurrent);
@@ -110,7 +110,7 @@ export const Table = () => {
 
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard?.name)
   const dragEndTarget = useSelector((state: RootState) => state.dragEndTarget)
-  const newSnapshots = useSelector((state: RootState) => state.newSnapshotsNewVersion);
+  const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
 
   return (
     <div id="table" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
@@ -121,7 +121,6 @@ export const Table = () => {
         draggerId: {draggerId} */}
         {/* draggedHandCard: {draggedHandCard}
         DRAGENDTARGET: {dragEndTarget ? dragEndTarget.x : "undefined"} */}
-        {/* <SimulateNewSnapshotButton currentSnapshot={gameSnapshot} /> */}
         <EnemyPlayer
           id={gameSnapshot.players[1].id}
           player={1}

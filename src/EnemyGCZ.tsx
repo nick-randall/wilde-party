@@ -42,14 +42,14 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
 };
 
 // const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
-//   const { gameSnapshot, newSnapshotsNewVersion, draggedState, highlights, draggedHandCard } = state;
+//   const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
 //   const { draggedId } = draggedState;
 //   const { id, player } = ownProps;
 
 //   let enemyGCZCards = gameSnapshot.players[player].places.GCZ.cards;
 //   let emissaryCardIndex;
-//   if (newSnapshotsNewVersion.length > 0) {
-//     newSnapshotsNewVersion[0].animationTemplates.forEach(template => {
+//   if (newSnapshots.length > 0) {
+//     newSnapshots[0].animationTemplates.forEach(template => {
 //       // if place contains a card transitioning to or from it..
 
 //       const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???

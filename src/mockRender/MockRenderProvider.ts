@@ -19,7 +19,7 @@ const MockRenderProvider: React.FC<MockRenderProviderProps & DerivedMockRenderPr
 };
 
 const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) => {
-  const { gameSnapshot, newSnapshotsNewVersion, animationTemplates } = state;
+  const { gameSnapshot, newSnapshots, animationTemplates } = state;
   const { player, placeType, placeId } = ownProps;
 
   let cards;
@@ -30,7 +30,7 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
   }
   let mockRenderIds: string[] = [];
 
-  if (newSnapshotsNewVersion.length > 0 && animationTemplates.length > 0) {
+  if (newSnapshots.length > 0 && animationTemplates.length > 0) {
     const templatesWithAnimationToThisPlace = animationTemplates[0]
       .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
       .filter(a => "placeId" in a.to && a.to.placeId === placeId) 
@@ -38,9 +38,9 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
     if (templatesWithAnimationToThisPlace.length > 0) {
 
       if (player === null) {
-        cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
+        cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
       } else {
-        cards = newSnapshotsNewVersion[0].players[player].places[placeType].cards;
+        cards = newSnapshots[0].players[player].places[placeType].cards;
       }
 
       mockRenderIds = cards
@@ -53,9 +53,9 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
       .filter(a => "placeId" in a.from && a.from.placeId === placeId);
     if (templatesWithAnimationFromThisPlace.length > 0) {
       if (player === null) {
-        cards = newSnapshotsNewVersion[0].nonPlayerPlaces[placeType].cards;
+        cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;
       } else {
-        cards = newSnapshotsNewVersion[0].players[player].places[placeType].cards;
+        cards = newSnapshots[0].players[player].places[placeType].cards;
       }
     }
   }

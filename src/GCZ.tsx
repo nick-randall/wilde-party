@@ -96,7 +96,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 /* isDropDisabled={!allowDropping}*/
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
-  const { gameSnapshot, newSnapshotsNewVersion, animationTemplates, draggedState, highlights, draggedHandCard } = state;
+  const { gameSnapshot, newSnapshots, animationTemplates, draggedState, highlights, draggedHandCard } = state;
   const { draggedId } = draggedState;
   const { id: placeId } = ownProps;
 
@@ -108,13 +108,13 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   let cardGroups = getCardGroupsObjsnew(cards);
   let emissaryCardGroupIndex: number = -1;
 
-  if (newSnapshotsNewVersion.length > 0 && animationTemplates.length > 0) {
+  if (newSnapshots.length > 0 && animationTemplates.length > 0) {
     const templatesWithAnimationToThisPlace = animationTemplates[0]
       .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
       .filter(a => "placeId" in a.to && a.to.placeId === placeId);
 
     if (templatesWithAnimationToThisPlace.length > 0) {
-      cards = newSnapshotsNewVersion[0].players[0].places["GCZ"].cards;
+      cards = newSnapshots[0].players[0].places["GCZ"].cards;
       cardGroups = getCardGroupsObjsnew(cards);
     }
   }

@@ -4,6 +4,7 @@ import Hand from "./Hand";
 import countPlayerPoints from "./helperFunctions/locateFunctions/countPlayerPoints";
 import { RootState } from "./redux/store";
 import { SpecialsZone } from "./SpecialsZone";
+import SimulateNewSnapshotButton from "./Table";
 import UWZ from "./UWZ";
 
 interface PlayerProps {
@@ -36,6 +37,7 @@ const Player = (props: PlayerProps) => {
       {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
 
       <GCZ id={places.GCZ.id} />
+      {/* <SimulateNewSnapshotButton currentSnapshot={useSelector((state: RootState) => state.gameSnapshot)} /> */}
 
       <Hand id={places.hand.id} />
 
