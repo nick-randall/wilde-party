@@ -18,9 +18,9 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
 
   const specialsZoneHighlighted = useSelector((state: RootState) => state.highlights.includes(specialsZoneId));
   const handCardSpecialsType = useSelector((state: RootState) => state.draggedHandCard?.specialsCardType);
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === emptySpecialsColumnId);
+  // const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === emptySpecialsColumnId);
 
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  // const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
 
   const specialsTypeAccepted = handCardSpecialsType && acceptedSpecialsTypes.includes(handCardSpecialsType);
 
@@ -47,7 +47,7 @@ export const EmptySpecialsColumn = (props: EmptySpecialsColumnProps) => {
             {...provided.droppableProps}
           >
             {provided.placeholder}
-            {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+            {/* {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
           </div>
         )}
       </Droppable>

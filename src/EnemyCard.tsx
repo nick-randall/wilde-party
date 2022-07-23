@@ -7,7 +7,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import GhostCard from "./GhostCard";
 import React from "react";
-import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import AnimationHandler from "./animations/AnimationHandler";
 
 export interface EnemyCardProps {
   id: string;
@@ -28,7 +28,6 @@ const EnemyCard = (props: EnemyCardProps) => {
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
 
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
   const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
@@ -50,7 +49,6 @@ const EnemyCard = (props: EnemyCardProps) => {
     setMessinessOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
   }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
 
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const normalStyles: CSSProperties = {
     zIndex: tableCardzIndex,

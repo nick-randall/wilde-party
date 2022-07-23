@@ -20,9 +20,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
   // Represents the next index where a new card of this special type will be inserted;
   const specialsColumnId = columnIndex + specialsZoneId;
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId && isHighlighted);
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const allowDropping = isHighlighted;
 
   return (
@@ -60,7 +58,7 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                     }}
                   >
                     {provided.placeholder}
-                    {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                    {/* {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
                   </div>
                 )}
               </Droppable>

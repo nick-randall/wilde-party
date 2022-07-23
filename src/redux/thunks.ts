@@ -9,7 +9,7 @@ import { RootState } from "./store";
 import enactAiPlayerTurnThunk from "../thunks/enactAiPlayerTurnThunk";
 import { compareProps } from "../helperFunctions/tests";
 import { addTransition } from "./transitionQueueActionCreators";
-import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
+import { findSnapshotDifferences } from "../animations/findSnapshotDifferences";
 
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
 export const shouldEndDrawPhase = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1;

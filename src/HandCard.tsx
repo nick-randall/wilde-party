@@ -1,10 +1,10 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import "./animations/animations.css";
+// import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
 import Dragger from "./dndcomponents/Dragger";
-import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import AnimationHandler from "./animations/AnimationHandler";
 import useMockRender from "./mockRender/useMockRender";
 import handleEndAnimation from "./animations/handleEndAnimation";
 
@@ -25,7 +25,6 @@ const HandCard = (props: HandCardProps) => {
   // const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
-  const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
   const transitionUnderway = useSelector((state: RootState) => state.transitionData.length > 0);

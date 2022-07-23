@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
+import { findSnapshotDifferences } from "./findSnapshotDifferences";
 import { changeGroupStatus } from "./handleEndAnimation";
 
 export type SnapshotUpdateSource = "localUser" | "server";

@@ -1,10 +1,10 @@
 import { CSSProperties, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./animations/animations.css";
+// import "./animations/animations.css";
 import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "./redux/store";
 import useMockRender from "./mockRender/useMockRender";
-import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import AnimationHandler from "./animations/AnimationHandler";
 import handleEndAnimation from "./animations/handleEndAnimation";
 
 export interface EnemyHandCardProps {

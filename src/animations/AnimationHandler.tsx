@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Transition from "react-transition-group/Transition";
 import styled, { keyframes } from "styled-components";
-import { RootState } from "../../redux/store";
+import { RootState } from "../redux/store";
 
 interface AnimationHandlerProvidedProps {
   animated: boolean;

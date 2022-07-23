@@ -13,20 +13,20 @@ interface UWZProps {
 export const UWZ = (props: UWZProps) => {
   const { id, unwantedCards } = props;
 
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
-  const rearrange = useSelector((state: RootState) => state.rearrangingData);
+  // const draggedOver = useSelector((state: RootState) => state.dragUpdate);
+  // const rearrange = useSelector((state: RootState) => state.rearrangingData);
 
-  const ghostCardIndex = draggedOver.droppableId === id ? draggedOver.index : rearrange.sourceIndex;
+  // const ghostCardIndex = draggedOver.droppableId === id ? draggedOver.index : rearrange.sourceIndex;
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
+  // const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
   const highlights = useSelector((state: RootState) => state.highlights);
 
   const isHighlighted = highlights.includes(id);
 
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
+  // const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
 
-  const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
+  // const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getDimensions(0, "UWZ");
   const devSettings = useSelector((state: RootState) => state.devSettings);
 
@@ -44,7 +44,7 @@ export const UWZ = (props: UWZProps) => {
           placeId={id}
         />
       ))}
-      <Droppable droppableId={id} isDropDisabled={!allowDropping}>
+      <Droppable droppableId={id} isDropDisabled={true}>
         {provided => (
           <div
             {...provided.droppableProps}
@@ -60,13 +60,13 @@ export const UWZ = (props: UWZProps) => {
             }}
           >
             {provided.placeholder}
-            {ghostCard ? (
+            {/* {ghostCard ? (
               <GhostCard //index={ghostCardIndex}
                 image={ghostCard.image}
                 dimensions={dimensions}
                 zIndex={9}
               />
-            ) : null}
+            ) : null} */}
           </div>
         )}
       </Droppable>

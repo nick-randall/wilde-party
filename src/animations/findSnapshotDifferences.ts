@@ -1,4 +1,4 @@
-import { nonPlayerPlacesTypes, playerPlacesTypes } from "../../helperFunctions/locateFunctions";
+import { nonPlayerPlacesTypes, playerPlacesTypes } from "../helperFunctions/locateFunctions";
 
 /**
  * This function returns all differences between two given snapshots, with one

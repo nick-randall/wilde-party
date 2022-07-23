@@ -20,14 +20,14 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
   const screenSize = useSelector((state: RootState) => state.screenSize);
   const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id));
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
+  // const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
   const specialsCardsColumns = sortSpecials2(specialsCards);
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   const specialsCardsTypes: (GuestCardType | undefined)[] = flatten(specialsCardsColumns.map(column => column[0].specialsCardType));
   const missingSpecialsCardsTypes = allSpecialsCardsTypes.filter(type => !specialsCardsTypes.includes(type));
   const allowDropping = isHighlighted && draggedHandCard?.specialsCardType && missingSpecialsCardsTypes.includes(draggedHandCard?.specialsCardType);
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
-  const ghostCard = draggedOver.droppableId === id && draggedOver.index !== -1 ? draggedHandCard : undefined;
+  // const draggedOver = useSelector((state: RootState) => state.dragUpdate);
+  // const ghostCard = draggedOver.droppableId === id && draggedOver.index !== -1 ? draggedHandCard : undefined;
   const devSettings = useSelector((state: RootState) => state.devSettings);
 
   // const allowDropping = rearranging;
@@ -64,7 +64,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = (props: SpecialsZonePro
               dimensions={dimensions}
             />
           ) : null} */}
-          {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+          {/* {ghostCard ? <GhostCard image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null} */}
 
           {provided.placeholder}
         </div>

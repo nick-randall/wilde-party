@@ -5,7 +5,7 @@ import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
 import { RootState } from "./redux/store";
 import DropZoneWrapper from "./dndcomponents/DropZoneWrapper";
-import AnimationHandler from "./thunks/animationFunctions/AnimationHandler";
+import AnimationHandler from "./animations/AnimationHandler";
 import useMockRender from "./mockRender/useMockRender";
 import handleEndAnimation from "./animations/handleEndAnimation";
 

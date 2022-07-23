@@ -32,9 +32,7 @@ export interface State {
   animationData: AnimationData[];
   animationTemplates: AnimationTemplate[][];
   transitionData: TransitionData[];
-  dragUpdate: UpdateDragData;
   BFFdraggedOverSide?: string;
-  rearrangingData: SimpleRearrangingData;
   draggedHandCard?: GameCard;
   highlights: string[];
   highlightType: string;
@@ -58,10 +56,8 @@ export const stateReducer = (
     dragEndTarget: initialDragState.dragEndTarget,
     animationData: [],
     animationTemplates: [],
-    dragUpdate: { droppableId: "", index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],
-    rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
