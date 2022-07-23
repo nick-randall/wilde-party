@@ -4,9 +4,9 @@ import { changeGroupStatus } from "./handleEndAnimation";
 
 export type SnapshotUpdateSource = "localUser" | "server";
 
-const createAnimationTemplates = (currSnapshot: GameSnapshot, newSnapshot: GameSnapshot): AnimationTemplateNewVersion[][] => {
+const createAnimationTemplates = (currSnapshot: GameSnapshot, newSnapshot: GameSnapshot, snapshotUpdateSource: SnapshotUpdateSource): AnimationTemplateNewVersion[][] => {
   const snapshotDifferences = findSnapshotDifferences(currSnapshot, newSnapshot);
-  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(snapshotDifferences, newSnapshot.snapshotUpdateType, "server");
+  const animationTemplates = createAnimationTemplatesFromSnapshotDifferencesNewVersion(snapshotDifferences, newSnapshot.snapshotUpdateType, snapshotUpdateSource);
   return animationTemplates;
 };
 
@@ -33,6 +33,8 @@ const createAnimationTemplatesFromSnapshotDifferencesNewVersion = (
   This is necessary because the user has already dragged the card to its target location. 
   */
   if (snapshotUpdateSource === "localUser") {
+    //TODO weird code, havven't i handled this better somewhere??
+    if(templateGroups.length < 2) return [];
     const updatedTemplateGroups = changeGroupStatus("awaitingEmissaryData", templateGroups[1]);
     templateGroups = [updatedTemplateGroups, ...templateGroups.slice(1)];
   }

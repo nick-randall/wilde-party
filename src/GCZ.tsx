@@ -6,8 +6,8 @@ import GhostCardGroup from "./GhostCardGroup";
 import { getDimensions } from "./helperFunctions/getDimensions";
 import { getCardGroupsObjsnew } from "./helperFunctions/groupGCZCardNew";
 import { getCardGroupObjs } from "./helperFunctions/groupGCZCards";
+import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { RootState } from "./redux/store";
-import TableCardEmissary from "./TableCardEmissary";
 
 interface GCZProps {
   id: string;
@@ -40,7 +40,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   return (
     <div
       id="pl0GCZ"
-      className= {devSettings.grid.on ? "place-grid" : ""}
+      className={devSettings.grid.on ? "place-grid" : ""}
       style={{
         display: "flex",
         // top: 100,
@@ -67,20 +67,14 @@ function GCZ(props: GCZProps & GCZReduxProps) {
                 boxShadow: "0px 0px 30px 30px yellowgreen",
                 transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                 transitionDelay: "100ms",
-                minWidth: cardWidth
+                minWidth: cardWidth,
               }
             : {}
         }
       >
         {cardGroups.map((cardGroup, index) =>
           emissaryCardGroupIndex === index ? (
-            <TableCardEmissary
-              id={cardGroup.cards[0].id}
-              index={index}
-              image={cardGroup.cards[0].image}
-              dimensions={dimensions}
-              key={"emissary" + cardGroup.cards[0].id}
-            />
+            <TableCardMockRender cardId={cardGroup.cards[0].id} index={index} dimensions={dimensions} key={"emissary" + cardGroup.cards[0].id} />
           ) : (
             <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
               {draggerProps => (
@@ -102,9 +96,9 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 /* isDropDisabled={!allowDropping}*/
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
-  const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
+  const { gameSnapshot, newSnapshotsNewVersion, animationTemplates, draggedState, highlights, draggedHandCard } = state;
   const { draggedId } = draggedState;
-  const { id } = ownProps;
+  const { id: placeId } = ownProps;
 
   let isDraggingOver = false;
   let placeholder = undefined;
@@ -114,52 +108,15 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   let cardGroups = getCardGroupsObjsnew(cards);
   let emissaryCardGroupIndex: number = -1;
 
-  if (newSnapshots.length > 0) {
-    newSnapshots[0].animationTemplates.forEach(template => {
-      const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???
+  if (newSnapshotsNewVersion.length > 0 && animationTemplates.length > 0) {
+    const templatesWithAnimationToThisPlace = animationTemplates[0]
+      .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
+      .filter(a => "placeId" in a.to && a.to.placeId === placeId);
 
-      // if place contains a card transitioning to or from it..
-      if (placeId === id) {
-        //TODO sort somtehing like this:
-        // if (template.to.placeId === id || template.from.placeId === id) {
-        switch (template.status) {
-          case "waitingInLine":
-            break;
-
-          case "awaitingEmissaryData":
-            cards = newSnapshots[0].players[0].places.GCZ.cards;
-            cardGroups = getCardGroupsObjsnew(cards);
-            console.log("listening to newSnapshot");
-            const groups: CardGroup[] = cardGroups.map(group => group.cards);
-            groups.forEach((cards, cardsIndex) =>
-              cards.forEach(card => {
-                console.log(card.id);
-                console.log(template.to.cardId);
-                if (card.id === template.to.cardId) emissaryCardGroupIndex = cardsIndex;
-              })
-            );
-            // emissaryCardGroupIndex = cardGroups
-            //   .map(group => group.cards)
-            //   .findIndex(cards => cards.find(card => card.id === template.to.cardId) !== undefined);
-            console.log("listening to newSnapshot and awaitingEmissary at index " + emissaryCardGroupIndex);
-            break;
-          case "underway":
-            console.log("listening to newSnapshot");
-            cards = newSnapshots[0].players[0].places.GCZ.cards;
-            cardGroups = getCardGroupsObjsnew(cards);
-          // case "complete" :
-          //   break; ???
-        }
-      }
-      if (placeId === id) {
-        console.log("template from");
-        switch (template.status) {
-          case "underway":
-            cards = newSnapshots[0].players[0].places["GCZ"].cards;
-            cardGroups = getCardGroupsObjsnew(cards);
-        }
-      }
-    });
+    if (templatesWithAnimationToThisPlace.length > 0) {
+      cards = newSnapshotsNewVersion[0].players[0].places["GCZ"].cards;
+      cardGroups = getCardGroupsObjsnew(cards);
+    }
   }
 
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width);

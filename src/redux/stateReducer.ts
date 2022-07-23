@@ -23,7 +23,6 @@ const updateTemplate = (template: AnimationTemplateNewVersion, array: AnimationT
 
 export interface State {
   gameSnapshot: GameSnapshot;
-  newSnapshots: NewSnapshot[];
   newSnapshotsNewVersion: GameSnapshot[];
   draggedState: DraggedState;
   dragEndTarget?: DragEndTarget;
@@ -51,7 +50,6 @@ const initialDragState = {
 export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
-    newSnapshots: [],
     newSnapshotsNewVersion: [],
     screenSize: getScreenSize(),
     devSettings: initDevSettings,
@@ -113,18 +111,6 @@ export const stateReducer = (
         dragEndTarget: initialDragState.dragEndTarget,
         highlights: [],
       };
-    case "REMOVE_NEW_SNAPSHOT":
-      const id = action.payload;
-      console.log("removing snapshot with id " + id);
-      const newSnapshots = state.newSnapshots.filter(e => e.id !== id);
-      return { ...state, newSnapshots };
-    case "SET_NEW_SNAPSHOT": {
-      const newSnapshot = action.payload;
-      console.log("setting new snapshot");
-      const { id } = newSnapshot;
-      const newSnapshots = state.newSnapshots.map(e => (e.id === id ? newSnapshot : e));
-      return { ...state, ...newSnapshots };
-    }
     case "SET_NEW_SNAPSHOTS_NEW_VERSION": {
       const newSnapshots: GameSnapshot[] = action.payload;
       const sortedNewSnapshots = newSnapshots.sort((a, b) => a.id - b.id);
@@ -134,15 +120,18 @@ export const stateReducer = (
     case "SET_NEW_GAME_SNAPSHOTS": {
       return { ...state, newSnapshots: action.payload };
     }
+    case "ADD_NEW_GAME_SNAPSHOTS":
+      console.log(state.newSnapshotsNewVersion);
+      console.log("adding new game snapshot");
+      console.log(action.payload)
+      // they should already be in the right order and the first snapshot should
+      // have added transitionTemplates already---if there weren't already
+      // others in the stack
+      return { ...state, newSnapshots: state.newSnapshotsNewVersion.concat(action.payload) };
 
-    case "OVERWRITE_CURRENT_SNAPSHOT":
-      console.log("overwriting current snapshot");
-      return { ...state, gameSnapshot: action.payload };
 
     case "OVERWRITE_CURRENT_SNAPSHOT_NEW_VERSION": {
       const newSnapshotsNewVersion = state.newSnapshotsNewVersion.filter((a, i) => i > 0);
-      console.log(newSnapshotsNewVersion);
-      console.log("#s############");
       return { ...state, newSnapshotsNewVersion, gameSnapshot: action.payload };
     }
     case "SET_ANIMATION_TEMPLATES": {
@@ -152,14 +141,6 @@ export const stateReducer = (
     }
     case "SET_DRAG_CONTAINER_EXPAND":
       return { ...state, dragContainerExpand: action.payload };
-
-    case "ADD_NEW_GAME_SNAPSHOTS":
-      console.log(state.newSnapshots);
-      console.log("adding new game snapshot");
-      // they should already be in the right order and the first snapshot should
-      // have added transitionTemplates already---if there weren't already
-      // others in the stack
-      return { ...state, newSnapshots: state.newSnapshots.concat(action.payload) };
 
     case "ADD_SCREEN_DATA_TO_TEMPLATE": {
       let currTemplate = action.payload;

@@ -5,9 +5,6 @@ import MockRenderProvider from "./mockRender/MockRenderProvider";
 import TableCardMockRender from "./mockRender/TableCardMockRender";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
-import TableCardEmissary from "./TableCardEmissary";
-import EmissaryHandler from "./transitionFunctions/EmissaryHandler";
-
 interface DeckProps {
   id: string;
   cards: GameCard[];

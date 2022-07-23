@@ -12,13 +12,13 @@ const handleNewSnapshots = (newSnapshots: GameSnapshot[]) => (dispatch: Function
   dispatch(setNewSnapshotsNewVersion(newSnapshots));
   console.log("this many new snapshots: " + newSnapshots.length)
   console.log(newSnapshots)
-  const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0]);
+  const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0], "server");
 
   // If no animations are necessary to show updated state, update game state and deal with the next newsnaphoos...
   if (animationTemplates.length === 0) {
     console.log("no animation templates")
     replaceCurrentSnapshotWithNewSnapshotNewVersion(newSnapshots[0]);
-    handleNewSnapshots(getState().newSnapshots);
+    handleNewSnapshots(getState().newSnapshotsNewVersion);
     return;
   }
   console.log(animationTemplates.length + " animation template groups")

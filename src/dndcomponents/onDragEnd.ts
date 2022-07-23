@@ -46,13 +46,18 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
     } else {
       playedCard = gameSnapshot.players[sourcePlayer].places[sourcePlace].cards[source.index];
     }
+    console.log(playedCard)
 
     const snapshotUpdater = new SnapshotUpdater(gameSnapshot, playedCard.action.actionType);
     switch (playedCard.action.actionType) {
       case "addDragged":
+        console.log("addDragged")
+        console.log(source)
+        console.log(destination)
         snapshotUpdater.addChange({ source: source, destination: destination });
         snapshotUpdater.begin();
         const newSnapshot = snapshotUpdater.getNewSnapshot();
+        console.log(newSnapshot)
         dispatch(handleNewSnapshotFromUserAction(newSnapshot));
     }
   }
