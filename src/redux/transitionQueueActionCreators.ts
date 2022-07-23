@@ -6,13 +6,9 @@ type AddAnimation = { type: "ADD_ANIMATION"; payload: AnimationData };
 
 type AddMultipleAnimations = { type: "ADD_MULTIPLE_ANIMATIONS"; payload: AnimationData[] };
 
-type UpdateAnimationTemplate = { type: "UPDATE_ANIMATION_TEMPLATE"; payload: AnimationTemplate };
-
 type SetAnimationTemplates = { type: "SET_ANIMATION_TEMPLATES"; payload: AnimationTemplateNewVersion[][] };
 
 type AddScreenDataToTemplate = { type: "ADD_SCREEN_DATA_TO_TEMPLATE"; payload: AnimationTemplateNewVersion };
-
-type UpdateTransitionTemplate = { type: "UPDATE_TRANSITION_TEMPLATE"; payload: TransitionTemplate };
 
 type EndAnimationTemplateNewVersion = { type: "END_ANIMATION_TEMPLATE_NEW_VERSION"; payload: AnimationTemplateNewVersion };
 
@@ -37,7 +33,6 @@ type CreateAnimationsFromTemplates = {
 
 export type CreateNewAnimations = { type: "CREATE_NEW_ANIMATIONS" };
 
-type SetNewGameSnapshots = { type: "SET_NEW_GAME_SNAPSHOTS"; payload: NewSnapshot[] };
 
 export const removeTransition = (transitionId: string): RemoveTransition => ({ type: "REMOVE_TRANSITION", payload: transitionId });
 
@@ -56,16 +51,6 @@ export const addAnimation = (newAnimationData: AnimationData): AddAnimation => (
 export const addMultipleAnimations = (newAnimationData: AnimationData[]): AddMultipleAnimations => ({
   type: "ADD_MULTIPLE_ANIMATIONS",
   payload: newAnimationData,
-});
-
-export const updateTransitionTemplate = (template: TransitionTemplate): UpdateTransitionTemplate => ({
-  type: "UPDATE_TRANSITION_TEMPLATE",
-  payload: template,
-});
-
-export const updateAnimationTemplate = (template: AnimationTemplate): UpdateAnimationTemplate => ({
-  type: "UPDATE_ANIMATION_TEMPLATE",
-  payload: template,
 });
 
 export const clearAnimationTemplates = (): ClearAnimationTemplates => ({ type: "CLEAR_ANIMATION_TEMPLATES" });
@@ -90,14 +75,10 @@ export const setAnimationTemplates = (animationTemplates: AnimationTemplateNewVe
   payload: animationTemplates,
 });
 
-export const setNewGameSnapshots = (newSnapshots: NewSnapshot[]): SetNewGameSnapshots => ({ type: "SET_NEW_GAME_SNAPSHOTS", payload: newSnapshots });
-
 export type TransitionQueueActions =
   | AddTransition
   | AddMultipleTransitions
   | RemoveTransition
-  | UpdateTransitionTemplate
   | CreateNewAnimations
-  | SetNewGameSnapshots
   | EndAnimationTemplateGroup
   | EndAnimationTemplateNewVersion;

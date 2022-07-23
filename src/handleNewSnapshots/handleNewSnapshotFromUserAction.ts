@@ -1,7 +1,5 @@
-import { findSnapshotDifferences } from "../transitionFunctions/findSnapshotDifferences/findSnapshotDifferences";
 import { addNewGameSnapshots } from "../redux/newSnapshotActions";
 import { RootState } from "../redux/store";
-import { setNewGameSnapshots } from "../redux/transitionQueueActionCreators";
 import {  replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import createAnimationTemplatesFromSnapshotDifferencesNewVersion from "../animations/createAnimationTemplatesFromSnapshotDifferences";
 

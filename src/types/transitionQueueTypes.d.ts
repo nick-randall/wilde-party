@@ -3,37 +3,8 @@
  * the screen data of xPosition/yPosition at origin
  * or destination is still missing.
  */
-type TransitionTemplate = {
-  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData;
-  from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
-} & { id: string; status: TransitionTemplateStatus; orderOfExecution: number; animation?: string; delay?: number };
-
-type TransitionTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
-
-type CompleteTransitionTemplate = {
-  id: string;
-  status: TransitionTemplateStatus;
-  animation?: string;
-  delay?: number;
-  to: ToWithScreenData | ToViaWithScreenData;
-  from: FromWithScreenData | FromViaWithScreenData;
-};
-
-type AnimationTemplate = {
-  to: ToWithPossibleScreenData | ToViaWithPossibleScreenData;
-  from: FromWithPossibleScreenData | FromViaWithPossibleScreenData;
-} & { id: string; status: AnimationTemplateStatus; orderOfExecution: number; animation?: string; delay?: number };
 
 type AnimationTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
-
-type CompleteAnimationTemplate = {
-  id: string;
-  status: AnimationTemplateStatus;
-  startAnimation?: string;
-  delay?: number;
-  to: ToWithScreenData | ToViaWithScreenData;
-  from: FromWithScreenData | FromViaWithScreenData;
-};
 
 type ToWithScreenData = ToOrFrom & CompleteScreenToData;
 type FromWithScreenData = ToOrFrom & CompleteScreenFromData;
@@ -127,7 +98,3 @@ type CompleteAnimationTemplateNewVersion = {
   to: ToOrFromWithScreenData | ViaWithScreenData;
   from: ToOrFromWithScreenData | ViaWithScreenData;
 };
-
-//
-
-type NewSnapshot = GameSnapshot & { transitionTemplates?: TransitionTemplate[]; animationTemplates: AnimationTemplate[] };

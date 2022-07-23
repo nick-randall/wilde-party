@@ -4,10 +4,7 @@ type ReplaceCurrentSnapshotWithNewSnapshot = {
   payload: GameSnapshot;
 };
 
-type SetNewSnapshot = {
-  type: "SET_NEW_SNAPSHOT";
-  payload: NewSnapshot;
-};
+
 
 type SetNewSnapshotsNewVersion = {
   type: "SET_NEW_SNAPSHOTS_NEW_VERSION";
@@ -24,10 +21,6 @@ type RemoveNewSnapshot = {
  * @param newSnapshot 
  * @returns 
  */
-export const  setNewSnapshot = (newSnapshot: NewSnapshot): SetNewSnapshot => ({
-  type: "SET_NEW_SNAPSHOT",
-  payload: newSnapshot,
-});
 
 export const  setNewSnapshotsNewVersion = (newSnapshots: GameSnapshot[]): SetNewSnapshotsNewVersion => ({
   type: "SET_NEW_SNAPSHOTS_NEW_VERSION",
