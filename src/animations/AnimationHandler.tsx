@@ -115,7 +115,7 @@ const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, c
   );
 };
 
-const dynamicAnimation = (
+const flip = (
   originDelta: { x: number; y: number },
   backImgSrc: string,
   frontImgSrc: string,
@@ -132,8 +132,6 @@ const dynamicAnimation = (
    height: ${originHeight}px;
     transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
     content: url("${backImgSrc}");
-
-
   }
   ${wait}% {
    width: ${originWidth}px;
@@ -147,9 +145,36 @@ const dynamicAnimation = (
     height: ${finalHeight}px;
     transform: translate(0px, 0px) rotate3d(0, 1, 0, 0deg) rotate(${finalRotation}deg);
     content: url("${frontImgSrc}");
-
   }
 `;
+
+const noAnimation = (
+  originDelta: { x: number; y: number },
+  initialRotation: number,
+  finalRotation: number,
+  originWidth: number,
+  finalWidth: number,
+  originHeight: number,
+  finalHeight: number,
+  waitAsPercent?: number
+) => keyframes`
+  0% {
+    width: ${originWidth}px;
+    height: ${originHeight}px;
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation});
+  }
+  ${waitAsPercent}% {
+    width: ${originWidth}px;
+    height: ${originHeight}px;
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation});
+  }
+  100% {
+    width: ${finalWidth}px;
+    height: ${finalHeight}px;
+    transform: translate(0px, 0px) rotate(${finalRotation});
+  }
+`;
+
 const flipGrowThenMoveAnimation = (
   originDelta: { x: number; y: number },
   backImgSrc: string,
@@ -179,19 +204,21 @@ const flipGrowThenMoveAnimation = (
 // The StyledComponent
 const InjectedAnimationHandler = styled(AnimationLoader)<InjectedAnimationHandlerProps>`
   animation: ${props =>
-      props.startAnimation === "flipGrow"
-        ? flipGrowThenMoveAnimation(
+      props.startAnimation === "flip"
+        ? flip(
             props.originDelta,
             props.backImgSrc,
             props.frontImgSrc,
             props.initialRotation,
-            props.startAnimationDurationAsPercent,
+            props.finalRotation,
+            props.originWidth,
+            props.finalWidth,
+            props.originHeight,
+            props.finalHeight,
             props.waitAsPercent
           )
-        : dynamicAnimation(
+        : noAnimation(
             props.originDelta,
-            props.backImgSrc,
-            props.frontImgSrc,
             props.initialRotation,
             props.finalRotation,
             props.originWidth,

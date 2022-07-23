@@ -36,7 +36,7 @@ const EnemyHand: React.FC<EnemyHandProps> = ({ id, player, placeType }) => {
             // left: cardLeftSpread * handCards.length,
             // left: (spread / 2) * handCards.length,
             // top: y,  
-            border: "dotted blue thick",
+            // border: "dotted blue thick",
             transition: "180ms",
             height: dimensions.cardHeight,
           }}

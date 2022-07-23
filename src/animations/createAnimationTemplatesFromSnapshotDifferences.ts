@@ -96,7 +96,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "dealingInitialCard": {
       const transitionTemplate: AnimationTemplate = {
         ...differences[0],
-        animation: "",
+        animation: "flip",
         id: uuidv4(),
         status: "awaitingEmissaryData",
       };
@@ -107,10 +107,11 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       differences.forEach((difference, index) => {
         const transitionTemplate: AnimationTemplate = {
           ...difference,
-          animation: "",
+          animation: difference.to.player === 0 ? "flip" : "",
           id: uuidv4(),
           status: "awaitingEmissaryData",
-          delay: differences.length * 300 - index * 300,
+          // Just adds a 300ms delay to each card dealt (after the first) 
+          delay: (differences.length - 1) * 300 - index * 300,
         };
         templates.push(transitionTemplate);
       });

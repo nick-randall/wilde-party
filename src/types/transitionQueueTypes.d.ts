@@ -93,7 +93,7 @@ type MockRenderData = ScreenData & { cardId: string }
 type CompleteAnimationTemplate = {
   id: string;
   status: AnimationTemplateStatus;
-  startAnimation?: string;
+  animation?: string;
   delay?: number;
   to: ToOrFromWithScreenData | ViaWithScreenData;
   from: ToOrFromWithScreenData | ViaWithScreenData;

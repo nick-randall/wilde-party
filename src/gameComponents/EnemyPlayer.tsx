@@ -23,7 +23,7 @@ const EnemyPlayer = (props: PlayerProps) => {
       className={devSettings.grid.on ? "player-grid" : ""}
       style={{
         //position: "absolute", left: x, top: y, width: width, height:height,
-        border: "thin black solid",
+        // border: "thin black solid",
         display: "grid",
         justifyContent: "center",
         gridTemplateColumns: "1fr 1 fr",

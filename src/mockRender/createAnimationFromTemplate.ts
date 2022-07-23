@@ -11,10 +11,10 @@ const createAnimationFromTemplate = (template: CompleteAnimationTemplate): Anima
   newAnimationData.originDimensions = from.dimensions;
   newAnimationData.finalDimensions = to.dimensions;
 
-  // newAnimationData.startAnimation = template.animation ?? "";
+  newAnimationData.startAnimation = template.animation ?? "";
   newAnimationData.startAnimationDuration = 0;
   newAnimationData.wait = template.delay ?? 0;
-
+  console.log(newAnimationData.startAnimation)
   return newAnimationData;
 };
 

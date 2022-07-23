@@ -56,7 +56,7 @@ const Hand = (props: HandProps) => {
             // left: cardLeftSpread * handCards.length,
             //left: x - (spread / 2) * handCards.length,
             // top: y,
-            border: "blue solid 2px",
+            // border: "blue solid 2px",
             transition: "380ms",
             height: dimensions.cardHeight,
           }}
