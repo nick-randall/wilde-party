@@ -56,7 +56,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "addDragged": {
       let transitionTemplate: AnimationTemplate = {
         ...differences[0],
-        animation: "",
+        animation: "flip",
         status: "awaitingEmissaryData",
         id: uuidv4(),
       };

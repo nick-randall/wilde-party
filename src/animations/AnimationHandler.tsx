@@ -130,13 +130,13 @@ const flip = (
   0% {
    width: ${originWidth}px;
    height: ${originHeight}px;
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg);
     content: url("${backImgSrc}");
   }
   ${wait}% {
    width: ${originWidth}px;
    height: ${originHeight}px;
-   transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation});
+   transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg);
    content: url("${backImgSrc}");
 
   }
@@ -161,17 +161,17 @@ const noAnimation = (
   0% {
     width: ${originWidth}px;
     height: ${originHeight}px;
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation});
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation}deg);
   }
   ${waitAsPercent}% {
     width: ${originWidth}px;
     height: ${originHeight}px;
-    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation});
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate(${initialRotation}deg);
   }
   100% {
     width: ${finalWidth}px;
     height: ${finalHeight}px;
-    transform: translate(0px, 0px) rotate(${finalRotation});
+    transform: translate(0px, 0px) rotate(${finalRotation}deg);
   }
 `;
 
