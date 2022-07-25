@@ -37,7 +37,7 @@ const Player = (props: PlayerProps) => {
       {/* <SpecialsZone id={places.specialsZone.id} specialsCards={places.specialsZone.cards} playerZoneSize={{ width, height }} /> */}
 
       <GCZ id={places.GCZ.id} />
-      {/* <SimulateNewSnapshotButton currentSnapshot={useSelector((state: RootState) => state.gameSnapshot)} /> */}
+      <SimulateNewSnapshotButton currentSnapshot={useSelector((state: RootState) => state.gameSnapshot)} />
 
       <Hand id={places.hand.id} />
 

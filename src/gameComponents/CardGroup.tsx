@@ -1,10 +1,12 @@
+import TableCardMockRender from "../mockRender/TableCardMockRender";
 import Card from "./Card";
 
 export interface CardGroupProps {
   cardGroup: NewCardGroupObj;
   index: number;
   dimensions: AllDimensions;
-  GCZId: string
+  mockRenderIds: string[];
+  GCZId: string;
 }
 
 interface CardOffset {
@@ -13,12 +15,12 @@ interface CardOffset {
 }
 
 const CardGroup = (props: CardGroupProps) => {
-  const { cardGroup, index, dimensions, GCZId } = props;
+  const { cardGroup, index, dimensions, GCZId, mockRenderIds } = props;
   const { cardHeight, cardLeftSpread } = dimensions;
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
     if (card.cardType === "bff") return { top: cardHeight / 2, left: cardLeftSpread / 2 };
-    if (card.cardType === "zwilling") return { top: cardHeight / 2, left:0 };
+    if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
     if (cardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
     else return { top: 0, left: 0 };
   };
@@ -37,8 +39,10 @@ const CardGroup = (props: CardGroupProps) => {
         // border: "thin black solid",
       }}
     >
-      
-        {cardGroup.cards.map((card, cardGroupIndex) => (
+      {cardGroup.cards.map((card, cardGroupIndex) =>
+        mockRenderIds.includes(card.id) ? (
+          <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} key={card.id +"MockRender"}/>
+        ) : (
           <Card
             offsetTop={getOffset(card, cardGroupIndex).top}
             offsetLeft={getOffset(card, cardGroupIndex).left}
@@ -50,9 +54,9 @@ const CardGroup = (props: CardGroupProps) => {
             key={card.id}
             placeId={GCZId}
           />
-        ))}
-      </div>
-  
+        )
+      )}
+    </div>
   );
 };
 export default CardGroup;

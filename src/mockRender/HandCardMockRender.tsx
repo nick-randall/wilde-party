@@ -49,7 +49,7 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
         )
       );
     }
-  }, [cardId, dimensions, dispatch, index, rotation]);
+  }, [cardId, dimensions, dispatch, index, numHandCards, rotation]);
 
   return  (
     <div

@@ -1,12 +1,12 @@
 import { connect, useSelector } from "react-redux";
 import Dragger from "../dndcomponents/Dragger";
 import DraggerContainer from "../dndcomponents/DraggerContainer";
-import CardGroup from "./CardGroup";
-import GhostCardGroup from "./GhostCardGroup";
 import { getDimensions } from "../helperFunctions/getDimensions";
 import { getCardGroupsObjs } from "../helperFunctions/groupGCZCards";
-import TableCardMockRender from "../mockRender/TableCardMockRender";
+import MockRenderProvider from "../mockRender/MockRenderProvider";
 import { RootState } from "../redux/store";
+import CardGroup from "./CardGroup";
+import GhostCardGroup from "./GhostCardGroup";
 
 interface GCZProps {
   id: string;
@@ -37,67 +37,64 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   const devSettings = useSelector((state: RootState) => state.devSettings);
 
   return (
-    <div
-      id="pl0GCZ"
-      className={devSettings.grid.on ? "place-grid" : ""}
-      style={{
-        display: "flex",
-        // top: 100,
-        position: "relative",
-        margin: 0,
-        // left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-        left: 0,
-        height: cardHeight * 1.5, // should grow when bffs/ zwilling in group
-        minWidth: dimensions.cardWidth,
-        verticalAlign: "center",
-        // border: "thin red solid"
-      }}
-    >
-      <DraggerContainer
-        id={id}
-        elementWidth={cardWidth}
-        numElementsAt={numElementsAt}
-        elementWidthAt={elementWidthAt}
-        placeHolder={placeholder && <GhostCardGroup ghostCardGroup={placeholder} dimensions={dimensions} />}
-        containerStyles={
-          isRearranging || isHighlighted
-            ? {
-                backgroundColor: "yellowgreen",
-                boxShadow: "0px 0px 30px 30px yellowgreen",
-                transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-                transitionDelay: "100ms",
-                minWidth: cardWidth,
-              }
-            : {}
-        }
-      >
-        {cardGroups.map((cardGroup, index) =>
-          emissaryCardGroupIndex === index ? (
-            <TableCardMockRender cardId={cardGroup.cards[0].id} index={index} dimensions={dimensions} key={"emissary" + cardGroup.cards[0].id} />
-          ) : (
-            <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
-              {draggerProps => (
-                <div ref={draggerProps.ref} onMouseDown={draggerProps.handleDragStart}>
-                  <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id} />
-                </div>
-              )}
-            </Dragger>
-          )
-        )}
-      </DraggerContainer>
-
-      {/* {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cumulativeWidthAt[convertedDraggedOverIndex ?? 0]} dimensions={dimensions} /> : null}
-          {ghostCard ? <GhostCard index={numElementsAt[ghostCardIndex]} image={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null} */}
-    </div>
+    <MockRenderProvider placeId={id} placeType="GCZ" player={0}>
+      {(cards, mockRenderIds) => (
+        <div
+          id="pl0GCZ"
+          className={devSettings.grid.on ? "place-grid" : ""}
+          style={{
+            display: "flex",
+            // top: 100,
+            position: "relative",
+            margin: 0,
+            // left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
+            left: 0,
+            height: cardHeight * 1.5, // should grow when bffs/ zwilling in group
+            minWidth: dimensions.cardWidth,
+            verticalAlign: "center",
+            // border: "thin red solid"
+          }}
+        >
+          <DraggerContainer
+            id={id}
+            elementWidth={cardWidth}
+            numElementsAt={numElementsAt}
+            elementWidthAt={elementWidthAt}
+            placeHolder={placeholder && <GhostCardGroup ghostCardGroup={placeholder} dimensions={dimensions} />}
+            containerStyles={
+              isRearranging || isHighlighted
+                ? {
+                    backgroundColor: "yellowgreen",
+                    boxShadow: "0px 0px 30px 30px yellowgreen",
+                    transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+                    transitionDelay: "100ms",
+                    minWidth: cardWidth,
+                  }
+                : {}
+            }
+          >
+            {getCardGroupsObjs(cards).map((cardGroup, index) => (
+              <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
+                {draggerProps => (
+                  <div ref={draggerProps.ref} onMouseDown={draggerProps.handleDragStart}>
+                    <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id} mockRenderIds={mockRenderIds} />
+                  </div>
+                )}
+              </Dragger>
+            ))}
+          </DraggerContainer>
+        </div>
+      )}
+    </MockRenderProvider>
   );
 }
 
 /* isDropDisabled={!allowDropping}*/
 
 const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
-  const { gameSnapshot, newSnapshots, animationTemplates, draggedState, highlights, draggedHandCard } = state;
+  const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
   const { draggedId } = draggedState;
-  const { id: placeId } = ownProps;
+  const { id } = ownProps;
 
   let isDraggingOver = false;
   let placeholder = undefined;
@@ -105,18 +102,6 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
   // player slash place data;
   let cards = gameSnapshot.players[0].places.GCZ.cards;
   let cardGroups = getCardGroupsObjs(cards);
-  let emissaryCardGroupIndex: number = -1;
-
-  if (newSnapshots.length > 0 && animationTemplates.length > 0) {
-    const templatesWithAnimationToThisPlace = animationTemplates[0]
-      .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
-      .filter(a => "placeId" in a.to && a.to.placeId === placeId);
-
-    if (templatesWithAnimationToThisPlace.length > 0) {
-      cards = newSnapshots[0].players[0].places["GCZ"].cards;
-      cardGroups = getCardGroupsObjs(cards);
-    }
-  }
 
   const elementWidthAt = cardGroups.map(cardGroup => cardGroup.width);
   const numElementsAt = cardGroups.map(cardGroup => cardGroup.size);
@@ -133,7 +118,7 @@ const mapStateToProps = (state: RootState, ownProps: GCZProps) => {
       cards: [draggedHandCard],
     };
 
-  return { draggedId, isRearranging, isDraggingOver, elementWidthAt, cardGroups, numElementsAt, placeholder, isHighlighted, emissaryCardGroupIndex };
+  return { draggedId, isRearranging, isDraggingOver, elementWidthAt, cardGroups, numElementsAt, placeholder, isHighlighted };
 };
 
 export default connect(mapStateToProps)(GCZ);
