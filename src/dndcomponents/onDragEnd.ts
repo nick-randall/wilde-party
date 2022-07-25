@@ -18,7 +18,7 @@ export const onDragEnd = () => (dispatch: Function, getState: () => RootState) =
   // if rearrange...not implemented yet
   if (destination.containerId === source?.containerId) {
     const snapshotUpdater = new SnapshotUpdater(gameSnapshot, "rearrangingTablePlace");
-    snapshotUpdater.addChange({ source: source, destination: destination });
+    snapshotUpdater.addChanges({ source: source, destination: destination }, source.numDraggedElements);
     snapshotUpdater.begin();
     const newSnapshot = snapshotUpdater.getNewSnapshot();
     dispatch(handleNewSnapshotFromUserAction(newSnapshot));

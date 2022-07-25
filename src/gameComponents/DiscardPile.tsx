@@ -18,7 +18,7 @@ const DiscardPile: React.FC<DiscardPileProps> = ({ id }) => {
               <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} offsetLeft={index * 3} />
             ) : (
               // <img src={card.image} alt={card.image} style={{ height: cardHeight, width: cardWidth }} />
-              <Card id={card.id} key={card.id} index={0} image={card.image} dimensions={dimensions} offsetLeft={index * 3} placeId={id} />
+              <Card id={card.id} key={card.id} index={0} image={card.image} dimensions={dimensions} offsetLeft={index * 3} placeId={id} placeType="discardPile"/>
             )
           )}
         </div>

@@ -47,7 +47,7 @@ const Deck = (props: DeckProps) => {
               mockRenderIds.includes(card.id) ? (
                 <TableCardMockRender dimensions={dimensions} cardId={card.id} index={index} />
               ) : (
-                <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id} />
+                <Card dimensions={dimensions} id={card.id} index={index} image="back" placeId={id} placeType="deck"/>
               )
             )}
         </div>

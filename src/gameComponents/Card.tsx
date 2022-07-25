@@ -18,11 +18,12 @@ export interface CardProps {
   offsetTop?: number;
   //cardGroupIndex: number;
   placeId: string;
+  placeType: PlaceType;
   showNotAmongHighlights?: boolean;
 }
 
 const Card = (props: CardProps) => {
-  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image } = props;
+  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image, placeType } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
@@ -52,8 +53,8 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    // left: offsetLeft ? + offsetLeft + messinessOffset.x : messinessOffset.x,
-    // top: offsetTop ? offsetTop + messinessOffset.y : messinessOffset.y,
+    left: offsetLeft ? + offsetLeft + messinessOffset.x : "",
+    top: offsetTop ? offsetTop + messinessOffset.y : "",
     position: "absolute",
     transform: `rotate(${messinessRotation}deg)`,
     transition: "300ms",
@@ -61,35 +62,28 @@ const Card = (props: CardProps) => {
     userSelect: "none",
   };
 
-  const emissaryRef = useRef<HTMLDivElement>(null);
+  const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
   useMockRender(id, dimensions, 0, emissaryRef);
   
   return (
-    <div style={{ position: "absolute" }} ref={emissaryRef}>
-      <CardInspector
-        dimensions={dimensions}
-        cardRotation={messinessRotation}
-        render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
+     
           <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
             {animationProvidedProps => (
-              <div ref={cardRef}>
                 <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
                   {isDraggingOver => (
-                    <div>
+                    <>
                       <img
+                        ref={emissaryRef}
                         alt={image}
                         draggable="false"
                         src={`./images/${image}.jpg`}
-                        onClick={handleClick}
-                        onMouseLeave={handleMouseLeave}
                         id={id}
                         style={{
                           WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
                           boxShadow: "2px 2px 2px black",
                           transition: "box-shadow 180ms",
                           ...normalStyles,
-                          ...inspectingStyles,
                         }}
                         onAnimationEnd={() => dispatch(handleEndAnimation(id))}
                         className={animationProvidedProps.className}
@@ -103,15 +97,12 @@ const Card = (props: CardProps) => {
                           zIndex={5}
                         />
                       ) : null}
-                    </div>
+                    </>
                   )}
                 </DropZoneWrapper>
-              </div>
             )}
           </AnimationHandler>
-        )}
-      />
-    </div>
+
   );
 };
 export default Card;

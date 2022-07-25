@@ -26,8 +26,8 @@ export const createGameSnapshot = () => {
           playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
-          // cards: !i ? GCZCards : [],
-          cards:[]
+          cards: !i ? GCZCards : [],
+          // cards:[]
         },
         UWZ: {
           id: uuidv4(),

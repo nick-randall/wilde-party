@@ -42,6 +42,7 @@ export const UWZ = (props: UWZProps) => {
           offsetTop={index * dimensions.cardTopSpread}
           key={card.id}
           placeId={id}
+          placeType="UWZ"
         />
       ))}
       <Droppable droppableId={id} isDropDisabled={true}>

@@ -31,7 +31,7 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
               <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} />
             ) : (
               <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
-                <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} />)
+                <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ"/>)
               </div>
             )
           )}

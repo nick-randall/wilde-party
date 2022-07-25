@@ -37,6 +37,7 @@ const CardGroup = (props: CardGroupProps) => {
         // this here determines height of GCZ dragover area
         height: cardHeight * 1.5,
         // border: "thin black solid",
+        position:"relative"
       }}
     >
       {cardGroup.cards.map((card, cardGroupIndex) =>
@@ -53,6 +54,7 @@ const CardGroup = (props: CardGroupProps) => {
             dimensions={dimensions}
             key={card.id}
             placeId={GCZId}
+            placeType="GCZ"
           />
         )
       )}

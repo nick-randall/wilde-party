@@ -75,7 +75,7 @@ const DropZoneWrapper: React.FC<ComponentProps> = ({
   };
 
   return (
-    <div
+    <div id="dropZoneWrapper"
       style={{
         paddingTop: isDropDisabled ? 0 : expandAbove,
         marginTop: isDropDisabled ? 0 : -expandAbove,
