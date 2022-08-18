@@ -2,7 +2,8 @@ import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
 import "animate.css";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 
 type GameStartedProps = {
   imageHeight?: number;
@@ -33,15 +34,79 @@ const HomePage: React.FC = () => {
   const [bannerOffScreen, setBannerOffScreen] = useState(false);
   const [choice, setChoice] = useState<Choice>("");
   const [loading, setLoading] = useState(false);
-
+  const [sessionToken, setSessionToken] = useState<string | undefined>();
 
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseStartNewGame = () => {
     setChoice("startNewGame");
+    createNewGame()
   };
   const chooseJoinGame = () => {
     setChoice("joinGame");
+    joinGame("Wilde-Kirsche-Strasse40");
   };
+
+  const signInAnonymously = useCallback(() => {
+    const host = "127.0.0.1";
+    const port = 8443;
+    axios.get(`https://${host}:${port}/Wilde_Party/get-session-token`).then(response => {
+      console.log(response.headers.sessiontoken);
+      setSessionToken(response.headers.sessiontoken);
+      window.localStorage.setItem("sessiontoken", response.headers.sessiontoken);
+    });
+  }, []);
+
+  const createNewGame = useCallback(() => {
+    const host = "127.0.0.1";
+    const port = 8443;
+    axios
+    .get(`https://${host}:${port}/Wilde_Party/create-game`, {
+      // agent: httpsAgent,
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
+    })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(`Error creating a game: ${error}`);
+      console.log(error.response.status);
+      console.log(error.response);
+      if (error.response.status === 401) {
+        console.log(error.response)
+        setSessionToken("");
+        // localStorage.setItem("sessiontoken", undefined);
+      }
+     else if (error.response.data.reason === "gameAlreadyInProgress") {
+      console.log("game is already in progress!");
+    }
+    })
+    .finally(() => {
+    });
+
+  }, [sessionToken]);
+
+  const joinGame = useCallback((partyStreetNumber: string) => {
+    axios
+      .get(`https://127.0.0.1:8443/Wilde_Party/join-game/?partyaddress=Wilde-Kirsche-Strasse-805405`, {
+        headers: {
+          Authorization: `Bearer ${sessionToken}`,
+        },
+      })
+      .then(response => console.log(response))
+      .catch(error => {
+        console.log(error.response);
+        if (error.response.status === 401) {
+          setSessionToken("");
+          // localStorage.setItem("sessiontoken", undefined);
+        }
+      });
+  },[sessionToken]);
+
+  useEffect(() => {
+    signInAnonymously();
+  }, [signInAnonymously]);
 
   return (
     <div className="full-height">
