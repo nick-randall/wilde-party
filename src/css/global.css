@@ -3,17 +3,45 @@ body,
 .full-height, #root {
   height: 100%;
   margin: 0;
+      /*this prevents scrolling*/
+      overflow-y: hidden;
+
+}
+
+body {
+  background-image: url(background_tile.jpg);
+  background-repeat: repeat;
+  background-size: 130px;
 }
 
 .banner {
+  z-index: 10;
 }
+
+.banner.off-screen {
+  transform: translateX(100%);
+}
+
+.horizontal-flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
 .vertical-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
+  height: 100%;
   /* justify-content: space-around; */
+  justify-content: center;
 }
-a
+.screen-behind {
+  position: absolute;
+  z-index: 1;
+}
 
 div {
   /* margin: 0px; */
@@ -23,11 +51,9 @@ div {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+
 .table {
-  background-image: url(background_tile.jpg);
-  background-repeat: repeat;
-  height: 100%;
-  background-size: 130px;
   padding: 20px
 }
 

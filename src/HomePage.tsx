@@ -1,14 +1,17 @@
 import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
+import "animate.css";
+import { useState } from "react";
 
 type GameStartedProps = {
   imageHeight?: number;
+  wide?: boolean;
 };
 
 const HomeScreenButton = styled.div<GameStartedProps>`
-  height: 40px;
-  width: 300px;
+  // height: 40px;
+  width: ${props => (props.wide ? "30ch" : "15ch")};
   font-family: wilde-party-font;
   font-size: 35px;
   border-radius: 30px;
@@ -19,50 +22,53 @@ const HomeScreenButton = styled.div<GameStartedProps>`
   padding: ${props => (props.imageHeight ? "12.5px 15px 12.5px 15px" : "20px 15px 10px 15px")};
   text-align: center;
   display: inline-block;
+  cursor: pointer;
   /*text-shadow: 4px 5px 0px black;*/
 `;
 
 const HomePage: React.FC = () => {
+  const [bannerOffScreen, setBannerOffScreen] = useState(false);
+
+  const slideBanner = () => setBannerOffScreen(state => !state);
+
   return (
-    // <div style={{backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover"}}>
-    /* <img
-        src="./images/splashscreen.jpg"
-        alt="background"
+    <div className="full-height">
+      <div className="screen-behind horizontal-flex-container full-height">
+        <div className="vertical-container">
+          {/* <img className="test" src="./images/beerpong.jpg" alt="test" /> */}
+          <HomeScreenButton wide>Neue Party starten</HomeScreenButton>
+          <HomeScreenButton wide>Zur Party einer Freund*in</HomeScreenButton>
+        </div>
+      </div>
+
+      <div
+        className={`banner full-height ${bannerOffScreen ? "off-screen" : ""}`}
         style={{
-          width: "100vw",
-          transition: "1600ms",
-          overflow: "hidden",
-          padding: 0,
-          position: "fixed",
-          backgroundRepeat: "repeat"
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url("./images/splashscreen.jpg")`,
+          backgroundSize: "cover",
+          transition: "3s",
         }}
-      /> */
-    <div
-      className="banner full-height"
-      style={{
-        position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        backgroundImage: `url("./images/splashscreen.jpg")`,
-        backgroundSize: "cover",
-      }}
-    >
-      <div className="full-height vertical-container">
-        <div style={{ height: "65vh" }} />
-        <Link to="/game">
-          <HomeScreenButton>Spiel starten</HomeScreenButton>
-        </Link>
-        {/* <div style={{ height: 10 }} /> */}
-        <HomeScreenButton imageHeight={30}>
+      >
+        <div className="vertical-container">
+          <div style={{ height: "10vh" }} />
+          {/* <Link to="/game"> */}
+          <HomeScreenButton className={!bannerOffScreen ? "animate__animated animate__pulse animate__infinite" : ""} onClick={slideBanner}>
+            starten
+          </HomeScreenButton>
+          {/* </Link> */}
+
+          {/* <div style={{ height: 10 }} /> */}
+          {/* <HomeScreenButton imageHeight={30}>
           <a href="https://github.com/nick-randall/wilde-party" target="_self">
             <img src="https://www.analyticsvidhya.com/wp-content/uploads/2015/07/github_logo.png" alt="github logo" style={{ height: 35 }} />
           </a>
-        </HomeScreenButton>
+        </HomeScreenButton> */}
+        </div>
       </div>
     </div>
-
-    // </div>
-    // </div>
   );
 };
 
