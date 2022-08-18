@@ -7,6 +7,7 @@ import { useState } from "react";
 type GameStartedProps = {
   imageHeight?: number;
   wide?: boolean;
+  disabled?: boolean;
 };
 
 type Choice = "startNewGame" | "joinGame" | "";
@@ -24,7 +25,7 @@ const HomeScreenButton = styled.div<GameStartedProps>`
   padding: ${props => (props.imageHeight ? "12.5px 15px 12.5px 15px" : "20px 15px 10px 15px")};
   text-align: center;
   display: inline-block;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? "auto" : "pointer")};
   /*text-shadow: 4px 5px 0px black;*/
 `;
 
@@ -34,12 +35,12 @@ const HomePage: React.FC = () => {
 
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseStartNewGame = () => {
-    setChoice("startNewGame")
-  }
+    setChoice("startNewGame");
+  };
   const chooseJoinGame = () => {
-    setChoice("joinGame")
-
-  }
+    setChoice("joinGame");
+  };
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="full-height">
@@ -47,12 +48,14 @@ const HomePage: React.FC = () => {
         <div className="vertical-container">
           {/* <img className="test" src="./images/beerpong.jpg" alt="test" /> */}
           <div className={`vertical-container justify-content-end flying-button ${choice === "joinGame" ? "off-screen-top" : ""}`}>
-            <HomeScreenButton  onClick={chooseStartNewGame}>
+            <HomeScreenButton disabled={choice !== ""} onClick={chooseStartNewGame}>
               Neue Party starten
             </HomeScreenButton>
           </div>
           <div className={`vertical-container justify-content-start flying-button ${choice === "startNewGame" ? "off-screen-bottom" : ""}`}>
-            <HomeScreenButton onClick={chooseJoinGame}>Zur Party einer Freund*in</HomeScreenButton>
+            <HomeScreenButton disabled={choice !== ""} onClick={chooseJoinGame}>
+              Zur Party einer Freund*in
+            </HomeScreenButton>
           </div>
         </div>
       </div>
