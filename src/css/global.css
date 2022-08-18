@@ -1,3 +1,6 @@
+html{
+  height: 100%;
+}
 div{
   margin:0px;
   user-drag: none; 
@@ -6,7 +9,9 @@ user-select: none;
 -webkit-user-drag: none;
 -webkit-user-select: none;
 -ms-user-select: none;
-  
+  height: 100%;
+
+
 }
 body{
   /* background-color: blue; */
@@ -14,6 +19,7 @@ body{
   background-image: url(background_tile.jpg);
   background-repeat: repeat;
   background-size: 130px;
+  height: 100%;
 }
 
 @font-face {
