@@ -49,4 +49,4 @@ type SimpleSnapshotLocator = {
   place: PlaceType;
 }
 
-type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCard" | "dealingCards" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;
+type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCards" | "dealingCards" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;

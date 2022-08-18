@@ -93,7 +93,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     // case "protectSelf":
     // case "drawingWildeParty":
     // case "initialSnapshot":
-    case "dealingInitialCard": {
+    case "dealingInitialCards": {
       const transitionTemplate: AnimationTemplate = {
         ...differences[0],
         animation: "flip",
