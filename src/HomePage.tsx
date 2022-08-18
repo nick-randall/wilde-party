@@ -32,6 +32,8 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 const HomePage: React.FC = () => {
   const [bannerOffScreen, setBannerOffScreen] = useState(false);
   const [choice, setChoice] = useState<Choice>("");
+  const [loading, setLoading] = useState(false);
+
 
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseStartNewGame = () => {
@@ -40,7 +42,6 @@ const HomePage: React.FC = () => {
   const chooseJoinGame = () => {
     setChoice("joinGame");
   };
-  const [loading, setLoading] = useState(false);
 
   return (
     <div className="full-height">
