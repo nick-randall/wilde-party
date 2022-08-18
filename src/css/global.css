@@ -5,6 +5,7 @@ body,
   margin: 0;
       /*this prevents scrolling*/
       overflow-y: hidden;
+      overflow-x: hidden;
 
 }
 
@@ -20,6 +21,18 @@ body {
 
 .banner.off-screen {
   transform: translateX(100%);
+}
+
+.flying-button {
+  transition: 1.5s
+}
+
+.flying-button.off-screen-top {
+  transform: translateY(-110%);
+}
+
+.flying-button.off-screen-bottom {
+  transform: translateY(110%);
 }
 
 .horizontal-flex-container {
@@ -38,6 +51,15 @@ body {
   /* justify-content: space-around; */
   justify-content: center;
 }
+
+.justify-content-end {
+  justify-content: end;
+}
+
+.justify-content-start {
+  justify-content: start;
+}
+
 .screen-behind {
   position: absolute;
   z-index: 1;

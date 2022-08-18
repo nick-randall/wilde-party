@@ -9,6 +9,8 @@ type GameStartedProps = {
   wide?: boolean;
 };
 
+type Choice = "startNewGame" | "joinGame" | "";
+
 const HomeScreenButton = styled.div<GameStartedProps>`
   // height: 40px;
   width: ${props => (props.wide ? "30ch" : "15ch")};
@@ -28,16 +30,30 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 
 const HomePage: React.FC = () => {
   const [bannerOffScreen, setBannerOffScreen] = useState(false);
+  const [choice, setChoice] = useState<Choice>("");
 
   const slideBanner = () => setBannerOffScreen(state => !state);
+  const chooseStartNewGame = () => {
+    setChoice("startNewGame")
+  }
+  const chooseJoinGame = () => {
+    setChoice("joinGame")
+
+  }
 
   return (
     <div className="full-height">
       <div className="screen-behind horizontal-flex-container full-height">
         <div className="vertical-container">
           {/* <img className="test" src="./images/beerpong.jpg" alt="test" /> */}
-          <HomeScreenButton wide>Neue Party starten</HomeScreenButton>
-          <HomeScreenButton wide>Zur Party einer Freund*in</HomeScreenButton>
+          <div className={`vertical-container justify-content-end flying-button ${choice === "joinGame" ? "off-screen-top" : ""}`}>
+            <HomeScreenButton  onClick={chooseStartNewGame}>
+              Neue Party starten
+            </HomeScreenButton>
+          </div>
+          <div className={`vertical-container justify-content-start flying-button ${choice === "startNewGame" ? "off-screen-bottom" : ""}`}>
+            <HomeScreenButton onClick={chooseJoinGame}>Zur Party einer Freund*in</HomeScreenButton>
+          </div>
         </div>
       </div>
 
