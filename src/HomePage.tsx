@@ -25,7 +25,7 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 const HomePage: React.FC = () => {
   return (
     // <div style={{backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover"}}>
-      /* <img
+    /* <img
         src="./images/splashscreen.jpg"
         alt="background"
         style={{
@@ -37,21 +37,29 @@ const HomePage: React.FC = () => {
           backgroundRepeat: "repeat"
         }}
       /> */
-      <div style={{ position: "relative", display: "flex", justifyContent: "center", backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover", }}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ height: "65vh" }} />
-          <Link to="/game">
-            <HomeScreenButton>Spiel starten</HomeScreenButton>
-          </Link>
-          <div style={{ height: 10 }} />
-          <HomeScreenButton imageHeight={30}>
-            <a href="https://github.com/nick-randall/wilde-party" target="_self">
-              <img src="https://www.analyticsvidhya.com/wp-content/uploads/2015/07/github_logo.png" alt="github logo" style={{ height: 35 }} />
-            </a>
-          </HomeScreenButton>
-        </div>
-        
+    <div
+      className="banner full-height"
+      style={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        backgroundImage: `url("./images/splashscreen.jpg")`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="full-height vertical-container">
+        <div style={{ height: "65vh" }} />
+        <Link to="/game">
+          <HomeScreenButton>Spiel starten</HomeScreenButton>
+        </Link>
+        {/* <div style={{ height: 10 }} /> */}
+        <HomeScreenButton imageHeight={30}>
+          <a href="https://github.com/nick-randall/wilde-party" target="_self">
+            <img src="https://www.analyticsvidhya.com/wp-content/uploads/2015/07/github_logo.png" alt="github logo" style={{ height: 35 }} />
+          </a>
+        </HomeScreenButton>
       </div>
+    </div>
 
     // </div>
     // </div>

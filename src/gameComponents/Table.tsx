@@ -70,7 +70,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div  style={{ display: "flex", flexDirection: "column" }}>
       <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
       {/* <button onClick={simulateDestroy}>Simulate destroy!</button> */}
       <button onClick={logNewSnapshot} style={{color: newSnapshotcurrent === undefined ? "red" : "black"}}>Log New Snapshots NEw version</button>
@@ -113,7 +113,7 @@ export const Table = () => {
   const newSnapshots = useSelector((state: RootState) => state.newSnapshots);
 
   return (
-    <div id="table" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
+    <div id="table" className="table" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
         {/* numDraggedElements: {draggedState.source?.numDraggedElements}
         sourceIndex: {draggedState.source?.index}
