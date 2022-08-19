@@ -1,19 +1,18 @@
-import styled, { keyframes } from "styled-components";
+import styled, { css, CSSProperties, keyframes } from "styled-components";
 
-const throb = keyframes`
+const Throb = keyframes`
 
   0% {
-      -webkit-transform: scale(1.0, 1.0); opacity: 1.0;
+      -webkit-transform: translate(-50%) scale(1.0, 1.0);
   }
   50% {
-      -webkit-transform: scale(0.75, 0.75); opacity: 0.5;
+      -webkit-transform: translate(-50%) scale(0.95, 0.95);
   }
   100% {
-      -webkit-transform: scale(1.0, 1.0); opacity: 1.0;
+      -webkit-transform: translate(-50%) scale(1.0, 1.0);
   
 }
 `;
-
 
 type OffscreenPosition = "top" | "bottom" | "";
 
@@ -28,7 +27,13 @@ type ButtonProps = {
   wide?: boolean;
   disabled?: boolean;
   offScreen: OffscreenPosition;
+  throb?: boolean;
 };
+
+const throbAnimation = (props: CSSProperties) => css`
+${Throb} ${props.animationPlayState} infinite 1s;
+`
+
 
 
 export const HorizontalFlyButton = styled.div<ButtonProps>`
@@ -48,6 +53,6 @@ export const HorizontalFlyButton = styled.div<ButtonProps>`
   transform: ${props => offScreenProp[props.offScreen]}
   position: absolute;
   cursor: ${props => (props.disabled ? "auto" : "pointer")};
+  animation: ${props => throbAnimation({animationPlayState: props.throb ? "running" :  "initial"})};
   /*text-shadow: 4px 5px 0px black;*/
 `;
-

@@ -118,6 +118,8 @@ const HomePage: React.FC = () => {
         <div className="vertical-container">
           <div style={{ height: "10vh" }} />
           <HorizontalFlyButton
+
+          throb
             // className={!bannerOffScreen ? "animate__animated animate__pulse animate__infinite" : ""}
             offScreen=""
             onClick={slideBanner}
