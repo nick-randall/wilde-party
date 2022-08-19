@@ -1,22 +1,29 @@
 html,
-body, 
-.full-height, #root {
+body,
+#root {
   height: 100%;
   margin: 0;
-      /*this prevents scrolling*/
-      overflow-y: hidden;
-      overflow-x: hidden;
-
+}
+.full-height {
+  height: 100%;
 }
 
 body {
   background-image: url(background_tile.jpg);
   background-repeat: repeat;
   background-size: 130px;
+
+  /*this prevents scrolling*/
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .banner {
+  position: relative;
   z-index: 10;
+  transition: 3s;
+  background-image: url("splashscreen.jpg") ;
+  background-size: cover;
 }
 
 .banner.off-screen {
@@ -24,15 +31,28 @@ body {
 }
 
 .flying-button {
-  transition: 1.5s
+  transition: 1.5s;
+  left: 50vw;
+  transform: translateX(-50%);
+  position: absolute;
 }
 
 .flying-button.off-screen-top {
-  transform: translateY(-110%);
+  transform: translate(-50%, -50vh);
+
+}
+
+.test{
+  height: 100px;
+  width: 30ch;
+  background-color: aqua;
+  position: absolute;
+  left: 50vw;
+  transform: translateX(-50%);
 }
 
 .flying-button.off-screen-bottom {
-  transform: translateY(110%);
+  transform: translate(-50%, 100vh);
 }
 
 .horizontal-flex-container {
@@ -74,11 +94,9 @@ div {
   -ms-user-select: none;
 }
 
-
 .table {
-  padding: 20px
+  padding: 20px;
 }
-
 
 @font-face {
   font-family: wilde-party-font;
