@@ -1,34 +1,10 @@
-import { url } from "inspector";
-import { Link } from "react-router-dom";
-import styled, { StyledComponent } from "styled-components";
+import styled from "styled-components";
 import "animate.css";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-
-type GameStartedProps = {
-  imageHeight?: number;
-  wide?: boolean;
-  disabled?: boolean;
-};
+import { HorizontalFlyButton } from "./HorizontalFlyButton";
 
 type Choice = "createNewGame" | "joinGame" | "";
-
-const HomeScreenButton = styled.div<GameStartedProps>`
-  // height: 40px;
-  width: ${props => (props.wide ? "30ch" : "15ch")};
-  font-family: wilde-party-font;
-  font-size: 35px;
-  border-radius: 30px;
-  box-shadow: 4px 5px 0px black;
-  background-color: white;
-  color: #f9ca44;
-  border: thin black solid;
-  padding: ${props => (props.imageHeight ? "12.5px 15px 12.5px 15px" : "20px 15px 10px 15px")};
-  text-align: center;
-  display: inline-block;
-  cursor: ${props => (props.disabled ? "auto" : "pointer")};
-  /*text-shadow: 4px 5px 0px black;*/
-`;
 
 const HomePage: React.FC = () => {
   const [bannerOffScreen, setBannerOffScreen] = useState(false);
@@ -112,30 +88,22 @@ const HomePage: React.FC = () => {
       <div className="screen-behind full-height">
         <div className="vertical-container">
           <div className={`vertical-container justify-content-end`}>
-
-            <HomeScreenButton
-              className={`flying-button ${choice === "joinGame" ? "off-screen-top" : ""}`}
-              disabled={choice !== ""}
-              onClick={chooseCreateNewGame}
-            >
+            <HorizontalFlyButton offScreen={choice === "joinGame" ? "top" : ""} disabled={choice !== ""} onClick={chooseCreateNewGame}>
               Neue Party starten
-            </HomeScreenButton>
+            </HorizontalFlyButton>
+            <input type="text" className={`test flying-button ${choice === "createNewGame" || choice === "" ? "off-screen-top" : ""}`} />
           </div>
 
           <div className={`vertical-container justify-content-start`}>
-          <HomeScreenButton
-            className={`flying-button ${choice === "createNewGame" ? "off-screen-bottom" : ""}`}
-            disabled={choice !== ""}
-            onClick={chooseJoinGame}
-          >
-            Zur Party einer Freund*in
-          </HomeScreenButton>
+            <HorizontalFlyButton offScreen={choice === "createNewGame" ? "bottom" : ""} disabled={choice !== ""} onClick={chooseJoinGame}>
+              Zur Party einer Freund*in
+            </HorizontalFlyButton>
           </div>
         </div>
       </div>
 
       <div
-        className={`banner horizontal-flex-container full-height ${bannerOffScreen ? "off-screen" : ""}`}
+        className={`banner full-height ${bannerOffScreen ? "off-screen" : ""}`}
         style={
           {
             // position: "relative",
@@ -149,9 +117,13 @@ const HomePage: React.FC = () => {
       >
         <div className="vertical-container">
           <div style={{ height: "10vh" }} />
-          <HomeScreenButton className={!bannerOffScreen ? "animate__animated animate__pulse animate__infinite" : ""} onClick={slideBanner}>
+          <HorizontalFlyButton
+            // className={!bannerOffScreen ? "animate__animated animate__pulse animate__infinite" : ""}
+            offScreen=""
+            onClick={slideBanner}
+          >
             starten
-          </HomeScreenButton>
+          </HorizontalFlyButton>
         </div>
       </div>
     </div>

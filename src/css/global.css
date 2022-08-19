@@ -31,7 +31,7 @@ body {
 }
 
 .flying-button {
-  transition: 1.5s;
+  transition: 1s;
   left: 50vw;
   transform: translateX(-50%);
   position: absolute;
@@ -42,18 +42,21 @@ body {
 
 }
 
+
+
+.flying-button.off-screen-bottom {
+  transform: translate(-50%, 50vh);
+}
+
 .test{
-  height: 100px;
+  height: 3ch;
   width: 30ch;
   background-color: aqua;
   position: absolute;
   left: 50vw;
   transform: translateX(-50%);
-}
-
-.flying-button.off-screen-bottom {
-  transform: translate(-50%, 100vh);
-}
+  transition-delay: 800ms;
+} 
 
 .horizontal-flex-container {
   display: flex;
