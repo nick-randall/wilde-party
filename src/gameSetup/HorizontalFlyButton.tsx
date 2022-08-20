@@ -22,6 +22,12 @@ const offScreenProp = {
   "": "translateX(-50%);",
 };
 
+const offScreenPropForJoinButton = {
+  top: "translateY(-50vh);",
+  bottom: "translateY(50vh);",
+  "": "",
+};
+
 type ButtonProps = {
   imageHeight?: number;
   wide?: boolean;
@@ -56,3 +62,25 @@ export const HorizontalFlyButton = styled.div<ButtonProps>`
   animation: ${props => throbAnimation({animationPlayState: props.throb ? "running" :  "initial"})};
   /*text-shadow: 4px 5px 0px black;*/
 `;
+
+// export const JoinGameButton = styled.div<ButtonProps>`
+//   width: ${props => (props.wide ? "30ch" : "15ch")};
+//   font-family: wilde-party-font;
+//   font-size: 20px;
+//   border-radius: 30px;
+//   box-shadow: 4px 5px 0px black;
+//   background-color: white;
+//   color: #f9ca44;
+//   border: thin black solid;
+//   padding: ${props => (props.imageHeight ? "12.5px 15px 12.5px 15px" : "20px 15px 10px 15px")};
+//   text-align: center;
+
+//   transition: 1s;
+//   // left: 50vw;
+//   transform: ${props => offScreenPropForJoinButton[props.offScreen]}
+//   // position: absolute;
+//   cursor: ${props => (props.disabled ? "auto" : "pointer")};
+//   animation: ${props => throbAnimation({animationPlayState: props.throb ? "running" :  "initial"})};
+//   /*text-shadow: 4px 5px 0px black;*/
+// `;
+

@@ -63,6 +63,7 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
+  /* gap: 10ch; */
   width: 100%;
 }
 
@@ -86,6 +87,7 @@ body {
 .screen-behind {
   position: absolute;
   z-index: 1;
+  width: 100%
 }
 
 div {

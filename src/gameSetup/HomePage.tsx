@@ -3,28 +3,41 @@ import "animate.css";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { HorizontalFlyButton } from "./HorizontalFlyButton";
+import ReactFlipMove from "react-flip-move";
+import FlipMove from "react-flip-move";
+import JoinGameButton from "./JoinButton";
 
 type Choice = "createNewGame" | "joinGame" | "";
+
+const host = "127.0.0.1";
+const port = 8443;
 
 const HomePage: React.FC = () => {
   const [bannerOffScreen, setBannerOffScreen] = useState(false);
   const [choice, setChoice] = useState<Choice>("");
   const [loading, setLoading] = useState(false);
   const [sessionToken, setSessionToken] = useState<string | undefined>();
+  const [availableGames, setAvailableGames] = useState<AvailableGame[]>();
 
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseCreateNewGame = () => {
     setChoice("createNewGame");
-    // createNewGame()
+    createNewGame();
   };
   const chooseJoinGame = () => {
-    setChoice("joinGame");
-    // joinGame("Wilde-Kirsche-Strasse40");
+    const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/waiting-games-stream`);
+    ws.onmessage = (message: MessageEvent) => {
+      console.log(message.data);
+      setAvailableGames(JSON.parse(message.data));
+    };
   };
+  useEffect(() => {
+    if (availableGames !== undefined) {
+      setChoice("joinGame");
+    }
+  }, [availableGames]);
 
   const signInAnonymously = useCallback(() => {
-    const host = "127.0.0.1";
-    const port = 8443;
     axios.get(`https://${host}:${port}/Wilde_Party/get-session-token`).then(response => {
       console.log(response.headers.sessiontoken);
       setSessionToken(response.headers.sessiontoken);
@@ -33,8 +46,6 @@ const HomePage: React.FC = () => {
   }, []);
 
   const createNewGame = useCallback(() => {
-    const host = "127.0.0.1";
-    const port = 8443;
     axios
       .get(`https://${host}:${port}/Wilde_Party/create-game`, {
         headers: {
@@ -62,7 +73,7 @@ const HomePage: React.FC = () => {
   const joinGame = useCallback(
     (partyStreetNumber: string) => {
       axios
-        .get(`https://127.0.0.1:8443/Wilde_Party/join-game/?partyaddress=Wilde-Kirsche-Strasse-805405`, {
+        .get(`https://127.0.0.1:8443/Wilde_Party/join-game/?partyaddress=${partyStreetNumber}`, {
           headers: {
             Authorization: `Bearer ${sessionToken}`,
           },
@@ -91,7 +102,23 @@ const HomePage: React.FC = () => {
             <HorizontalFlyButton offScreen={choice === "joinGame" ? "top" : ""} disabled={choice !== ""} onClick={chooseCreateNewGame}>
               Neue Party starten
             </HorizontalFlyButton>
-            <input type="text" className={`test flying-button ${choice === "createNewGame" || choice === "" ? "off-screen-top" : ""}`} />
+
+            <div className={`horizontal-flex-container`}>
+              {availableGames && ( // TODO should be .length
+                <FlipMove
+                  duration={1000}
+                  // leaveAnimation={{ from: { height: "0px" }, to: { height: "100px" } }}
+                  // enterAnimation={{ from: { height: "0px" }, to: { height: "100px" }  }}
+                >
+                  {availableGames.map(game => (
+                    <JoinGameButton key={game.id} offScreen={choice !== "joinGame"} joinGame={() => joinGame(game.partyAddress)}>
+                      {game.partyAddress}
+                    </JoinGameButton>
+                    // <p>{game.partyAddress}</p>
+                  ))}
+                </FlipMove>
+              )}
+            </div>
           </div>
 
           <div className={`vertical-container justify-content-start`}>
@@ -118,8 +145,7 @@ const HomePage: React.FC = () => {
         <div className="vertical-container">
           <div style={{ height: "10vh" }} />
           <HorizontalFlyButton
-
-          throb
+            throb
             // className={!bannerOffScreen ? "animate__animated animate__pulse animate__infinite" : ""}
             offScreen=""
             onClick={slideBanner}
