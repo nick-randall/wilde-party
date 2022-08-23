@@ -1,0 +1,33 @@
+
+.banner {
+  position: absolute;
+  z-index: 10;
+  transition: 1s;
+  background-image: url("splashscreen.jpg");
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.banner.off-screen {
+  transform: translateX(100%);
+}
+
+.background {
+  position: absolute;
+  /* z-index: 1; */
+  width: 100%;
+  background-image: url(background_tile.jpg);
+  background-repeat: repeat;
+  background-size: 130px;
+  height: 100%;
+
+  /*this prevents scrolling*/
+  overflow-y: hidden;
+  overflow-x: hidden;
+}

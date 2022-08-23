@@ -1,0 +1,71 @@
+.game-setup-widget {
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 1s;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+}
+
+.name-input-box {
+  background-color: aqua;
+  padding: 3ch;
+  border-radius: 2ch;
+  text-align: center;
+}
+
+.name-input {
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: groove;
+  background-color: #eee;
+}
+
+.button {
+  width: 15ch;
+  font-family: wilde-party-font;
+  font-size: 35px;
+  border-radius: 30px;
+  box-shadow: 4px 5px 0px black;
+  background-color: white;
+  color: #f9ca44;
+  border: thin black solid;
+  padding: 20px 15px 10px 15px;
+  text-align: center;
+
+  transition: 1s;
+  left: 50vw;
+  transform: translateX(-50%);
+  position: absolute;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: translate(-50%) scale(1, 1);
+  }
+  50% {
+    -webkit-transform: translate(-50%) scale(0.95, 0.95);
+  }
+  100% {
+    -webkit-transform: translate(-50%) scale(1, 1);
+  }
+}
+
+.button.pulsing {
+  animation: pulse 1s infinite;
+}
+
+
+.button.offscreen-top {
+  transform: translate(-50%, -100vh);
+  transition: 1000ms;
+}
+
+.button.offscreen-bottom {
+  transform: translate(-50%, 100vh);
+  transition: 1000ms;
+}
+
+

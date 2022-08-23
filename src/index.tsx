@@ -6,6 +6,7 @@ import store from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import  HomePage  from "./gameSetup/HomePage";
+import App from "./App";
 
 
 
@@ -14,12 +15,7 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-            {/* can put layout wrapper here*
-            <Route /> */}
-            <Route path= "game" element={<Table />} />
-          
-          {/* <Table /> */}
+          <Route path="/*" element={<App />} />
         </Routes>
       </Router>
     </Provider>

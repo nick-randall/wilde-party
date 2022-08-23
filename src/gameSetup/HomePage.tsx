@@ -9,6 +9,19 @@ import JoinGameButton from "./JoinButton";
 
 type Choice = "createNewGame" | "joinGame" | "";
 
+type NewGameParams = {
+  numPlayers: number;
+  numHumans: number;
+  creatorName: string;
+};
+
+type JoinGameSuccessMessage = {
+  type: "joinedGame";
+  message: string;
+  partyAddress: string;
+  websocketToken: string;
+};
+
 const host = "127.0.0.1";
 const port = 8443;
 
@@ -22,7 +35,7 @@ const HomePage: React.FC = () => {
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseCreateNewGame = () => {
     setChoice("createNewGame");
-    createNewGame();
+    createNewGame(3, 2, "Johnny for realzies", "Johnny's biffy");
   };
   const chooseJoinGame = () => {
     const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/waiting-games-stream`);
@@ -45,40 +58,82 @@ const HomePage: React.FC = () => {
     });
   }, []);
 
-  const createNewGame = useCallback(() => {
-    axios
-      .get(`https://${host}:${port}/Wilde_Party/create-game`, {
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      })
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.log(`Error creating a game: ${error}`);
-        console.log(error.response.status);
-        console.log(error.response);
-        if (error.response.status === 401) {
+  const createNewGame = useCallback(
+    (numPlayers: number, numHumans: number, creatorName: string, partyName: string) => {
+      axios
+        .post(
+          `https://${host}:${port}/Wilde_Party/create-game`,
+          { numPlayers, numHumans, creatorName, partyName },
+          {
+            headers: {
+              Authorization: `Bearer ${sessionToken}`,
+            },
+          }
+        )
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(`Error creating a game: ${error}`);
+          console.log(error.response.status);
           console.log(error.response);
-          setSessionToken("");
-          // localStorage.setItem("sessiontoken", undefined);
-        } else if (error.response.data.reason === "gameAlreadyInProgress") {
-          console.log("game is already in progress!");
-        }
-      })
-      .finally(() => {});
-  }, [sessionToken]);
+          if (error.response.status === 401) {
+            console.log(error.response);
+            setSessionToken("");
+            // localStorage.setItem("sessiontoken", undefined);
+          } else if (error.response.data.reason === "gameAlreadyInProgress") {
+            console.log("game is already in progress!");
+          }
+        })
+        .finally(() => {});
+    },
+    [sessionToken]
+  );
+
+  // const joinGame = useCallback(
+  //   (partyStreetNumber: string) => {
+  //     axios
+  //       .get(`https://127.0.0.1:8443/Wilde_Party/join-game/?partyaddress=${partyStreetNumber}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${sessionToken}`,
+  //         },
+  //       })
+  //       .then(response => console.log(response))
+  //       .catch(error => {
+  //         console.log(error.response);
+  //         if (error.response.status === 401) {
+  //           setSessionToken("");
+  //           // localStorage.setItem("sessiontoken", undefined);
+  //         }
+  //       });
+  //   },
+  //   [sessionToken]
+  // );
 
   const joinGame = useCallback(
-    (partyStreetNumber: string) => {
+    (partyAddress: string, joiningPlayerName: string) => {
       axios
-        .get(`https://127.0.0.1:8443/Wilde_Party/join-game/?partyaddress=${partyStreetNumber}`, {
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
+        .post(
+          `https://127.0.0.1:8443/Wilde_Party/join-game/}`,
+          { partyAddress, joiningPlayerName },
+          {
+            headers: {
+              Authorization: `Bearer ${sessionToken}`,
+            },
+          }
+        )
+        .then(response => {
+          const message: JoinGameSuccessMessage = response.data;
+          console.log(message.message);
+          console.log(message.partyAddress + " is the party adress");
+          console.log(message.type)
+
+          // TODO: now use the websocketToken and start waiting for all players to join.
+          const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/websocket-session/${message.websocketToken}`);
+          ws.onmessage = (message: MessageEvent) => {
+            console.log(message.data);
+          };
         })
-        .then(response => console.log(response))
         .catch(error => {
           console.log(error.response);
           if (error.response.status === 401) {
@@ -111,7 +166,7 @@ const HomePage: React.FC = () => {
                   // enterAnimation={{ from: { height: "0px" }, to: { height: "100px" }  }}
                 >
                   {availableGames.map(game => (
-                    <JoinGameButton key={game.id} offScreen={choice !== "joinGame"} joinGame={() => joinGame(game.partyAddress)}>
+                    <JoinGameButton key={game.id} offScreen={choice !== "joinGame"} joinGame={() => joinGame(game.partyAddress, "Nick")}>
                       {game.partyAddress}
                     </JoinGameButton>
                     // <p>{game.partyAddress}</p>
