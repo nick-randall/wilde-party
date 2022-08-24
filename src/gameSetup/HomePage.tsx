@@ -5,7 +5,7 @@ import axios from "axios";
 import { HorizontalFlyButton } from "./HorizontalFlyButton";
 import ReactFlipMove from "react-flip-move";
 import FlipMove from "react-flip-move";
-import JoinGameButton from "./JoinButton";
+import JoinGameButton from "../GameSetupPage/JoinButton";
 
 type Choice = "createNewGame" | "joinGame" | "";
 
@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
   const [choice, setChoice] = useState<Choice>("");
   const [loading, setLoading] = useState(false);
   const [sessionToken, setSessionToken] = useState<string | undefined>();
-  const [availableGames, setAvailableGames] = useState<AvailableGame[]>();
+  const [availableGames, setAvailableGames] = useState<GameStats[]>();
 
   const slideBanner = () => setBannerOffScreen(state => !state);
   const chooseCreateNewGame = () => {

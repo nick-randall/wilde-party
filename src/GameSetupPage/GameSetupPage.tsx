@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import CreateGamePage from "./CreateGamePage";
 import JoinGamePage from "./JoinGamePage";
-import { WidgetData, ActiveGames, TextInput, GameStats, WaitingWidget } from "./GameSetupWidgets";
+import { WidgetData, ActiveGames, TextInput, WaitingWidget } from "./GameSetupWidgets";
 
 interface GameSetupProps {}
 
@@ -45,7 +45,7 @@ const GameSetup: FC<GameSetupProps> = () => {
   return (
     <>
       <p>{playerName}</p>
-      <p>{selectedParty?.name}</p>
+      <p>{selectedParty?.partyAddress}</p>
       <div style={{ display: "grid", gridTemplateColumns: 4, gridTemplateRows: 8, justifyContent: "center", height: "100%" }}>
         <Link to="/game/setup/createGame" style={{ gridColumn: 2, gridRow: 3 }}>
           <div className={`button  ${location.pathname === "/game/setup/joinGame" ? "offscreen-top" : ""}`}>Neue Party starten</div>

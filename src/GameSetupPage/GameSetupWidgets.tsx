@@ -1,5 +1,10 @@
-import { ChangeEvent, FC } from "react";
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import FlipMove from "react-flip-move";
+import { TransitionGroup } from "react-transition-group";
+import { useApi } from "../api/useApi";
+import { AuthContext } from "../App";
 import "./GameSetupPages.css";
+import JoinGameButton from "./JoinButton";
 export type WidgetData = {
   index: number;
   buttonText: string;
@@ -7,16 +12,42 @@ export type WidgetData = {
   widgetComponent: JSX.Element;
 };
 
-const activeGames: GameStats[] = [{ name: "james 30th" }, { name: "steves 25th" }];
+const host = "127.0.0.1";
+const port = 8443;
 
 export const ActiveGames: FC<ActiveGamesProps> = ({ selectedParty, setSelected }) => {
-  return (
-    <>
-      {activeGames.map(game => (
-        <div onClick={() => setSelected(game)}>{game.name}</div>
-      ))}
-    </>
-  );
+  const [availableGames, setAvailableGames] = useState<GameStats[]>();
+  const api = useApi();
+  // const token = useContext(AuthContext);
+
+  useEffect(() => {
+    const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/waiting-games-stream`);
+    ws.onmessage = (message: MessageEvent) => {
+      console.log(message.data);
+      setAvailableGames(JSON.parse(message.data));
+    };
+  });
+
+  // const handleClick = (game: GameStats) => {
+  //   api.joinGame(game.partyAddress)
+  // };
+  console.log(selectedParty)
+
+  if (availableGames === undefined) return <></>;
+  else if (availableGames?.length === 0) {
+    return <div>Keine Spiele verfügbar</div>;
+  } else
+    return (
+      <>
+        {availableGames.map(game => (
+          <FlipMove duration={1000}>
+            <div className={`available-game-button ${game === selectedParty ? "selected" : ""}`} onClick={() => setSelected(game)}>
+              {game.partyAddress}
+            </div>
+          </FlipMove>
+        ))}
+      </>
+    );
 };
 
 type ActiveGamesProps = {
@@ -24,9 +55,6 @@ type ActiveGamesProps = {
   setSelected: (game: GameStats) => void;
 };
 
-export type GameStats = {
-  name: string;
-};
 type TextInputProps = {
   state: string;
   setStateFunction: (ev: React.ChangeEvent<HTMLInputElement>) => void;
@@ -36,7 +64,7 @@ export const TextInput: FC<TextInputProps> = ({ state, setStateFunction }) => {
   return (
     <>
       <div className="name-input-box">
-        <p>Enter your name</p>
+        <p>Wie heißt du?</p>
         <input className="name-input" type="text" value={state} onChange={setStateFunction} />{" "}
       </div>
     </>
@@ -57,7 +85,7 @@ type WidgetProps = WidgetData & {
 };
 
 const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
-  const { numWidgets, currIndex, index, widgetComponent } = widgetData;
+  const { currIndex, index, widgetComponent } = widgetData;
   const offscreenLeft = 100 * (currIndex - index);
 
   return (

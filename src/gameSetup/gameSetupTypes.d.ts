@@ -1,4 +1,4 @@
-type AvailableGame = {
+type GameStats = {
 partyAddress: string;
 partyName: string;
 totalPlayers: string;

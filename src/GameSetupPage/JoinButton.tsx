@@ -8,7 +8,7 @@ interface JoinGameButtonProps {
 
 const JoinGameButton: FC<JoinGameButtonProps> = forwardRef(({ offScreen, children, joinGame }, ref: Ref<HTMLDivElement>) => {
   const style: CSSProperties = {
-    transform: offScreen ? "translate(-100vh)" : "",//"translateX(-50%)",
+    // transform: offScreen ? "translate(-100vh)" : "",//"translateX(-50%)",
 
     // position: "absolute",
     height: "2ch",
