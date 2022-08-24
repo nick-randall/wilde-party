@@ -1,4 +1,4 @@
-import { createContext, FC, useEffect, useState } from "react";
+import { createContext, FC, useCallback, useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import Game from "./GamePath";
@@ -25,15 +25,13 @@ const App: FC<AppProps> = () => {
   const location = useLocation();
   const [sessionToken, setSessionToken] = useState<SessionToken>(null);
   const [loading, setLoading] = useState(false);
-  const [activeGame, setActiveGame] = useState<GameStats>();
-  useEffect(() => {
-    if(sessionToken) return;
-    const oldToken = window.localStorage.getItem("sessionToken");
-    console.log(oldToken);
-    if (oldToken !== null) {
-      setSessionToken(oldToken);
-    }
-    setLoading(true);
+  // const [activeGame, setActiveGame] = useState<GameStats>();
+  const [error, setError] = useState();
+
+  const getSessionToken = useCallback(() => {
+    const savedToken = window.localStorage.getItem("sessiontoken");
+    if (savedToken !== null) setSessionToken(savedToken);
+    if(!sessionToken)
     axios
       .get(`https://${host}:${port}/Wilde_Party/get-session-token`, {
         // headers: {
@@ -42,16 +40,14 @@ const App: FC<AppProps> = () => {
       })
       .then(response => {
         const { sessiontoken } = response.headers;
-        console.log(sessiontoken)
-        console.log(response.headers)
         setSessionToken(sessiontoken);
-        window.localStorage.setItem("sessiontoken", response.headers.sessiontoken);
+        window.localStorage.setItem("sessiontoken", sessiontoken);
         const { type, message, activeGame } = response.data as GetSessionTokenSuccessMessage;
         console.log(message);
         console.log(sessiontoken);
-        if (activeGame) {
-          setActiveGame(activeGame);
-        }
+        // if (activeGame) {
+        //   setActiveGame(activeGame);
+        // }
         setLoading(false);
       })
       .catch(e => {
@@ -59,23 +55,33 @@ const App: FC<AppProps> = () => {
           window.localStorage.removeItem("sessionToken");
           setSessionToken(null);
           setLoading(false);
-        }
+        } else setError(e.response);
       });
-      console.log(sessionToken)
+    console.log(sessionToken);
   }, [sessionToken]);
+
+  useEffect(() => {
+    const oldToken = window.localStorage.getItem("sessionToken");
+    console.log(oldToken);
+    if (oldToken !== null) {
+      setSessionToken(oldToken);
+      getSessionToken();
+    } else {
+      if (sessionToken === null) {
+        getSessionToken();
+      }
+    }
+    // setLoading(true);
+  }, [getSessionToken, sessionToken]);
 
   console.log(location.pathname);
   return (
     <AuthContext.Provider value={sessionToken}>
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
-        {sessionToken && !loading && !activeGame && (
+        {error && <div>{error}</div>}
+        {sessionToken && !loading && (
           <div className={`button pulsing`}>
             <Link to="/game/setup">starten</Link>
-          </div>
-        )}
-        {sessionToken && !loading && activeGame && (
-          <div className={`button pulsing`}>
-            <Link to="/game/setup">zurück zum Spiel</Link>
           </div>
         )}
         {sessionToken}

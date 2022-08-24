@@ -1,25 +1,58 @@
-import { FC } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import GameSetupPagesWidget, { WidgetData } from "./GameSetupWidgets";
-
-interface JoinGamePageProps {
-  index: number;
-  widgetsData: WidgetData[]
-}
+import { useApi } from "../api/useApi";
+import { AuthContext } from "../App";
+import AuthRoute from "./AuthRoute";
+import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData } from "./GameSetupWidgets";
 
 
-
-const JoinGamePage: FC<JoinGamePageProps> = ({ index, widgetsData }) => {
+const JoinGamePage: FC = () => {
   const location = useLocation();
-  console.log("join game page " + index)
+  const { joinGame } = useApi();
+  const sessionToken = useContext(AuthContext);
+
+  const [currIndex, setCurrIndex] = useState<number>(0);
+  const [selectedParty, setSelectedParty] = useState<GameStats>();
+  const [playerName, setPlayerName] = useState();
+
+
+  const widgetsData: WidgetData[] = [
+    {
+      index: 1,
+      buttonText: "Wo geht's hin?",
+      buttonFunction: () => null,
+      widgetComponent: <ActiveGames value={selectedParty} setValue={setSelectedParty} setCurrIndex={setCurrIndex} />,
+    },
+    {
+      index: 2,
+      buttonText: "OK",
+      buttonFunction: () => null,
+      widgetComponent: <TextInput setValue={setPlayerName} value={playerName} setCurrIndex={setCurrIndex} />,
+    },
+    {
+      index: 3,
+      buttonText: "Spiel verlassen",
+      buttonFunction: () => null,
+      widgetComponent: <WaitingWidget />,
+    },
+  ];
+
+  useEffect(() => {
+    if (selectedParty && playerName && sessionToken && currIndex === widgetsData.length - 1) {
+      joinGame(sessionToken, selectedParty.partyAddress, playerName);
+    }
+  });
+
   return (
-    <div style={{ gridRow: 1 }}>
-      {widgetsData.map((widget) => (
-        <GameSetupPagesWidget {...widget} currIndex={index} numWidgets={widgetsData.length}>
-          {widget.widgetComponent}
-        </GameSetupPagesWidget>
-      ))}
-    </div>
+    <AuthRoute checkForActiveGames>
+      <>
+        {widgetsData.map((widget, index) => (
+          <GameSetupPagesWidget {...widget} currIndex={currIndex} numWidgets={widgetsData.length} key={index}>
+            {widget.widgetComponent}
+          </GameSetupPagesWidget>
+        ))}
+      </>
+    </AuthRoute>
   );
 };
 

@@ -1,10 +1,6 @@
-import React, { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import FlipMove from "react-flip-move";
-import { TransitionGroup } from "react-transition-group";
-import { useApi } from "../api/useApi";
-import { AuthContext } from "../App";
 import "./GameSetupPages.css";
-import JoinGameButton from "./JoinButton";
 export type WidgetData = {
   index: number;
   buttonText: string;
@@ -15,33 +11,51 @@ export type WidgetData = {
 const host = "127.0.0.1";
 const port = 8443;
 
-export const ActiveGames: FC<ActiveGamesProps> = ({ selectedParty, setSelected }) => {
+export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, setCurrIndex }) => {
   const [availableGames, setAvailableGames] = useState<GameStats[]>();
-  const api = useApi();
-  // const token = useContext(AuthContext);
+  const [error, setError] = useState<CloseEvent>();
+
+  const attachToGamesStream = useCallback(async () => {
+    try {
+      const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/waiting-games-stream`);
+      ws.onopen = () => {
+        console.log("opened");
+      };
+      ws.onclose = (ev: CloseEvent) => {
+        setAvailableGames(undefined);
+
+        setError(ev);
+      };
+      ws.onmessage = (message: MessageEvent) => {
+        console.log(message.data);
+        // if(message.data)
+        setAvailableGames(JSON.parse(message.data));
+      };
+    } catch (e: any) {
+      console.log(e.response);
+    }
+  }, []);
 
   useEffect(() => {
-    const ws = new WebSocket(`wss://${host}:${port}/Wilde_Party/waiting-games-stream`);
-    ws.onmessage = (message: MessageEvent) => {
-      console.log(message.data);
-      setAvailableGames(JSON.parse(message.data));
-    };
-  });
+    if (!availableGames) attachToGamesStream();
+  }, [attachToGamesStream, availableGames]);
 
-  // const handleClick = (game: GameStats) => {
-  //   api.joinGame(game.partyAddress)
-  // };
-  console.log(selectedParty)
-
-  if (availableGames === undefined) return <></>;
+  const handleClick = (game: GameStats) => {
+    // api.joinGame(game.partyAddress)
+    setValue(game);
+    setCurrIndex((s: number) => s + 1);
+  };
+  // if (error) return <>{error.response}</>;
+  if (!availableGames) return <>Verbindungsfehler</>;
   else if (availableGames?.length === 0) {
     return <div>Keine Spiele verfügbar</div>;
   } else
     return (
       <>
+        {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
         {availableGames.map(game => (
           <FlipMove duration={1000}>
-            <div className={`available-game-button ${game === selectedParty ? "selected" : ""}`} onClick={() => setSelected(game)}>
+            <div key={game.id} className={`available-game-button ${game === value ? "selected" : ""}`} onClick={() => handleClick(game)}>
               {game.partyAddress}
             </div>
           </FlipMove>
@@ -50,22 +64,24 @@ export const ActiveGames: FC<ActiveGamesProps> = ({ selectedParty, setSelected }
     );
 };
 
-type ActiveGamesProps = {
-  selectedParty?: GameStats;
-  setSelected: (game: GameStats) => void;
+type InnerWidgetProps = {
+  value?: any;
+  setValue: React.Dispatch<React.SetStateAction<any>>;
+  setCurrIndex: React.Dispatch<React.SetStateAction<any>>;
 };
 
-type TextInputProps = {
-  state: string;
-  setStateFunction: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
-export const TextInput: FC<TextInputProps> = ({ state, setStateFunction }) => {
+export const TextInput: FC<InnerWidgetProps> = ({ value, setValue, setCurrIndex }) => {
+  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(ev.target.value)
+  };
+  const handleSubmit = () => {
+    setCurrIndex((s: number) => s + 1);
+  };
   return (
     <>
       <div className="name-input-box">
         <p>Wie heißt du?</p>
-        <input className="name-input" type="text" value={state} onChange={setStateFunction} />{" "}
+        <input className="name-input" type="text" value={value} onChange={handleChange} /> <button onClick={handleSubmit}>OK</button>
       </div>
     </>
   );
@@ -74,7 +90,7 @@ export const TextInput: FC<TextInputProps> = ({ state, setStateFunction }) => {
 export const WaitingWidget: FC = () => {
   return (
     <>
-      <p>Doing fancy api call stuff...</p>
+      <p>Now in stream</p>
     </>
   );
 };
@@ -86,10 +102,10 @@ type WidgetProps = WidgetData & {
 
 const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
   const { currIndex, index, widgetComponent } = widgetData;
-  const offscreenLeft = 100 * (currIndex - index);
+  const offscreenLeft = 100 * (currIndex - index + 1);
 
   return (
-    <div className="game-setup-widget" style={{ gridRow: 2, transform: `translateX(calc(${offscreenLeft}vw - 50%)` }}>
+    <div className="game-setup-widget" style={{ transform: `translateX(calc(${offscreenLeft}vw - 50%)` }}>
       {widgetComponent}
     </div>
   );
