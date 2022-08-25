@@ -2,7 +2,7 @@ import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { SessionContext } from "../SessionProvider";
-import AuthRoute from "./AuthRoute";
+import AuthRoute from "./SessionRoute";
 import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData } from "./GameSetupWidgets";
 
 

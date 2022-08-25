@@ -18,7 +18,7 @@ const ActiveGamePopUp: FC<ActiveGamePopUpProps> = ({ activeGame }) => {
   );
 };
 
-interface AuthRouteProps {
+interface SessionRouteProps {
   checkForActiveGames?: boolean;
   children: JSX.Element;
 }
@@ -29,10 +29,11 @@ type GetSessionTokenSucessMessage = {
   activeGame: GameStats;
 };
 
-const AuthRoute: FC<AuthRouteProps> = ({ checkForActiveGames, children }) => {
+const SessionRoute: FC<SessionRouteProps> = ({ checkForActiveGames, children }) => {
   const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
-
+  console.log(sessionToken)
   if (!sessionToken) {
+    console.log(sessionToken)
     return <Navigate to="/" replace />;
   }
   if (activeGame) {
@@ -46,4 +47,4 @@ const AuthRoute: FC<AuthRouteProps> = ({ checkForActiveGames, children }) => {
   return <>{children}</>;
 };
 
-export default AuthRoute;
+export default SessionRoute;

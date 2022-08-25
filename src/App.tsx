@@ -21,7 +21,7 @@ const App: FC<AppProps> = () => {
   const signInAndLaunch = async () => {
     login().then((sessionToken: string) => {
       console.log(sessionToken);
-      navigate("game");
+      navigate("game/setup");
     });
   };
 
@@ -32,16 +32,13 @@ const App: FC<AppProps> = () => {
       verifyToken(savedToken);
       console.log("finished?");
     }
-    // else {
-    //   console.log("logging in anonymously")
-    //   login();
-    // }
   }, [verifyToken]);
 
   return (
     <>
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
         {/* {error && <div>{error}</div>} */}
+        {sessionToken == null ? "NULL": sessionToken}
         {sessionToken && (
           <div className={`button pulsing`}>
             <Link to="/game/setup">{activeGame ? "zurück zum Spiel" : "starten"}</Link>

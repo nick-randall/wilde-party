@@ -39,7 +39,13 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
   const login = () =>
     new Promise<string>((resolve, reject) => {
       signInAnonymously()
-        .then(response => resolve(response.data.sessionToken))
+        .then(response => {
+          const { message, sessionToken } = response.data;
+          console.log(message)
+          setSessionToken(sessionToken)
+          window.localStorage.setItem("sessiontoken", sessionToken)
+          resolve(response.data.sessionToken);
+        })
         .catch(e => reject());
     });
 
@@ -67,7 +73,7 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
     console.log("session provider verifying token " + savedToken);
     try {
       const { type, message, activeGame } = await checkSessionToken(savedToken);
-      console.log("SessionProvider: " + message);
+      setSessionToken(savedToken);
       setActiveGame(activeGame);
     } catch (err) {
       const error = err as AxiosError;
