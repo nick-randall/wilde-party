@@ -1,7 +1,7 @@
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useApi } from "../api/useApi";
-import { AuthContext } from "../App";
+import { SessionContext } from "../SessionProvider";
 import AuthRoute from "./AuthRoute";
 import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData } from "./GameSetupWidgets";
 
@@ -9,7 +9,7 @@ import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData
 const JoinGamePage: FC = () => {
   const location = useLocation();
   const { joinGame } = useApi();
-  const sessionToken = useContext(AuthContext);
+  const {sessionToken} = useContext(SessionContext);
 
   const [currIndex, setCurrIndex] = useState<number>(0);
   const [selectedParty, setSelectedParty] = useState<GameStats>();

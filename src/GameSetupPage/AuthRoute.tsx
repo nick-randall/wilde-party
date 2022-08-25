@@ -2,7 +2,7 @@ import axios from "axios";
 import { Children, FC, useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { host, port, useApi } from "../api/useApi";
-import { AuthContext } from "../App";
+import { SessionContext } from "../SessionProvider";
 
 interface ActiveGamePopUpProps {
   activeGame: GameStats;
@@ -24,58 +24,18 @@ interface AuthRouteProps {
 }
 
 type GetSessionTokenSucessMessage = {
-  type: "tokenExists" | "createdNewSessionToken";
+  type: "tokenValid" | "createdNewSessionToken";
   message: string;
   activeGame: GameStats;
 };
 
 const AuthRoute: FC<AuthRouteProps> = ({ checkForActiveGames, children }) => {
-  const sessionToken = useContext(AuthContext);
-  const [activeGame, setActiveGame] = useState<GameStats>();
-  const [tokenExpired, setTokenExpired] = useState<boolean>();
+  const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
 
-  useEffect(() => {
-    console.log("in authroute");
-    console.log(sessionToken + "is session token from AuthContext");
-    if (sessionToken)
-      axios
-        .get(`https://${host}:${port}/Wilde_Party/get-session-token`, {
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-        })
-        .then(response => {
-          console.log(response.headers.sessiontoken);
-          const message = response.data as GetSessionTokenSucessMessage;
-          console.log(message.type)
-          if (message.type === "createdNewSessionToken") {
-            console.log("created new session token " + response.headers.sessiontoken);
-          }
-          if(message.type=== "tokenExists") {
-            console.log("token exists-- should be called token is valid ")
-          }
-          if (checkForActiveGames && message.type === "tokenExists") {
-            const { activeGame } = message;
-            console.log(activeGame)
-            console.log(message)
-            setActiveGame(activeGame);
-          }
-          window.localStorage.setItem("sessiontoken", response.headers.sessiontoken);
-        })
-        .catch(e => {
-          if (e.response.status === 401) {
-            console.log("got a 401")
-            console.log(e.response)
-            setTokenExpired(true);
-            window.localStorage.removeItem("sessiontoken");
-          }
-        });
-  }, [checkForActiveGames, sessionToken]);
-
-  if (!sessionToken || tokenExpired) {
+  if (!sessionToken) {
     return <Navigate to="/" replace />;
   }
-  if (activeGame !== undefined) {
+  if (activeGame) {
     return (
       <>
         {children}
