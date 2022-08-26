@@ -18,6 +18,9 @@ const App: FC<AppProps> = () => {
   const navigate = useNavigate();
   const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
 
+  /**
+   * starts app, setting sessiontoken
+   */
   const signInAndLaunch = async () => {
     login().then((sessionToken: string) => {
       console.log(sessionToken);
@@ -26,7 +29,7 @@ const App: FC<AppProps> = () => {
   };
 
   useEffect(() => {
-    const savedToken = window.localStorage.getItem("sessiontoken");
+    const savedToken = window.localStorage.getItem("sessionToken");
     if (savedToken) {
       console.log("verifying token " + savedToken);
       verifyToken(savedToken);

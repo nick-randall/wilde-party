@@ -104,9 +104,10 @@ const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
   const { currIndex, index, widgetComponent } = widgetData;
   const offscreenLeft = 100 * (currIndex - index + 1);
 
-  return (
-    <div className="game-setup-widget" style={{ transform: `translateX(calc(${offscreenLeft}vw - 50%)` }}>
+  return (<div className="wrapper" style={{ transform: `translateX(calc(${offscreenLeft}vw - 50%)` }}>
+    <div className="game-setup-widget" >
       {widgetComponent}
+    </div>
     </div>
   );
 };

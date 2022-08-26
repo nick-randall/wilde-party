@@ -47,7 +47,7 @@ export const useApi = () => {
         console.log(error.response);
         if (error.response.status === 401) {
           // setSessionToken("");
-          // localStorage.setItem("sessiontoken", undefined);
+          // localStorage.setItem("sessionToken", undefined);
         }
       });
   }, []);
@@ -73,7 +73,7 @@ export const useApi = () => {
         if (error.response.status === 401) {
           console.log(error.response);
           // setSessionToken("");
-          // localStorage.setItem("sessiontoken", undefined);
+          // localStorage.setItem("sessionToken", undefined);
         } else if (error.response.data.reason === "gameAlreadyInProgress") {
           console.log("game is already in progress!");
         }

@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
     axios.get(`https://${host}:${port}/Wilde_Party/get-session-token`).then(response => {
       console.log(response.headers.sessiontoken);
       setSessionToken(response.headers.sessiontoken);
-      window.localStorage.setItem("sessiontoken", response.headers.sessiontoken);
+      window.localStorage.setItem("sessionToken", response.headers.sessiontoken);
     });
   }, []);
 

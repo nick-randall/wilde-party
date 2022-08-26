@@ -36,14 +36,15 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
   const [error, setError] = useState<string>();
   const [activeGame, setActiveGame] = useState<GameStats>();
 
-  const login = () =>
+  const login = (email?: string, password?: string)  =>
     new Promise<string>((resolve, reject) => {
+      // if (!email && !password)
       signInAnonymously()
         .then(response => {
           const { message, sessionToken } = response.data;
           console.log(message)
           setSessionToken(sessionToken)
-          window.localStorage.setItem("sessiontoken", sessionToken)
+          window.localStorage.setItem("sessionToken", sessionToken)
           resolve(response.data.sessionToken);
         })
         .catch(e => reject());
