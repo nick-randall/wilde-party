@@ -6,7 +6,8 @@ export type WaitingPageProps = {
 };
 
 const WaitingPage: FC<WaitingPageProps> = () => {
-  const { partyName } = useLocation().state as WaitingPageProps;
+  let { partyName } = useLocation().state as WaitingPageProps;
+  if(!partyName)partyName = "none"
   console.log(partyName)
   return <div>{partyName  || "none"}</div>;
 };

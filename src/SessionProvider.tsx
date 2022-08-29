@@ -50,21 +50,6 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
         .catch(e => reject(e));
     });
 
-  const login2 = async (email?: string, password?: string) => {
-    if (!email && !password)
-      try {
-        const response = await signInAnonymously();
-        const { message, sessionToken } = response.data;
-        console.log(message);
-        console.log(sessionToken);
-        setSessionToken(sessionToken);
-      } catch (err) {
-        console.log(err);
-        const error = err as ErrorMessage;
-        setError("Es gab ein Problem. " + error.reason);
-      }
-  };
-
   const logout = () => {
     window.localStorage.removeItem("sessionoken");
     setSessionToken(null);
@@ -74,7 +59,10 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
     console.log("session provider verifying token " + savedToken);
     try {
       const { type, message, activeGame } = await checkSessionToken(savedToken);
+      // const response = await checkSessionToken(savedToken);
+      // const { type, message, activeGame } = response.data
       setSessionToken(savedToken);
+      console.log(activeGame)
       setActiveGame(activeGame);
     } catch (err) {
       const error = err as AxiosError;

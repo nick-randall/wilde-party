@@ -7,6 +7,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { host, port } from "./api/useApi";
 import { checkSessionToken, signInAnonymously } from "./api/api";
 import SessionProvider, { ErrorMessage, SessionContext } from "./SessionProvider";
+import { meaningfulErrorMessage } from "./api/meaningfulErrorMessage";
 
 /**
  * By nesting the app inside a router, we get the location object
@@ -29,35 +30,30 @@ const App: FC<AppProps> = () => {
         navigate("game/setup");
       })
       .catch(e => {
-        // check if error is a custom error from me or a standard error from Tomcat
-        // Tomcat errors will be a string
-        const errorIsCustomError = typeof e.response.data === "object"
-        if (errorIsCustomError) {
-          const error = e.response.data as ErrorMessage;
-          console.log(error);
-          setError(error.message);
-        } else {
-          console.log(e.response.statusText)
-          setError(e.response.statusText);
-        }
+        setError(meaningfulErrorMessage(e));
       });
   };
 
   useEffect(() => {
     const savedToken = window.localStorage.getItem("sessionToken");
-    if (savedToken) {
+    if (savedToken && !sessionToken) {
       verifyToken(savedToken);
     }
-  }, [verifyToken]);
+  }, [verifyToken, sessionToken]);
 
   return (
     <>
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
         {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
         {sessionToken == null ? "NULL" : sessionToken}
-        {sessionToken && (
+        {sessionToken && !activeGame}(
+        <div className={`button pulsing`}>
+          <Link to="/game/setup">starten</Link>
+        </div>
+        )
+        {sessionToken && activeGame && (
           <div className={`button pulsing`}>
-            <Link to="/game/setup">{activeGame ? "zurück zum Spiel" : "starten"}</Link>
+            <Link to="/game/waiting" state={activeGame.partyName}>zurück zum Spiel</Link>
           </div>
         )}
         {!sessionToken && (

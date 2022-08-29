@@ -1,9 +1,9 @@
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { JoinGameSuccessMessage, useApi } from "../api/useApi";
+import { useApi } from "../api/useApi";
 import { SessionContext } from "../SessionProvider";
 import AuthRoute from "./SessionRoute";
-import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData } from "./GameSetupWidgets";
+import GameSetupPagesWidget, { ActiveGames, TextInput, WidgetData } from "./GameSetupWidgets";
 import { joinGameAlt } from "../api/api";
 import { Transition } from "react-transition-group";
 import { meaningfulErrorMessage } from "../api/meaningfulErrorMessage";
@@ -23,24 +23,29 @@ const JoinGamePage: FC = () => {
     partyAddress => {
       navigate("finished");
       setTimeout(() => navigate("/game/waiting", { state: partyAddress }), 1000);
-      console.log("worked!")
+      console.log("worked!");
     },
     [navigate]
   );
 
   const submitWidgetData = async (finalIndex?: boolean) => {
-    if (selectedParty && playerName && sessionToken && finalIndex)
+    setCurrIndex(s => s + 1);
+
+    if (selectedParty && playerName && sessionToken && finalIndex) {
+      console.log("should navigate to waiting page")
+
       try {
         const params = { partyAddress: selectedParty.partyAddress, joiningPlayerName: playerName };
         const response = await joinGameAlt(sessionToken, params);
+        console.log(response)
         if (response.type === "joinedGame") {
           navigateToWaitingPage(selectedParty.partyAddress);
         }
       } catch (e) {
-        setError(meaningfulErrorMessage(e))
+        setError(meaningfulErrorMessage(e));
         console.log(meaningfulErrorMessage(e));
       }
-    setCurrIndex(s => s + 1);
+    }
   };
 
   const widgetsData: WidgetData[] = [
@@ -52,7 +57,16 @@ const JoinGamePage: FC = () => {
       index: 1,
       widgetComponent: <TextInput setValue={setPlayerName} value={playerName} submit={submitWidgetData} finalIndex />,
     },
-   {index: 2, widgetComponent: error ? <div className="name-input-box">{error} <button className="name-input-button">Reset</button></div>: <div/> }
+    {
+      index: 2,
+      widgetComponent: error ? (
+        <div className="name-input-box">
+          {error} <button className="name-input-button">Reset</button>
+        </div>
+      ) : (
+        <div />
+      ),
+    },
   ];
 
   // const handleTransitionEnd = async () => {
