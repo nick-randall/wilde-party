@@ -47,7 +47,7 @@ const SessionProvider = ({ children }: { children: JSX.Element }) => {
           window.localStorage.setItem("sessionToken", sessionToken)
           resolve(response.data.sessionToken);
         })
-        .catch(e => reject());
+        .catch(e => reject(e));
     });
 
   const login2 = async (email?: string, password?: string) => {

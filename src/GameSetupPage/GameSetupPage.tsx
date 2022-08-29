@@ -14,10 +14,10 @@ const GameSetup: FC<GameSetupProps> = () => {
     <SessionRoute checkForActiveGames>
       <div style={{ display: "grid", gridTemplateColumns: 4, gridTemplateRows: 8, justifyContent: "center", height: "100%" }}>
         <Link to="/game/setup/createGame" style={{ gridColumn: 2, gridRow: 3 }}>
-          <div className={`button  ${location.pathname === "/game/setup/joinGame" ? "offscreen-top" : ""}`}>Neue Party starten</div>
+          <div className={`button  ${location.pathname !== "/game/setup/createGame" && location.pathname !== "/game/setup" ? "offscreen-top" : ""}`}>Neue Party starten</div>
         </Link>
         <Link to="/game/setup/joinGame" style={{ gridColumn: 2, gridRow: 4 }}>
-          <div className={`button  ${location.pathname === "/game/setup/createGame" ? "offscreen-bottom" : ""}`}>zur Party einer Freund*in</div>
+          <div className={`button  ${location.pathname !== "/game/setup/joinGame" && location.pathname !== "/game/setup" ? "offscreen-bottom" : ""}`}>zur Party einer Freund*in</div>
         </Link>
 
         <Routes>

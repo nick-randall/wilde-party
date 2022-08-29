@@ -6,7 +6,7 @@ import "./css/global.css";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { host, port } from "./api/useApi";
 import { checkSessionToken, signInAnonymously } from "./api/api";
-import SessionProvider, { SessionContext } from "./SessionProvider";
+import SessionProvider, { ErrorMessage, SessionContext } from "./SessionProvider";
 
 /**
  * By nesting the app inside a router, we get the location object
@@ -16,32 +16,45 @@ interface AppProps {}
 const App: FC<AppProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [error, setError] = useState<string>();
   const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
 
   /**
    * starts app, setting sessiontoken
    */
   const signInAndLaunch = async () => {
-    login().then((sessionToken: string) => {
-      console.log(sessionToken);
-      navigate("game/setup");
-    });
+    login()
+      .then((sessionToken: string) => {
+        console.log(sessionToken);
+        navigate("game/setup");
+      })
+      .catch(e => {
+        // check if error is a custom error from me or a standard error from Tomcat
+        // Tomcat errors will be a string
+        const errorIsCustomError = typeof e.response.data === "object"
+        if (errorIsCustomError) {
+          const error = e.response.data as ErrorMessage;
+          console.log(error);
+          setError(error.message);
+        } else {
+          console.log(e.response.statusText)
+          setError(e.response.statusText);
+        }
+      });
   };
 
   useEffect(() => {
     const savedToken = window.localStorage.getItem("sessionToken");
     if (savedToken) {
-      console.log("verifying token " + savedToken);
       verifyToken(savedToken);
-      console.log("finished?");
     }
   }, [verifyToken]);
 
   return (
     <>
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
-        {/* {error && <div>{error}</div>} */}
-        {sessionToken == null ? "NULL": sessionToken}
+        {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
+        {sessionToken == null ? "NULL" : sessionToken}
         {sessionToken && (
           <div className={`button pulsing`}>
             <Link to="/game/setup">{activeGame ? "zurück zum Spiel" : "starten"}</Link>

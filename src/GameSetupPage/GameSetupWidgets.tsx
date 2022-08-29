@@ -1,17 +1,17 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import FlipMove from "react-flip-move";
 import "./GameSetupPages.css";
+
 export type WidgetData = {
   index: number;
-  buttonText: string;
-  buttonFunction: Function;
+  finalIndex?: boolean; 
   widgetComponent: JSX.Element;
 };
 
 const host = "127.0.0.1";
 const port = 8443;
 
-export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, setCurrIndex }) => {
+export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, finalIndex }) => {
   const [availableGames, setAvailableGames] = useState<GameStats[]>();
   const [error, setError] = useState<CloseEvent>();
 
@@ -38,12 +38,13 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, setCurrInde
 
   useEffect(() => {
     if (!availableGames) attachToGamesStream();
+    console.log("reloading active games widget")
   }, [attachToGamesStream, availableGames]);
 
   const handleClick = (game: GameStats) => {
     // api.joinGame(game.partyAddress)
     setValue(game);
-    setCurrIndex((s: number) => s + 1);
+    submit(finalIndex);
   };
   // if (error) return <>{error.response}</>;
   if (!availableGames) return <>Verbindungsfehler</>;
@@ -54,8 +55,8 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, setCurrInde
       <>
         {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
         {availableGames.map(game => (
-          <FlipMove duration={1000}>
-            <div key={game.id} className={`available-game-button ${game === value ? "selected" : ""}`} onClick={() => handleClick(game)}>
+          <FlipMove duration={1000} key={game.id}>
+            <div className={`available-game-button ${game === value ? "selected" : ""}`} onClick={() => handleClick(game)}>
               {game.partyAddress}
             </div>
           </FlipMove>
@@ -67,22 +68,27 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, setCurrInde
 type InnerWidgetProps = {
   value?: any;
   setValue: React.Dispatch<React.SetStateAction<any>>;
-  setCurrIndex: React.Dispatch<React.SetStateAction<any>>;
+  // setCurrIndex: React.Dispatch<React.SetStateAction<any>>;
+  submit: (isFinalIndex?: boolean) => void;
+  finalIndex?: boolean;
 };
 
-export const TextInput: FC<InnerWidgetProps> = ({ value, setValue, setCurrIndex }) => {
+export const TextInput: FC<InnerWidgetProps> = ({ value, setValue, submit, finalIndex }) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(ev.target.value)
+    setValue(ev.target.value);
   };
-  const handleSubmit = () => {
-    setCurrIndex((s: number) => s + 1);
-  };
+  // const handleSubmit = () => {
+  //   setCurrIndex((s: number) => s + 1);
+  // };
   return (
     <>
       <div className="name-input-box">
         <p>Wie heißt du?</p>
-        <input className="name-input" type="text" value={value} onChange={handleChange} /> <button onClick={handleSubmit}>OK</button>
+        <input className="name-input" type="text" value={value} onChange={handleChange} />
       </div>
+      <button className="name-input-button" onClick={()=> submit(finalIndex)}>
+        OK
+      </button>
     </>
   );
 };
@@ -95,19 +101,19 @@ export const WaitingWidget: FC = () => {
   );
 };
 type WidgetProps = WidgetData & {
-  numWidgets: number;
+  // numWidgets: number;
+  handleTransitionEnd: () => void;
   children: JSX.Element;
   currIndex: number;
 };
 
 const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
-  const { currIndex, index, widgetComponent } = widgetData;
-  const offscreenLeft = 100 * (currIndex - index + 1);
-
-  return (<div className="wrapper" style={{ transform: `translateX(calc(${offscreenLeft}vw - 50%)` }}>
-    <div className="game-setup-widget" >
-      {widgetComponent}
-    </div>
+  const { currIndex, index, widgetComponent, handleTransitionEnd } = widgetData;
+  const offscreenLeft = 100 * (currIndex - index);
+console.log(currIndex)
+  return (
+    <div className="wrapper" style={{ transform: `translateX(calc(${-offscreenLeft}vw - 50%)` }} onTransitionEnd={handleTransitionEnd}>
+      <div className="game-setup-widget">{widgetComponent}</div>
     </div>
   );
 };

@@ -31,7 +31,7 @@ type GetSessionTokenSucessMessage = {
 
 const SessionRoute: FC<SessionRouteProps> = ({ checkForActiveGames, children }) => {
   const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
-  console.log(sessionToken)
+  // console.log(sessionToken) 
   if (!sessionToken) {
     console.log(sessionToken)
     return <Navigate to="/" replace />;

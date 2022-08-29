@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { host, port } from "./useApi";
+import { host, JoinGameSuccessMessage, port } from "./useApi";
 
 interface CheckSessionTokenSuccessMessage {
   type: string;
@@ -8,14 +8,24 @@ interface CheckSessionTokenSuccessMessage {
 }
 
 interface AnonymousSignInSuccessMessage {
-    type: string;
-    message: string;
-    sessionToken: string;
-  }
+  type: string;
+  message: string;
+  sessionToken: string;
+}
 
+interface JoinGameParams {
+  partyAddress: string;
+  joiningPlayerName: string;
+}
 
-export const signInAnonymously = async (): Promise<AxiosResponse> =>
-  axios.get(`https://${host}:${port}/Wilde_Party/sign-in-anonymously`);
+export const signInAnonymously = async (): Promise<AxiosResponse> => axios.get(`https://${host}:${port}/Wilde_Party/sign-in-anonymously`);
 
 export const checkSessionToken = async (sessionToken: string): Promise<CheckSessionTokenSuccessMessage> =>
   axios.get(`https://${host}:${port}/Wilde_Party/check-session-token`, { headers: { Authorization: `Bearer ${sessionToken}` } });
+
+export const joinGameAlt = async (sessionToken: string, params: JoinGameParams): Promise<JoinGameSuccessMessage> =>
+  axios.post(`https://${host}:${port}/Wilde_Party/join-game`, params, {
+    headers: {
+      Authorization: `Bearer ${sessionToken}`,
+    },
+  });
