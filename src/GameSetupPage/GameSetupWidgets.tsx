@@ -4,14 +4,14 @@ import "./GameSetupPages.css";
 
 export type WidgetData = {
   index: number;
-  finalIndex?: boolean; 
+  atFinalIndex?: boolean;
   widgetComponent: JSX.Element;
 };
 
 const host = "127.0.0.1";
 const port = 8443;
 
-export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, finalIndex }) => {
+export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, joinGameData, setJoinGameData }) => {
   const [availableGames, setAvailableGames] = useState<GameStats[]>();
   const [error, setError] = useState<CloseEvent>();
 
@@ -38,13 +38,15 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, fin
 
   useEffect(() => {
     if (!availableGames) attachToGamesStream();
-    console.log("reloading active games widget")
+    console.log("reloading active games widget");
   }, [attachToGamesStream, availableGames]);
 
   const handleClick = (game: GameStats) => {
     // api.joinGame(game.partyAddress)
-    setValue(game);
-    submit(finalIndex);
+    // setValue(game);
+    setJoinGameData(prevState => ({ ...prevState, partyAddress: game.partyAddress }));
+
+    submit(atFinalIndex);
   };
   // if (error) return <>{error.response}</>;
   if (!availableGames) return <>Verbindungsfehler</>;
@@ -56,7 +58,7 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, fin
         {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
         {availableGames.map(game => (
           <FlipMove duration={1000} key={game.id}>
-            <div className={`available-game-button ${game === value ? "selected" : ""}`} onClick={() => handleClick(game)}>
+            <div className={`available-game-button ${game.partyAddress === joinGameData.partyAddress ? "selected" : ""}`} onClick={() => handleClick(game)}>
               {game.partyAddress}
             </div>
           </FlipMove>
@@ -66,23 +68,24 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, fin
 };
 
 type InnerWidgetProps = {
-  value?: any;
-  setValue: React.Dispatch<React.SetStateAction<any>>;
-  submit: (isFinalIndex?: boolean) => void;
-  finalIndex?: boolean;
+  joinGameData: JoinGameParams;
+  setJoinGameData: React.Dispatch<React.SetStateAction<JoinGameParams>>;
+  submit: (atFinalIndex?: boolean) => void;
+  atFinalIndex?: boolean;
 };
 
-export const TextInput: FC<InnerWidgetProps> = ({ value, setValue, submit, finalIndex }) => {
+export const TextInput: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setJoinGameData, joinGameData }) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(ev.target.value);
+    // setValue(ev.target.value);
+    setJoinGameData(prevState => ({ ...prevState, playerName: ev.target.value }));
   };
   return (
     <>
       <div className="name-input-box">
         <p>Wie heißt du?</p>
-        <input className="name-input" type="text" value={value} onChange={handleChange} />
+        <input className="name-input" type="text" value={joinGameData.playerName} onChange={handleChange} />
       </div>
-      <button className="name-input-button" onClick={()=> submit(finalIndex)}>
+      <button className="name-input-button" onClick={() => submit(atFinalIndex)}>
         OK
       </button>
     </>

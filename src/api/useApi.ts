@@ -13,19 +13,7 @@ type NewGameParams = {
   creatorName: string;
 };
 
-export type JoinGameSuccessMessage = {
-  type: "joinedGame";
-  message: string;
-  partyAddress: string;
-  websocketToken: string;
-};
 
-export type JoinGameErrorMessage = {
-  type: "joinedGame";
-  message: string;
-  partyAddress: string;
-  websocketToken: string;
-};
 export const useApi = () => {
   const dispatch = useDispatch();
   const { handleWebsocketMessages } = useStreamGame();
@@ -46,7 +34,7 @@ export const useApi = () => {
           const message: JoinGameSuccessMessage = response.data;
           // message = response.data;
           console.log(message.message);
-          console.log(message.partyAddress + " is the party adress");
+          console.log(message.gameStats.partyAddress + " is the party adress");
           console.log(message.type);
 
           // // TODO: now use the websocketToken and start waiting for all players to join.

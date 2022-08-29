@@ -15,31 +15,27 @@ const JoinGamePage: FC = () => {
   const { sessionToken } = useContext(SessionContext);
 
   const [currIndex, setCurrIndex] = useState<number>(0);
-  const [selectedParty, setSelectedParty] = useState<GameStats>();
+  const [joinGameData, setJoinGameData] = useState<JoinGameParams>({ playerName: "", partyAddress: "" });
   const [error, setError] = useState<string>();
-  const [playerName, setPlayerName] = useState();
 
   const navigateToWaitingPage = useCallback(
-    partyAddress => {
+    partyName => {
       navigate("finished");
-      setTimeout(() => navigate("/game/waiting", { state: partyAddress }), 1000);
+      setTimeout(() => navigate("/game/waiting", { state: {partyName} }), 1000);
       console.log("worked!");
     },
     [navigate]
   );
 
-  const submitWidgetData = async (finalIndex?: boolean) => {
+  const submitWidgetData = async (atFinalIndex?: boolean) => {
     setCurrIndex(s => s + 1);
 
-    if (selectedParty && playerName && sessionToken && finalIndex) {
-      console.log("should navigate to waiting page")
-
+    if (atFinalIndex && joinGameData.partyAddress && joinGameData.playerName && sessionToken) {
       try {
-        const params = { partyAddress: selectedParty.partyAddress, joiningPlayerName: playerName };
-        const response = await joinGameAlt(sessionToken, params);
-        console.log(response)
+        const response = await joinGameAlt(sessionToken, joinGameData);
+        console.log(response);
         if (response.type === "joinedGame") {
-          navigateToWaitingPage(selectedParty.partyAddress);
+          navigateToWaitingPage(response.gameStats.partyName);
         }
       } catch (e) {
         setError(meaningfulErrorMessage(e));
@@ -51,11 +47,11 @@ const JoinGamePage: FC = () => {
   const widgetsData: WidgetData[] = [
     {
       index: 0,
-      widgetComponent: <ActiveGames value={selectedParty} setValue={setSelectedParty} submit={submitWidgetData} />,
+      widgetComponent: <ActiveGames setJoinGameData={setJoinGameData} submit={submitWidgetData} joinGameData={joinGameData} />,
     },
     {
       index: 1,
-      widgetComponent: <TextInput setValue={setPlayerName} value={playerName} submit={submitWidgetData} finalIndex />,
+      widgetComponent: <TextInput setJoinGameData={setJoinGameData} submit={submitWidgetData} joinGameData={joinGameData} atFinalIndex/>,
     },
     {
       index: 2,

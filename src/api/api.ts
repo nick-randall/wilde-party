@@ -1,11 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { host, JoinGameSuccessMessage, port } from "./useApi";
+import { host, port } from "./useApi";
 
-interface CheckSessionTokenSuccessMessage {
-  type: string;
-  message: string;
-  activeGame: GameStats;
-}
 
 interface AnonymousSignInSuccessMessage {
   type: string;
@@ -13,10 +8,7 @@ interface AnonymousSignInSuccessMessage {
   sessionToken: string;
 }
 
-interface JoinGameParams {
-  partyAddress: string;
-  joiningPlayerName: string;
-}
+
 
 export const signInAnonymously = async (): Promise<AxiosResponse> => axios.get(`https://${host}:${port}/Wilde_Party/sign-in-anonymously`);
 
