@@ -20,7 +20,7 @@
 
 
 .name-input-box {
-  padding: 3ch;
+  padding: 1ch;
   text-align: center;
   font-family: wilde-party-font;
   font-size: 30px;
@@ -34,11 +34,17 @@
 }
 
 .name-input {
+  height: 5ch;
   border-top-style: hidden;
   border-right-style: hidden;
   border-left-style: hidden;
   border-bottom-style: groove;
   background-color: white;
+  font-size: 20px;
+  font-family: wilde-party-font;
+  text-align: center;
+
+
   
 }
 
@@ -98,7 +104,8 @@
   background-color: white;
   padding: 20px 15px 10px 15px;
   transition-property: transform;
-  transition-duration: 1000ms
+  transition-duration: 1000ms;
+  cursor: pointer;
 }
 .available-game-button.selected{
   transform: scale(1.3);

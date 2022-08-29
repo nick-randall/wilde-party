@@ -29,3 +29,5 @@ export const joinGameAlt = async (sessionToken: string, params: JoinGameParams):
       Authorization: `Bearer ${sessionToken}`,
     },
   });
+
+  

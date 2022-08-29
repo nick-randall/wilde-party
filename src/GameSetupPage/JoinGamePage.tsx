@@ -6,6 +6,7 @@ import AuthRoute from "./SessionRoute";
 import GameSetupPagesWidget, { ActiveGames, TextInput, WaitingWidget, WidgetData } from "./GameSetupWidgets";
 import { joinGameAlt } from "../api/api";
 import { Transition } from "react-transition-group";
+import { meaningfulErrorMessage } from "../api/meaningfulErrorMessage";
 
 const JoinGamePage: FC = () => {
   const location = useLocation();
@@ -15,28 +16,31 @@ const JoinGamePage: FC = () => {
 
   const [currIndex, setCurrIndex] = useState<number>(0);
   const [selectedParty, setSelectedParty] = useState<GameStats>();
+  const [error, setError] = useState<string>();
   const [playerName, setPlayerName] = useState();
 
-  const navigateToWaitingPage = useCallback(async () => {
-    if (selectedParty && playerName && sessionToken)
-      try {
-        await joinGameAlt(sessionToken, { partyAddress: selectedParty.partyAddress, joiningPlayerName: playerName });
-        navigate("/game/waiting", { state: selectedParty.partyAddress });
-      } catch (e) {
-        console.log(e);
-      }
-  }, [navigate, playerName, selectedParty, sessionToken]);
+  const navigateToWaitingPage = useCallback(
+    partyAddress => {
+      navigate("finished");
+      setTimeout(() => navigate("/game/waiting", { state: partyAddress }), 1000);
+      console.log("worked!")
+    },
+    [navigate]
+  );
 
   const submitWidgetData = async (finalIndex?: boolean) => {
+    if (selectedParty && playerName && sessionToken && finalIndex)
+      try {
+        const params = { partyAddress: selectedParty.partyAddress, joiningPlayerName: playerName };
+        const response = await joinGameAlt(sessionToken, params);
+        if (response.type === "joinedGame") {
+          navigateToWaitingPage(selectedParty.partyAddress);
+        }
+      } catch (e) {
+        setError(meaningfulErrorMessage(e))
+        console.log(meaningfulErrorMessage(e));
+      }
     setCurrIndex(s => s + 1);
-
-    if (finalIndex) {
-      navigate("finished");
-
-      setTimeout(() => {
-        navigateToWaitingPage();
-      }, 1000);
-    }
   };
 
   const widgetsData: WidgetData[] = [
@@ -48,10 +52,7 @@ const JoinGamePage: FC = () => {
       index: 1,
       widgetComponent: <TextInput setValue={setPlayerName} value={playerName} submit={submitWidgetData} finalIndex />,
     },
-    // {
-    //   index: 3,
-    //   widgetComponent: <WaitingWidget />,
-    // },
+   {index: 2, widgetComponent: error ? <div className="name-input-box">{error} <button className="name-input-button">Reset</button></div>: <div/> }
   ];
 
   // const handleTransitionEnd = async () => {
@@ -88,15 +89,14 @@ const JoinGamePage: FC = () => {
     <AuthRoute checkForActiveGames>
       <>
         {widgetsData.map((widget, index) => (
-          <Transition timeout={0} in={true}>
+          <Transition timeout={0} in={true} appear={true}>
             {state => (
               <>
-              <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? 0 : currIndex} key={index} handleTransitionEnd={() => {}}>
-                {widget.widgetComponent}
-              </GameSetupPagesWidget>
-            {state}
-            </> )}
-            
+                <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index} handleTransitionEnd={() => {}}>
+                  {widget.widgetComponent}
+                </GameSetupPagesWidget>
+              </>
+            )}
           </Transition>
         ))}
       </>

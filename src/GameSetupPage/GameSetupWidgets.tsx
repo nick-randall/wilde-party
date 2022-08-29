@@ -68,7 +68,6 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ value, setValue, submit, fin
 type InnerWidgetProps = {
   value?: any;
   setValue: React.Dispatch<React.SetStateAction<any>>;
-  // setCurrIndex: React.Dispatch<React.SetStateAction<any>>;
   submit: (isFinalIndex?: boolean) => void;
   finalIndex?: boolean;
 };
@@ -77,9 +76,6 @@ export const TextInput: FC<InnerWidgetProps> = ({ value, setValue, submit, final
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setValue(ev.target.value);
   };
-  // const handleSubmit = () => {
-  //   setCurrIndex((s: number) => s + 1);
-  // };
   return (
     <>
       <div className="name-input-box">
@@ -110,7 +106,6 @@ type WidgetProps = WidgetData & {
 const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
   const { currIndex, index, widgetComponent, handleTransitionEnd } = widgetData;
   const offscreenLeft = 100 * (currIndex - index);
-console.log(currIndex)
   return (
     <div className="wrapper" style={{ transform: `translateX(calc(${-offscreenLeft}vw - 50%)` }} onTransitionEnd={handleTransitionEnd}>
       <div className="game-setup-widget">{widgetComponent}</div>
