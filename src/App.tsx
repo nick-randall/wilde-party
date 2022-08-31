@@ -18,12 +18,14 @@ const App: FC<AppProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
   const { sessionToken, login, logout, verifyToken, activeGame } = useContext(SessionContext);
 
   /**
    * starts app, setting sessiontoken
    */
   const signInAndLaunch = async () => {
+    setLoading(true);
     login()
       .then((sessionToken: string) => {
         console.log(sessionToken);
@@ -31,7 +33,8 @@ const App: FC<AppProps> = () => {
       })
       .catch(e => {
         setError(meaningfulErrorMessage(e));
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -46,19 +49,25 @@ const App: FC<AppProps> = () => {
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
         {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
         {sessionToken == null ? "NULL" : sessionToken}
-        {sessionToken && !activeGame}(
-        <div className={`button pulsing`}>
-          <Link to="/game/setup">starten</Link>
-        </div>
-        )
-        {sessionToken && activeGame && (
-          <div className={`button pulsing`}>
-            <Link to="/game/waiting" state={activeGame.partyName}>zurück zum Spiel</Link>
+        {sessionToken && !activeGame && (
+          <div className={`button`}>
+            <Link to="/game/setup">starten</Link>
           </div>
         )}
-        {!sessionToken && (
-          <div className="button" onClick={signInAndLaunch}>
-            starten
+        {sessionToken && activeGame && (
+          <div style={{display: "flex", flexDirection: "column", gap: 30 }}>
+            <div className={`button`}>
+              <Link to="/game/waiting" state={activeGame.partyName || "no name"}>
+                zurück zum Spiel
+              </Link>
+            </div>
+            <div className={`button`}></div>
+
+          </div>
+        )}
+        {!sessionToken && !activeGame && (
+          <div className="button pulsing" onClick={loading ? () => null : signInAndLaunch}>
+            {loading ? "laden..." : "starten"}
           </div>
         )}
         {sessionToken}

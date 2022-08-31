@@ -2,16 +2,12 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import FlipMove from "react-flip-move";
 import "./GameSetupPages.css";
 
-export type WidgetData = {
-  index: number;
-  atFinalIndex?: boolean;
-  widgetComponent: JSX.Element;
-};
+
 
 const host = "127.0.0.1";
 const port = 8443;
 
-export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, joinGameData, setJoinGameData }) => {
+export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setupData, setSetupData }) => {
   const [availableGames, setAvailableGames] = useState<GameStats[]>();
   const [error, setError] = useState<CloseEvent>();
 
@@ -44,7 +40,7 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, joinGa
   const handleClick = (game: GameStats) => {
     // api.joinGame(game.partyAddress)
     // setValue(game);
-    setJoinGameData(prevState => ({ ...prevState, partyAddress: game.partyAddress }));
+    setSetupData(prevState => ({ ...prevState, partyAddress: game.partyAddress }));
 
     submit(atFinalIndex);
   };
@@ -58,7 +54,7 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, joinGa
         {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
         {availableGames.map(game => (
           <FlipMove duration={1000} key={game.id}>
-            <div className={`available-game-button ${game.partyAddress === joinGameData.partyAddress ? "selected" : ""}`} onClick={() => handleClick(game)}>
+            <div className={`available-game-button ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`} onClick={() => handleClick(game)}>
               {game.partyAddress}
             </div>
           </FlipMove>
@@ -67,23 +63,18 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, joinGa
     );
 };
 
-type InnerWidgetProps = {
-  joinGameData: JoinGameParams;
-  setJoinGameData: React.Dispatch<React.SetStateAction<JoinGameParams>>;
-  submit: (atFinalIndex?: boolean) => void;
-  atFinalIndex?: boolean;
-};
 
-export const TextInput: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setJoinGameData, joinGameData }) => {
+
+export const TextInput: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setSetupData, setupData }) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     // setValue(ev.target.value);
-    setJoinGameData(prevState => ({ ...prevState, playerName: ev.target.value }));
+    setSetupData(prevState => ({ ...prevState, playerName: ev.target.value }));
   };
   return (
     <>
       <div className="name-input-box">
         <p>Wie heißt du?</p>
-        <input className="name-input" type="text" value={joinGameData.playerName} onChange={handleChange} />
+        <input className="name-input" type="text" value={setupData.playerName} onChange={handleChange} />
       </div>
       <button className="name-input-button" onClick={() => submit(atFinalIndex)}>
         OK
@@ -99,21 +90,3 @@ export const WaitingWidget: FC = () => {
     </>
   );
 };
-type WidgetProps = WidgetData & {
-  // numWidgets: number;
-  handleTransitionEnd: () => void;
-  children: JSX.Element;
-  currIndex: number;
-};
-
-const GameSetupPagesWidget: FC<WidgetProps> = widgetData => {
-  const { currIndex, index, widgetComponent, handleTransitionEnd } = widgetData;
-  const offscreenLeft = 100 * (currIndex - index);
-  return (
-    <div className="wrapper" style={{ transform: `translateX(calc(${-offscreenLeft}vw - 50%)` }} onTransitionEnd={handleTransitionEnd}>
-      <div className="game-setup-widget">{widgetComponent}</div>
-    </div>
-  );
-};
-
-export default GameSetupPagesWidget;

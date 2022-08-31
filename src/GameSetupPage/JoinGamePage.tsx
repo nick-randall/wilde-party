@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { SessionContext } from "../SessionProvider";
 import AuthRoute from "./SessionRoute";
-import GameSetupPagesWidget, { ActiveGames, TextInput, WidgetData } from "./GameSetupWidgets";
+import  { ActiveGames, TextInput } from "./JoinGameWidgets";
 import { joinGameAlt } from "../api/api";
 import { Transition } from "react-transition-group";
 import { meaningfulErrorMessage } from "../api/meaningfulErrorMessage";
+import GameSetupPagesWidget from "./GameSetupPagesWidget";
 
 const JoinGamePage: FC = () => {
   const location = useLocation();
@@ -15,13 +16,13 @@ const JoinGamePage: FC = () => {
   const { sessionToken } = useContext(SessionContext);
 
   const [currIndex, setCurrIndex] = useState<number>(0);
-  const [joinGameData, setJoinGameData] = useState<JoinGameParams>({ playerName: "", partyAddress: "" });
+  const [setupData, setSetupData] = useState<JoinGameParams>({ playerName: "", partyAddress: "" });
   const [error, setError] = useState<string>();
 
   const navigateToWaitingPage = useCallback(
     partyName => {
       navigate("finished");
-      setTimeout(() => navigate("/game/waiting", { state: {partyName} }), 1000);
+      setTimeout(() => navigate("/game/waiting", { state: { partyName } }), 1000);
       console.log("worked!");
     },
     [navigate]
@@ -30,9 +31,9 @@ const JoinGamePage: FC = () => {
   const submitWidgetData = async (atFinalIndex?: boolean) => {
     setCurrIndex(s => s + 1);
 
-    if (atFinalIndex && joinGameData.partyAddress && joinGameData.playerName && sessionToken) {
+    if (atFinalIndex && sessionToken && setupData.partyAddress && setupData.playerName) {
       try {
-        const response = await joinGameAlt(sessionToken, joinGameData);
+        const response = await joinGameAlt(sessionToken, setupData);
         console.log(response);
         if (response.type === "joinedGame") {
           navigateToWaitingPage(response.gameStats.partyName);
@@ -47,11 +48,11 @@ const JoinGamePage: FC = () => {
   const widgetsData: WidgetData[] = [
     {
       index: 0,
-      widgetComponent: <ActiveGames setJoinGameData={setJoinGameData} submit={submitWidgetData} joinGameData={joinGameData} />,
+      widgetComponent: <ActiveGames setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} />,
     },
     {
       index: 1,
-      widgetComponent: <TextInput setJoinGameData={setJoinGameData} submit={submitWidgetData} joinGameData={joinGameData} atFinalIndex/>,
+      widgetComponent: <TextInput setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} atFinalIndex />,
     },
     {
       index: 2,
@@ -65,36 +66,6 @@ const JoinGamePage: FC = () => {
     },
   ];
 
-  // const handleTransitionEnd = async () => {
-  //   console.log(selectedParty, playerName, sessionToken)
-  //   if (selectedParty && playerName && sessionToken) {
-  //     // try {
-  //     //   const { partyAddress } = await joinGame(sessionToken, selectedParty.partyAddress, playerName);
-  //     //   // prevent any other transitionend events cause the function to fire.
-  //     //   setCurrIndex(-1);
-  //     //   navigate("game/waiting", { state: partyAddress });
-  //     // } catch (e) {
-  //     //   console.log(e);
-  //     // }
-
-  //     try {
-  //       await joinGameAlt(sessionToken, { partyAddress: selectedParty.partyAddress, joiningPlayerName: playerName });
-  //       // prevent any other transitionend events cause the function to fire.
-  //       setCurrIndex(-1);
-  //       navigate("/game/waiting", { state: selectedParty.partyAddress });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-  // };
-
-  // const handleTransitionEndFunc = currIndex === widgetsData.length ? handleTransitionEnd : () => null;
-  useEffect(() => {
-    // if (selectedParty && playerName && sessionToken && currIndex === widgetsData.length - 1) {
-    //   joinGame(sessionToken, selectedParty.partyAddress, playerName);
-    // }
-  });
-
   return (
     <AuthRoute checkForActiveGames>
       <>
@@ -102,7 +73,7 @@ const JoinGamePage: FC = () => {
           <Transition timeout={0} in={true} appear={true}>
             {state => (
               <>
-                <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index} handleTransitionEnd={() => {}}>
+                <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index}>
                   {widget.widgetComponent}
                 </GameSetupPagesWidget>
               </>

@@ -34,4 +34,23 @@ type GameStatus =
     message: string;
     activeGame: GameStats;
   }
+
+  type WidgetData = {
+    index: number;
+    atFinalIndex?: boolean;
+    widgetComponent: JSX.Element;
+  };
+  
+  type InnerWidgetProps = {
+    setupData: JoinGameParams;
+    setSetupData: React.Dispatch<React.SetStateAction<JoinGameParams>>;
+    submit: (atFinalIndex?: boolean) => void;
+    atFinalIndex?: boolean;
+  };
+
+
+type WidgetProps = WidgetData & {
+  children: JSX.Element;
+  currIndex: number;
+};
   

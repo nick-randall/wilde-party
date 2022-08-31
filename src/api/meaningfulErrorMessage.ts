@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import { ErrorMessage } from "../SessionProvider";
 
 export const meaningfulErrorMessage = (error: unknown) => {
+  console.log(error)
   const e = error as AxiosError
   if (!e.response) return "unknown error";
   const errorIsCustomError = typeof e.response.data === "object";

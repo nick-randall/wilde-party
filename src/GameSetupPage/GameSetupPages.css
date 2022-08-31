@@ -93,6 +93,9 @@
   transform: translate(-50%, 100vh);
   transition: 1000ms;
 }
+.button a {
+  text-decoration: none;
+}
 
 .available-game-button{
   /* height: 2ch; */
@@ -113,3 +116,9 @@
 }
 
 
+.game-setup-avatar {
+  clip-path: circle();
+  border: solid black 0.7ch;
+  border-radius: 100%;
+  height: 16ch;
+}
