@@ -10,12 +10,20 @@
 }
 .game-setup-widget {
   left: 50%;
-  top:50%;
+  top: 50%;
   transform: translateX(-50%);
   transition: transform 1s;
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: center;
+}
+
+.game-setup-widget.top {
+  top: 60%
+}
+
+.game-setup-widget.bottom {
+  bottom: 60%
 }
 
 
@@ -92,6 +100,16 @@
 
 .button.offscreen-bottom {
   transform: translate(-50%, 100vh);
+  transition: 1000ms;
+}
+
+.button.raised {
+  transform: translate(-50%, -100%);
+  transition: 1000ms;
+}
+
+.button.lowered {
+  transform: translate(-50%, 100%);
   transition: 1000ms;
 }
 .button a {
