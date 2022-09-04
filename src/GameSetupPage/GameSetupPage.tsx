@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import CreateGamePage from "./CreateGamePage";
 import JoinGamePage from "./JoinGamePage";
 import SessionRoute from "./SessionRoute";
+import "./GameSetupPages.css";
 
 interface GameSetupProps {}
 
@@ -12,18 +13,38 @@ const GameSetup: FC<GameSetupProps> = () => {
 
   return (
     <SessionRoute checkForActiveGames>
-      <div style={{ display: "grid", gridTemplateColumns: 4, gridTemplateRows: 8, justifyContent: "center", height: "100%" }}>
-        <Link to="/game/setup/createGame" style={{ gridColumn: 2, gridRow: 3 }}>
-          <div className={`button ${location.pathname !== "/game/setup/createGame" && location.pathname !== "/game/setup" ? "offscreen-top" : ""}`}>Neue Party starten</div>
-        </Link>
-        <Link to="/game/setup/joinGame" style={{ gridColumn: 2, gridRow: 4 }}>
-          <div className={`button ${location.pathname !== "/game/setup/joinGame" && location.pathname !== "/game/setup" ? "offscreen-bottom" : ""}`}>zur Party einer Freund*in</div>
-        </Link>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ height: "100%", position: "relative" }}>
+          <Routes>
+            <Route path="/joinGame/*" element={<JoinGamePage />} />
+          </Routes>
+          <Link to="/game/setup/createGame">
+            <div
+              style={{ bottom: "5%" }}
+              className={`button ${location.pathname !== "/game/setup/createGame" && location.pathname !== "/game/setup" ? "offscreen-top" : ""}`}
+            >
+              Neue Party starten
+            </div>
+          </Link>
+        </div>
+        <div style={{ height: "100%", position: "relative" }}>
+          <Link to="/game/setup/joinGame">
+            <div
+              style={{ top: "5%" }}
+              className={`button ${location.pathname !== "/game/setup/joinGame" && location.pathname !== "/game/setup" ? "offscreen-bottom" : ""}`}
+            >
+              zur Party einer Freund*in
+            </div>
+          </Link>
+          <Routes>
+            <Route path="/createGame/*" element={<CreateGamePage />} />
+          </Routes>
+        </div>
 
-        <Routes>
-          <Route path="/joinGame/*" element={<JoinGamePage />} />
-          <Route path="/createGame/*" element={<CreateGamePage />} />
-        </Routes>
+        {/* <Routes> */}
+        {/* <Route path="/joinGame/*" element={<JoinGamePage />} /> */}
+
+        {/* </Routes> */}
       </div>
     </SessionRoute>
   );

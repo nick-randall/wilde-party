@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApi } from "../api/useApi";
 import { SessionContext } from "../SessionProvider";
 import AuthRoute from "./SessionRoute";
-import  { ActiveGames, TextInput } from "./JoinGameWidgets";
+import { ActiveGames, TextInput } from "./JoinGameWidgets";
 import { joinGameAlt } from "../api/api";
 import { Transition } from "react-transition-group";
 import { meaningfulErrorMessage } from "../api/meaningfulErrorMessage";
@@ -69,18 +69,18 @@ const JoinGamePage: FC = () => {
   return (
     <AuthRoute checkForActiveGames>
       <>
+        {/* <div style={{position: "relative"}}> */}
         {widgetsData.map((widget, index) => (
           <Transition timeout={0} in={true} appear={true}>
             {state => (
-              <>
-                <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index}>
-                  {widget.widgetComponent}
-                </GameSetupPagesWidget>
-              </>
+              <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index}>
+                {widget.widgetComponent}
+              </GameSetupPagesWidget>
             )}
           </Transition>
         ))}
       </>
+      {/* </div> */}
     </AuthRoute>
   );
 };

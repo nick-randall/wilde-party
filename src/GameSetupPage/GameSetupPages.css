@@ -9,9 +9,10 @@
   height: 50%;
 }
 .game-setup-widget {
-  /* left: 50%;
+  left: 50%;
+  top:50%;
   transform: translateX(-50%);
-  transition: transform 1s; */
+  transition: transform 1s;
   position: relative;
   display: flex;
   justify-content: center;

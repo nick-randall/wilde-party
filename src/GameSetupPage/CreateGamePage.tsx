@@ -4,9 +4,8 @@ import { Transition } from "react-transition-group";
 import { SessionContext } from "../SessionProvider";
 import SelectPlayers from "./CreateGameWidgets";
 import GameSetupPagesWidget from "./GameSetupPagesWidget";
-import  {  ActiveGames } from "./JoinGameWidgets";
+import { ActiveGames } from "./JoinGameWidgets";
 import AuthRoute from "./SessionRoute";
-
 
 interface CreateGamePageProps {}
 
@@ -54,24 +53,21 @@ const CreateGamePage: FC<CreateGamePageProps> = () => {
       index: 0,
       widgetComponent: <SelectPlayers setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} />,
     },
-   
   ];
 
   return (
     <AuthRoute checkForActiveGames>
-      <>
+      <div style={{ position: "relative", height: "100%" }}>
         {widgetsData.map((widget, index) => (
           <Transition timeout={0} in={true} appear={true}>
             {state => (
-              <>
-                <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index}>
-                  {widget.widgetComponent}
-                </GameSetupPagesWidget>
-              </>
+              <GameSetupPagesWidget {...widget} currIndex={state === "entering" ? -1 : currIndex} key={index}>
+                {widget.widgetComponent}
+              </GameSetupPagesWidget>
             )}
           </Transition>
         ))}
-      </>
+      </div>
     </AuthRoute>
   );
 };
