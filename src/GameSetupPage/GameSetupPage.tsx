@@ -12,12 +12,12 @@ const GameSetup: FC<GameSetupProps> = () => {
   const location = useLocation();
 
   const joinGameButtonPosition: { [pathname: string]: string } = {
-    "/game/setup/createGame": "offscreen-bottom",
+    "/game/setup/createGame": "offscreen-top",
     "/game/setup": "",
-    "/game/setup/joinGame": "lowered",
+    "/game/setup/joinGame": "raised-left",
   };
   const createGameButtonPosition: { [pathname: string]: string } = {
-    "/game/setup/createGame": "raised",
+    "/game/setup/createGame": "raised-right",
     "/game/setup": "",
     "/game/setup/joinGame": "offscreen-top",
   };
@@ -31,16 +31,18 @@ const GameSetup: FC<GameSetupProps> = () => {
           <Route path="/joinGame/*" element={<JoinGamePage />} />
           <Route path="/createGame/*" element={<CreateGamePage />} />
         </Routes>
-        <Link to="/game/setup/createGame">
-          <div style={{ top: "30%" }} className={`button ${createGameButtonPosition[location.pathname]}`}>
-            Neue Party starten
-          </div>
-        </Link>
-        <Link to="/game/setup/joinGame">
-          <div style={{ bottom: "30%" }} className={`button ${joinGameButtonPosition[location.pathname]}`}>
-            zur Party einer Freund*in
-          </div>
-        </Link>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Link to="/game/setup/createGame">
+            <div style={{ top: "20vh" }} className={`button ${createGameButtonPosition[location.pathname]}`}>
+              Neue Party starten
+            </div>
+          </Link>
+          <Link to="/game/setup/joinGame">
+            <div style={{ top: "20vh" }} className={`button ${joinGameButtonPosition[location.pathname]}`}>
+              zur Party einer Freund*in
+            </div>
+          </Link>
+        </div>
       </>
     </SessionRoute>
   );

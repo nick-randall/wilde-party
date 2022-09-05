@@ -47,30 +47,31 @@ const App: FC<AppProps> = () => {
   return (
     <>
       <div className={`banner ${location.pathname === "/" ? "" : "off-screen"}`}>
-        {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
-        {sessionToken == null ? "NULL" : sessionToken}
-        {sessionToken && !activeGame && (
-          <div className={`button`}>
-            <Link to="/game/setup">starten</Link>
-          </div>
-        )}
-        {sessionToken && activeGame && (
-          <div style={{display: "flex", flexDirection: "column", gap: 30 }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
+          {sessionToken == null ? "NULL" : sessionToken}
+          {sessionToken && !activeGame && (
             <div className={`button`}>
-              <Link to="/game/waiting" state={activeGame.partyName || "no name"}>
-                zurück zum Spiel
-              </Link>
+              <Link to="/game/setup">starten</Link>
             </div>
-            <div className={`button`}></div>
-
-          </div>
-        )}
-        {!sessionToken && !activeGame && (
-          <div className="button pulsing" onClick={loading ? () => null : signInAndLaunch}>
-            {loading ? "laden..." : "starten"}
-          </div>
-        )}
-        {sessionToken}
+          )}
+          {sessionToken && activeGame && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+              <div className={`button`}>
+                <Link to="/game/waiting" state={activeGame.partyName || "no name"}>
+                  zurück zum Spiel
+                </Link>
+              </div>
+              <div className={`button`}>Spiel verlassen</div>
+            </div>
+          )}
+          {!sessionToken && !activeGame && (
+            <div className="button pulsing" onClick={loading ? () => null : signInAndLaunch}>
+              {loading ? "laden..." : "starten"}
+            </div>
+          )}
+          {sessionToken}
+        </div>
       </div>
       <Routes>
         <Route path="/game/*" element={<Game />} />

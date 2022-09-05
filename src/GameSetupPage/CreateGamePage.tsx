@@ -60,10 +60,10 @@ const CreateGamePage: FC<CreateGamePageProps> = () => {
     if (sessionToken) api.createNewGame(sessionToken, 3, 0, "nick", "nick's party");
   }, [api, sessionToken]);
 
-  useEffect(() => createGame(),[createGame]);
+  // useEffect(() => createGame(),[createGame]);
   return (
     <AuthRoute checkForActiveGames>
-      <div style={{ position: "relative", height: "100%" }}>
+      <>
         {widgetsData.map((widget, index) => (
           <Transition timeout={0} in={true} appear={true}>
             {state => (
@@ -73,7 +73,7 @@ const CreateGamePage: FC<CreateGamePageProps> = () => {
             )}
           </Transition>
         ))}
-      </div>
+      </>
     </AuthRoute>
   );
 };
