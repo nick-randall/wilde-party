@@ -1,6 +1,7 @@
-import { FC, useCallback, useContext, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Transition } from "react-transition-group";
+import { useApi } from "../api/useApi";
 import { SessionContext } from "../SessionProvider";
 import SelectPlayers from "./CreateGameWidgets";
 import GameSetupPagesWidget from "./GameSetupPagesWidget";
@@ -54,7 +55,12 @@ const CreateGamePage: FC<CreateGamePageProps> = () => {
       widgetComponent: <SelectPlayers setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} />,
     },
   ];
+  const api = useApi();
+  const createGame = useCallback(() => {
+    if (sessionToken) api.createNewGame(sessionToken, 3, 0, "nick", "nick's party");
+  }, [api, sessionToken]);
 
+  useEffect(() => createGame(),[createGame]);
   return (
     <AuthRoute checkForActiveGames>
       <div style={{ position: "relative", height: "100%" }}>
