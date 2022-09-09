@@ -51,22 +51,22 @@ const App: FC<AppProps> = () => {
           {error && <div style={{ color: "red", position: "absolute", left: "50%", top: 20, transform: "translateX(-50%)" }}>{error}</div>}
           {sessionToken == null ? "NULL" : sessionToken}
           {sessionToken && !activeGame && (
-            <div className={`button`}>
+            <div className={`button clickable`}>
               <Link to="/game/setup">starten</Link>
             </div>
           )}
           {sessionToken && activeGame && (
             <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
-              <div className={`button`}>
+              <div className={`button clickable`}>
                 <Link to="/game/waiting" state={activeGame.partyName || "no name"}>
                   zurück zum Spiel
                 </Link>
               </div>
-              <div className={`button`}>Spiel verlassen</div>
+              <div className={`button clickable`}>Spiel verlassen</div>
             </div>
           )}
           {!sessionToken && !activeGame && (
-            <div className="button pulsing" onClick={loading ? () => null : signInAndLaunch}>
+            <div className="button pulsing clickable" onClick={loading ? () => null : signInAndLaunch}>
               {loading ? "laden..." : "starten"}
             </div>
           )}

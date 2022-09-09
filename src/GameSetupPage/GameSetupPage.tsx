@@ -13,12 +13,12 @@ const GameSetup: FC<GameSetupProps> = () => {
 
   const joinGameButtonPosition: { [pathname: string]: string } = {
     "/game/setup/createGame": "offscreen-top",
-    "/game/setup": "",
+    "/game/setup": "clickable",
     "/game/setup/joinGame": "raised-left",
   };
   const createGameButtonPosition: { [pathname: string]: string } = {
     "/game/setup/createGame": "raised-right",
-    "/game/setup": "",
+    "/game/setup": "clickable",
     "/game/setup/joinGame": "offscreen-top",
   };
 
@@ -31,7 +31,7 @@ const GameSetup: FC<GameSetupProps> = () => {
           <Route path="/joinGame/*" element={<JoinGamePage />} />
           <Route path="/createGame/*" element={<CreateGamePage />} />
         </Routes>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "3ch" }}>
           <Link to="/game/setup/createGame">
             <div style={{ top: "20vh" }} className={`button ${createGameButtonPosition[location.pathname]}`}>
               Neue Party starten
