@@ -49,35 +49,34 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setupD
     return <div>Keine Spiele verfügbar</div>;
   } else
     return (
-      <>
-        {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
-        {availableGames.map(game => (
-          <FlipMove duration={1000} key={game.id}>
-            <div
-              className={`available-game-button ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`}
-              onClick={() => handleClick(game)}
-            >
-              {game.partyAddress}
-              <div className="avatar-row">
-                <div className="avatar-wrapper">
-                  <div style={{display: "flex", justifyContent: "center", flexDirection:"column"}}>
-                    <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
-                    Jakob
-                  </div>
-                </div>
-                <div className="avatar-wrapper">
-                  <img src="../../images/avatars/screamer_avatar.jpg" alt="insert file name here" className="available-game-avatar center" />
-                  Nick
-                </div>
-                <div className="avatar-wrapper">
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className="available-games-scrollable">
+          {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
+          {availableGames.slice(0, 4).map(game => (
+            <FlipMove duration={1000} key={game.id}>
+              <div
+                className={`available-game-card ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`}
+                onClick={() => handleClick(game)}
+              >
+                <div className="party-name">{game.partyAddress}</div>
+                <div className="avatar-column">
                   <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
-                  Christopherson
+                  <p>Computer</p>
+                </div>
+                <div className="avatar-column">
+                  <img src="../../images/avatars/screamer_avatar.jpg" alt="insert file name here" className="available-game-avatar" />
+                  <p>Nick</p>
+                </div>
+                <div className="avatar-column">
+                  <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
+                  <p>Computer</p>
                 </div>
               </div>
-            </div>
-          </FlipMove>
-        ))}
-      </>
+            </FlipMove>
+          ))}
+        </div>
+        <p className="which-party-title"> Auf welche Party?</p>
+      </div>
     );
 };
 

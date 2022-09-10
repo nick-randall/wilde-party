@@ -1,35 +1,53 @@
+.available-games-scrollable {
+  display: flex;
+  flex-direction: column;
+  gap: 2ch;
+  overflow-y: scroll;
+  min-height: 15vh;
+  max-height: 25vh;
+  padding: 10ch;
+  box-shadow: inset 1px 0px 6px 3px transparent;
+  border-radius: 1ch;
+  -webkit-mask-image: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0), 5%, rgba(0, 0, 0, 1), 95%, rgba(0,0,0,0));
+  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0), 5%, rgba(0, 0, 0, 1), 95%, rgba(0,0,0,0));
+}
 
-.available-game-button {
+.available-game-card {
   width: 30ch;
-  /* height: 13ch; */
   text-align: center;
-  font-family: wilde-party-font;
   font-size: 20px;
-  border-radius: 0.5ch;
-  border: black 0.2ch solid;
+  border-radius: 0.7ch;
+  border: black 0.4ch solid;
   box-shadow: 4px 5px 0px grey;
-  background-color: #FFFFFF;
-  padding: 20px 15px 10px 20px;
+  background-color: #ffffff;
+  /* padding: 20px 15px 10px 20px; */
+  padding-top: 1ch;
   transition-property: transform;
   transition-duration: 1000ms;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  display: grid;
+  grid-row-gap: 1ch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 auto;
+  margin-top:20px;
 }
-.available-game-button.selected {
+.available-games-scrollable > * {
+  font-family: wilde-party-font;
+
+}
+
+.available-game-card.selected {
   transform: scale(1.3);
   z-index: 1;
 }
 
-.available-game-button .avatar-row {
-  display: flex;
-  justify-content: space-evenly;
+.available-game-card .party-name {
+  grid-column: span 3;
 }
 
-.available-game-avatar{
+.available-game-avatar {
   clip-path: circle();
-  border: solid black 0.2ch;
+  /* border: solid black 0.2ch; */
   border-radius: 100%;
   height: 6ch;
   width: 6ch;
@@ -37,15 +55,23 @@
   /* background-color: lightpink ; */
   background-image: linear-gradient(to bottom right, red, yellow);
 }
-.avatar-row .avatar-wrapper {
-  /* flex: 1 1 0px; */
-  /* border: solid black thin; */
-  width: 100%;
+.available-game-card.avatar-column {
   display: flex;
   flex-direction: column;
-
+  align-items: center;
+  justify-content: space-between;
 }
-.avatar-row  {
+
+.available-game-card .avatar-column p {
+  font-size: small  ;
+}
+
+.avatar-row {
   font-size: medium;
   width: 100%;
 }
+
+.which-party-title {
+text-align: center ;
+font-family: wilde-party-font;
+padding: 2ch}
