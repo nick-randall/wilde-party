@@ -69,7 +69,6 @@ const JoinGamePage: FC = () => {
   return (
     <AuthRoute checkForActiveGames>
       <>
-        {/* <div style={{position: "relative"}}> */}
         {widgetsData.map((widget, index) => (
           <Transition timeout={0} in={true} appear={true}>
             {state => (
@@ -80,7 +79,6 @@ const JoinGamePage: FC = () => {
           </Transition>
         ))}
       </>
-      {/* </div> */}
     </AuthRoute>
   );
 };

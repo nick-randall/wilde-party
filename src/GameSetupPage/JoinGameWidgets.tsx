@@ -1,8 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import FlipMove from "react-flip-move";
 import "./GameSetupPages.css";
-
-
+import "./JoinGameWidgets.css";
 
 const host = "127.0.0.1";
 const port = 8443;
@@ -54,16 +53,33 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setupD
         {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
         {availableGames.map(game => (
           <FlipMove duration={1000} key={game.id}>
-            <div className={`available-game-button ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`} onClick={() => handleClick(game)}>
+            <div
+              className={`available-game-button ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`}
+              onClick={() => handleClick(game)}
+            >
               {game.partyAddress}
+              <div className="avatar-row">
+                <div className="avatar-wrapper">
+                  <div style={{display: "flex", justifyContent: "center", flexDirection:"column"}}>
+                    <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
+                    Jakob
+                  </div>
+                </div>
+                <div className="avatar-wrapper">
+                  <img src="../../images/avatars/screamer_avatar.jpg" alt="insert file name here" className="available-game-avatar center" />
+                  Nick
+                </div>
+                <div className="avatar-wrapper">
+                  <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
+                  Christopherson
+                </div>
+              </div>
             </div>
           </FlipMove>
         ))}
       </>
     );
 };
-
-
 
 export const TextInput: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setSetupData, setupData }) => {
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {

@@ -109,23 +109,6 @@ transform: scale(1.1);
   text-decoration: none;
 }
 
-.available-game-button {
-  /* height: 2ch; */
-  text-align: center;
-  font-family: wilde-party-font;
-  font-size: 20px;
-  border-radius: 5ch;
-  box-shadow: 4px 5px 0px black;
-  background-color: white;
-  padding: 20px 15px 10px 15px;
-  transition-property: transform;
-  transition-duration: 1000ms;
-  cursor: pointer;
-}
-.available-game-button.selected {
-  transform: scale(1.3);
-  z-index: 1;
-}
 
 .game-setup-avatar {
   clip-path: circle();
