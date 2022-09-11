@@ -1,15 +1,16 @@
 .available-games-scrollable {
   display: flex;
-  flex-direction: column;
-  gap: 2ch;
-  overflow-y: scroll;
-  min-height: 15vh;
-  max-height: 25vh;
-  padding: 10ch;
+  /* flex-direction: column; */
+  gap: 4ch;
+  overflow-x: scroll;
+  /* min-height: 15vh; */
+  /* max-height: 25vh; */
+  width: 70vw;
+  padding: 0 15vw 0 15vw;
   box-shadow: inset 1px 0px 6px 3px transparent;
   border-radius: 1ch;
-  -webkit-mask-image: -webkit-linear-gradient(0deg, rgba(0, 0, 0, 0), 5%, rgba(0, 0, 0, 1), 95%, rgba(0,0,0,0));
-  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0), 5%, rgba(0, 0, 0, 1), 95%, rgba(0,0,0,0));
+  -webkit-mask-image: -webkit-linear-gradient(90deg, rgba(0, 0, 0, 0), 5vw, rgba(0, 0, 0, 1), 95vw, rgba(0,0,0,0));
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0), 5vw, rgba(0, 0, 0, 1), 95vw, rgba(0,0,0,0));
 }
 
 .available-game-card {

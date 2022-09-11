@@ -46,13 +46,14 @@ const JoinGamePage: FC = () => {
   };
 
   const widgetsData: WidgetData[] = [
+  
     {
       index: 0,
-      widgetComponent: <ActiveGames setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} />,
+      widgetComponent: <TextInput setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} atFinalIndex />,
     },
     {
       index: 1,
-      widgetComponent: <TextInput setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} atFinalIndex />,
+      widgetComponent: <ActiveGames setSetupData={setSetupData} submit={submitWidgetData} setupData={setupData} />,
     },
     {
       index: 2,
