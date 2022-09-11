@@ -49,33 +49,39 @@ export const ActiveGames: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setupD
     return <div>Keine Spiele verfügbar</div>;
   } else
     return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div className="available-games-scrollable">
-          {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
-          {availableGames.map(game => (
+      // <div style={{ display: "flex", flexDirection: "column" }}>
+      <div className="available-games-scrollable">
+        {availableGames.length === 0 && <button>Keine Spiele verfügbar</button>}
+        {availableGames.map(game => (
+          <div style={{ display: "flex", flexDirection: "column", gap: "2ch" }}>
             <FlipMove duration={1000} key={game.id}>
               <div
                 className={`available-game-card ${game.partyAddress === setupData.partyAddress ? "selected" : ""}`}
-                onClick={() => handleClick(game)}
               >
                 <div className="party-name">Jakobs party</div>
-                <div className="avatar-column">
-                  <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
-                  <p>Computer</p>
-                </div>
+
                 <div className="avatar-column">
                   <img src="../../images/avatars/screamer_avatar.jpg" alt="insert file name here" className="available-game-avatar" />
                   <p>Nick</p>
                 </div>
                 <div className="avatar-column">
-                  <img src="../../images/avatars/roboty.png" alt="insert file name here" className="available-game-avatar" />
+                  <img src="../../images/avatars/robot.png" alt="insert file name here" className="available-game-avatar" />
                   <p>Computer</p>
+                </div>
+                <div className="avatar-column">
+                  <img src="../../images/avatars/question_mark.png" alt="insert file name here" className="available-game-avatar" />
+                  <p></p>
                 </div>
               </div>
             </FlipMove>
-          ))}
-        </div>
-        <p className="which-party-title"> Auf welche Party?</p>
+            <div style={{textAlign: "center", cursor:"pointer"}}                 onClick={() => handleClick(game)}
+>
+            Join
+            </div>
+            <div />
+          </div>
+        ))}
+     
       </div>
     );
 };

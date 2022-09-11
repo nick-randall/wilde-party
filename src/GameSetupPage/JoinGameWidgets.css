@@ -52,9 +52,8 @@
   border-radius: 100%;
   height: 6ch;
   width: 6ch;
-
   /* background-color: lightpink ; */
-  background-image: linear-gradient(to bottom right, red, yellow);
+  /* background-image: linear-gradient(to bottom right, red, yellow); */
 }
 .available-game-card.avatar-column {
   display: flex;
