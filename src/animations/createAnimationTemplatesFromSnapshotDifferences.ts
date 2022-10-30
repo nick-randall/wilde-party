@@ -70,20 +70,23 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       if (destroyedCardFromData) {
         const destroyedCard: Via = { cardId: destroyedCardFromData.cardId, targetId: destroyedCardFromData.cardId };
 
-        let handCardFliesToDestroyedCard: AnimationTemplate = {} as AnimationTemplate;
-        let handCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
+        let handCardFliesToDiscardPileViaDestroyedCard: AnimationTemplate = {} as AnimationTemplate;
+        // let handCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
         let destroyedCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
         differences.forEach(change => {
           if (change.from.place === "hand") {
             // create two differences with orderOfExecution 0 and 1
-            handCardFliesToDestroyedCard = { ...change, to: destroyedCard, id: uuidv4(), status: "awaitingEmissaryData" };
-            handCardFliesToDiscardPile = { ...change, from: destroyedCard, id: uuidv4(), status: "waitingInLine" };
+            // handCardFliesToDestroyedCard = { ...change, to: destroyedCard, id: uuidv4(), status: "awaitingEmissaryData" };
+            handCardFliesToDiscardPileViaDestroyedCard = { ...change, via: destroyedCard, id: uuidv4(), status: "waitingInLine" };
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), status: "waitingInLine" };
+            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), status: "waitingInLine", };
           }
         });
-        return [[handCardFliesToDestroyedCard], [handCardFliesToDiscardPile, destroyedCardFliesToDiscardPile]];
+        return [
+          // [handCardFliesToDestroyedCard],
+          [handCardFliesToDiscardPileViaDestroyedCard, destroyedCardFliesToDiscardPile],
+        ];
       }
       return [];
     }
@@ -110,7 +113,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           animation: difference.to.player === 0 ? "flip" : "",
           id: uuidv4(),
           status: "awaitingEmissaryData",
-          // Just adds a 300ms delay to each card dealt (after the first) 
+          // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * 300 - index * 300,
         };
         templates.push(transitionTemplate);

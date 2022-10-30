@@ -98,7 +98,7 @@ type InjectedAnimationHandlerProps = CalculatedAnimationData & {
 /**
  * This component receives all animation data but can't access it directly.
  * Instead, the InjectedAnimationHandler uses the animation data (to, from, delay etc.)
- * to build a dynamic animation.
+ * contained in the css class (className prop) to build a dynamic animation.
  * @param param0
  * @returns
  */
@@ -128,16 +128,16 @@ const flip = (
   wait?: number
 ) => keyframes`
   0% {
-   width: ${originWidth}px;
-   height: ${originHeight}px;
+    width: ${originWidth}px;
+    height: ${originHeight}px;
     transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg);
     content: url("${backImgSrc}");
   }
   ${wait}% {
-   width: ${originWidth}px;
-   height: ${originHeight}px;
-   transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg);
-   content: url("${backImgSrc}");
+    width: ${originWidth}px;
+    height: ${originHeight}px;
+    transform: translate(${originDelta.x}px, ${originDelta.y}px) rotate3d(0, 1, 0, 180deg) rotate(${initialRotation}deg);
+    content: url("${backImgSrc}");
 
   }
    100% {

@@ -1,6 +1,7 @@
 import  { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import handleNewMockRenderData from "../animations/handleNewMockRenderData";
+import { rotateHandCard } from "../helperFunctions/getDimensions";
 
 export interface HandCardMockRenderProps {
   cardId: string;
@@ -20,7 +21,7 @@ export interface HandCardMockRenderProps {
  */
 const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, dimensions, spread, numHandCards }) => {
   // const { id, animationTemplateId, index, dimensions, spread, numHandCards } = props;
-  const { cardWidth, rotation, cardHeight } = dimensions;
+  const { cardWidth, cardHeight } = dimensions;
   const mockRenderRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -44,12 +45,12 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
       const { left, top } = element.getBoundingClientRect();
       dispatch(
         handleNewMockRenderData(
-          { cardId, xPosition: left, yPosition: top, dimensions: dimensions, rotation: rotation(index, numHandCards) },
+          { cardId, xPosition: left, yPosition: top, dimensions, rotation: rotateHandCard(index, numHandCards) },
           "to"
         )
       );
     }
-  }, [cardId, dimensions, dispatch, index, numHandCards, rotation]);
+  }, [cardId, dimensions, dispatch, index, numHandCards]);
 
   return  (
     <div

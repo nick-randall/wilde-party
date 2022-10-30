@@ -24,7 +24,7 @@ export interface CardProps {
 
 const Card = (props: CardProps) => {
   const { id, placeId, index, dimensions, offsetTop, offsetLeft, image, placeType } = props;
-  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
+  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth, facing } = dimensions;
   const settings = getSettings();
 
   const [messinessRotation, setMessinessRotation] = useState(0);
@@ -53,56 +53,54 @@ const Card = (props: CardProps) => {
     zIndex: tableCardzIndex,
     width: cardWidth,
     height: cardHeight,
-    left: offsetLeft ? + offsetLeft + messinessOffset.x : "",
+    left: offsetLeft ? +offsetLeft + messinessOffset.x : "",
     top: offsetTop ? offsetTop + messinessOffset.y : "",
     position: "absolute",
-    transform: `rotate(${messinessRotation}deg)`,
+    transform: `rotate(${messinessRotation}deg) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
     transition: "300ms",
     // transitionDelay: "150ms",
     userSelect: "none",
   };
 
-  const emissaryRef = useRef<HTMLImageElement>(null);
+  const mockRenderRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
-  useMockRender(id, dimensions, 0, emissaryRef);
-  
-  return (
-     
-          <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
-            {animationProvidedProps => (
-                <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
-                  {isDraggingOver => (
-                    <>
-                      <img
-                        ref={emissaryRef}
-                        alt={image}
-                        draggable="false"
-                        src={`./images/${image}.jpg`}
-                        id={id}
-                        style={{
-                          WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                          boxShadow: "2px 2px 2px black",
-                          transition: "box-shadow 180ms",
-                          ...normalStyles,
-                        }}
-                        onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-                        className={animationProvidedProps.className}
-                      />
-                      {isDraggingOver && draggedHandCard ? (
-                        <GhostCard
-                          offsetLeft={cardLeftSpread * BFFOffset}
-                          offsetTop={cardHeight / 2}
-                          image={draggedHandCard.image}
-                          dimensions={dimensions}
-                          zIndex={5}
-                        />
-                      ) : null}
-                    </>
-                  )}
-                </DropZoneWrapper>
-            )}
-          </AnimationHandler>
+  useMockRender(id, dimensions, 0, mockRenderRef);
 
+  return (
+    <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
+      {animationProvidedProps => (
+        <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
+          {isDraggingOver => (
+            <>
+              <img
+                ref={mockRenderRef}
+                alt={image}
+                draggable="false"
+                src={facing === "front" ? `./images/${image}.jpg` : "./images/back.jpg"}
+                id={id}
+                style={{
+                  WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                  boxShadow: "2px 2px 2px black",
+                  transition: "box-shadow 180ms",
+                  ...normalStyles,
+                }}
+                onAnimationEnd={() => dispatch(handleEndAnimation(id))}
+                className={animationProvidedProps.className}
+              />
+              {isDraggingOver && draggedHandCard ? (
+                <GhostCard
+                  offsetLeft={cardLeftSpread * BFFOffset}
+                  offsetTop={cardHeight / 2}
+                  image={draggedHandCard.image}
+                  dimensions={dimensions}
+                  zIndex={5}
+                />
+              ) : null}
+            </>
+          )}
+        </DropZoneWrapper>
+      )}
+    </AnimationHandler>
   );
 };
 export default Card;

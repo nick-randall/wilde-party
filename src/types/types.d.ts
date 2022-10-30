@@ -11,20 +11,13 @@ type PlaceDimensions = {
   featuredCardScale: number;
 };
 
-type CardDimensions = {
+type CardAnimationDimensions = {
   cardHeight: number;
   cardWidth: number;
-  cardLeftSpread: number;
-  cardTopSpread: number;
-  leftOffset: number;
-  topOffset: number;
-  draggedCardScale: number;
-  draggedCardWidth: number;
-  draggedCardzIndex: number;
-  tableCardzIndex: number;
-  rotation: number;
-  featuredCardScale: number;
-};
+  rotationX: number;
+  rotationZ?: number;
+  scale: number;
+}
 
 type AllDimensions = {
   cardHeight: number;
@@ -36,7 +29,6 @@ type AllDimensions = {
   draggedCardWidth: number;
   draggedCardzIndex: number;
   tableCardzIndex: number;
-  rotation: (index: number, numCards: number) => number;
   scale: number;
   featuredCardScale: number;
   zIndex: number;
@@ -44,6 +36,7 @@ type AllDimensions = {
   tableCardWidth: number;
   tableCardHeight: number;
   tableCardWidth: number;
+  facing: "front" | "back";
   // leftOffset: number;
   // topOffset: number;
 };

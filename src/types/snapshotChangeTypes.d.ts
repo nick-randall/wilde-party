@@ -4,25 +4,25 @@
  * where it stopped
  */
 
- type SnapshotUpdate = {
+type SnapshotUpdate = {
   from: SnapshotLocation;
   to: SnapshotLocation;
-}
+};
 
 /**
- * A snapshot change is a the summary of what has changed in the 
+ * A snapshot change is a the summary of what has changed in the
  * snapshot. It is the output of analysing the before and after
- * of a changed snapshot. It describes how a card has moved from 
+ * of a changed snapshot. It describes how a card has moved from
  * one part of the game to another. This is then used to generate
  * transition data.
  */
 
- type SnapshotDifference = {
+type SnapshotDifference = {
   from: ToOrFrom;
   to: ToOrFrom;
-}
+};
 
-type PendingTransition = SnapshotChange & { orderOfExecution: number }
+type PendingTransition = SnapshotChange & { orderOfExecution: number };
 
 type ToOrFrom = {
   cardId: string;
@@ -31,22 +31,29 @@ type ToOrFrom = {
   player: number | null;
   playerId: string | null;
   index: number;
-}
+};
 
 type Via = {
   cardId: string;
   targetId: string;
-}
+};
 
 type SnapshotLocation = {
   player: number | null;
   place: PlaceType;
   index: number;
-}
+};
 
 type SimpleSnapshotLocator = {
   player: number | null;
   place: PlaceType;
-}
+};
 
-type SnapshotUpdateType = "initialSnapshot" | "dealingInitialCards" | "dealingCards" | "rearrangingHand" | "rearrangingTablePlace" | "drawingWildeParty" | ActionType;
+type SnapshotUpdateType =
+  | "initialSnapshot"
+  | "dealingInitialCards"
+  | "dealingCards"
+  | "rearrangingHand"
+  | "rearrangingTablePlace"
+  | "drawingWildeParty"
+  | ActionType;

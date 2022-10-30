@@ -2,6 +2,7 @@ import { CSSProperties, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AnimationHandler from "../animations/AnimationHandler";
 import handleEndAnimation from "../animations/handleEndAnimation";
+import { rotateHandCard } from "../helperFunctions/getDimensions";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import useMockRender from "../mockRender/useMockRender";
 import { RootState } from "../redux/store";
@@ -19,7 +20,7 @@ export interface EnemyHandCardProps {
 const EnemyHandCard = (props: EnemyHandCardProps) => {
   const { id, index, image, dimensions, numHandCards, spread } = props;
 
-  const { zIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
+  const { zIndex, cardWidth, facing, cardTopSpread, cardHeight, cardLeftSpread } = dimensions;
 
   const normalStyles: CSSProperties = {
     zIndex: zIndex,
@@ -27,7 +28,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     // top: cardTopSpread,
     left: spread * index - (spread * numHandCards) / 2,
     position: "absolute",
-    transform: `rotate(${rotation(index, numHandCards)}deg)`,
+    transform: `rotate(${rotateHandCard(index, numHandCards)}deg) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
     transition: `left 250ms, width 180ms, transform 180ms, opacity 300ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
@@ -43,17 +44,17 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         }
       : { opacity: 0 };
 
-  const emissaryRef = useRef<HTMLImageElement>(null);
+  const mockRenderRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
-  useMockRender(id, dimensions, rotation(index, numHandCards), emissaryRef);
+  useMockRender(id, dimensions, rotateHandCard(index, numHandCards), mockRenderRef);
 
   return (
     <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>
       {animationProvidedProps => (
-        <div ref={emissaryRef}>
+        <div ref={mockRenderRef}>
           <img
             alt={image}
-            src={`./images/back.jpg`}
+            src={facing === "front" ? `./images/${image}.jpg` : `./images/back.jpg`}
             draggable="false"
             id={id}
             style={{

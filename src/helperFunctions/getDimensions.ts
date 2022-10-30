@@ -1,5 +1,4 @@
 export const getDimensions = (player: number | null, place: PlaceType, numCards: number = 0) => {
-
   const tableCardHeights = { enemy: 120, self: 148 };
   const handCardHeights = { enemy: 100, self: 180 };
 
@@ -14,7 +13,7 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
 
   const handToTableScaleFactor = tableCardHeight / handCardHeight;
 
-  const dimensions: AllDimensions = {
+  const tableDimensions: AllDimensions = {
     featuredCardScale: 2,
     cardHeight: tableCardHeight,
     cardWidth: tableCardWidth,
@@ -26,10 +25,10 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     draggedCardScale: 1.1,
     draggedCardWidth: 112,
     tableCardzIndex: 10,
-    rotation: place === "deck" ? () => 0 : (index: number) => 10 * index - (numCards / 2 - 0.5) * 10,
     scale: 2.4,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     handToTableScaleFactor: handToTableScaleFactor,
+    facing: place !== "deck" ? "front" : "back",
   };
 
   const handDimensions: AllDimensions = {
@@ -46,10 +45,17 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     draggedCardWidth: 112,
     draggedCardzIndex: 7,
     tableCardzIndex: 10,
-    rotation: (index: number, numCards: number) => 10 * index - (numCards / 2 - 0.5) * 10,
     scale: 2,
     handToTableScaleFactor: handToTableScaleFactor,
+    facing: player === 0 ? "front" : "back",
   };
-  if (place === "hand") return handDimensions;
-  return dimensions;
+  return place === "hand" ? handDimensions : tableDimensions;
 };
+
+export const createAnimationDimensions = (dimensions: AllDimensions, rotationX: number, rotationZ: number): CardAnimationDimensions => ({
+  rotationX,
+  rotationZ,
+  ...dimensions,
+});
+
+export const rotateHandCard = (index: number, numCards: number) => 10 * index - (numCards / 2 - 0.5) * 10;

@@ -7,6 +7,7 @@ import Dragger from "../dndcomponents/Dragger";
 import AnimationHandler from "../animations/AnimationHandler";
 import useMockRender from "../mockRender/useMockRender";
 import handleEndAnimation from "../animations/handleEndAnimation";
+import { rotateHandCard } from "../helperFunctions/getDimensions";
 
 export interface HandCardProps {
   id: string;
@@ -21,7 +22,7 @@ export interface HandCardProps {
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, handId, spread, numHandCards, dimensions } = props;
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
+  const { tableCardzIndex, cardWidth, facing, cardTopSpread, cardHeight } = dimensions;
   // const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -41,7 +42,7 @@ const HandCard = (props: HandCardProps) => {
           // should be in dimensions
           zIndex: shortHover ? 30 : tableCardzIndex,
           position: "absolute",
-          transform: `rotate(${rotation(index, numHandCards)}deg) scale(${shortHover ? 1.1 : 1})`,
+          transform: `rotate(${rotateHandCard(index, numHandCards)}deg) scale(${shortHover ? 1.1 : 1}) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
           transition: `left 250ms, top 250ms, width 180ms, transform 180ms`,
           // transition: "300ms",
           width: cardWidth,
@@ -63,7 +64,7 @@ const HandCard = (props: HandCardProps) => {
   const emissaryRef = useRef<HTMLImageElement>(null);
   const dispatch = useDispatch();
 
-  useMockRender(id, dimensions, rotation(index, numHandCards), emissaryRef);
+  useMockRender(id, dimensions, rotateHandCard(index, numHandCards), emissaryRef);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
@@ -84,7 +85,7 @@ const HandCard = (props: HandCardProps) => {
               <img
                 ref={emissaryRef}
                 alt={image}
-                src={`./images/${image}.jpg`}
+                src={facing === "front" ? `./images/${image}.jpg` : `./images/back.jpg`}
                 draggable="false"
                 onMouseDown={draggerProps.handleDragStart}
                 onMouseEnter={() => setShortHover(true)}

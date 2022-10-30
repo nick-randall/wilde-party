@@ -8,13 +8,13 @@ type AnimationTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "await
 
 type ToWithScreenData = ToOrFrom & CompleteScreenToData;
 type FromWithScreenData = ToOrFrom & CompleteScreenFromData;
-type ToViaWithScreenData = Via & CompleteScreenToData;
-type FromViaWithScreenData = Via & CompleteScreenFromData;
+// type ToViaWithScreenData = Via & CompleteScreenToData;
+// type FromViaWithScreenData = Via & CompleteScreenFromData;
 
 type ToWithPossibleScreenData = ToOrFrom & ScreenToData;
 type FromWithPossibleScreenData = ToOrFrom & ScreenFromData;
-type ToViaWithPossibleScreenData = Via & ScreenToData;
-type FromViaWithPossibleScreenData = Via & ScreenFromData;
+// type ToViaWithPossibleScreenData = Via & ScreenToData;
+// type FromViaWithPossibleScreenData = Via & ScreenFromData;
 
 type ScreenToData = {
   xPosition?: number;
@@ -84,8 +84,9 @@ type ToOrFromWithScreenData = ToOrFrom & CompleteScreenData;
 type ViaWithScreenData = Via & CompleteScreenData;
 
 type AnimationTemplate = {
-  to: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData
-  from: ToOrFromWithPossibleScreenData | ViaWithPossibleScreenData;
+  to: ToOrFromWithPossibleScreenData 
+  via?: ViaWithPossibleScreenData
+  from: ToOrFromWithPossibleScreenData ;
 } & { id: string; status: AnimationTemplateStatus; animation?: string; delay?: number };
 
 type MockRenderData = ScreenData & { cardId: string }
