@@ -38,7 +38,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   return (
     <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>
       {animationProvidedProps => (
-        <div ref={mockRenderRef}>
+        // <div ref={mockRenderRef}>
           <CardBase
             id={id}
             image={image}
@@ -46,8 +46,9 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
             dimensions={dimensions}
             rotateX={rotateHandCard(index, numHandCards)}
             className={animationProvidedProps.className}
+            ref={mockRenderRef}
           />
-        </div>
+        // </div>
       )}
     </AnimationHandler>
   );
