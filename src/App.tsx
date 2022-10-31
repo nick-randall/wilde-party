@@ -1,12 +1,9 @@
-import { createContext, FC, useCallback, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import Game from "./GamePath";
 import "./css/global.css";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { host, port } from "./api/useApi";
-import { checkSessionToken, signInAnonymously } from "./api/api";
-import SessionProvider, { ErrorMessage, SessionContext } from "./SessionProvider";
+import { SessionContext } from "./SessionProvider";
 import { meaningfulErrorMessage } from "./api/meaningfulErrorMessage";
 
 /**

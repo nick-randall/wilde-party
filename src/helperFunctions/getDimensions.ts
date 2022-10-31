@@ -1,4 +1,4 @@
-export const getDimensions = (player: number | null, place: PlaceType, numCards: number = 0) => {
+export const getDimensions = (player: number | null, place: PlaceType, numCards: number = 0, cardType: CardType = "guest") => {
   const tableCardHeights = { enemy: 120, self: 148 };
   const handCardHeights = { enemy: 100, self: 180 };
 
@@ -29,6 +29,8 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     handToTableScaleFactor: handToTableScaleFactor,
     facing: place !== "deck" ? "front" : "back",
+    offsetLeft: (cardType: CardType) => (place === "GCZ" && cardType === "bff" ? tableCardWidth / 2 : 0),
+    offsetTop: (cardType: CardType) => (place === "GCZ" && (cardType === "bff" || cardType === "zwilling") ? tableCardHeight / 2 : 0),
   };
 
   const handDimensions: AllDimensions = {
@@ -48,6 +50,8 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     scale: 2,
     handToTableScaleFactor: handToTableScaleFactor,
     facing: player === 0 ? "front" : "back",
+    offsetLeft: () => 0,
+    offsetTop: () => 0,
   };
   return place === "hand" ? handDimensions : tableDimensions;
 };

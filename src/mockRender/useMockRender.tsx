@@ -16,6 +16,7 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotation: numb
     if (animationTemplates.length > 0) {
       animationTemplates[0].forEach(a => {
         if (a.from.cardId === cardId && a.status === "awaitingEmissaryData") {
+          console.log(ref)
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();

@@ -37,8 +37,8 @@ type AllDimensions = {
   tableCardHeight: number;
   tableCardWidth: number;
   facing: "front" | "back";
-  // leftOffset: number;
-  // topOffset: number;
+  offsetTop: (cardType: CardType) => number;
+  offsetLeft: (cardType: CardType) => number;
 };
 
 type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";

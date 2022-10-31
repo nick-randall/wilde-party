@@ -8,6 +8,7 @@ import DropZoneWrapper from "../dndcomponents/DropZoneWrapper";
 import AnimationHandler from "../animations/AnimationHandler";
 import useMockRender from "../mockRender/useMockRender";
 import handleEndAnimation from "../animations/handleEndAnimation";
+import CardBase from "./CardBase";
 
 export interface CardProps {
   id: string;
@@ -45,25 +46,10 @@ const Card = (props: CardProps) => {
   // const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
 
-  // const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFDraggedOverSide ? 0 : BFFDraggedOverSide === "left" ? -0.5 : 0.5;
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
 
-  const normalStyles: CSSProperties = {
-    zIndex: tableCardzIndex,
-    width: cardWidth,
-    height: cardHeight,
-    left: offsetLeft ? +offsetLeft + messinessOffset.x : "",
-    top: offsetTop ? offsetTop + messinessOffset.y : "",
-    position: "absolute",
-    transform: `rotate(${messinessRotation}deg) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
-    transition: "300ms",
-    // transitionDelay: "150ms",
-    userSelect: "none",
-  };
-
   const mockRenderRef = useRef<HTMLImageElement>(null);
-  const dispatch = useDispatch();
   useMockRender(id, dimensions, 0, mockRenderRef);
 
   return (
@@ -72,30 +58,27 @@ const Card = (props: CardProps) => {
         <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
           {isDraggingOver => (
             <>
-              <img
+              <CardBase
                 ref={mockRenderRef}
-                alt={image}
-                draggable="false"
-                src={facing === "front" ? `./images/${image}.jpg` : "./images/back.jpg"}
                 id={id}
-                style={{
-                  WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
-                  boxShadow: "2px 2px 2px black",
-                  transition: "box-shadow 180ms",
-                  ...normalStyles,
-                }}
-                onAnimationEnd={() => dispatch(handleEndAnimation(id))}
+                image={image}
+                dimensions={dimensions}
+                rotateX={0}
+                greyedOut={notAmongHighlights}
+                offsetLeft={offsetLeft}
+                offsetTop={offsetTop}
                 className={animationProvidedProps.className}
-              />
-              {isDraggingOver && draggedHandCard ? (
-                <GhostCard
-                  offsetLeft={cardLeftSpread * BFFOffset}
-                  offsetTop={cardHeight / 2}
-                  image={draggedHandCard.image}
-                  dimensions={dimensions}
-                  zIndex={5}
-                />
-              ) : null}
+              >
+                {isDraggingOver && draggedHandCard ? (
+                  <GhostCard
+                    offsetLeft={cardLeftSpread * BFFOffset}
+                    offsetTop={cardHeight / 2}
+                    image={draggedHandCard.image}
+                    dimensions={dimensions}
+                    zIndex={5}
+                  />
+                ) : null}
+              </CardBase>
             </>
           )}
         </DropZoneWrapper>
