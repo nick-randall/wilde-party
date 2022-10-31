@@ -22,8 +22,8 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
     const frontAndBackStyles: CSSProperties = {
       width: "100%",
       height: "100%",
-      position:"absolute",
-      backfaceVisibility: "hidden"
+      position: "absolute",
+      backfaceVisibility: "hidden",
     };
 
     const innerStyles: CSSProperties = {
@@ -38,9 +38,8 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
       boxShadow: "2px 2px 2px black",
       userSelect: "none",
       backfaceVisibility: "hidden",
-      transformOrigin: "50% 50%", /*seems to do nothing?*/
-      transformStyle: "preserve-3d"
-
+      transformOrigin: "50% 50%" /*seems to do nothing?*/,
+      transformStyle: "preserve-3d",
     };
 
     const outerStyles: CSSProperties = {
@@ -52,14 +51,8 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
     };
 
     return (
-      <div
-        onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-        ref={mockRenderRef}
-        style={outerStyles}
-        className={className}
-      >
-        <div style={innerStyles}>
-         
+      <div style={outerStyles}>
+        <div style={innerStyles} ref={mockRenderRef} onAnimationEnd={() => dispatch(handleEndAnimation(id))} className={className}>
           <img
             ref={mockRenderRef}
             alt={image}
@@ -71,7 +64,7 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
               ...frontAndBackStyles,
             }}
           />
-           <img
+          <img
             alt={image}
             draggable="false"
             src={"./images/back.jpg"}
