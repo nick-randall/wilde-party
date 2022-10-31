@@ -1,4 +1,4 @@
-import { CSSProperties, FC, ForwardedRef, forwardRef } from "react";
+import { CSSProperties, ForwardedRef, forwardRef } from "react";
 import { useDispatch } from "react-redux";
 import handleEndAnimation from "../animations/handleEndAnimation";
 
@@ -6,7 +6,7 @@ interface CardBaseProps {
   id: string;
   image: string;
   dimensions: AllDimensions;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   rotateX: number;
   greyedOut?: boolean;
   className?: string;
@@ -26,7 +26,7 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
       left: offsetLeft || 0,
       top: offsetTop || 0,
       position: "absolute",
-      transform: `rotate(${rotateX}deg) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
+      transform: `rotate(${rotateX}deg) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180}deg)`,
       transition: "300ms",
       userSelect: "none",
     };
