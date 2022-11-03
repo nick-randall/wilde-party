@@ -53,8 +53,7 @@ const Card = (props: CardProps) => {
   useMockRender(id, dimensions, 0, mockRenderRef);
 
   return (
-    <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
-      {animationProvidedProps => (
+   
         <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
           {isDraggingOver => (
             <>
@@ -67,7 +66,7 @@ const Card = (props: CardProps) => {
                 greyedOut={notAmongHighlights}
                 offsetLeft={offsetLeft}
                 offsetTop={offsetTop}
-                className={animationProvidedProps.className}
+                // className={animationProvidedProps.className}
               >
                 {isDraggingOver && draggedHandCard ? (
                   <GhostCard
@@ -82,8 +81,7 @@ const Card = (props: CardProps) => {
             </>
           )}
         </DropZoneWrapper>
-      )}
-    </AnimationHandler>
+     
   );
 };
 export default Card;

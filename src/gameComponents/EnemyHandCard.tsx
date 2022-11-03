@@ -36,21 +36,14 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   useMockRender(id, dimensions, rotateHandCard(index, numHandCards), mockRenderRef);
 
   return (
-    <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={`./images/${image}.jpg`} cardId={id}>
-      {animationProvidedProps => (
-        // <div ref={mockRenderRef}>
           <CardBase
             id={id}
             image={image}
             offsetLeft={spread * index - (spread * numHandCards) / 2}
             dimensions={dimensions}
             rotateX={rotateHandCard(index, numHandCards)}
-            className={animationProvidedProps.className}
             ref={mockRenderRef}
           />
-        // </div>
-      )}
-    </AnimationHandler>
   );
 };
 export default EnemyHandCard;

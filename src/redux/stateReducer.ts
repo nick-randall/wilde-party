@@ -170,14 +170,6 @@ export const stateReducer = (
     case "CLEAR_ANIMATION_TEMPLATES": {
       return { ...state, animationTemplates: [] };
     }
-    case "ADD_TRANSITION":
-      const newTransition = action.payload;
-      return { ...state, transitionData: [...state.transitionData, newTransition] };
-    case "ADD_MULTIPLE_TRANSITIONS":
-      console.log("adding multiple transitions");
-      console.log(action.payload);
-      const newTransitions = action.payload;
-      return { ...state, transitionData: [...state.transitionData, ...newTransitions] };
     // Called after all templates for the group have received their screen data (all are "awaitingSimultaneousTemplates")
     case "ADD_MULTIPLE_ANIMATIONS": {
       console.log(action.payload);
@@ -224,6 +216,7 @@ export const stateReducer = (
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {
+       
         draft.current.draws += change;
       });
       return { ...state, gameSnapshot: newSnapshot };
