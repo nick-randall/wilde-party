@@ -95,7 +95,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
   const isDragEnd = usePrevious(isDraggingOver) && !isDraggingOver;
   const isNotJustLeavingDragArea = usePrevious(draggedId) !== undefined && draggedId === undefined;
   const isActualDragEnd = isDragEnd && isNotJustLeavingDragArea;
-  if(isActualDragEnd) console.log("then EEEENNNNND")
+  if (isActualDragEnd) console.log("then EEEENNNNND");
   let dropTargetX = draggedOverIndex !== undefined ? distFromLeftMap[draggedOverIndex] * elementWidth : 0;
 
   // console.log(distFromLeftMap);
@@ -146,9 +146,12 @@ const DraggerContainer: React.FC<ComponentProps> = ({
         newDraggedOverIndex = findNewDraggedOverIndex(newBreakPoints, touchedX);
       } else {
         newDraggedOverIndex = findNewDraggedOverIndex(breakPoints, touchedX);
+
       }
       if (draggedOverIndex !== newDraggedOverIndex) {
-        dropTargetX = distFromLeftMap[newDraggedOverIndex] * elementWidth;
+        // if outside of draggerContainer(-1) this is a drop cancel, send back to source
+        const dropTargetIndex = newDraggedOverIndex === -1 ? sourceIndex : newDraggedOverIndex;
+        dropTargetX = distFromLeftMap[dropTargetIndex] * elementWidth;
 
         newDraggedOverIndex = draggedOverindexToMapped(newDraggedOverIndex, numElementsAt, isRearrange, sourceIndex);
         dispatch(onDragUpdate({ index: newDraggedOverIndex, containerId: id }));
@@ -236,7 +239,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
                 // height: 150,
                 // Suppress transition if this is the first time an element is being dragged in this container
                 // OR if the drag is ending here, for example when rearranging or when a new card is added.
-                transition: isInitialRearrange|| isActualDragEnd ? "" : "200ms ease",
+                transition: isInitialRearrange || isActualDragEnd ? "" : "200ms ease",
 
                 // transitionDelay: "120ms"
               }}
@@ -252,7 +255,7 @@ const DraggerContainer: React.FC<ComponentProps> = ({
             width: figureOutWhetherToExpandFinal(),
             height: 150,
             // Suppress transition if this is the first time an element is being dragged in this container
-            transition: isInitialRearrange  ? "" : "200ms ease",
+            transition: isInitialRearrange ? "" : "200ms ease",
           }}
           draggable="false"
         />
