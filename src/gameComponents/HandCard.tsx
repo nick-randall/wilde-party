@@ -8,6 +8,7 @@ import AnimationHandler from "../animations/AnimationHandler";
 import useMockRender from "../mockRender/useMockRender";
 import handleEndAnimation from "../animations/handleEndAnimation";
 import { rotateHandCard } from "../helperFunctions/getDimensions";
+import CardBase from "./CardBase";
 
 export interface HandCardProps {
   id: string;
@@ -22,7 +23,7 @@ export interface HandCardProps {
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, handId, spread, numHandCards, dimensions } = props;
 
-  const { tableCardzIndex, cardWidth, facing, cardTopSpread, cardHeight } = dimensions;
+  const { tableCardzIndex, cardWidth, rotateY, cardTopSpread, cardHeight } = dimensions;
   // const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
   const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
@@ -41,19 +42,16 @@ const HandCard = (props: HandCardProps) => {
       ? {
           // should be in dimensions
           zIndex: shortHover ? 30 : tableCardzIndex,
-          position: "absolute",
-          transform: `rotate(${rotateHandCard(index, numHandCards)}deg) scale(${shortHover ? 1.1 : 1}) rotate3d(0, 1, 0, ${facing === "front" ? 0 : 180})`,
           transition: `left 250ms, top 250ms, width 180ms, transform 180ms`,
-          // transition: "300ms",
           width: cardWidth,
           pointerEvents: "auto",
           boxShadow: "10px 10px 10px black",
         }
       : {
-          position: "absolute",
-          transform: "",
           transition: "300ms",
           width: dimensions.tableCardWidth,
+          height: dimensions.tableCardHeight,
+          pointerEvents: "none",
           zIndex: 10,
         };
   const endShortAndLongHover = (handleMouseLeave: Function) => {
@@ -61,45 +59,37 @@ const HandCard = (props: HandCardProps) => {
     setShortHover(false);
   };
 
-  const emissaryRef = useRef<HTMLImageElement>(null);
-  const dispatch = useDispatch();
-
-  useMockRender(id, dimensions, rotateHandCard(index, numHandCards), emissaryRef);
+  const mockRenderRef = useRef<HTMLImageElement>(null);
 
   return (
     <Dragger draggerId={id} index={index} key={id} isDragDisabled={!canPlay} containerId={handId} isOutsideContainer>
       {draggerProps => (
-        <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
-          {animationProvidedProps => (
-            <div
-              // This div manages the spread (left positioning) for the Hand card.
-              ref={draggerProps.ref}
-              style={{
-                position: "absolute",
-                left: draggerProps.dragged || draggerProps.dropping ? "" :  spread * index - (spread * numHandCards) / 2,
-                top: 0,
-                transition: "300ms",
-              }}
-            >
-              <div ref={draggerProps.unrotatedElementRef} />
-              <img
-                ref={emissaryRef}
-                alt={image}
-                src={facing === "front" ? `./images/${image}.jpg` : `./images/back.jpg`}
-                draggable="false"
-                onMouseDown={draggerProps.handleDragStart}
-                onMouseEnter={() => setShortHover(true)}
-                id={id}
-                style={{
-                  ...mainStyles(draggerProps.dragged || draggerProps.dropping),
-                }}
-                onAnimationEnd={() => dispatch(handleEndAnimation(id))}
-                className={animationProvidedProps.className}
-              />
-             
-            </div>
-          )}
-        </AnimationHandler>
+        <div
+          onMouseDown={draggerProps.handleDragStart}
+          onMouseEnter={() => setShortHover(true)}
+          // This div manages the spread (left positioning) for the Hand card.
+          ref={draggerProps.ref}
+          style={{
+            position: "absolute",
+            left: draggerProps.dragged || draggerProps.dropping ? "" : spread * index - (spread * numHandCards) / 2,
+            // top: 0,
+            // pointerEvents: "none",
+
+            transition: "300ms",
+          }}
+        >
+          <CardBase
+            id={id}
+            image={image}
+            // offsetLeft={spread * index - (spread * numHandCards) / 2}
+            extraStyles={{...mainStyles(draggerProps.dragged || draggerProps.dropping)}}
+            dimensions={dimensions}
+            rotateX={draggerProps.dragged || draggerProps.dropping ? 0 : rotateHandCard(index, numHandCards)}
+            ref={mockRenderRef}
+          />
+          <div ref={draggerProps.unrotatedElementRef} />
+
+        </div>
       )}
     </Dragger>
   );

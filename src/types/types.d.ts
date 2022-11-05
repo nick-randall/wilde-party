@@ -36,7 +36,7 @@ type AllDimensions = {
   tableCardWidth: number;
   tableCardHeight: number;
   tableCardWidth: number;
-  facing: "front" | "back";
+  rotateY: number;
   offsetTop: (cardType: CardType) => number;
   offsetLeft: (cardType: CardType) => number;
 };

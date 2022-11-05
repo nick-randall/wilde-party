@@ -28,7 +28,7 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     scale: 2.4,
     draggedCardzIndex: place !== "enchantmentsRow" ? 6 : 7,
     handToTableScaleFactor: handToTableScaleFactor,
-    facing: place !== "deck" ? "front" : "back",
+    rotateY: place !== "deck" ? 0 : 180,
     offsetLeft: (cardType: CardType) => (place === "GCZ" && cardType === "bff" ? tableCardWidth / 2 : 0),
     offsetTop: (cardType: CardType) => (place === "GCZ" && (cardType === "bff" || cardType === "zwilling") ? tableCardHeight / 2 : 0),
   };
@@ -49,7 +49,7 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
     tableCardzIndex: 10,
     scale: 2,
     handToTableScaleFactor: handToTableScaleFactor,
-    facing: player === 0 ? "front" : "back",
+    rotateY: player === 0 ? 0 : 180,
     offsetLeft: () => 0,
     offsetTop: () => 0,
   };

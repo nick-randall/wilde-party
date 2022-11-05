@@ -1,7 +1,35 @@
 import { keyframes } from "styled-components";
 
-const transitionDuration = { veryShort: 200, short: 500, medium: 1000, long: 2000 };
+// in msPerPixel
+const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
 const handToTableDuration = transitionDuration.medium;
+
+interface TransitionTypeData {
+  // msPerPixel
+  mainTransitionDuration: number;
+  extraSteps: Step[];
+}
+
+const transitionTypes: { [type: string]: TransitionTypeData } = {
+  handToTable: {
+    mainTransitionDuration: transitionDuration.long,
+    extraSteps: [],
+  },
+};
+
+class transitionType {
+  name: string;
+  mainTransitionDuration: number;
+  steps: Step[];
+
+  constructor(name: string, mainTransitionDuration: number, steps: Step[]) {
+    this.name = name;
+    this.mainTransitionDuration = mainTransitionDuration;
+    this.steps = steps;
+  }
+
+  getTotalDuration = () => this.mainTransitionDuration + this.steps.reduce((prev: number, curr: Step) => prev + curr.duration, 0);
+}
 
 // const handToTable = (template: CompleteAnimationTemplate) => {
 //   const {
@@ -13,35 +41,49 @@ const handToTableDuration = transitionDuration.medium;
 //   return { start: { dime } };
 // };
 
-const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{${keyframeData}};`
+const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{${keyframeData}};`;
 
 const stringifyDimensions = (data: KeyframeStepData) => `
   height: ${data.dimensions.cardHeight};
   width: ${data.dimensions.cardWidth};
-  transform: rotate(${data.rotateX}deg) rotate3d(0, 1, 0, ${data.rotateZ}deg) scale(${data.dimensions.scale});
+  transform: rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
 `;
+
+const calculateTotalDuration = (transitionDuration: number, wait: number, extraSteps: Step[]) =>
+  wait + transitionDuration + extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0);
+
+const createStart = (data: CompleteAnimationTemplate) => {
+  const {
+    to: { xPosition: toX, yPosition: toY, dimensions: toDimensions, rotation: toRotateX },
+    from: { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions, rotation: fromRotateX },
+    animation,
+  } = data;
+  // TODO make animation property non-optional and call it animationType (transitionType?)
+  const { mainTransitionDuration, extraSteps } = transitionTypes[animation || ""];
+  // WAIT extra steps therefore need a duration themselves
+  const totalDuration = calculateTotalDuration(mainTransitionDuration, data.delay || 0, extraSteps);
+  const deltaX = toX - fromX;
+  const deltaY = toY - fromY;
+  const fromKeyFrameData: KeyframeStepData = { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions, rotateX: fromRotateX };
+  const toKeyFrameData: KeyframeStepData = { translateX: 0, translateY: 0, dimensions: toDimensions, rotateX: toRotateX };
+
+  const start = createKeyframe(fromKeyFrameData, 0, totalDuration);
+  const wait = data.delay ? createKeyframe(fromKeyFrameData, data.delay, totalDuration) : "";
+  const finish = createKeyframe(toKeyFrameData, totalDuration, totalDuration);
+};
 
 const createKeyframe = (data: KeyframeStepData, duration: number, totalDuration: number) => {
   const percent = (totalDuration / duration) * 100;
   return wrapWithPercent(percent, stringifyDimensions(data));
-}
+};
 
 interface KeyframeStepData {
   translateX: number;
   translateY: number;
   dimensions: AllDimensions;
   rotateX: number;
-  rotateZ: number;
+  // rotateZ: number;
 }
-
-
-
-const showFront = (frontImgSrc: string) => `
-  content: url("${frontImgSrc}");
-`;
-const showBack = (backImgSrc: string) => `
-  content: url("${backImgSrc}");
-`;
 
 const show = (img: string) => `content: url("${img}");`;
 
@@ -52,14 +94,13 @@ interface Step {
   translateX: number;
   translateY: number;
   translateFrom: "origin" | "destination";
-  show: "front" | "back";
 }
 
 // const keyframestest2 = ()
 
 // const keyframestest = (steps: Step[]) => {
 //   const totalDuration = 0;
-//   return keyframes`  
+//   return keyframes`
 
 // ${steps.map(step => {
 //   let keyFrame: string = "";

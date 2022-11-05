@@ -25,7 +25,7 @@ export interface CardProps {
 
 const Card = (props: CardProps) => {
   const { id, placeId, index, dimensions, offsetTop, offsetLeft, image, placeType } = props;
-  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth, facing } = dimensions;
+  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
   const [messinessRotation, setMessinessRotation] = useState(0);
