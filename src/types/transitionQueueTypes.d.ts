@@ -87,14 +87,16 @@ type AnimationTemplate = {
   to: ToOrFromWithPossibleScreenData 
   via?: ViaWithPossibleScreenData
   from: ToOrFromWithPossibleScreenData ;
-} & { id: string; status: AnimationTemplateStatus; animation?: string; delay?: number };
+} & { id: string; status: AnimationTemplateStatus; animationType: AnimationType; delay?: number };
+
+type AnimationType = "handToTable" | "deckToHand" | "tableToDiscardPile";
 
 type MockRenderData = ScreenData & { cardId: string }
 
 type CompleteAnimationTemplate = {
   id: string;
   status: AnimationTemplateStatus;
-  animation?: string;
+  animationType: AnimationType;
   delay?: number;
   to: ToOrFromWithScreenData | ViaWithScreenData;
   from: ToOrFromWithScreenData | ViaWithScreenData;

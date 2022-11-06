@@ -6,7 +6,6 @@ const SelectPlayers: FC<InnerWidgetProps> = ({ submit, atFinalIndex, setupData, 
       <img src="../../images/avatars/robot.png" alt="insert file name here" className="game-setup-avatar" />
       <img src="../../images/avatars/screamer_avatar.jpg" alt="insert file name here" className="game-setup-avatar center" />
       <div>
-        {" "}
         <img src="../../images/avatars/robot.png" alt="insert file name here" className="game-setup-avatar" />
         <span>after</span>
       </div>

@@ -1,4 +1,8 @@
+import { createKeyframesFromTemplate } from "../animations/createAnimationFromTemplate2";
+
 const createAnimationFromTemplate = (template: CompleteAnimationTemplate): AnimationData => {
+  console.log(createKeyframesFromTemplate(template));
+  
   const { to, from } = template;
   const xDelta = from.xPosition - to.xPosition;
   const yDelta = from.yPosition - to.yPosition;
@@ -11,7 +15,7 @@ const createAnimationFromTemplate = (template: CompleteAnimationTemplate): Anima
   newAnimationData.originDimensions = from.dimensions;
   newAnimationData.finalDimensions = to.dimensions;
 
-  newAnimationData.startAnimation = template.animation ?? "";
+  newAnimationData.startAnimation = template.animationType;
   newAnimationData.startAnimationDuration = 0;
   newAnimationData.wait = template.delay ?? 0;
   console.log(newAnimationData.startAnimation)

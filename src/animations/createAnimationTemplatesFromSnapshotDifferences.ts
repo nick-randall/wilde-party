@@ -56,7 +56,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "addDragged": {
       let transitionTemplate: AnimationTemplate = {
         ...differences[0],
-        animation: "flip",
+        animationType: "deckToHand",
         status: "awaitingEmissaryData",
         id: uuidv4(),
       };
@@ -77,10 +77,10 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           if (change.from.place === "hand") {
             // create two differences with orderOfExecution 0 and 1
             // handCardFliesToDestroyedCard = { ...change, to: destroyedCard, id: uuidv4(), status: "awaitingEmissaryData" };
-            handCardFliesToDiscardPileViaDestroyedCard = { ...change, via: destroyedCard, id: uuidv4(), status: "waitingInLine" };
+            handCardFliesToDiscardPileViaDestroyedCard = { ...change, via: destroyedCard, id: uuidv4(), animationType: "handToTable", status: "waitingInLine" };
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), status: "waitingInLine", };
+            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), status: "waitingInLine", animationType: "tableToDiscardPile" };
           }
         });
         return [
@@ -99,7 +99,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "dealingInitialCards": {
       const transitionTemplate: AnimationTemplate = {
         ...differences[0],
-        animation: "flip",
+        animationType: "deckToHand",
         id: uuidv4(),
         status: "awaitingEmissaryData",
       };
@@ -110,7 +110,8 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       differences.forEach((difference, index) => {
         const transitionTemplate: AnimationTemplate = {
           ...difference,
-          animation: difference.to.player === 0 ? "flip" : "",
+          // animation: difference.to.player === 0 ? "flip" : "",
+          animationType: "deckToHand",
           id: uuidv4(),
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
