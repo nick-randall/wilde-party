@@ -1,4 +1,4 @@
-import { css, keyframes } from "styled-components";
+import { css } from "styled-components";
 
 // in msPerPixel
 const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
@@ -83,14 +83,16 @@ const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData 
   return { translateX: 0, translateY: 0, dimensions: toDimensions, rotateX: toRotateX };
 };
 
-export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate) => {
+export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate) : AnimationData => {
   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
 
-  return css`0%{${stringifyDimensions(createInitialKeyframe(data))}}
+  const keyframesString = css`0%{${stringifyDimensions(createInitialKeyframe(data))}}
   ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
   100%{${stringifyDimensions(createFinalKeyframe(data))}}`;
+
+  return {cardId: data.to.cardId, keyframesString}
 };
 
 interface KeyframePartData {

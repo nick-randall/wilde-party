@@ -4,8 +4,8 @@ import { Action } from "./actions";
 import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { changeGroupStatus } from "../animations/handleEndAnimation";
-import createAnimationFromTemplate from "../mockRender/createAnimationFromTemplate";
 import { initDevSettings } from "../gameSettings/devSettings";
+import { createKeyframesFromTemplate } from "../animations/createKeyframesFromTemplate";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -182,7 +182,7 @@ export const stateReducer = (
     case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
       console.log("new animation templates ready");
       const currTemplates: CompleteAnimationTemplate[] = action.payload;
-      const newAnimations = currTemplates.map(t => createAnimationFromTemplate(t));
+      const newAnimations = currTemplates.map(t => createKeyframesFromTemplate(t));
       const animationTemplates = state.animationTemplates.map(group =>
         group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group
       );
