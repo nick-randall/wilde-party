@@ -10,7 +10,7 @@ interface AnonymousSignInSuccessMessage {
 
 
 
-export const signInAnonymously = async (): Promise<AxiosResponse> => axios.get(`https://${"localhost"}:${port}/WildeParty-0.0.1/sign-in-anonymously`);
+export const signInAnonymously = async (): Promise<AxiosResponse> => axios.get(`https://${"localhost"}:${port}/Wilde_Party/sign-in-anonymously`);
 
 export const checkSessionToken = async (sessionToken: string): Promise<CheckSessionTokenSuccessMessage> =>
   axios.get(`https://${"localhost"}:${port}/WildeParty-0.0.1/check-session-token`, { headers: { Authorization: `Bearer ${sessionToken}` } }).then(e => e.data);

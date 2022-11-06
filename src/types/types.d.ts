@@ -37,8 +37,6 @@ type AllDimensions = {
   tableCardHeight: number;
   tableCardWidth: number;
   rotateY: number;
-  offsetTop: (cardType: CardType) => number;
-  offsetLeft: (cardType: CardType) => number;
 };
 
 type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";
