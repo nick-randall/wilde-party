@@ -60,7 +60,7 @@ const EnemyCard = (props: EnemyCardProps) => {
     userSelect: "none",
   };
   return (
-    <AnimationHandler backImgSrc={"./images/back.jpg"} frontImgSrc={"./images/back.jpg"} cardId={id}>
+    <AnimationHandler cardId={id}>
       {animationProvidedProps => (
         <img
           alt={image}

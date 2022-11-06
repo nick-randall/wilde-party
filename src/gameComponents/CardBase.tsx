@@ -60,7 +60,7 @@ const CardBase = forwardRef<HTMLImageElement, CardBaseProps>(
     };
 
     return (
-      <AnimationHandler cardId={id} frontImgSrc={`./images/${image}.jpg`} backImgSrc={`./images/back.jpg`}>
+      <AnimationHandler cardId={id}>
         {animationProvidedProps => (
           <div ref={mockRenderRef} style={{ pointerEvents: animationProvidedProps.animated ? "none" : "auto", ...outerStyles }}>
             <div style={innerStyles} onAnimationEnd={() => dispatch(handleEndAnimation(id))} className={animationProvidedProps.className}>

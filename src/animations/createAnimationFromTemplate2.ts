@@ -1,4 +1,4 @@
-import { keyframes } from "styled-components";
+import { css, keyframes } from "styled-components";
 
 // in msPerPixel
 const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
@@ -30,7 +30,7 @@ const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{
 const stringifyDimensions = (data: KeyframePartData) => `
   height: ${data.dimensions.cardHeight};
   width: ${data.dimensions.cardWidth};
-  transform: rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
+  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) //scale(${data.dimensions.scale});
 `;
 
 const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
@@ -69,8 +69,8 @@ const createInitialKeyframe = (data: CompleteAnimationTemplate): KeyframePartDat
     from: { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions, rotation: fromRotateX },
   } = data;
 
-  const deltaX = toX - fromX;
-  const deltaY = toY - fromY;
+  const deltaX = fromX - toX;
+  const deltaY = fromY - toY ;
 
   return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions, rotateX: fromRotateX };
 };
@@ -88,7 +88,7 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate) => 
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
 
-  return `0%{${stringifyDimensions(createInitialKeyframe(data))}}
+  return css`0%{${stringifyDimensions(createInitialKeyframe(data))}}
   ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
   100%{${stringifyDimensions(createFinalKeyframe(data))}}`;
 };

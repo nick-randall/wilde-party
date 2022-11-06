@@ -48,18 +48,22 @@ type TransitionData = {
   startAnimation: string;
 };
 
-type AnimationData = {
+// type  AnimationData = {
+//   cardId: string;
+//   originDimensions: AllDimensions;
+//   finalDimensions: AllDimensions;
+//   originDelta: { x: number; y: number };
+//   transitionDuration: number;
+//   transitionCurve: string;
+//   initialRotation?: number;
+//   finalRotation: number;
+//   startAnimation?: string;
+//   startAnimationDuration?: number;
+//   wait: number;
+// };
+type  AnimationData = {
   cardId: string;
-  originDimensions: AllDimensions;
-  finalDimensions: AllDimensions;
-  originDelta: { x: number; y: number };
-  transitionDuration: number;
-  transitionCurve: string;
-  initialRotation?: number;
-  finalRotation: number;
-  startAnimation?: string;
-  startAnimationDuration?: number;
-  wait: number;
+  keyframesString: Keyframes
 };
 
 //
