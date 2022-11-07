@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { delay } from "./createKeyframesFromTemplate";
 import { findSnapshotDifferences } from "./findSnapshotDifferences";
 import { changeGroupStatus } from "./handleEndAnimation";
 
@@ -115,7 +116,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           id: uuidv4(),
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
-          delay: (differences.length - 1) * 300 - index * 300,
+          delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
         };
         templates.push(transitionTemplate);
       });

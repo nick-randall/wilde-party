@@ -15,13 +15,20 @@ export interface AnimationHandlerProps {
 const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children }) => {
   const animationData = useSelector((state: RootState) => state.animationData.find(animation => animation.cardId === cardId));
   const keyframesString = animationData?.keyframesString ?? "";
-
-  return <InjectedAnimationHandler keyframesString={keyframesString} animated={animationData !== undefined} children={children} />;
+console.log(animationData?.totalDuration)
+  return (
+    <InjectedAnimationHandler
+      keyframesString={keyframesString}
+      animated={animationData !== undefined}
+      totalDuration={animationData?.totalDuration || 0}
+      children={children}
+    />
+  );
 };
-
 
 type InjectedAnimationHandlerProps = {
   keyframesString: string;
+  totalDuration: number;
   animated: boolean;
   className?: string;
   children: (animationHandlerProvidedProps: AnimationHandlerProvidedProps) => React.ReactNode;
@@ -43,7 +50,7 @@ const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, c
 };
 
 const InjectedAnimationHandler = styled(AnimationLoader)<InjectedAnimationHandlerProps>`
-  animation: ${props => keyframes`${props.keyframesString}`} 1000ms;
+  animation: ${props => keyframes`${props.keyframesString}`} ${props => props.totalDuration}ms;
 `;
 
-export default AnimationHandler
+export default AnimationHandler;

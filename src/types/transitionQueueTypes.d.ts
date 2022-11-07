@@ -63,7 +63,8 @@ type TransitionData = {
 // };
 type  AnimationData = {
   cardId: string;
-  keyframesString: Keyframes
+  keyframesString: Keyframes;
+  totalDuration: number;
 };
 
 //

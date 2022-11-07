@@ -1,7 +1,9 @@
 import { css } from "styled-components";
 
 // in msPerPixel
-const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
+export const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
+export const delay = { veryShort: 200, short: 500, medium: 1000, long: 2000 };
+
 const handToTableDuration = transitionDuration.medium;
 
 interface TransitionTypeData {
@@ -30,7 +32,7 @@ const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{
 const stringifyDimensions = (data: KeyframePartData) => `
   height: ${data.dimensions.cardHeight};
   width: ${data.dimensions.cardWidth};
-  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) //scale(${data.dimensions.scale});
+  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg);
 `;
 
 const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
@@ -52,14 +54,7 @@ const measureDistance = (data: CompleteAnimationTemplate) => {
   const x = fromX;
   const y = fromY;
 
-  let first = y - b < 0 ? b - y : y - b;
-  let second = x - a < 0 ? a - x : x - a;
-
-  console.log(Math.sqrt(second ^ (2 + first)) ^ 2);
   var distance = Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
-  console.log(`distance * handToTableDuration ${distance * handToTableDuration}`);
-  // return Math.sqrt(second ^ (2 + first) ^ 2);
-
   return distance;
 };
 
@@ -87,12 +82,11 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate) : A
   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
-
+  
   const keyframesString = css`0%{${stringifyDimensions(createInitialKeyframe(data))}}
   ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
   100%{${stringifyDimensions(createFinalKeyframe(data))}}`;
-
-  return {cardId: data.to.cardId, keyframesString}
+  return {cardId: data.to.cardId, keyframesString, totalDuration}
 };
 
 interface KeyframePartData {
