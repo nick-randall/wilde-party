@@ -15,7 +15,6 @@ export interface AnimationHandlerProps {
 const AnimationHandler: React.FC<AnimationHandlerProps> = ({ cardId, children }) => {
   const animationData = useSelector((state: RootState) => state.animationData.find(animation => animation.cardId === cardId));
   const keyframesString = animationData?.keyframesString ?? "";
-console.log(animationData?.totalDuration)
   return (
     <InjectedAnimationHandler
       keyframesString={keyframesString}
