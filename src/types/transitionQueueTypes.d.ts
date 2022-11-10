@@ -71,15 +71,13 @@ type  AnimationData = {
 type ScreenData = {
   xPosition?: number;
   yPosition?: number;
-  rotation?: number;
-  dimensions?: AllDimensions;
+  dimensions?: CardAnimationDimensions;
 };
 
 type CompleteScreenData = {
   xPosition: number;
   yPosition: number;
-  rotation: number;
-  dimensions: AllDimensions;
+  dimensions: CardAnimationDimensions;
 };
 
 type ToOrFromWithPossibleScreenData = ToOrFrom & ScreenData;

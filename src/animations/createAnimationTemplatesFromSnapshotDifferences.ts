@@ -55,13 +55,13 @@ const createAnimationTemplatesFromSnapshotDifferences = (
 const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplate[][] => {
   switch (snapshotUpdateType) {
     case "addDragged": {
-      let transitionTemplate: AnimationTemplate = {
+      let animationTemplate: AnimationTemplate = {
         ...differences[0],
         animationType: "deckToHand",
         status: "awaitingEmissaryData",
         id: uuidv4(),
       };
-      return [[transitionTemplate]];
+      return [[animationTemplate]];
     }
     // case "rearrangingHand":
     //   break;
@@ -109,16 +109,15 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     case "dealingCards": {
       const templates: AnimationTemplate[] = [];
       differences.forEach((difference, index) => {
-        const transitionTemplate: AnimationTemplate = {
+        const animationTemplate: AnimationTemplate = {
           ...difference,
-          // animation: difference.to.player === 0 ? "flip" : "",
           animationType: "deckToHand",
           id: uuidv4(),
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
         };
-        templates.push(transitionTemplate);
+        templates.push(animationTemplate);
       });
 
       return [templates];

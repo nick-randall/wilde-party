@@ -20,7 +20,7 @@ export interface TableCardMockRenderProps {
 
 const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimensions, offsetLeft, offsetTop }) => {
   const { tableCardzIndex, cardHeight, cardWidth } = dimensions;
-  const emissaryRef = useRef<HTMLDivElement>(null);
+  const mockRenderRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const normalStyles: CSSProperties = {
@@ -30,24 +30,23 @@ const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimen
     left: offsetLeft,
     top: offsetTop,
     position: "absolute",
-    // backgroundColor: "black"
   };
   /**
-   * Called after the Emissary is created, passing its location to
-   * the SnapshotChanges object...
+   * Called after the Mock Render component is created, passing its 
+   * location and dimensions to the SnapshotChanges object...
    */
   useEffect(() => {
-    if (emissaryRef !== null && emissaryRef.current !== null) {
-      const element = emissaryRef.current;
+    if (mockRenderRef !== null && mockRenderRef.current !== null) {
+      const element = mockRenderRef.current;
       const { left, top } = element.getBoundingClientRect();
-      console.log("TableCardEmissary dispatch ----left:" + left, " ---top: " + top);
-      dispatch(handleNewMockRenderData({ cardId, xPosition: left, yPosition: top, dimensions, rotation: 0 }, "to"));
+      const mockRenderData = { cardId, xPosition: left, yPosition: top, dimensions: { rotateX: 0, ...dimensions } };
+      dispatch(handleNewMockRenderData(mockRenderData, "to"));
     }
   }, [dimensions, dispatch, cardId]);
 
   return (
     <div
-      ref={emissaryRef}
+      ref={mockRenderRef}
       draggable="false"
       style={{
         ...normalStyles,

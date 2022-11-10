@@ -1,42 +1,62 @@
 type CardGroup = GameCard[];
 
-type PlaceDimensions = {
-  cardHeight: number;
-  cardWidth: number;
-  cardLeftSpread: number;
-  cardTopSpread: number;
-  leftOffset: number;
-  topOffset: number;
-  zIndex: number;
-  featuredCardScale: number;
-};
+// type PlaceDimensions = {
+//   cardHeight: number;
+//   cardWidth: number;
+//   cardLeftSpread: number;
+//   cardTopSpread: number;
+//   leftOffset: number;
+//   topOffset: number;
+//   zIndex: number;
+//   featuredCardScale: number;
+// };
 
 type CardAnimationDimensions = {
   cardHeight: number;
   cardWidth: number;
-  rotationX: number;
-  rotationZ?: number;
+  rotateX: number;
+  rotateY: number;
   scale: number;
-}
+};
 
-type AllDimensions = {
-  cardHeight: number;
-  cardWidth: number;
+type AllDimensions = PlaceDimensions & CardDimensions & GlobalDimensions;
+
+type PlaceDimensions = {
+  maxCardLeftSpread: number;
   cardLeftSpread: number;
   cardTopSpread: number;
-  maxCardLeftSpread?: number;
+  cardHeight: number;
+  cardWidth: number;
+};
+
+type CardDimensions = {
+  cardHeight: number;
+  cardWidth: number;
+  rotateY: number;
+  scale: number;
+  zIndex: number;
+};
+
+type CardDimensions2 = {
+  cardHeight: number;
+  cardWidth: number;
+  rotateX: number;
+  rotateY: number;
+  scale: number;
+  zIndex: number;
+  offsetLeft?: number;
+  offsetTop?: number;
+};
+
+type GlobalDimensions = {
   draggedCardScale: number;
   draggedCardWidth: number;
   draggedCardzIndex: number;
   tableCardzIndex: number;
-  scale: number;
   featuredCardScale: number;
-  zIndex: number;
   handToTableScaleFactor: number;
   tableCardWidth: number;
   tableCardHeight: number;
-  tableCardWidth: number;
-  rotateY: number;
 };
 
 type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";
@@ -89,8 +109,6 @@ type CardAction = {
   cardHighlightType?: CardType;
   placeHighlightType?: PlaceType;
 };
-
-
 
 type LocationData = { containerId: string; index: number };
 
@@ -152,7 +170,6 @@ type Current = {
   rolls: number;
 };
 
-
 type GameSnapshot = {
   id: number;
   snapshotUpdateType: SnapshotUpdateType;
@@ -167,8 +184,6 @@ type GameSnapshot = {
 //   duration: number;
 //   animation: AnimationData;
 // };
-
-
 
 type CardGroupObj = {
   id: string;
@@ -186,4 +201,3 @@ type NewCardGroupObj = {
 type Hover = "shortHover" | "longHover" | "none";
 
 type SnapshotUpdateSource = "localUser" | "server";
-

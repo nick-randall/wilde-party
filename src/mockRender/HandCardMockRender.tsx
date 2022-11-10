@@ -1,4 +1,4 @@
-import  { CSSProperties, useEffect, useRef } from "react";
+import { CSSProperties, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import handleNewMockRenderData from "../animations/handleNewMockRenderData";
 import { rotateHandCard } from "../helperFunctions/getDimensions";
@@ -45,21 +45,21 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
       const { left, top } = element.getBoundingClientRect();
       dispatch(
         handleNewMockRenderData(
-          { cardId, xPosition: left, yPosition: top, dimensions, rotation: rotateHandCard(index, numHandCards) },
+          { cardId, xPosition: left, yPosition: top, dimensions: { rotateX: rotateHandCard(index, numHandCards), ...dimensions } },
           "to"
         )
       );
     }
   }, [cardId, dimensions, dispatch, index, numHandCards]);
 
-  return  (
+  return (
     <div
       ref={mockRenderRef}
       id={cardId}
       style={{
         ...normalStyles,
       }}
-    />)
-  
+    />
+  );
 };
 export default HandCardMockRender;

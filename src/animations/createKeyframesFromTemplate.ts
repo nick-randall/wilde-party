@@ -32,7 +32,7 @@ const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{
 const stringifyDimensions = (data: KeyframePartData) => `
   height: ${data.dimensions.cardHeight};
   width: ${data.dimensions.cardWidth};
-  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.rotateX}deg) rotateY(${data.dimensions.rotateY}deg);
+  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
 `;
 
 const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
@@ -61,44 +61,66 @@ const measureDistance = (data: CompleteAnimationTemplate) => {
 const createInitialKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
   const {
     to: { xPosition: toX, yPosition: toY },
-    from: { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions, rotation: fromRotateX },
+    from: { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions },
   } = data;
 
   const deltaX = fromX - toX;
-  const deltaY = fromY - toY ;
+  const deltaY = fromY - toY;
 
-  return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions, rotateX: fromRotateX };
+  return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions };
 };
 
 const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
   const {
-    to: { dimensions: toDimensions, rotation: toRotateX },
+    to: { dimensions },
   } = data;
 
-  return { translateX: 0, translateY: 0, dimensions: toDimensions, rotateX: toRotateX };
+  return { translateX: 0, translateY: 0, dimensions };
 };
 
-export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate) : AnimationData => {
+export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
-  
-  const keyframesString = css`0%{${stringifyDimensions(createInitialKeyframe(data))}}
-  ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
-  100%{${stringifyDimensions(createFinalKeyframe(data))}}`;
-  return {cardId: data.to.cardId, keyframesString, totalDuration}
+
+  const keyframesString = css`
+    0% {
+      ${stringifyDimensions(createInitialKeyframe(data))}
+    }
+    ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
+    100% {
+      ${stringifyDimensions(createFinalKeyframe(data))}
+    }
+  `;
+  return { cardId: data.to.cardId, keyframesString, totalDuration };
 };
 
 interface KeyframePartData {
   translateX: number;
   translateY: number;
-  dimensions: AllDimensions;
-  rotateX: number;
+  dimensions: CardAnimationDimensions;
 }
 
+// alternative is to say "progress", meaning that half way between
+// one part of the animation and another it should have these values:
+
+// so it takes place on the way, cutting durations in half or 0.25 - 0.75
+// This way we could just say, eg rotateY 180 progress 0.5, then the flip
+// would occur earlier.
+interface IntermediateStep {
+  progress: number; // (eg 0.5)
+  cardHeight?: number;
+  cardWidth?: number;
+  rotateX?: number;
+  rotateY?: number;
+  translateX?: number;
+  translateY?: number;
+  scale?: number;
+}
 interface Step {
   duration: number;
-  dimensions: AllDimensions;
+  dimensions: CardAnimationDimensions;
   translateX: number;
+  translateY: number;
   translateFrom: "origin" | "destination";
 }
