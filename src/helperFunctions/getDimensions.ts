@@ -11,7 +11,7 @@ export const getDimensions = (player: number | null, place: PlaceType, numCards:
   const handCardHeight = handCardHeights[playerType];
   const handCardWidth = handCardHeight / heightToWidthRatio;
 
-  const handToTableScaleFactor = tableCardHeight / handCardHeight;
+  const handToTableScaleFactor = Math.round(tableCardHeight / handCardHeight);
 
   const tableDimensions: AllDimensions = {
     featuredCardScale: 2,

@@ -10,15 +10,19 @@ interface TransitionTypeData {
   // msPerPixel
   mainTransitionDuration: number;
   extraSteps: Step[];
+  intermediateStep?: IntermediateStep;
 }
 
 const transitionTypes: { [key in AnimationType]: TransitionTypeData } = {
   handToTable: {
     mainTransitionDuration: transitionDuration.long,
+    intermediateStep: { progress: 0.5, translateX: 280 },
     extraSteps: [],
   },
   deckToHand: {
     mainTransitionDuration: transitionDuration.long,
+    intermediateStep: { progress: 0.2 , translateX:0, translateY:0 },
+
     extraSteps: [],
   },
   tableToDiscardPile: {
@@ -30,8 +34,8 @@ const transitionTypes: { [key in AnimationType]: TransitionTypeData } = {
 const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{${keyframeData}}`;
 
 const stringifyDimensions = (data: KeyframePartData) => `
-  height: ${data.dimensions.cardHeight}px;
-  width: ${data.dimensions.cardWidth}px;
+  height: ${data.dimensions.cardHeight};
+  width: ${data.dimensions.cardWidth};
   transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg);
 `;
 
@@ -78,22 +82,69 @@ const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData 
   return { translateX: 0, translateY: 0, dimensions };
 };
 
+const getIntermediatePercent = (intermediateProgress: number, percentBefore: number, percentAfter: number) =>{
+  console.log(`percentBefore: ${percentBefore}, percentAfter: ${percentAfter}`)
+  console.log(`(percentAfter - percentBefore) * intermediateProgress: ${((percentAfter - percentBefore) * intermediateProgress) + percentBefore}`);
+  return ((percentAfter - percentBefore) * (1- intermediateProgress)) + percentBefore;
+}
+const createKeyframeFromIntermediateStep = (data: CompleteAnimationTemplate, intermediateStep: IntermediateStep): KeyframePartData => {
+  // translateY and X will need to be calculated from CompleteAnimationTemplate
+  // will have to deal with undefined properties
+
+  // undefined properties will need to be calculated according to difference
+  // between beginning and end eg rotateX 0 -> 0.33 -> 1 = 0 -> 30 -> 100
+  // therefore 30
+  const { progress } = intermediateStep;
+  const calculatedDimensions = {} as CardAnimationDimensions;
+  for (let key of Object.keys(data.to.dimensions) as Array<keyof CardAnimationDimensions>) {
+    const value = intermediateStep[key];
+    if (value === undefined) {
+      let delta = (data.from.dimensions[key] + data.to.dimensions[key]) / 2;
+      calculatedDimensions[key] = delta * progress;
+    } else {
+      calculatedDimensions[key] = value;
+    }
+  }
+  const {
+    to: { xPosition: toX, yPosition: toY },
+    from: { xPosition: fromX, yPosition: fromY },
+  } = data;
+
+  const deltaX = fromX- toX ;
+  const deltaY =  fromY - toY;
+  const translateX = intermediateStep.translateX ?? deltaX * progress
+  ;
+  const translateY = intermediateStep.translateY ?? deltaY * progress;
+  console.log(calculatedDimensions);
+  console.log(`deltaY ${deltaY} * progress ${deltaY * progress}`);
+  return { translateX, translateY, dimensions: calculatedDimensions };
+};
 
 export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
-  const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
+  const { extraSteps, mainTransitionDuration, intermediateStep } = transitionTypes[data.animationType];
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
 
+  let intermediatePercent = 0;
+  if (intermediateStep) {
+    const delayAsPercent = data.delay ? (data.delay / totalDuration) * 100 : undefined;
+    intermediatePercent = delayAsPercent
+      ? getIntermediatePercent(intermediateStep.progress, delayAsPercent, 100)
+      : getIntermediatePercent(intermediateStep.progress, 0, 100);
+  }
   const keyframesString = css`
     0% {
       ${stringifyDimensions(createInitialKeyframe(data))}
     }
     ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
+    ${intermediateStep
+      ? wrapWithPercent(intermediatePercent, stringifyDimensions(createKeyframeFromIntermediateStep(data, intermediateStep)))
+      : ""}
     100% {
       ${stringifyDimensions(createFinalKeyframe(data))}
     }
   `;
-  console.log(keyframesString)
+  console.log(keyframesString);
   return { cardId: data.to.cardId, keyframesString, totalDuration };
 };
 
