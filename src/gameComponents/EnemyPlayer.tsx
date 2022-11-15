@@ -31,7 +31,7 @@ const EnemyPlayer = (props: PlayerProps) => {
     >
       <EnemyGCZ
         id={places.GCZ.id}
-        enchantmentsRowCards={places.enchantmentsRow.cards}
+        // enchantmentsRowCards={places.enchantmentsRow.cards}
         // GCZCards={places.GCZ.cards}
         player={player}
       />

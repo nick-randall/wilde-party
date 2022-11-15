@@ -7,7 +7,7 @@ import Card from "./Card";
 
 type EnemyGCZProps = {
   id: string;
-  enchantmentsRowCards: GameCard[];
+  // enchantmentsRowCards: GameCard[];
   // GCZCards: GameCard[];
   player: number;
 };

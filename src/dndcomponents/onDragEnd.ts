@@ -4,14 +4,14 @@ import { RootState } from "../redux/store";
 import { cleanUpDragState } from "./dragEventActionCreators";
 import handleNewSnapshotFromUserAction from "../animations/handleNewSnapshotFromUserAction";
 
-export const onDragEnd = () => (dispatch: Function, getState: () => RootState) => {
-  const { source, destination } = getState().draggedState;
+export const onDragEnd = (draggedState: DraggedState) => (dispatch: Function, getState: ()=> RootState) => {
+  const { source, destination } = draggedState;
   const { gameSnapshot } = getState();
   console.log(" start of ondragend");
 
   // if drag of no consequence
   if (!destination || destination === source) {
-    console.log("drag of no consequence");
+    console.log("drag of no consequence because "+ !destination);
     dispatch(cleanUpDragState());
     return;
   }

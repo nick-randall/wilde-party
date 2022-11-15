@@ -42,6 +42,17 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     dispatch(handleNewSnapshots([newSnapshot]));
   };
 
+  const simulateRearrangeGCZ = () => {
+    const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "rearrangingTablePlace");
+    const dragSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 0, numDraggedElements: 1 };
+    const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 4 };
+    snapshotUpdater.addChange({ source: dragSource, destination: dragDestination });
+    snapshotUpdater.begin();
+    const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();
+    const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType: "addDragged"}
+    dispatch(handleNewSnapshots([newSnapshot]));
+  };
+
   const simulateDestroy = () => {
     const changes: DraggedResult[] = [];
     let playedFromHandSource: DragSourceData = { containerId: currentSnapshot.players[1].places["hand"].id, index: 0, numDraggedElements: 1 };
@@ -71,7 +82,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
   return (
     <div  style={{ display: "flex", flexDirection: "column" }}>
-      <button onClick={simulateHandToGCZ}>Simulate HandtoGcz</button>
+      <button onClick={simulateRearrangeGCZ}>Simulate Rearrange GCZ</button>
       {/* <button onClick={simulateDestroy}>Simulate destroy!</button> */}
       <button onClick={logNewSnapshot} style={{color: newSnapshotcurrent === undefined ? "red" : "black"}}>Log New Snapshots NEw version</button>
       <button onClick={logAnimationTemplates}>Log Animation Templates</button>

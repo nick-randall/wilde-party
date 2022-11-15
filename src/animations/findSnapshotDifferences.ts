@@ -27,6 +27,12 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
       const placeId = prevSnapshot.players[player].places[place].id;
 
       let differences = prevCardIds.filter(card => !newCardIds.includes(card));
+      if(newCardIds.length === prevCardIds.length){
+      let innerPlaceDifferences = prevCardIds.filter((card, index) => newCardIds.indexOf(card) !== index);
+      console.log(`prevCardIds ${prevCardIds}`)
+      console.log(`newCardIds ${newCardIds}`)  
+      console.log(innerPlaceDifferences)
+    }
       if (differences.length === 0) {
       } else {
         for (let i = 0; i < differences.length; i++) {

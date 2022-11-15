@@ -47,6 +47,8 @@ interface DraggerReduxProps {
   source: DragSourceData | undefined;
   destination: DragDestinationData | undefined;
   dragEndTarget?: DragEndTarget;
+  draggedId?: string
+
 }
 
 type CombinedProps = DraggerProps & DraggerReduxProps;
@@ -62,6 +64,7 @@ const Dragger: React.FC<CombinedProps> = ({
   source,
   destination,
   dragEndTarget,
+  draggedId,
   isRotatable = false,
 }) => {
   const [dragState, setDragState] = useState({
@@ -153,7 +156,7 @@ const Dragger: React.FC<CombinedProps> = ({
 
   const handleDrag = useCallback(
     ({ clientX, clientY }) => {
-      if (dragState.dragged) {
+      if (dragState.dragged && !isMovingToDropTarget) {
         setDragState(prevState => ({
           ...prevState,
           translateX: clientX - dragState.offsetX,
@@ -161,10 +164,14 @@ const Dragger: React.FC<CombinedProps> = ({
         }));
       }
     },
-    [dragState]
+    [dragState, isMovingToDropTarget]
   );
   const handleDragEnd = useCallback(() => {
+    console.log("here ")
+    console.log(dragEndTarget)
     if (dragState.dragged) {
+      console.log("dragged")
+      console.log(destination);
       if (dragEndTarget !== undefined) {
         setIsMovingToDropTarget(true);
         if (startLocation && destination) {
@@ -182,24 +189,25 @@ const Dragger: React.FC<CombinedProps> = ({
           ...prevState,
           dragged: false,
         }));
-        dispatch(onDragEnd());
+        dispatch(onDragEnd({draggedId, destination, source}));
         setIsReturning(true);
       }
     }
-  }, [dragState.dragged, dragEndTarget, startLocation, destination, dispatch]);
+  }, [dragEndTarget, dragState.dragged, destination, startLocation, dispatch, draggedId, source]);
 
   const handleEndMoveToDropTarget = useCallback(
     (event: TransitionEvent) => {
       if (!isMovingToDropTarget) return;
+      if(draggedId !== draggerId) return;
       console.log("card ended transition" + draggerId);
-      console.log(event.propertyName);
+      console.log(event);
       if (event.propertyName !== "transform") return;
-      dispatch(onDragEnd());
-      setIsMovingToDropTarget(false);
+      dispatch(onDragEnd({draggedId, destination, source}));
+      setIsMovingToDropTarget(false)
       setStartLocation(undefined);
       setIsReturning(false);
     },
-    [dispatch, draggerId, isMovingToDropTarget]
+    [dispatch, draggedId, draggerId, isMovingToDropTarget]
   );
 
   const droppedStyles: CSSProperties = {
@@ -262,8 +270,8 @@ const Dragger: React.FC<CombinedProps> = ({
 
 const mapStateToProps = (state: RootState) => {
   const { draggedState, dragEndTarget } = state;
-  const { source, destination } = draggedState;
-  return { source, destination, dragEndTarget };
+  const { source, destination, draggedId } = draggedState;
+  return { source, destination, dragEndTarget, draggedId };
 };
 
 export default connect(mapStateToProps)(Dragger);

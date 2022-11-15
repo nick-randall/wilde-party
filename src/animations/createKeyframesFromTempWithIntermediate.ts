@@ -124,7 +124,9 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): An
   const { extraSteps, mainTransitionDuration, intermediateStep } = transitionTypes[data.animationType];
   const transitionDuration = measureDistance(data) * mainTransitionDuration;
   const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
-
+ // May need to do a comparision of duration before and duration after to 
+// determine percentage-- 
+const percentages = [0, data.delay ?? 0, ...extraSteps.map(step => step.duration), 100].map(duration => (duration / totalDuration) * 100);
   let intermediatePercent = 0;
   if (intermediateStep) {
     const delayAsPercent = data.delay ? (data.delay / totalDuration) * 100 : undefined;

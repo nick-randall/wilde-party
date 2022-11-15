@@ -7,10 +7,10 @@ const dealTwoCards = () => (dispatch: Function, getState: () => RootState) => {
 
   const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "dealingCards");
   const deckTop: DragSourceData = { containerId: currentSnapshot.nonPlayerPlaces["deck"].id, index: 0, numDraggedElements: 1 };
-  const handStart: DragDestinationData = { containerId: currentSnapshot.players[0].places["hand"].id, index: 0 };
+  const handStart: DragDestinationData = { containerId: currentSnapshot.players[0].places["hand"].id, index: Math.round(currentSnapshot.players[0].places["hand"].cards.length / 2) };
   // These shouldn't be called changes! Or else findchanges needs to be renamed
   snapshotUpdater.addChanges(
-    { source: deckTop, destination: handStart }, 7
+    { source: deckTop, destination: handStart }, 2
     // { source: deckTop, destination: handStart },
   );
   snapshotUpdater.begin();

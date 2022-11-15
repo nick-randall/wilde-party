@@ -32,7 +32,7 @@ const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{
 const stringifyDimensions = (data: KeyframePartData) => `
   height: ${data.dimensions.cardHeight}px;
   width: ${data.dimensions.cardWidth}px;
-  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg);
+  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
 `;
 
 const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
