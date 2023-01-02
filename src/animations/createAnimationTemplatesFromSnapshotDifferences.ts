@@ -53,6 +53,7 @@ const createAnimationTemplatesFromSnapshotDifferences = (
 };
 
 const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpdateType: SnapshotUpdateType): AnimationTemplate[][] => {
+  console.log(snapshotUpdateType);
   switch (snapshotUpdateType) {
     case "addDragged": {
       let animationTemplate: AnimationTemplate = {
@@ -78,10 +79,16 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           if (change.from.place === "hand") {
             // create two differences with orderOfExecution 0 and 1
             // handCardFliesToDestroyedCard = { ...change, to: destroyedCard, id: uuidv4(), status: "awaitingEmissaryData" };
-            handCardFliesToDiscardPileViaDestroyedCard = { ...change, via: destroyedCard, id: uuidv4(), animationType: "handToTable", status: "waitingInLine" };
+            handCardFliesToDiscardPileViaDestroyedCard = {
+              ...change,
+              via: destroyedCard,
+              id: uuidv4(),
+              animationType: "handToTable",
+              status: "waitingInLine",
+            };
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), status: "waitingInLine", animationType: "tableToDiscardPile" };
+            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), animationType: "tableToDiscardPile", status: "waitingInLine" };
           }
         });
         return [
@@ -90,6 +97,19 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         ];
       }
       return [];
+    }
+    case "rearrangingTablePlace": {
+      return [
+        [...differences].map((difference, index) => ({
+          ...difference,
+          animationType: "deckToHand",
+          id: uuidv4(),
+          status: "awaitingEmissaryData",
+          // Just adds a 300ms delay to each card dealt (after the first)
+          // delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
+          delay: index === 0 ? 0 : delay.short,
+        })),
+      ];
     }
     // case "steal":
     // case "swap":
@@ -107,20 +127,16 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       return [[transitionTemplate]];
     }
     case "dealingCards": {
-      const templates: AnimationTemplate[] = [];
-      differences.forEach((difference, index) => {
-        const animationTemplate: AnimationTemplate = {
+      return [
+        differences.map((difference, index) => ({
           ...difference,
           animationType: "deckToHand",
           id: uuidv4(),
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
-        };
-        templates.push(animationTemplate);
-      });
-
-      return [templates];
+        })),
+      ];
     }
   }
 

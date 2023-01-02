@@ -2,18 +2,17 @@ import { nonPlayerPlacesTypes, playerPlacesTypes } from "../helperFunctions/loca
 
 /**
  * This function returns all differences between two given snapshots, with one
- * exception: If a card has moved WITHIN a place the place will return that 
+ * exception: If a card has moved WITHIN a place the place will return that
  * there were no snapshotDifferences, since it only calls
  * let differences = prevCardIds.filter(card => !newCardIds.includes(card));
- * Therefore any rearranges within a place will not be found. 
- * 
+ * Therefore any rearranges within a place will not be found.
+ *
  * Performance note: this function takes about (0.1ms -0.2 ms) when finding one snapshotDifference.
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
 
-
-export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot: GameSnapshot ) => {
+export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
   //if (prevSnapshot.players.length === 0) return [];
   const snapshotDifferences = [];
   const players = prevSnapshot.players;
@@ -27,12 +26,10 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
       const placeId = prevSnapshot.players[player].places[place].id;
 
       let differences = prevCardIds.filter(card => !newCardIds.includes(card));
-      if(newCardIds.length === prevCardIds.length){
-      let innerPlaceDifferences = prevCardIds.filter((card, index) => newCardIds.indexOf(card) !== index);
-      console.log(`prevCardIds ${prevCardIds}`)
-      console.log(`newCardIds ${newCardIds}`)  
-      console.log(innerPlaceDifferences)
-    }
+      // If rearranging:
+      if (newCardIds.length === prevCardIds.length) {
+        differences = prevCardIds.filter((card, index) => newCardIds.indexOf(card) !== index);
+      }
       if (differences.length === 0) {
       } else {
         for (let i = 0; i < differences.length; i++) {
@@ -97,16 +94,13 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
   }
   // find those missing cards!!!
   for (let snapshotDifference = 0; snapshotDifference < snapshotDifferences.length; snapshotDifference++) {
-
     for (let player = 0; player < players.length; player++) {
-
       for (let place of playerPlacesTypes) {
         let i = 0;
         const newCardIds = newSnapshot.players[player].places[place].cards.map(card => card.id);
         const playerId = newSnapshot.players[player].id;
         const placeId = newSnapshot.players[player].places[place].id;
         for (i = 0; i < newSnapshot.players[player].places[place].cards.length; i++) {
-
           if (newCardIds[i] === snapshotDifferences[snapshotDifference]["from"]["cardId"]) {
             snapshotDifferences[snapshotDifference]["to"] = {
               cardId: snapshotDifferences[snapshotDifference]["from"]["cardId"],
@@ -117,7 +111,7 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
               index: i,
             };
             break;
-          } 
+          }
         }
       }
     }
@@ -126,11 +120,10 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
   // now  check deck & discard pile for those missing cards!!!
   for (let snapshotDifference = 0; snapshotDifference < snapshotDifferences.length; snapshotDifference++) {
     for (let place of nonPlayerPlacesTypes) {
-      let i = 0;
       const newCardIds = newSnapshot.nonPlayerPlaces[place].cards.map(card => card.id);
       const placeId = newSnapshot.nonPlayerPlaces[place].id;
 
-      for (i = 0; i < newSnapshot.nonPlayerPlaces[place].cards.length; i++) {
+      for (let i = 0; i < newSnapshot.nonPlayerPlaces[place].cards.length; i++) {
         if (newCardIds[i] === snapshotDifferences[snapshotDifference]["from"]["cardId"]) {
           snapshotDifferences[snapshotDifference]["to"] = {
             cardId: snapshotDifferences[snapshotDifference]["from"]["cardId"],

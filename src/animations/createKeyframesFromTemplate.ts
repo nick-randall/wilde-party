@@ -93,7 +93,6 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): An
       ${stringifyDimensions(createFinalKeyframe(data))}
     }
   `;
-  console.log(keyframesString)
   return { cardId: data.to.cardId, keyframesString, totalDuration };
 };
 

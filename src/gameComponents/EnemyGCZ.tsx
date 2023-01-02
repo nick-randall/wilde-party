@@ -1,6 +1,6 @@
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getDimensions } from "../helperFunctions/getDimensions";
-import MockRenderProvider from "../mockRender/MockRenderProvider";
+import MockRenderProviderWithRearrange from "../mockRender/MockRenderProviderWithRearrange";
 import TableCardMockRender from "../mockRender/TableCardMockRender";
 import { RootState } from "../redux/store";
 import Card from "./Card";
@@ -23,16 +23,16 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   const devSettings = useSelector((state: RootState) => state.devSettings);
 
   return (
-    <MockRenderProvider player={player} placeType="GCZ" placeId={id}>
-      {(cards, mockRenderIds) => (
+    <MockRenderProviderWithRearrange player={player} placeType="GCZ" placeId={id}>
+      {({ cards, prevSnapshotCards, mockRenderToIds, mockRenderFromIds }) => (
         <div style={{ position: "relative" }}>
           <div className={devSettings.grid.on ? "place-grid" : ""} style={{ left: 200, position: "absolute", height: dimensions.cardHeight }}>
             {cards.map((card, index) =>
-              mockRenderIds.includes(card.id) ? (
-                <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} />
+              mockRenderToIds.includes(card.id) ? (
+                <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} offsetLeft={index * dimensions.cardWidth} />
               ) : (
                 <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
-                  <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ" />)
+                  <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ" />
                 </div>
               )
             )}
@@ -40,67 +40,20 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
           <div
             className={devSettings.grid.on ? "place-grid" : ""}
             style={{ left: 200, position: "absolute", height: dimensions.cardHeight }}
-            // This will become the mockRenderLayer, always reflecting the "from" or
-            // prevSnapshot state--never has any gaps and always renders either nothing
-            // (if animationTemplates are all finished or newSnapshot.isempty) or
-            // the prevSnapshot state--until it is no longer needed
-            // All this just to allow rearranging!
+          // The mock render layer container, allowing rearranging. 
           >
-            {cards.map((card, index) => (
-              <img
-                // replace these with TableCardMockRender, with prop of "from"
-                alt="test"
-                style={{
-                  left: index * dimensions.cardLeftSpread,
-                  position: "absolute",
-                  height: dimensions.cardHeight,
-                  width: dimensions.cardWidth,
-                  border: "thin blue solid",
-                }}
-                key={card.id}
-              />
-            ))}
+            {prevSnapshotCards.map((card, index) =>
+              mockRenderFromIds.includes(card.id) ? (
+                <div style={{ left: index * dimensions.cardWidth, position: "absolute" }}>
+                  <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ" />
+                </div>
+              ) : null
+            )}
           </div>
         </div>
       )}
-    </MockRenderProvider>
+    </MockRenderProviderWithRearrange>
   );
 };
 
-// const mapStateToProps = (state: RootState, ownProps: EnemyGCZProps) => {
-//   const { gameSnapshot, newSnapshots, draggedState, highlights, draggedHandCard } = state;
-//   const { draggedId } = draggedState;
-//   const { id, player } = ownProps;
-
-//   let enemyGCZCards = gameSnapshot.players[player].places.GCZ.cards;
-//   let emissaryCardIndex;
-//   if (newSnapshots.length > 0) {
-//     newSnapshots[0].animationTemplates.forEach(template => {
-//       // if place contains a card transitioning to or from it..
-
-//       const placeId = "placeId" in template.to ? template.to.placeId : undefined; // will this work???
-//       if (placeId === id) {
-//         //TODO sort somtehing like this:
-//         // if (template.to.placeId === id || template.from.placeId === id) {
-
-//         if (template.status !== "waitingInLine") {
-//           // this path should be figured out with
-//           // player slash place data;
-
-//           // Listen to next newSnapshot in line rather than currSnapshot
-
-//           enemyGCZCards = newSnapshots[0].players[player].places.GCZ.cards;
-//           console.log("listening to newSnapshot");
-//           if (template.status === "awaitingEmissaryData") {
-//             emissaryCardIndex = enemyGCZCards.map(card => card.id).indexOf(template.to.cardId);
-//           }
-//         }
-//       }
-//     });
-//   }
-//   return { emissaryCardIndex, enemyGCZCards };
-// };
-
 export default EnemyGCZ;
-
-// export default EnemyGCZ;

@@ -44,12 +44,11 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
   const simulateRearrangeGCZ = () => {
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "rearrangingTablePlace");
-    const dragSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 0, numDraggedElements: 1 };
-    const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 4 };
+    const dragSource: DragSourceData = { containerId: currentSnapshot.players[1].places["GCZ"].id, index: 1, numDraggedElements: 1 };
+    const dragDestination: DragDestinationData = { containerId: currentSnapshot.players[1].places["GCZ"].id, index: 4 };
     snapshotUpdater.addChange({ source: dragSource, destination: dragDestination });
     snapshotUpdater.begin();
-    const newSnapshotWithoutUpdateType = snapshotUpdater.getNewSnapshot();
-    const newSnapshot: GameSnapshot = {...newSnapshotWithoutUpdateType, snapshotUpdateType: "addDragged"}
+    const newSnapshot = snapshotUpdater.getNewSnapshot();
     dispatch(handleNewSnapshots([newSnapshot]));
   };
 
