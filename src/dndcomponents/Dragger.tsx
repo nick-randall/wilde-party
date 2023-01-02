@@ -198,16 +198,19 @@ const Dragger: React.FC<CombinedProps> = ({
   const handleEndMoveToDropTarget = useCallback(
     (event: TransitionEvent) => {
       if (!isMovingToDropTarget) return;
+      // This prevents other draggers from triggering end of drag,
+      // which was causing a sucessfully dropped card to "not stick"
+      // but to return to source draggercontainer.
+      // A better solution may be to have shared state be aware of moving
+      //  to drop target and not to reset container id until it has
       if(draggedId !== draggerId) return;
-      console.log("card ended transition" + draggerId);
-      console.log(event);
       if (event.propertyName !== "transform") return;
       dispatch(onDragEnd({draggedId, destination, source}));
       setIsMovingToDropTarget(false)
       setStartLocation(undefined);
       setIsReturning(false);
     },
-    [dispatch, draggedId, draggerId, isMovingToDropTarget]
+    [destination, dispatch, draggedId, draggerId, isMovingToDropTarget, source]
   );
 
   const droppedStyles: CSSProperties = {

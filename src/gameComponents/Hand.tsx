@@ -26,7 +26,7 @@ const Hand = (props: HandProps) => {
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
-  const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
+  const transitionsUnderway = useSelector((state: RootState) => state.animationData.length > 0);
   const enemysTurn = useSelector((state: RootState) => state.gameSnapshot.current.player !== 0);
   const devSettings = useSelector((state: RootState) => state.devSettings);
 

@@ -1,12 +1,7 @@
-import { CSSProperties, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { CSSProperties, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-// import "./animations/animations.css";
-import { CardInspector } from "../renderPropsComponents/CardInspector";
 import Dragger from "../dndcomponents/Dragger";
-import AnimationHandler from "../animations/AnimationHandler";
-import useMockRender from "../mockRender/useMockRender";
-import handleEndAnimation from "../animations/handleEndAnimation";
 import { rotateHandCard } from "../helperFunctions/getDimensions";
 import CardBase from "./CardBase";
 
@@ -29,7 +24,7 @@ const HandCard = (props: HandCardProps) => {
   const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
 
   const highlightType = useSelector((state: RootState) => state.highlightType);
-  const transitionUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
+  const transitionUnderway = useSelector((state: RootState) => state.animationData.length > 0);
 
   const { player, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
 
@@ -37,22 +32,37 @@ const HandCard = (props: HandCardProps) => {
 
   const [shortHover, setShortHover] = useState(false);
 
-  const mainStyles = (draggedOrDropping: boolean, rear?: boolean): CSSProperties =>
-    !draggedOrDropping
+  const mainStyles = (draggedOrDropping: string): CSSProperties =>
+    draggedOrDropping === "dragged"
+      ? {
+          width: cardWidth,
+          height: cardHeight,
+
+          transition: "300ms",
+          pointerEvents: "none",
+          zIndex: 10,
+          boxShadow: "10px 10px 10px black",
+
+        }
+      : draggedOrDropping === "dropping"
       ? {
           // should be in dimensions
           zIndex: shortHover ? 30 : tableCardzIndex,
           transition: `left 250ms, top 250ms, width 180ms, transform 180ms`,
-          width: cardWidth,
-          pointerEvents: "auto",
-          boxShadow: "10px 10px 10px black",
-        }
-      : {
-          transition: "300ms",
+
           width: dimensions.tableCardWidth,
           height: dimensions.tableCardHeight,
           pointerEvents: "none",
+          boxShadow: "10px 10px 10px black",
+        }
+      : {
+          width: cardWidth,
+          height: cardHeight,
+          transition: "300ms",
+          pointerEvents: canPlay ? "auto" : "none",
           zIndex: 10,
+          boxShadow: "10px 10px 10px black",
+
         };
   const endShortAndLongHover = (handleMouseLeave: Function) => {
     handleMouseLeave();
@@ -75,20 +85,19 @@ const HandCard = (props: HandCardProps) => {
             // top: 0,
             // pointerEvents: "none",
 
-            transition: "300ms",
+            transition: `left 180ms`,
           }}
         >
           <CardBase
             id={id}
             image={image}
             // offsetLeft={spread * index - (spread * numHandCards) / 2}
-            extraStyles={{...mainStyles(draggerProps.dragged || draggerProps.dropping)}}
+            extraStyles={{ ...mainStyles(draggerProps.dragged ? "dragged" : draggerProps.dropping ? "dropping" : "") }}
             dimensions={dimensions}
             rotateX={draggerProps.dragged || draggerProps.dropping ? 0 : rotateHandCard(index, numHandCards)}
             ref={mockRenderRef}
           />
           <div ref={draggerProps.unrotatedElementRef} />
-
         </div>
       )}
     </Dragger>

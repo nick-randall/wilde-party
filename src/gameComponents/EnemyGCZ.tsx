@@ -25,16 +25,42 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   return (
     <MockRenderProvider player={player} placeType="GCZ" placeId={id}>
       {(cards, mockRenderIds) => (
-        <div className={devSettings.grid.on ? "place-grid" : ""} style={{ left: 200, position: "relative", height: dimensions.cardHeight }}>
-          {cards.map((card, index) =>
-            mockRenderIds.includes(card.id) ? (
-              <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} />
-            ) : (
-              <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
-                <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ"/>)
-              </div>
-            )
-          )}
+        <div style={{ position: "relative" }}>
+          <div className={devSettings.grid.on ? "place-grid" : ""} style={{ left: 200, position: "absolute", height: dimensions.cardHeight }}>
+            {cards.map((card, index) =>
+              mockRenderIds.includes(card.id) ? (
+                <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} />
+              ) : (
+                <div style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }} key={card.id}>
+                  <Card dimensions={dimensions} id={card.id} index={index} image={card.image} placeId={id} placeType="GCZ" />)
+                </div>
+              )
+            )}
+          </div>
+          <div
+            className={devSettings.grid.on ? "place-grid" : ""}
+            style={{ left: 200, position: "absolute", height: dimensions.cardHeight }}
+            // This will become the mockRenderLayer, always reflecting the "from" or
+            // prevSnapshot state--never has any gaps and always renders either nothing
+            // (if animationTemplates are all finished or newSnapshot.isempty) or
+            // the prevSnapshot state--until it is no longer needed
+            // All this just to allow rearranging!
+          >
+            {cards.map((card, index) => (
+              <img
+                // replace these with TableCardMockRender, with prop of "from"
+                alt="test"
+                style={{
+                  left: index * dimensions.cardLeftSpread,
+                  position: "absolute",
+                  height: dimensions.cardHeight,
+                  width: dimensions.cardWidth,
+                  border: "thin blue solid",
+                }}
+                key={card.id}
+              />
+            ))}
+          </div>
         </div>
       )}
     </MockRenderProvider>
