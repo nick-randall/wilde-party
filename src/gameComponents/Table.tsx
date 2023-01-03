@@ -59,7 +59,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
     const change1 = { source: playedFromHandSource, destination: playedFromHandDestination };
     changes.push(change1);
 
-    const destroyedGCZCardSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 2, numDraggedElements: 1 };
+    const destroyedGCZCardSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 0, numDraggedElements: 1 };
     const destroyedGCZCardDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 1 };
     const change2 = { source: destroyedGCZCardSource, destination: destroyedGCZCardDestination };
     changes.push(change2);
@@ -82,7 +82,7 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
   return (
     <div  style={{ display: "flex", flexDirection: "column" }}>
       <button onClick={simulateRearrangeGCZ}>Simulate Rearrange GCZ</button>
-      {/* <button onClick={simulateDestroy}>Simulate destroy!</button> */}
+      <button onClick={simulateDestroy}>Simulate destroy!</button>
       <button onClick={logNewSnapshot} style={{color: newSnapshotcurrent === undefined ? "red" : "black"}}>Log New Snapshots NEw version</button>
       <button onClick={logAnimationTemplates}>Log Animation Templates</button>
 

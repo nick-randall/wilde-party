@@ -84,11 +84,11 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
               via: destroyedCard,
               id: uuidv4(),
               animationType: "handToTable",
-              status: "waitingInLine",
+              status: "awaitingEmissaryData",
             };
           }
           if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), animationType: "tableToDiscardPile", status: "waitingInLine" };
+            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), animationType: "tableToDiscardPile", status: "awaitingEmissaryData" };
           }
         });
         return [

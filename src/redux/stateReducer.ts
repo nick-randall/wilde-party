@@ -15,8 +15,13 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
   return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
 };
 
-const isTemplateComplete = (currTemplate: AnimationTemplate) =>
-  currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
+const isTemplateComplete = (currTemplate: AnimationTemplate) => {
+  const toandFromComplete = currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
+  if ("via" in currTemplate) {
+    const viaComplete = currTemplate.via?.xPosition !== undefined;
+    return toandFromComplete && viaComplete;
+  } else return toandFromComplete;
+};
 
 const updateTemplate = (template: AnimationTemplate, array: AnimationTemplate[][]) =>
   array.map(group => group.map(t => (t.id === template.id ? template : t)));
@@ -116,12 +121,11 @@ export const stateReducer = (
     case "ADD_NEW_GAME_SNAPSHOTS":
       console.log(state.newSnapshots);
       console.log("adding new game snapshot");
-      console.log(action.payload)
+      console.log(action.payload);
       // they should already be in the right order and the first snapshot should
       // have added transitionTemplates already---if there weren't already
       // others in the stack
       return { ...state, newSnapshotsVersion: state.newSnapshots.concat(action.payload) };
-
 
     case "OVERWRITE_CURRENT_SNAPSHOT": {
       const newSnapshots = state.newSnapshots.filter((a, i) => i > 0);
@@ -216,7 +220,6 @@ export const stateReducer = (
     case "CHANGE_NUM_DRAWS": {
       const change = action.payload;
       const newSnapshot = produce(state.gameSnapshot, draft => {
-       
         draft.current.draws += change;
       });
       return { ...state, gameSnapshot: newSnapshot };

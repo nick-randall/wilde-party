@@ -26,6 +26,21 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
       });
     }
   }, [animationTemplates, cardId, dimensions, dispatch, ref, rotateX]);
+  useEffect(() => {
+    if (animationTemplates.length > 0) {
+      animationTemplates[0].forEach(a => {
+        if("via" in a && a.via?.targetId){
+        if (a.via.targetId === cardId && a.status === "awaitingEmissaryData") {
+          if (ref !== null && ref?.current !== null) {
+            const element = ref.current;
+            const { left, top } = element.getBoundingClientRect();
+            const mockRenderData = { cardId, xPosition: left, yPosition: top, dimensions: { rotateX, ...dimensions } };
+            dispatch(handleNewMockRenderData(mockRenderData, "via"));
+          }
+        }}
+      });
+    }
+  }, [animationTemplates, cardId, dimensions, dispatch, ref, rotateX]);
 };
 
 export default useMockRender;
