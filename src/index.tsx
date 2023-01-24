@@ -12,12 +12,12 @@ ReactDOM.render(
   <React.StrictMode>
     <SessionProvider>
       <Provider store={store}>
-        <Table></Table>
-        {/* <Router>
+        {/* <Table></Table> */}
+        <Router>
           <Routes>
             <Route path="/*" element={<App />} />
           </Routes>
-        </Router> */}
+        </Router>
       </Provider>
     </SessionProvider>
   </React.StrictMode>,

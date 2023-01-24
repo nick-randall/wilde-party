@@ -29,6 +29,7 @@
   color: black;
   border: thin black solid;
   padding: 20px 15px 10px 15px;
+  margin: 20px 15px 10px 15px;
   text-align: center;
 }
 
@@ -63,6 +64,12 @@
 
 .button.clickable {
   cursor: pointer;
+}
+.button.plain {
+  border: none;
+  background-color: transparent;
+  color: black;
+  box-shadow: none;
 }
 
 .button:hover {

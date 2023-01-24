@@ -29,11 +29,14 @@ const transitionTypes: { [key in AnimationType]: TransitionTypeData } = {
 
 const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{${keyframeData}}`;
 
-const stringifyDimensions = (data: KeyframePartData) => `
+const stringifyDimensions = (data?: KeyframePartData) =>
+  data
+    ? `
   height: ${data.dimensions.cardHeight}px;
   width: ${data.dimensions.cardWidth}px;
   transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
-`;
+`
+    : "";
 
 const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
   const percent = (duration / totalDuration) * 100;
@@ -59,15 +62,31 @@ const measureDistance = (data: CompleteAnimationTemplate) => {
 };
 
 const createInitialKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
-  const {
-    to: { xPosition: toX, yPosition: toY },
-    from: { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions },
-  } = data;
+  const to = data.via || data.to;
+  const from = data.from;
+  if (data.via) console.log("via");
+  const { xPosition: toX, yPosition: toY } = to;
+  const { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions } = from;
 
   const deltaX = fromX - toX;
   const deltaY = fromY - toY;
 
   return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions };
+};
+const createViaKeyFrame = (data: CompleteAnimationTemplate): KeyframePartData | undefined => {
+  const { via } = data;
+  if (via) {
+    const { xPosition: viaX, yPosition: viaY } = via;
+
+    const {
+      to: { xPosition: toX, yPosition: toY, dimensions: fromDimensions },
+    } = data;
+
+    const deltaX = viaX - toX;
+    const deltaY = viaY - toY;
+
+    return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions };
+  }
 };
 
 const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
@@ -78,23 +97,51 @@ const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData 
   return { translateX: 0, translateY: 0, dimensions };
 };
 
-
 export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
-  const transitionDuration = measureDistance(data) * mainTransitionDuration;
-  const totalDuration = calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
+  const durations = {
+    delay: data.delay ?? 0,
+    transition: measureDistance(data) * mainTransitionDuration,
+    extraSteps: extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0),
+  };
+  const totalDuration = Object.values(durations).reduce((prev, acc) => prev + acc); //calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
 
   const keyframesString = css`
     0% {
       ${stringifyDimensions(createInitialKeyframe(data))}
     }
-    ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
+    ${stringifyKeyframeData(createInitialKeyframe(data), data.delay ?? 0, totalDuration)}
+    ${data.via ? `50%{${stringifyDimensions(createViaKeyFrame(data))}` : ""}
+
     100% {
       ${stringifyDimensions(createFinalKeyframe(data))}
     }
   `;
+  console.log(keyframesString);
   return { cardId: data.to.cardId, keyframesString, totalDuration };
 };
+
+// export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
+//   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
+//   const durations = {
+//     delay: data.delay ?? 0,
+//     transition: measureDistance(data) * mainTransitionDuration,
+//     extraSteps: extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0),
+//   };
+//   const totalDuration = Object.values(durations).reduce((prev, acc) => prev + acc); //calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
+
+//   const keyframesString = css`
+//     0% {
+//       ${stringifyDimensions(createInitialKeyframe(data))}
+//     }
+//     ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
+//     100% {
+//       ${stringifyDimensions(createFinalKeyframe(data))}
+//     }
+//   `;
+//   console.log(keyframesString)
+//   return { cardId: data.to.cardId, keyframesString, totalDuration };
+// };
 
 interface KeyframePartData {
   translateX: number;

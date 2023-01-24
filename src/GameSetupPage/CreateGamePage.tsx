@@ -34,6 +34,7 @@ const CreateGamePage: FC<CreateGamePageProps> = () => {
 
   const submitWidgetData = async (atFinalIndex?: boolean) => {
     setCurrIndex(s => s + 1);
+    createGame();
 
     // if (atFinalIndex && sessionToken && createGameData.partyAddress && createGameData.playerName) {
     //   try {

@@ -101,6 +101,7 @@ type CompleteAnimationTemplate = {
   status: AnimationTemplateStatus;
   animationType: AnimationType;
   delay?: number;
-  to: ToOrFromWithScreenData | ViaWithScreenData;
-  from: ToOrFromWithScreenData | ViaWithScreenData;
+  to: ToOrFromWithScreenData;
+  from: ToOrFromWithScreenData;
+  via?: ViaWithScreenData;
 };
