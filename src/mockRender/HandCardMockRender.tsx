@@ -45,7 +45,7 @@ const HandCardMockRender: React.FC<HandCardMockRenderProps> = ({ cardId, index, 
       const { left, top } = element.getBoundingClientRect();
       dispatch(
         handleNewMockRenderData(
-          { cardId, xPosition: left, yPosition: top, dimensions: { rotateX: rotateHandCard(index, numHandCards), ...dimensions } },
+          { cardId, dx: left, dy: top, dimensions: { rotateX: rotateHandCard(index, numHandCards), ...dimensions } },
           "to"
         )
       );

@@ -3,7 +3,7 @@ import { RootState } from "../redux/store";
 import {  replaceCurrentSnapshotWithNewSnapshot } from "../redux/updateSnapshotActionCreators";
 import createAnimationTemplatesFromSnapshotDifferences from "./createAnimationTemplatesFromSnapshotDifferences";
 
-export type DraggedCardScreenLocation = { xPosition: number; yPosition: number } | null;
+export type DraggedCardScreenLocation = { dx: number; dy: number } | null;
 
 const handleNewSnapshotFromUserAction =
   (newSnapshot: GameSnapshot) => (dispatch: Function, getState: () => RootState) => {

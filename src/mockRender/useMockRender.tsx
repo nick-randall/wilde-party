@@ -19,7 +19,7 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();
-            const mockRenderData = { cardId, xPosition: left, yPosition: top, dimensions: { rotateX, ...dimensions } };
+            const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX, ...dimensions } };
             dispatch(handleNewMockRenderData(mockRenderData, "from"));
           }
         }
@@ -34,7 +34,7 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();
-            const mockRenderData = { cardId, xPosition: left, yPosition: top, dimensions: { rotateX, ...dimensions } };
+            const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX, ...dimensions } };
             dispatch(handleNewMockRenderData(mockRenderData, "via"));
           }
         }}

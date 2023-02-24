@@ -16,9 +16,9 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
 };
 
 const isTemplateComplete = (currTemplate: AnimationTemplate) => {
-  const toandFromComplete = currTemplate.to.xPosition !== undefined && currTemplate.from.xPosition !== undefined;
+  const toandFromComplete = currTemplate.to.dx !== undefined && currTemplate.from.dx !== undefined;
   if ("via" in currTemplate) {
-    const viaComplete = currTemplate.via?.xPosition !== undefined;
+    const viaComplete = currTemplate.via?.dx !== undefined;
     return toandFromComplete && viaComplete;
   } else return toandFromComplete;
 };

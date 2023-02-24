@@ -39,7 +39,7 @@ const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimen
     if (mockRenderRef !== null && mockRenderRef.current !== null) {
       const element = mockRenderRef.current;
       const { left, top } = element.getBoundingClientRect();
-      const mockRenderData = { cardId, xPosition: left, yPosition: top, dimensions: { rotateX: 0, ...dimensions } };
+      const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX: 0, ...dimensions } };
       dispatch(handleNewMockRenderData(mockRenderData, "to"));
     }
   }, [dimensions, dispatch, cardId]);

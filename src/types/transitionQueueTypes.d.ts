@@ -1,6 +1,6 @@
 /**
  * All the data needed to create a transition, though either
- * the screen data of xPosition/yPosition at origin
+ * the screen data of dx/dy at origin
  * or destination is still missing.
  */
 
@@ -17,8 +17,8 @@ type FromWithPossibleScreenData = ToOrFrom & ScreenFromData;
 // type FromViaWithPossibleScreenData = Via & ScreenFromData;
 
 type ScreenToData = {
-  xPosition?: number;
-  yPosition?: number;
+  dx?: number;
+  dy?: number;
 };
 
 type ScreenFromData = ScreenToData & {
@@ -27,8 +27,8 @@ type ScreenFromData = ScreenToData & {
 };
 
 type CompleteScreenToData = {
-  xPosition: number;
-  yPosition: number;
+  dx: number;
+  dy: number;
 };
 
 type CompleteScreenFromData = CompleteScreenToData & {
@@ -69,14 +69,14 @@ type  AnimationData = {
 
 //
 type ScreenData = {
-  xPosition?: number;
-  yPosition?: number;
+  dx?: number;
+  dy?: number;
   dimensions?: CardAnimationDimensions;
 };
 
 type CompleteScreenData = {
-  xPosition: number;
-  yPosition: number;
+  dx: number;
+  dy: number;
   dimensions: CardAnimationDimensions;
 };
 
@@ -103,5 +103,5 @@ type CompleteAnimationTemplate = {
   delay?: number;
   to: ToOrFromWithScreenData;
   from: ToOrFromWithScreenData;
-  via?: ViaWithScreenData;
+  intermediateSteps: ViaWithScreenData[];
 };

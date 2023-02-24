@@ -8,144 +8,176 @@ const handToTableDuration = transitionDuration.medium;
 
 interface TransitionTypeData {
   // msPerPixel
-  mainTransitionDuration: number;
+  durationSpeed: number;
   extraSteps: Step[];
 }
 
 const transitionTypes: { [key in AnimationType]: TransitionTypeData } = {
   handToTable: {
-    mainTransitionDuration: transitionDuration.long,
+    durationSpeed: transitionDuration.long,
     extraSteps: [],
   },
   deckToHand: {
-    mainTransitionDuration: transitionDuration.long,
+    durationSpeed: transitionDuration.long,
     extraSteps: [],
   },
   tableToDiscardPile: {
-    mainTransitionDuration: transitionDuration.long,
+    durationSpeed: transitionDuration.long,
     extraSteps: [],
   },
 };
 
-const wrapWithPercent = (percent: number, keyframeData: string) => `${percent}%{${keyframeData}}`;
-
-const stringifyDimensions = (data?: KeyframePartData) =>
-  data
-    ? `
+const stringifyDimensions = (data: KeyframePartData) => `
   height: ${data.dimensions.cardHeight}px;
   width: ${data.dimensions.cardWidth}px;
-  transform: translate(${data.translateX}px, ${data.translateY}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
-`
-    : "";
+  transform: translate(${data.dx}px, ${data.dy}px) rotate(${data.dimensions.rotateX}deg) rotateY(${data.dimensions.rotateY}deg) scale(${data.dimensions.scale});
+`;
 
-const stringifyKeyframeData = (data: KeyframePartData, duration: number, totalDuration: number) => {
-  const percent = (duration / totalDuration) * 100;
-  return wrapWithPercent(percent, stringifyDimensions(data));
-};
+interface Pair {
+  start: ToOrFromWithScreenData | ViaWithScreenData;
+  finish: ToOrFromWithScreenData | ViaWithScreenData;
+}
 
-const calculateTotalDuration = (transitionDuration: number, wait: number, extraSteps: Step[]) =>
-  wait + transitionDuration + extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0);
+const unset = { dx: 0, dy: 0, duration: 0 };
+class OffsetAndDurationMetaData {
+  private finalScreenData: ToOrFromWithScreenData | ViaWithScreenData;
+  private transitionSpeed: number;
+  private totalDuration?: number;
+  private initial: OffsetAndDurationData = unset;
+  private delay: OffsetAndDurationData = unset;
+  private final: OffsetAndDurationData;
+  private intermediateSteps: OffsetAndDurationData[] = [];
+  private delayDuration?: number;
 
-const measureDistance = (data: CompleteAnimationTemplate) => {
-  const {
-    to: { xPosition: toX, yPosition: toY },
-    from: { xPosition: fromX, yPosition: fromY },
-  } = data;
-
-  const a = toX;
-  const b = toY;
-  const x = fromX;
-  const y = fromY;
-
-  var distance = Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
-  return distance;
-};
-
-const createInitialKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
-  const to = data.via || data.to;
-  const from = data.from;
-  if (data.via) console.log("via");
-  const { xPosition: toX, yPosition: toY } = to;
-  const { xPosition: fromX, yPosition: fromY, dimensions: fromDimensions } = from;
-
-  const deltaX = fromX - toX;
-  const deltaY = fromY - toY;
-
-  return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions };
-};
-const createViaKeyFrame = (data: CompleteAnimationTemplate): KeyframePartData | undefined => {
-  const { via } = data;
-  if (via) {
-    const { xPosition: viaX, yPosition: viaY } = via;
-
-    const {
-      to: { xPosition: toX, yPosition: toY, dimensions: fromDimensions },
-    } = data;
-
-    const deltaX = viaX - toX;
-    const deltaY = viaY - toY;
-
-    return { translateX: deltaX, translateY: deltaY, dimensions: fromDimensions };
+  constructor(finalScreenData: ToOrFromWithScreenData | ViaWithScreenData, transitionSpeed: number) {
+    this.finalScreenData = finalScreenData;
+    this.transitionSpeed = transitionSpeed;
+    this.final = { dx: 0, dy: 0, duration: 100 };
   }
-};
 
-const createFinalKeyframe = (data: CompleteAnimationTemplate): KeyframePartData => {
-  const {
-    to: { dimensions },
-  } = data;
+  private _setTotalDuration() {
+    this.totalDuration =
+      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
+  }
 
-  return { translateX: 0, translateY: 0, dimensions };
+  private _getDuration = (pair: Pair) => this._getDistance(pair) * this.transitionSpeed;
+
+  private _getDistance = (pair: Pair) => {
+    const { start, finish } = pair;
+    const a = start.dx;
+    const b = finish.dx;
+    const x = start.dy;
+    const y = finish.dy;
+
+    var distance = Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+    return distance;
+  };
+
+  private _getOffset = (pair: Pair) => {
+    const { start, finish } = pair;
+    return { dx: start.dx - finish.dx, dy: start.dy - finish.dy };
+  };
+
+  setInitialAndDelay(from: ToOrFromWithScreenData | ViaWithScreenData, delayDuration?: number) {
+    this.initial = this._getOffsetAndDurationData({ start: from, finish: from });
+    this.delay = { ...this.initial, duration: delayDuration ?? 0 };
+    this.delayDuration = delayDuration;
+  }
+
+  _convertToPercent = (duration: number) => (duration / (this.totalDuration ?? 1)) * 100;
+
+  convertAllToPercent() {
+    if (this.delay) {
+      this._setTotalDuration();
+      this.delay.duration = this._convertToPercent(this.delay.duration);
+    }
+    this.intermediateSteps = this.intermediateSteps.map(e => ({ ...e, duration: this._convertToPercent(e.duration) }));
+  }
+
+  setIntermediateSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
+    const lastIndex = trSteps.length - 1;
+    this.intermediateSteps = trSteps
+      .map((_, index, arr) => {
+        if (index === lastIndex) return { duration: 0, dx: 0, dy: 0 };
+        const pair: Pair = { start: arr[index], finish: arr[index + 1] };
+        return this._getOffsetAndDurationData(pair);
+      })
+      .slice(0, lastIndex - 1);
+  };
+
+  private _getOffsetAndDurationData = (transitionPair: Pair) => {
+    const { start, finish } = transitionPair;
+    const durationPair = { start, finish };
+    const offsetPair = { start, finish: this.finalScreenData };
+    const distance = this._getDuration(durationPair);
+    const { dx, dy } = this._getOffset(offsetPair);
+
+    return { dx, dy, duration: distance * this.transitionSpeed };
+  };
+
+  public getAllOffsetsAndPercents() {
+    return {
+      initial: this.initial,
+      delay: this.delay,
+      intermediateSteps: this.intermediateSteps,
+      final: this.final,
+      totalDuration: this.totalDuration ?? 0,
+    };
+  }
+}
+interface OffsetAndDurationData {
+  dx: number;
+  dy: number;
+  duration: number;
+}
+
+const getOffsetsAndPercents = (data: CompleteAnimationTemplate) => {
+  const { from, intermediateSteps, to } = data;
+
+  const transitionSpeed = transitionTypes[data.animationType].durationSpeed;
+
+  const offsetAndDurationCalculator = new OffsetAndDurationMetaData(to, transitionSpeed);
+  const trSteps = [from, ...intermediateSteps, to];
+
+  offsetAndDurationCalculator.setInitialAndDelay(from, data.delay);
+  offsetAndDurationCalculator.setIntermediateSteps(trSteps);
+  offsetAndDurationCalculator.convertAllToPercent();
+
+  return offsetAndDurationCalculator.getAllOffsetsAndPercents();
 };
 
 export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
-  const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
-  const durations = {
-    delay: data.delay ?? 0,
-    transition: measureDistance(data) * mainTransitionDuration,
-    extraSteps: extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0),
-  };
-  const totalDuration = Object.values(durations).reduce((prev, acc) => prev + acc); //calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
+  const { from, to } = data;
+  const { initial, delay, intermediateSteps, final, totalDuration } = getOffsetsAndPercents(data);
 
   const keyframesString = css`
     0% {
-      ${stringifyDimensions(createInitialKeyframe(data))}
+      ${stringifyDimensions({ ...initial, dimensions: from.dimensions })}
     }
-    ${stringifyKeyframeData(createInitialKeyframe(data), data.delay ?? 0, totalDuration)}
-    ${data.via ? `50%{${stringifyDimensions(createViaKeyFrame(data))}` : ""}
-
+    ${delay.duration}% {
+      ${stringifyDimensions({ ...delay, dimensions: from.dimensions })}
+    }
+    ${intermediateSteps.map(
+      step => `${step.duration}% {
+      ${stringifyDimensions({ ...step, dimensions: to.dimensions })}
+    }`
+    )}
     100% {
-      ${stringifyDimensions(createFinalKeyframe(data))}
+      ${stringifyDimensions({ ...final, dimensions: to.dimensions })}
     }
   `;
-  console.log(keyframesString);
+
   return { cardId: data.to.cardId, keyframesString, totalDuration };
 };
 
-// export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
-//   const { extraSteps, mainTransitionDuration } = transitionTypes[data.animationType];
-//   const durations = {
-//     delay: data.delay ?? 0,
-//     transition: measureDistance(data) * mainTransitionDuration,
-//     extraSteps: extraSteps.reduce((prev: number, curr: Step) => prev + curr.duration, 0),
-//   };
-//   const totalDuration = Object.values(durations).reduce((prev, acc) => prev + acc); //calculateTotalDuration(transitionDuration, data.delay || 0, extraSteps);
-
-//   const keyframesString = css`
-//     0% {
-//       ${stringifyDimensions(createInitialKeyframe(data))}
-//     }
-//     ${data.delay ? stringifyKeyframeData(createInitialKeyframe(data), data.delay, totalDuration) : ""}
-//     100% {
-//       ${stringifyDimensions(createFinalKeyframe(data))}
-//     }
-//   `;
-//   console.log(keyframesString)
-//   return { cardId: data.to.cardId, keyframesString, totalDuration };
-// };
-
 interface KeyframePartData {
-  translateX: number;
-  translateY: number;
+  dx: number;
+  dy: number;
+  dimensions: CardAnimationDimensions;
+}
+
+interface KeyframePartData2 {
+  offset: { dx: number; dy: number };
   dimensions: CardAnimationDimensions;
 }
 
@@ -161,14 +193,14 @@ interface IntermediateStep {
   cardWidth?: number;
   rotateX?: number;
   rotateY?: number;
-  translateX?: number;
-  translateY?: number;
+  dx?: number;
+  dy?: number;
   scale?: number;
 }
 interface Step {
   duration: number;
   dimensions: CardAnimationDimensions;
-  translateX: number;
-  translateY: number;
+  dx: number;
+  dy: number;
   translateFrom: "origin" | "destination";
 }

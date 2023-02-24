@@ -7,13 +7,13 @@ export const enactDrawCardEvent = (player: number, handId: string): DrawCard => 
   payload: { player: player, handId: handId },
 });
 
-// export const sendEmissaryToDispatch = (id: string, xPosition: number, yPosition: number): SendEmissaryToDispatch => ({
+// export const sendEmissaryToDispatch = (id: string, dx: number, dy: number): SendEmissaryToDispatch => ({
 //   type: "SEND_EMMISARY_TO_DISPATCH",
-//   payload: { cardId: id, xPosition: xPosition, yPosition: yPosition },
+//   payload: { cardId: id, dx: dx, dy: dy },
 // });
 
-// export const sendEmissaryFromDispatch = (id: string, xPosition: number, yPosition: number): SendEmissaryFromDispatch => ({
+// export const sendEmissaryFromDispatch = (id: string, dx: number, dy: number): SendEmissaryFromDispatch => ({
 //   type: "SEND_EMMISARY_FROM_DISPATCH",
-//   payload: { cardId: id, xPosition: xPosition, yPosition: yPosition },
+//   payload: { cardId: id, dx: dx, dy: dy },
 // });
 
