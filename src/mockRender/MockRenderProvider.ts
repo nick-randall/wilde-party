@@ -45,7 +45,7 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
 
       mockRenderIds = cards
         .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id && a.status === "awaitingEmissaryData"));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
     }
 
     const templatesWithAnimationFromThisPlace = animationTemplates[0]

@@ -61,7 +61,7 @@ type TransitionData = {
 //   startAnimationDuration?: number;
 //   wait: number;
 // };
-type  AnimationData = {
+type AnimationData = {
   cardId: string;
   keyframesString: Keyframes;
   totalDuration: number;
@@ -87,17 +87,19 @@ type ToOrFromWithScreenData = ToOrFrom & CompleteScreenData;
 type ViaWithScreenData = Via & CompleteScreenData;
 
 type AnimationTemplate = {
-  to: ToOrFromWithPossibleScreenData 
-  via?: ViaWithPossibleScreenData
-  from: ToOrFromWithPossibleScreenData ;
+  cardId: string;
+  to: ToOrFromWithPossibleScreenData;
+  via?: ViaWithPossibleScreenData;
+  from: ToOrFromWithPossibleScreenData;
 } & { id: string; status: AnimationTemplateStatus; animationType: AnimationType; delay?: number };
 
 type AnimationType = "handToTable" | "deckToHand" | "tableToDiscardPile";
 
-type MockRenderData = ScreenData & { cardId: string }
+type MockRenderData = ScreenData & { cardId: string };
 
 type CompleteAnimationTemplate = {
   id: string;
+  cardId: string;
   status: AnimationTemplateStatus;
   animationType: AnimationType;
   delay?: number;

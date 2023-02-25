@@ -167,7 +167,7 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): An
     }
   `;
 
-  return { cardId: data.to.cardId, keyframesString, totalDuration };
+  return { cardId: data.cardId, keyframesString, totalDuration };
 };
 
 interface KeyframePartData {

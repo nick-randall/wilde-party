@@ -68,9 +68,9 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     //   break;
     // return "rearrangingHand";
     case "destroy": {
-      const destroyedCardFromData: ToOrFrom | undefined = differences.find(change => change.from.place === "GCZ")?.from;
+      const destroyedCardFromData:  SnapshotDifference | undefined = differences.find(change => change.from.place === "GCZ");
       if (destroyedCardFromData) {
-        const destroyedCard: Via = { cardId: destroyedCardFromData.cardId, targetId: destroyedCardFromData.cardId };
+        const destroyedCard: Via = { targetId: destroyedCardFromData.cardId };
 
         let handCardFliesToDiscardPileViaDestroyedCard: AnimationTemplate = {} as AnimationTemplate;
         // let handCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;

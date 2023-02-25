@@ -1,11 +1,7 @@
 import { nonPlayerPlacesTypes, playerPlacesTypes } from "../helperFunctions/locateFunctions/locateFunctions";
 
 /**
- * This function returns all differences between two given snapshots, with one
- * exception: If a card has moved WITHIN a place the place will return that
- * there were no snapshotDifferences, since it only calls
- * let differences = prevCardIds.filter(card => !newCardIds.includes(card));
- * Therefore any rearranges within a place will not be found.
+ * This function returns all differences between two given snapshots
  *
  * Performance note: this function takes about (0.1ms -0.2 ms) when finding one snapshotDifference.
  * @param param0
@@ -34,8 +30,8 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
       } else {
         for (let i = 0; i < differences.length; i++) {
           let snapshotDifference: SnapshotDifference = {
+            cardId: differences[i],
             from: {
-              cardId: differences[i],
               place: place,
               placeId: placeId,
               player: player,
@@ -44,7 +40,6 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
             },
             // "to" gets placeholder values.
             to: {
-              cardId: differences[i],
               place: place,
               placeId: placeId,
               player: player,
@@ -70,8 +65,8 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
     } else {
       for (let i = 0; i < differences.length; i++) {
         let snapshotDifference: SnapshotDifference = {
+          cardId: differences[i],
           from: {
-            cardId: differences[i],
             place: place,
             placeId: placeId,
             player: null,
@@ -79,7 +74,6 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
             index: prevCardIds.indexOf(differences[i]),
           },
           to: {
-            cardId: differences[i],
             placeId: placeId,
             place: place,
             player: null,
@@ -101,9 +95,8 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
         const playerId = newSnapshot.players[player].id;
         const placeId = newSnapshot.players[player].places[place].id;
         for (i = 0; i < newSnapshot.players[player].places[place].cards.length; i++) {
-          if (newCardIds[i] === snapshotDifferences[snapshotDifference]["from"]["cardId"]) {
+          if (newCardIds[i] === snapshotDifferences[snapshotDifference]["cardId"]) {
             snapshotDifferences[snapshotDifference]["to"] = {
-              cardId: snapshotDifferences[snapshotDifference]["from"]["cardId"],
               place: place,
               placeId: placeId,
               player: player,
@@ -124,16 +117,15 @@ export const findSnapshotDifferences = (prevSnapshot: GameSnapshot, newSnapshot:
       const placeId = newSnapshot.nonPlayerPlaces[place].id;
 
       for (let i = 0; i < newSnapshot.nonPlayerPlaces[place].cards.length; i++) {
-        if (newCardIds[i] === snapshotDifferences[snapshotDifference]["from"]["cardId"]) {
+        if (newCardIds[i] === snapshotDifferences[snapshotDifference]["cardId"]) {
           snapshotDifferences[snapshotDifference]["to"] = {
-            cardId: snapshotDifferences[snapshotDifference]["from"]["cardId"],
             place: place,
             placeId: placeId,
             player: null,
             playerId: null,
             index: i,
           };
-          break;//i = newSnapshot.nonPlayerPlaces[place].cards.length;
+          break;
         }
       }
     }

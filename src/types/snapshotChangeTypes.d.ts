@@ -20,12 +20,12 @@ type SnapshotUpdate = {
 type SnapshotDifference = {
   from: ToOrFrom;
   to: ToOrFrom;
+  cardId: string;
 };
 
 type PendingTransition = SnapshotChange & { orderOfExecution: number };
 
 type ToOrFrom = {
-  cardId: string;
   place: PlaceType;
   placeId: string;
   player: number | null;
@@ -34,7 +34,6 @@ type ToOrFrom = {
 };
 
 type Via = {
-  cardId: string;
   targetId: string;
 };
 

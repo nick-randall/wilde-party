@@ -16,7 +16,7 @@ const handleNewMockRenderData =
     }
 
     else {
-      currTemplate = animationTemplates.flat().filter(t => t.from.cardId === cardId)[0];
+      currTemplate = animationTemplates.flat().filter(t => t.cardId === cardId)[0];
       if (toOrFrom === "from") {
         currTemplate = { ...currTemplate, from: { ...currTemplate.from, ...mockRenderData } };
       }

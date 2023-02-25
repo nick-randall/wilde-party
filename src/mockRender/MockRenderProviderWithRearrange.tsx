@@ -43,7 +43,7 @@ const MockRenderProviderWithRearrange: React.FC<MockRenderProviderWithRearrangeP
 
       mockRenderToIds = cards
         .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.to.cardId === id && a.status === "awaitingEmissaryData"));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
     }
 
     const templatesWithAnimationFromThisPlace = animationTemplates[0]
@@ -57,7 +57,7 @@ const MockRenderProviderWithRearrange: React.FC<MockRenderProviderWithRearrangeP
       }
       mockRenderFromIds = prevSnapshotCards
       .map(card => card.id)
-      .filter(id => templatesWithAnimationFromThisPlace.find(a => a.from.cardId === id && a.status === "awaitingEmissaryData"));
+      .filter(id => templatesWithAnimationFromThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
     }
    
   }

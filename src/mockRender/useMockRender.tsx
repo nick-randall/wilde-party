@@ -15,7 +15,7 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
   useEffect(() => {
     if (animationTemplates.length > 0) {
       animationTemplates[0].forEach(a => {
-        if (a.from.cardId === cardId && a.status === "awaitingEmissaryData") {
+        if (a.cardId === cardId && a.status === "awaitingEmissaryData") {
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();
@@ -29,8 +29,8 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
   useEffect(() => {
     if (animationTemplates.length > 0) {
       animationTemplates[0].forEach(a => {
-        if("via" in a && a.via?.cardId){
-        if (a.via.cardId === cardId && a.status === "awaitingEmissaryData") {
+        if("via" in a && a.cardId){
+        if (a.cardId === cardId && a.status === "awaitingEmissaryData") {
           if (ref !== null && ref?.current !== null) {
             const element = ref.current;
             const { left, top } = element.getBoundingClientRect();

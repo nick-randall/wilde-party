@@ -159,7 +159,7 @@ export const stateReducer = (
           return changeGroupStatus("awaitingEmissaryData", animationTemplateGroup);
         }
         return animationTemplateGroup.map(a => {
-          if (a.from.cardId === cardId) {
+          if (a.cardId === cardId) {
             // set the animationTemplateGroup to "complete"
             nextGroupIndex = index + 1;
             return { ...a, status: "complete" };
