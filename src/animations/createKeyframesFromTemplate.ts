@@ -48,6 +48,7 @@ class OffsetAndDurationMetaData {
   private final: OffsetAndDurationData;
   private intermediateSteps: OffsetAndDurationData[] = [];
   private delayDuration?: number;
+  private finalTransitionDuration: number = 0;
 
   constructor(finalScreenData: ToOrFromWithScreenData | ViaWithScreenData, transitionSpeed: number) {
     this.finalScreenData = finalScreenData;
@@ -57,7 +58,7 @@ class OffsetAndDurationMetaData {
 
   private _setTotalDuration() {
     this.totalDuration =
-      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
+      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0)+ (this.delayDuration ?? 0);
   }
 
   private _getDuration = (pair: Pair) => this._getDistance(pair) * this.transitionSpeed;
@@ -79,30 +80,41 @@ class OffsetAndDurationMetaData {
   };
 
   setInitialAndDelay(from: ToOrFromWithScreenData | ViaWithScreenData, delayDuration?: number) {
-    this.initial = this._getOffsetAndDurationData({ start: from, finish: from });
+    this.initial = { duration: 0, ...this._getOffset({ start: from, finish: this.finalScreenData }) }; //this._getOffsetAndDurationData({ start: from, finish: from });
     this.delay = { ...this.initial, duration: delayDuration ?? 0 };
     this.delayDuration = delayDuration;
   }
 
   _convertToPercent = (duration: number) => (duration / (this.totalDuration ?? 1)) * 100;
 
+  _getAccumulatedDurations = (arr: OffsetAndDurationData[]) => arr.reduce((acc, curr) => acc + curr.duration, 0);
+
   convertAllToPercent() {
     if (this.delay) {
+      this.intermediateSteps.splice(1, 0, {duration: 100, dx: 100, dy: 200});
+      this.intermediateSteps.splice(1, 0, {duration: 1300, dx: 100, dy: 200});
+
       this._setTotalDuration();
-      this.delay.duration = this._convertToPercent(this.delay.duration);
+      // this.delay.duration = this._convertToPercent(this.delay.duration);
     }
-    this.intermediateSteps = this.intermediateSteps.map(e => ({ ...e, duration: this._convertToPercent(e.duration) }));
+    this.intermediateSteps.unshift(this.delay);
+
+    this.intermediateSteps = this.intermediateSteps.map((e, i) => ({ ...e, duration: this._convertToPercent(e.duration) }));
+    let accumulatedDuration = 0;
+    const stepsWithPercent = []
+    for (let data of this.intermediateSteps) {
+      stepsWithPercent.push({...data, duration: accumulatedDuration})
+      accumulatedDuration += data.duration;
+    }
   }
 
   setIntermediateSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
     const lastIndex = trSteps.length - 1;
-    this.intermediateSteps = trSteps
-      .map((_, index, arr) => {
-        if (index === lastIndex) return { duration: 0, dx: 0, dy: 0 };
-        const pair: Pair = { start: arr[index], finish: arr[index + 1] };
-        return this._getOffsetAndDurationData(pair);
-      })
-      .slice(0, lastIndex - 1);
+    this.intermediateSteps = trSteps.map((_, index, arr) => {
+      if (index === lastIndex) return { duration: 0, dx: 0, dy: 0 };
+      const pair: Pair = { start: arr[index], finish: arr[index + 1] };
+      return this._getOffsetAndDurationData(pair);
+    });
   };
 
   private _getOffsetAndDurationData = (transitionPair: Pair) => {

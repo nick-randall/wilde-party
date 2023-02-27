@@ -108,6 +108,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           // Just adds a 300ms delay to each card dealt (after the first)
           // delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
           delay: index === 0 ? 0 : delay.short,
+          intermediateSteps:[]
         })),
       ];
     }
@@ -135,6 +136,8 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
+          intermediateSteps:[]
+
         })),
       ];
     }
