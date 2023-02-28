@@ -1,5 +1,3 @@
-import { css } from "styled-components";
-
 // in msPerPixel
 export const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, mediumLong: 1.5, long: 2 };
 export const delay = { veryShort: 200, short: 500, medium: 1000, long: 2000 };
@@ -39,12 +37,12 @@ interface Pair {
 }
 
 const unset = { dx: 0, dy: 0, duration: 0 };
-class OffsetAndDurationMetaData {
+class AnimationBuilder {
   private finalScreenData: ToOrFromWithScreenData | ViaWithScreenData;
   private transitionSpeed: number;
   private totalDuration?: number;
   private delay: OffsetAndDurationData = unset;
-  private intermediateSteps: OffsetAndDurationData[] = [];
+  private animationSteps: OffsetAndDurationData[] = [];
   private delayDuration?: number;
 
   constructor(finalScreenData: ToOrFromWithScreenData | ViaWithScreenData, transitionSpeed: number) {
@@ -54,7 +52,7 @@ class OffsetAndDurationMetaData {
 
   private _setTotalDuration() {
     this.totalDuration =
-      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
+      this.animationSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
   }
 
   private _getDuration = (pair: Pair) => this._getDistance(pair) * this.transitionSpeed;
@@ -83,9 +81,9 @@ class OffsetAndDurationMetaData {
 
   _getAccumulatedDurations = (arr: OffsetAndDurationData[]) => arr.reduce((acc, curr) => acc + curr.duration, 0);
 
-  setIntermediateSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
+  setAnimationSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
     const lastIndex = trSteps.length - 1;
-    this.intermediateSteps = trSteps.map((_, index, arr) => {
+    this.animationSteps = trSteps.map((_, index, arr) => {
       if (index === lastIndex) return { duration: 0, dx: 0, dy: 0 };
       const pair: Pair = { start: arr[index], finish: arr[index + 1] };
       return this._getOffsetAndDurationData(pair);
@@ -96,17 +94,17 @@ class OffsetAndDurationMetaData {
     if (this.delay) {
       this._setTotalDuration();
     }
-    const delay = {...this.intermediateSteps[0], duration: this.delayDuration ?? 0}
-    this.intermediateSteps.unshift(delay);
+    const delayStep = { ...this.animationSteps[0], duration: this.delayDuration ?? 0 };
+    this.animationSteps.unshift(delayStep);
 
-    this.intermediateSteps = this.intermediateSteps.map((e, i) => ({ ...e, duration: this._convertToPercent(e.duration) }));
+    this.animationSteps = this.animationSteps.map(e => ({ ...e, duration: this._convertToPercent(e.duration) }));
     let accumulatedDuration = 0;
     const stepsWithPercent = [];
-    for (let data of this.intermediateSteps) {
+    for (let data of this.animationSteps) {
       stepsWithPercent.push({ ...data, duration: accumulatedDuration });
       accumulatedDuration += data.duration;
     }
-    return stepsWithPercent;
+    this.animationSteps = stepsWithPercent;
   }
 
   private _getOffsetAndDurationData = (transitionPair: Pair) => {
@@ -119,9 +117,9 @@ class OffsetAndDurationMetaData {
     return { dx, dy, duration: distance * this.transitionSpeed };
   };
 
-  public getAllOffsetsAndPercents() {
+  public getTotalDurationAndSteps() {
     return {
-      intermediateSteps: this.intermediateSteps,
+      steps: this.animationSteps,
       totalDuration: this.totalDuration ?? 0,
     };
   }
@@ -132,28 +130,27 @@ interface OffsetAndDurationData {
   duration: number;
 }
 
-const getOffsetsAndPercents = (data: CompleteAnimationTemplate) => {
+const buildAnimation = (data: CompleteAnimationTemplate) => {
   const { from, intermediateSteps, to } = data;
 
   const transitionSpeed = transitionTypes[data.animationType].durationSpeed;
+  const animationBuilder = new AnimationBuilder(to, transitionSpeed);
 
-  const offsetAndDurationCalculator = new OffsetAndDurationMetaData(to, transitionSpeed);
-  const trSteps = [from, ...intermediateSteps, to];
-
-  offsetAndDurationCalculator.setDelayDuration(data.delay);
-  offsetAndDurationCalculator.setIntermediateSteps(trSteps);
-  const steps = offsetAndDurationCalculator.convertAllToPercent();
-  const {totalDuration} = offsetAndDurationCalculator.getAllOffsetsAndPercents()
-  return {steps, totalDuration}
+  animationBuilder.setDelayDuration(data.delay);
+  animationBuilder.setAnimationSteps([from, ...intermediateSteps, to]);
+  animationBuilder.convertAllToPercent();
+  return animationBuilder.getTotalDurationAndSteps();
+  
 };
 
 export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
   const { from, to } = data;
-  const { steps, totalDuration } = getOffsetsAndPercents(data);
+  const { steps, totalDuration } = buildAnimation(data);
 
+  // TODO: need a more flexible way to set whether from or to dimensions
   const keyframesString = steps.map(
     (step, i) => `${step.duration}% {
-    ${stringifyDimensions({ ...step, dimensions: i === 2 ? to.dimensions : from.dimensions })}
+    ${stringifyDimensions({ ...step, dimensions: i === steps.length - 1 ? to.dimensions : from.dimensions })}
   }`
   );
 
