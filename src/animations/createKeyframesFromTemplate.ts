@@ -1,7 +1,7 @@
 import { css } from "styled-components";
 
 // in msPerPixel
-export const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, long: 2 };
+export const transitionDuration = { veryShort: 0.2, short: 0.5, medium: 1, mediumLong: 1.5, long: 2 };
 export const delay = { veryShort: 200, short: 500, medium: 1000, long: 2000 };
 
 const handToTableDuration = transitionDuration.medium;
@@ -18,7 +18,7 @@ const transitionTypes: { [key in AnimationType]: TransitionTypeData } = {
     extraSteps: [],
   },
   deckToHand: {
-    durationSpeed: transitionDuration.long,
+    durationSpeed: transitionDuration.mediumLong,
     extraSteps: [],
   },
   tableToDiscardPile: {
@@ -43,22 +43,18 @@ class OffsetAndDurationMetaData {
   private finalScreenData: ToOrFromWithScreenData | ViaWithScreenData;
   private transitionSpeed: number;
   private totalDuration?: number;
-  private initial: OffsetAndDurationData = unset;
   private delay: OffsetAndDurationData = unset;
-  private final: OffsetAndDurationData;
   private intermediateSteps: OffsetAndDurationData[] = [];
   private delayDuration?: number;
-  private finalTransitionDuration: number = 0;
 
   constructor(finalScreenData: ToOrFromWithScreenData | ViaWithScreenData, transitionSpeed: number) {
     this.finalScreenData = finalScreenData;
     this.transitionSpeed = transitionSpeed;
-    this.final = { dx: 0, dy: 0, duration: 100 };
   }
 
   private _setTotalDuration() {
     this.totalDuration =
-      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0)+ (this.delayDuration ?? 0);
+      this.intermediateSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
   }
 
   private _getDuration = (pair: Pair) => this._getDistance(pair) * this.transitionSpeed;
@@ -79,34 +75,13 @@ class OffsetAndDurationMetaData {
     return { dx: start.dx - finish.dx, dy: start.dy - finish.dy };
   };
 
-  setInitialAndDelay(from: ToOrFromWithScreenData | ViaWithScreenData, delayDuration?: number) {
-    this.initial = { duration: 0, ...this._getOffset({ start: from, finish: this.finalScreenData }) }; //this._getOffsetAndDurationData({ start: from, finish: from });
-    this.delay = { ...this.initial, duration: delayDuration ?? 0 };
+  setDelayDuration(delayDuration?: number) {
     this.delayDuration = delayDuration;
   }
 
   _convertToPercent = (duration: number) => (duration / (this.totalDuration ?? 1)) * 100;
 
   _getAccumulatedDurations = (arr: OffsetAndDurationData[]) => arr.reduce((acc, curr) => acc + curr.duration, 0);
-
-  convertAllToPercent() {
-    if (this.delay) {
-      this.intermediateSteps.splice(1, 0, {duration: 100, dx: 100, dy: 200});
-      this.intermediateSteps.splice(1, 0, {duration: 1300, dx: 100, dy: 200});
-
-      this._setTotalDuration();
-      // this.delay.duration = this._convertToPercent(this.delay.duration);
-    }
-    this.intermediateSteps.unshift(this.delay);
-
-    this.intermediateSteps = this.intermediateSteps.map((e, i) => ({ ...e, duration: this._convertToPercent(e.duration) }));
-    let accumulatedDuration = 0;
-    const stepsWithPercent = []
-    for (let data of this.intermediateSteps) {
-      stepsWithPercent.push({...data, duration: accumulatedDuration})
-      accumulatedDuration += data.duration;
-    }
-  }
 
   setIntermediateSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
     const lastIndex = trSteps.length - 1;
@@ -116,6 +91,23 @@ class OffsetAndDurationMetaData {
       return this._getOffsetAndDurationData(pair);
     });
   };
+
+  convertAllToPercent() {
+    if (this.delay) {
+      this._setTotalDuration();
+    }
+    const delay = {...this.intermediateSteps[0], duration: this.delayDuration ?? 0}
+    this.intermediateSteps.unshift(delay);
+
+    this.intermediateSteps = this.intermediateSteps.map((e, i) => ({ ...e, duration: this._convertToPercent(e.duration) }));
+    let accumulatedDuration = 0;
+    const stepsWithPercent = [];
+    for (let data of this.intermediateSteps) {
+      stepsWithPercent.push({ ...data, duration: accumulatedDuration });
+      accumulatedDuration += data.duration;
+    }
+    return stepsWithPercent;
+  }
 
   private _getOffsetAndDurationData = (transitionPair: Pair) => {
     const { start, finish } = transitionPair;
@@ -129,10 +121,7 @@ class OffsetAndDurationMetaData {
 
   public getAllOffsetsAndPercents() {
     return {
-      initial: this.initial,
-      delay: this.delay,
       intermediateSteps: this.intermediateSteps,
-      final: this.final,
       totalDuration: this.totalDuration ?? 0,
     };
   }
@@ -151,33 +140,22 @@ const getOffsetsAndPercents = (data: CompleteAnimationTemplate) => {
   const offsetAndDurationCalculator = new OffsetAndDurationMetaData(to, transitionSpeed);
   const trSteps = [from, ...intermediateSteps, to];
 
-  offsetAndDurationCalculator.setInitialAndDelay(from, data.delay);
+  offsetAndDurationCalculator.setDelayDuration(data.delay);
   offsetAndDurationCalculator.setIntermediateSteps(trSteps);
-  offsetAndDurationCalculator.convertAllToPercent();
-
-  return offsetAndDurationCalculator.getAllOffsetsAndPercents();
+  const steps = offsetAndDurationCalculator.convertAllToPercent();
+  const {totalDuration} = offsetAndDurationCalculator.getAllOffsetsAndPercents()
+  return {steps, totalDuration}
 };
 
 export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): AnimationData => {
   const { from, to } = data;
-  const { initial, delay, intermediateSteps, final, totalDuration } = getOffsetsAndPercents(data);
+  const { steps, totalDuration } = getOffsetsAndPercents(data);
 
-  const keyframesString = css`
-    0% {
-      ${stringifyDimensions({ ...initial, dimensions: from.dimensions })}
-    }
-    ${delay.duration}% {
-      ${stringifyDimensions({ ...delay, dimensions: from.dimensions })}
-    }
-    ${intermediateSteps.map(
-      step => `${step.duration}% {
-      ${stringifyDimensions({ ...step, dimensions: to.dimensions })}
-    }`
-    )}
-    100% {
-      ${stringifyDimensions({ ...final, dimensions: to.dimensions })}
-    }
-  `;
+  const keyframesString = steps.map(
+    (step, i) => `${step.duration}% {
+    ${stringifyDimensions({ ...step, dimensions: i === 2 ? to.dimensions : from.dimensions })}
+  }`
+  );
 
   return { cardId: data.cardId, keyframesString, totalDuration };
 };
