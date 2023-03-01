@@ -37,12 +37,12 @@ const CardGroup = (props: CardGroupProps) => {
         // this here determines height of GCZ dragover area
         height: cardHeight * 1.5,
         // border: "thin black solid",
-        position:"relative"
+        position: "relative",
       }}
     >
       {cardGroup.cards.map((card, cardGroupIndex) =>
         mockRenderIds.includes(card.id) ? (
-          <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} key={card.id +"MockRender"}/>
+          <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} key={card.id + "MockRender"} />
         ) : (
           <Card
             offsetTop={getOffset(card, cardGroupIndex).top}

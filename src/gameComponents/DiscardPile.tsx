@@ -12,8 +12,8 @@ const DiscardPile: React.FC<DiscardPileProps> = ({ id }) => {
   return (
     <MockRenderProvider player={null} placeType={"discardPile"} placeId={id}>
       {(cards, mockRenderIds) => (
-        <div style={{  }}>
-          {cards.map((card, index) =>
+        <div style={{position:"relative"  }}>
+          {[...cards].reverse().map((card, index) =>
             mockRenderIds.includes(card.id) ? (
               <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} offsetLeft={index * 3} />
             ) : (

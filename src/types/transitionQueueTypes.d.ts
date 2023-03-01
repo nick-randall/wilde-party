@@ -91,6 +91,8 @@ type AnimationTemplate = {
   to: ToOrFromWithPossibleScreenData;
   via?: ViaWithPossibleScreenData;
   from: ToOrFromWithPossibleScreenData;
+  intermediateSteps?: ViaWithPossibleScreenData[];
+
 } & { id: string; status: AnimationTemplateStatus; animationType: AnimationType; delay?: number };
 
 type AnimationType = "handToTable" | "deckToHand" | "tableToDiscardPile";

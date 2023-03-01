@@ -29,15 +29,17 @@ const useMockRender = (cardId: string, dimensions: AllDimensions, rotateX: numbe
   useEffect(() => {
     if (animationTemplates.length > 0) {
       animationTemplates[0].forEach(a => {
-        if("via" in a && a.cardId){
-        if (a.cardId === cardId && a.status === "awaitingEmissaryData") {
-          if (ref !== null && ref?.current !== null) {
-            const element = ref.current;
-            const { left, top } = element.getBoundingClientRect();
-            const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX, ...dimensions } };
-            dispatch(handleNewMockRenderData(mockRenderData, "via"));
+        a.intermediateSteps?.forEach(step => {
+          if ("targetId" in step && step.targetId === cardId && a.status === "awaitingEmissaryData") {
+            
+            if (ref !== null && ref?.current !== null) {
+              const element = ref.current;
+              const { left, top } = element.getBoundingClientRect();
+              const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX, ...dimensions } };
+              dispatch(handleNewMockRenderData(mockRenderData, "intermediate"));
+            }
           }
-        }}
+        });
       });
     }
   }, [animationTemplates, cardId, dimensions, dispatch, ref, rotateX]);

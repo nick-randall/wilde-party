@@ -68,29 +68,28 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
     //   break;
     // return "rearrangingHand";
     case "destroy": {
-      const destroyedCardFromData:  SnapshotDifference | undefined = differences.find(change => change.from.place === "GCZ");
-      if (destroyedCardFromData) {
-        const destroyedCard: Via = { targetId: destroyedCardFromData.cardId };
+      const destroyedCardChangeData: SnapshotDifference | undefined = differences.find(change => change.from.place === "GCZ");
+      const handCardChangeData: SnapshotDifference | undefined = differences.find(change => change.from.place === "hand");
+      if (destroyedCardChangeData && handCardChangeData) {
+        const destroyedCardId = destroyedCardChangeData.cardId;
 
-        let handCardFliesToDiscardPileViaDestroyedCard: AnimationTemplate = {} as AnimationTemplate;
-        // let handCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
-        let destroyedCardFliesToDiscardPile: AnimationTemplate = {} as AnimationTemplate;
-        differences.forEach(change => {
-          if (change.from.place === "hand") {
-            // create two differences with orderOfExecution 0 and 1
-            // handCardFliesToDestroyedCard = { ...change, to: destroyedCard, id: uuidv4(), status: "awaitingEmissaryData" };
-            handCardFliesToDiscardPileViaDestroyedCard = {
-              ...change,
-              via: destroyedCard,
-              id: uuidv4(),
-              animationType: "handToTable",
-              status: "awaitingEmissaryData",
-            };
-          }
-          if (change.from.place === "GCZ") {
-            destroyedCardFliesToDiscardPile = { ...change, id: uuidv4(), animationType: "tableToDiscardPile", status: "awaitingEmissaryData" };
-          }
-        });
+        // create two differences with orderOfExecution 0 and 1
+        const handCardFliesToDestroyedCard = { ...handCardChangeData, targetId: destroyedCardId, id: uuidv4(), status: "awaitingEmissaryData" };
+        const handCardFliesToDiscardPileViaDestroyedCard : AnimationTemplate = {
+          ...handCardChangeData,
+          intermediateSteps: [handCardFliesToDestroyedCard],
+          id: uuidv4(),
+          animationType: "handToTable",
+          status: "awaitingEmissaryData",
+        };
+
+        const destroyedCardFliesToDiscardPile: AnimationTemplate = {
+          ...destroyedCardChangeData,
+          id: uuidv4(),
+          animationType: "tableToDiscardPile",
+          status: "awaitingEmissaryData",
+        };
+
         return [
           // [handCardFliesToDestroyedCard],
           [handCardFliesToDiscardPileViaDestroyedCard, destroyedCardFliesToDiscardPile],
@@ -108,7 +107,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           // Just adds a 300ms delay to each card dealt (after the first)
           // delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
           delay: index === 0 ? 0 : delay.short,
-          intermediateSteps:[]
+          intermediateSteps: [],
         })),
       ];
     }
@@ -136,8 +135,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           status: "awaitingEmissaryData",
           // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
-          intermediateSteps:[]
-
+          intermediateSteps: [],
         })),
       ];
     }

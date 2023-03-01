@@ -135,9 +135,10 @@ const buildAnimation = (data: CompleteAnimationTemplate) => {
 
   const transitionSpeed = transitionTypes[data.animationType].durationSpeed;
   const animationBuilder = new AnimationBuilder(to, transitionSpeed);
+  const trSteps = intermediateSteps ? [from, ...intermediateSteps, to] : [from, to];
 
   animationBuilder.setDelayDuration(data.delay);
-  animationBuilder.setAnimationSteps([from, ...intermediateSteps, to]);
+  animationBuilder.setAnimationSteps(trSteps);
   animationBuilder.convertAllToPercent();
   return animationBuilder.getTotalDurationAndSteps();
   
@@ -150,7 +151,7 @@ export const createKeyframesFromTemplate = (data: CompleteAnimationTemplate): An
   // TODO: need a more flexible way to set whether from or to dimensions
   const keyframesString = steps.map(
     (step, i) => `${step.duration}% {
-    ${stringifyDimensions({ ...step, dimensions: i === steps.length - 1 ? to.dimensions : from.dimensions })}
+    ${stringifyDimensions({ ...step, dimensions: i === 0 || i === 1 ? from.dimensions : to.dimensions })}
   }`
   );
 
