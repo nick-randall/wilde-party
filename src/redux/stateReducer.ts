@@ -186,9 +186,7 @@ export const stateReducer = (
       return { ...state, animationTemplates, animationData: [...state.animationData, ...newAnimations] };
     }
     case "CREATE_ANIMATIONS_FROM_TEMPLATES": {
-      console.log("new animation templates ready");
       const currTemplates: CompleteAnimationTemplate[] = action.payload;
-      // const newAnimations = currTemplates.map(t => new AnimationBuilder(t).getAnimationData());
       const newAnimations = createKeyframes(currTemplates);
       const animationTemplates = state.animationTemplates.map(group =>
         group.map(t => t.id).includes(currTemplates[0].id) ? changeGroupStatus("underway", group) : group

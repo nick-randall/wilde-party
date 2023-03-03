@@ -1,4 +1,4 @@
-import { transitionDuration } from "./createKeyframesFromTemplate";
+import { transitionDuration } from "./transitionSpeeds";
 
 interface Step {
   duration: number;
@@ -16,7 +16,7 @@ interface TransitionMetaData {
 
 export const transitionMetadata: { [key in AnimationType]: TransitionMetaData } = {
   handToTable: {
-    durationSpeed: transitionDuration.long,
+    durationSpeed: transitionDuration.medium,
     extraSteps: [],
   },
   deckToHand: {
@@ -24,7 +24,7 @@ export const transitionMetadata: { [key in AnimationType]: TransitionMetaData } 
     extraSteps: [],
   },
   tableToDiscardPile: {
-    durationSpeed: transitionDuration.long,
+    durationSpeed: transitionDuration.medium,
     extraSteps: [],
   },
 };

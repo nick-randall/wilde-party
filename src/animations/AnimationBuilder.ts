@@ -11,20 +11,32 @@ interface KeyframePartData {
   dimensions: CardAnimationDimensions;
 }
 
-interface OffsetAndDurationData {
+interface OffsetDurationDimensions {
   dx: number;
   dy: number;
   duration: number;
+  dimensions: CardAnimationDimensions;
 }
 
-const unset = { dx: 0, dy: 0, duration: 0 };
+const unset: OffsetDurationDimensions = {
+  dx: 0,
+  dy: 0,
+  duration: 0,
+  dimensions: {
+    cardHeight: 0,
+    cardWidth: 0,
+    rotateX: 0,
+    rotateY: 0,
+    scale: 0,
+  },
+};
 
 export class AnimationBuilder {
   private finalScreenData: ToOrFromWithScreenData | ViaWithScreenData;
   private transitionSpeed: number;
   public totalDuration?: number;
-  private delay: OffsetAndDurationData = unset;
-  private animationSteps: OffsetAndDurationData[] = [];
+  private delay: OffsetDurationDimensions = unset;
+  private animationSteps: OffsetDurationDimensions[] = [];
   public delayDuration?: number;
   public cardId = "";
   public keyframesString?: string;
@@ -51,7 +63,7 @@ export class AnimationBuilder {
 
   private _setTotalDuration() {
     this.totalDuration =
-      this.animationSteps.reduce((prev: number, curr: OffsetAndDurationData) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
+      this.animationSteps.reduce((prev: number, curr: OffsetDurationDimensions) => prev + curr.duration, 0) + (this.delayDuration ?? 0);
   }
 
   private _setCardId = (id: string) => (this.cardId = id);
@@ -82,10 +94,10 @@ export class AnimationBuilder {
 
   private _setAnimationSteps = (trSteps: (ToOrFromWithScreenData | ViaWithScreenData)[]) => {
     const lastIndex = trSteps.length - 1;
-    this.animationSteps = trSteps.map((_, index, arr) => {
-      if (index === lastIndex) return { duration: 0, dx: 0, dy: 0 };
+    this.animationSteps = trSteps.map((step, index, arr) => {
+      if (index === lastIndex) return { duration: 0, dx: 0, dy: 0, dimensions: step.dimensions };
       const pair: Pair = { start: arr[index], finish: arr[index + 1] };
-      return this._getOffsetAndDurationData(pair);
+      return this._getOffsetDurationDimensions(pair, step.dimensions);
     });
   };
 
@@ -106,25 +118,27 @@ export class AnimationBuilder {
     this.animationSteps = stepsWithPercent;
   }
 
-  private _getOffsetAndDurationData = (transitionPair: Pair) => {
+  private _getOffsetDurationDimensions = (transitionPair: Pair, dimensions: CardAnimationDimensions) => {
     const { start, finish } = transitionPair;
     const durationPair = { start, finish };
     const offsetPair = { start, finish: this.finalScreenData };
     const distance = this._getDuration(durationPair);
     const { dx, dy } = this._getOffset(offsetPair);
 
-    return { dx, dy, duration: distance * this.transitionSpeed };
+    return { dx, dy, duration: distance * this.transitionSpeed, dimensions };
   };
 
   private _createKeyframesFromTemplate = () => {
     const steps = this.animationSteps;
 
     // TODO: need a more flexible way to set whether from or to dimensions
-    this.keyframesString = steps.map(
-      (step, i) => `${Math.floor(step.duration)}% {
-      ${this._stringifyDimensions({ ...step, dimensions: i === 0 || i === 1 ? this.finalScreenData.dimensions : this.finalScreenData.dimensions })}
+    this.keyframesString = steps
+      .map(
+        step => `${Math.floor(step.duration)}% {
+      ${this._stringifyDimensions(step)}
     }`
-    ).join(' ');
+      )
+      .join(" ");
   };
 
   public getAnimationData = (): AnimationData => ({
@@ -133,7 +147,6 @@ export class AnimationBuilder {
     cardId: this.cardId,
   });
 }
-
 
 // alternative is to say "progress", meaning that half way between
 // one part of the animation and another it should have these values:

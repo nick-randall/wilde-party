@@ -1,5 +1,5 @@
 import { AnimationBuilder } from "./AnimationBuilder";
-
+// Handles animations that wait for each other
 const createKeyframes = (templates: CompleteAnimationTemplate[]) => {
   let waitingTemplates = templates.filter(template => template.hasOwnProperty("awaits"));
 
@@ -17,7 +17,7 @@ const createKeyframes = (templates: CompleteAnimationTemplate[]) => {
   const otherTemplates = templates.filter(template => !template.hasOwnProperty("awaits"));
   const otherKeyFrames = otherTemplates.map(template => new AnimationBuilder(template).getAnimationData());
 
-  return [...waitingKeyframes, ...otherKeyFrames];
+  return [...otherKeyFrames, ...waitingKeyframes];
 };
 
 export default createKeyframes;
