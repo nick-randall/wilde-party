@@ -16,7 +16,7 @@ interface TransitionMetaData {
 
 export const transitionMetadata: { [key in AnimationType]: TransitionMetaData } = {
   handToTable: {
-    durationSpeed: transitionDuration.medium,
+    durationSpeed: transitionDuration.mediumLong,
     extraSteps: [],
   },
   deckToHand: {
@@ -24,7 +24,7 @@ export const transitionMetadata: { [key in AnimationType]: TransitionMetaData } 
     extraSteps: [],
   },
   tableToDiscardPile: {
-    durationSpeed: transitionDuration.medium,
+    durationSpeed: transitionDuration.mediumLong,
     extraSteps: [],
   },
 };

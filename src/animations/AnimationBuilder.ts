@@ -131,7 +131,6 @@ export class AnimationBuilder {
   private _createKeyframesFromTemplate = () => {
     const steps = this.animationSteps;
 
-    // TODO: need a more flexible way to set whether from or to dimensions
     this.keyframesString = steps
       .map(
         step => `${Math.floor(step.duration)}% {
