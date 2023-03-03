@@ -5,8 +5,6 @@ import { produce } from "immer";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { changeGroupStatus } from "../animations/handleEndAnimation";
 import { initDevSettings } from "../gameSettings/devSettings";
-import { createKeyframesFromTemplate } from "../animations/createKeyframesFromTemplate";
-import { AnimationBuilder } from "../animations/AnimationBuilder";
 import createKeyframes from "../animations/createKeyframesFromTemplates";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });

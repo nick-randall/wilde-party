@@ -54,15 +54,17 @@ const SimulateNewSnapshotButton: React.FC<SimulateNewSnapshotButtonProps> = ({ c
 
   const simulateDestroy = () => {
     const changes: DraggedResult[] = [];
+    const destroyedGCZCardSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 0, numDraggedElements: 1 };
+    const destroyedGCZCardDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 1 };
+    const change2 = { source: destroyedGCZCardSource, destination: destroyedGCZCardDestination };
+    changes.push(change2);
+
     let playedFromHandSource: DragSourceData = { containerId: currentSnapshot.players[1].places["hand"].id, index: 0, numDraggedElements: 1 };
     let playedFromHandDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 0 };
     const change1 = { source: playedFromHandSource, destination: playedFromHandDestination };
     changes.push(change1);
 
-    const destroyedGCZCardSource: DragSourceData = { containerId: currentSnapshot.players[0].places["GCZ"].id, index: 0, numDraggedElements: 1 };
-    const destroyedGCZCardDestination: DragDestinationData = { containerId: currentSnapshot.nonPlayerPlaces["discardPile"].id, index: 1 };
-    const change2 = { source: destroyedGCZCardSource, destination: destroyedGCZCardDestination };
-    changes.push(change2);
+    
 
     const snapshotUpdater = new SnapshotUpdater(currentSnapshot, "destroy");
     snapshotUpdater.addChangesFromDifferentPlaces(changes);

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { delay } from "./createKeyframesFromTemplate";
 import { findSnapshotDifferences } from "./findSnapshotDifferences";
 import { changeGroupStatus } from "./handleEndAnimation";
+import { delay } from "./transitionSpeeds";
 
 export type SnapshotUpdateSource = "localUser" | "server";
 
