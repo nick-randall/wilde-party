@@ -92,6 +92,7 @@ type AnimationTemplate = {
   via?: ViaWithPossibleScreenData;
   from: ToOrFromWithPossibleScreenData;
   intermediateSteps?: ViaWithPossibleScreenData[];
+  awaits?: string;
 
 } & { id: string; status: AnimationTemplateStatus; animationType: AnimationType; delay?: number };
 
@@ -108,4 +109,5 @@ type CompleteAnimationTemplate = {
   to: ToOrFromWithScreenData;
   from: ToOrFromWithScreenData;
   intermediateSteps: ViaWithScreenData[];
+  awaits?: string;
 };

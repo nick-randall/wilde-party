@@ -71,6 +71,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       const destroyedCardChangeData: SnapshotDifference | undefined = differences.find(change => change.from.place === "GCZ");
       const handCardChangeData: SnapshotDifference | undefined = differences.find(change => change.from.place === "hand");
       if (destroyedCardChangeData && handCardChangeData) {
+        const awaitsId = uuidv4();
         const destroyedCardId = destroyedCardChangeData.cardId;
 
         // create two differences with orderOfExecution 0 and 1
@@ -78,7 +79,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         const handCardFliesToDiscardPileViaDestroyedCard : AnimationTemplate = {
           ...handCardChangeData,
           intermediateSteps: [handCardFliesToDestroyedCard],
-          id: uuidv4(),
+          id: awaitsId,
           animationType: "handToTable",
           status: "awaitingEmissaryData",
         };
@@ -88,6 +89,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           id: uuidv4(),
           animationType: "tableToDiscardPile",
           status: "awaitingEmissaryData",
+          awaits: awaitsId
         };
 
         return [
