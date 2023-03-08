@@ -4,7 +4,7 @@
  * or destination is still missing.
  */
 
-type AnimationTemplateStatus = "waitingInLine" | "awaitingEmissaryData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
+type AnimationTemplateStatus = "waitingInLine" | "awaitingScreenData" | "awaitingSimultaneousTemplates" | "underway" | "complete";
 
 type ToWithScreenData = ToOrFrom & CompleteScreenToData;
 type FromWithScreenData = ToOrFrom & CompleteScreenFromData;

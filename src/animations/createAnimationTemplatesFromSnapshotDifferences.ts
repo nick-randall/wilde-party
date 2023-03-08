@@ -46,7 +46,7 @@ const createAnimationTemplatesFromSnapshotDifferences = (
     if (templateGroups.length < 2) {
       return [];
     }
-    const updatedTemplateGroups = changeGroupStatus("awaitingEmissaryData", templateGroups[1]);
+    const updatedTemplateGroups = changeGroupStatus("awaitingScreenData", templateGroups[1]);
     templateGroups = [updatedTemplateGroups, ...templateGroups.slice(1)];
   }
   return templateGroups;
@@ -59,7 +59,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
       let animationTemplate: AnimationTemplate = {
         ...differences[0],
         animationType: "deckToHand",
-        status: "awaitingEmissaryData",
+        status: "awaitingScreenData",
         id: uuidv4(),
       };
       return [[animationTemplate]];
@@ -75,20 +75,20 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         const destroyedCardId = destroyedCardChangeData.cardId;
 
         // create two differences with orderOfExecution 0 and 1
-        const handCardFliesToDestroyedCard = { ...handCardChangeData, targetId: destroyedCardId, id: uuidv4(), status: "awaitingEmissaryData" };
+        const handCardFliesToDestroyedCard = { ...handCardChangeData, targetId: destroyedCardId, id: uuidv4(), status: "awaitingScreenData" };
         const handCardFliesToDiscardPileViaDestroyedCard : AnimationTemplate = {
           ...handCardChangeData,
           intermediateSteps: [handCardFliesToDestroyedCard],
           id: awaitsId,
           animationType: "handToTable",
-          status: "awaitingEmissaryData",
+          status: "awaitingScreenData",
         };
 
         const destroyedCardFliesToDiscardPile: AnimationTemplate = {
           ...destroyedCardChangeData,
           id: uuidv4(),
           animationType: "tableToDiscardPile",
-          status: "awaitingEmissaryData",
+          status: "awaitingScreenData",
           awaits: awaitsId
         };
 
@@ -105,7 +105,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           ...difference,
           animationType: "deckToHand",
           id: uuidv4(),
-          status: "awaitingEmissaryData",
+          status: "awaitingScreenData",
           // Just adds a 300ms delay to each card dealt (after the first)
           // delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
           delay: index === 0 ? 0 : delay.short,
@@ -124,7 +124,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
         ...differences[0],
         animationType: "deckToHand",
         id: uuidv4(),
-        status: "awaitingEmissaryData",
+        status: "awaitingScreenData",
       };
       return [[transitionTemplate]];
     }
@@ -134,7 +134,7 @@ const returnAnimationTemplates = (differences: SnapshotDifference[], snapshotUpd
           ...difference,
           animationType: "deckToHand",
           id: uuidv4(),
-          status: "awaitingEmissaryData",
+          status: "awaitingScreenData",
           // Just adds a 300ms delay to each card dealt (after the first)
           delay: (differences.length - 1) * delay.veryShort - index * delay.veryShort,
           intermediateSteps: [],

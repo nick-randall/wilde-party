@@ -8,6 +8,7 @@ export interface TableCardMockRenderProps {
   dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
+  toOrFrom?: "to" | "from";
 
   //cardGroupIndex: number;
 }
@@ -18,7 +19,7 @@ export interface TableCardMockRenderProps {
  * @returns
  */
 
-const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimensions, offsetLeft, offsetTop }) => {
+const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimensions, offsetLeft, offsetTop, toOrFrom }) => {
   const { tableCardzIndex, cardHeight, cardWidth } = dimensions;
   const mockRenderRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimen
     position: "absolute",
   };
   /**
-   * Called after the Mock Render component is created, passing its 
+   * Called after the Mock Render component is created, passing its
    * location and dimensions to the SnapshotChanges object...
    */
   useEffect(() => {
@@ -40,9 +41,9 @@ const TableCardMockRender: React.FC<TableCardMockRenderProps> = ({ cardId, dimen
       const element = mockRenderRef.current;
       const { left, top } = element.getBoundingClientRect();
       const mockRenderData = { cardId, dx: left, dy: top, dimensions: { rotateX: 0, ...dimensions } };
-      dispatch(handleNewMockRenderData(mockRenderData, "to"));
+      dispatch(handleNewMockRenderData(mockRenderData, toOrFrom ?? "to"));
     }
-  }, [dimensions, dispatch, cardId]);
+  }, [dimensions, dispatch, cardId, toOrFrom]);
 
   return (
     <div

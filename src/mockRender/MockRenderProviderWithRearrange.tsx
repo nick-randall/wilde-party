@@ -43,11 +43,11 @@ const MockRenderProviderWithRearrange: React.FC<MockRenderProviderWithRearrangeP
 
       mockRenderToIds = cards
         .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingScreenData"));
     }
 
     const templatesWithAnimationFromThisPlace = animationTemplates[0]
-      .filter(a => a.status === "awaitingEmissaryData")
+      .filter(a => a.status === "awaitingScreenData")
       .filter(a => "placeId" in a.from && a.from.placeId === placeId);
     if (templatesWithAnimationFromThisPlace.length > 0) {
       if (player === null) {
@@ -57,7 +57,7 @@ const MockRenderProviderWithRearrange: React.FC<MockRenderProviderWithRearrangeP
       }
       mockRenderFromIds = prevSnapshotCards
       .map(card => card.id)
-      .filter(id => templatesWithAnimationFromThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
+      .filter(id => templatesWithAnimationFromThisPlace.find(a => a.cardId === id && a.status === "awaitingScreenData"));
     }
    
   }

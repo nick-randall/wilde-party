@@ -34,6 +34,13 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
     const templatesWithAnimationToThisPlace = animationTemplates[0]
       .filter(a => a.status !== "waitingInLine" && a.status !== "awaitingSimultaneousTemplates")
       .filter(a => "placeId" in a.to && a.to.placeId === placeId) 
+    
+    // these templates "from" this place are already underway--
+    // they are not part of the mock render, they are for displaying
+    // the animated card.
+    const templatesWithAnimationFromThisPlace = animationTemplates[0]
+      .filter(a => a.status === "underway")
+      .filter(a => "placeId" in a.from && a.from.placeId === placeId);
 
     if (templatesWithAnimationToThisPlace.length > 0) {
 
@@ -45,12 +52,9 @@ const mapStateToProps = (state: RootState, ownProps: MockRenderProviderProps) =>
 
       mockRenderIds = cards
         .map(card => card.id)
-        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingEmissaryData"));
+        .filter(id => templatesWithAnimationToThisPlace.find(a => a.cardId === id && a.status === "awaitingScreenData"));
     }
 
-    const templatesWithAnimationFromThisPlace = animationTemplates[0]
-      .filter(a => a.status === "underway")
-      .filter(a => "placeId" in a.from && a.from.placeId === placeId);
     if (templatesWithAnimationFromThisPlace.length > 0) {
       if (player === null) {
         cards = newSnapshots[0].nonPlayerPlaces[placeType].cards;

@@ -156,7 +156,7 @@ export const stateReducer = (
       const animationTemplates = state.animationTemplates.map((animationTemplateGroup, index) => {
         // identify the "next in line" animationTemplateGroup to be updated after previous animationTemplateGroup is set to "complete"
         if (index === nextGroupIndex) {
-          return changeGroupStatus("awaitingEmissaryData", animationTemplateGroup);
+          return changeGroupStatus("awaitingScreenData", animationTemplateGroup);
         }
         return animationTemplateGroup.map(a => {
           if (a.cardId === cardId) {

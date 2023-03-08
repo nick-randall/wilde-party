@@ -21,10 +21,11 @@ export interface CardProps {
   placeId: string;
   placeType: PlaceType;
   showNotAmongHighlights?: boolean;
+  isPlaceHolder?: boolean
 }
 
 const Card = (props: CardProps) => {
-  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image, placeType } = props;
+  const { id, placeId, index, dimensions, offsetTop, offsetLeft, image, placeType, isPlaceHolder } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
@@ -51,7 +52,7 @@ const Card = (props: CardProps) => {
 
   const mockRenderRef = useRef<HTMLImageElement>(null);
   useMockRender(id, dimensions, 0, mockRenderRef);
-
+  if(isPlaceHolder) return <div style={{height: cardHeight, width: cardWidth}}/>
   return (
    
         <DropZoneWrapper id={placeId} providedIndex={index} insertToTheRight isDropDisabled>
