@@ -21,7 +21,6 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   const { id, player } = props;
   const dimensions = getDimensions(player, "GCZ");
   const devSettings = useSelector((state: RootState) => state.devSettings);
-  const animationData = useSelector((state: RootState) => state.animationData);
 
   return (
     <MockRenderProviderWithRearrange player={player} placeType="GCZ" placeId={id}>
