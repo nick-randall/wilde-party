@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { getDimensions } from "../helperFunctions/getDimensions";
-import MockRenderProviderWithRearrange from "../mockRender/NewMockRenderProvider";
+import MockRenderProviderWithRearrange from "../mockRender/MockRenderProviderWithRearrange";
 import TableCardMockRender from "../mockRender/TableCardMockRender";
 import { RootState } from "../redux/store";
 import Card from "./Card";

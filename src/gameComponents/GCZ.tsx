@@ -4,6 +4,7 @@ import DraggerContainer from "../dndcomponents/DraggerContainer";
 import { getDimensions } from "../helperFunctions/getDimensions";
 import { getCardGroupsObjs } from "../helperFunctions/groupGCZCards";
 import MockRenderProvider from "../mockRender/MockRenderProvider";
+import NewMockRenderProvider from "../mockRender/NewMockRenderProvider";
 import { RootState } from "../redux/store";
 import CardGroup from "./CardGroup";
 import GhostCardGroup from "./GhostCardGroup";
@@ -37,7 +38,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
   const devSettings = useSelector((state: RootState) => state.devSettings);
 
   return (
-    <MockRenderProvider placeId={id} placeType="GCZ" player={0}>
+    <NewMockRenderProvider placeId={id} placeType="GCZ" player={0}>
       {(cards, mockRenderIds) => (
         <div
           id="pl0GCZ"
@@ -85,7 +86,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
           </DraggerContainer>
         </div>
       )}
-    </MockRenderProvider>
+    </NewMockRenderProvider>
   );
 }
 
