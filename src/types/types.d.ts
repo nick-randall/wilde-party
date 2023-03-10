@@ -1,4 +1,4 @@
-type CardGroup = GameCard[];
+type CardGroup = UiGameCard[];
 
 // type PlaceDimensions = {
 //   cardHeight: number;

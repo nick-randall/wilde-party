@@ -1,6 +1,7 @@
 import { FC } from "react";
 import HandCardMockRender from "../mockRender/HandCardMockRender";
 import TableCardMockRender from "../mockRender/TableCardMockRender";
+import { UiGameCard } from "../types/uiTypes";
 import Card from "./Card";
 import EnemyCard from "./EnemyCard";
 import EnemyHandCard from "./EnemyHandCard";
@@ -8,21 +9,32 @@ import HandCard from "./HandCard";
 import PlaceHolder from "./Placeholder";
 
 interface CardElementProps {
-  card: GameCard;
+  card: UiGameCard;
   cardType: "tableCard" | "enemyTableCard" | "handCard" | "enemyHandCard";
   placeType: PlaceType;
   dimensions: AllDimensions;
   numHandCards?: number;
   spread?: number;
-  cardElementDisplayType: "placeholder" | "mockToRender" | "mockFromRender" | "card";
+  offsetTop?: number;
+  offsetLeft?: number;
+  // cardElementDisplayType: "placeholder" | "mockToRender" | "mockFromRender" | "card";
 }
 
 const CardElement: FC<CardElementProps> = (props: CardElementProps) => {
-  const { cardType, cardElementDisplayType, card, placeType, dimensions, spread, numHandCards } = props;
+  const {
+    cardType,
+    card: { cardElementDisplayType, ...card },
+    placeType,
+    dimensions,
+    spread,
+    numHandCards,
+    offsetLeft,
+    offsetTop
+  } = props;
   switch (cardElementDisplayType) {
     case "card":
       if (cardType === "tableCard") {
-        return <Card {...card} placeType={placeType} dimensions={dimensions} />;
+        return <Card {...card} placeType={placeType} dimensions={dimensions} offsetLeft={offsetLeft} offsetTop={offsetTop}/>;
       } else if (cardType === "handCard") {
         return <HandCard {...card} handId={card.placeId} dimensions={dimensions} numHandCards={numHandCards ?? 1} spread={spread ?? 0} />;
       } else if (cardType === "enemyHandCard") {

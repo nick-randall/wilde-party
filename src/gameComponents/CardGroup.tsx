@@ -1,11 +1,12 @@
 import TableCardMockRender from "../mockRender/TableCardMockRender";
+import { UiGameCard } from "../types/uiTypes";
 import Card from "./Card";
+import CardElement from "./CardElement";
 
 export interface CardGroupProps {
   cardGroup: NewCardGroupObj;
   index: number;
   dimensions: AllDimensions;
-  mockRenderIds: string[];
   GCZId: string;
 }
 
@@ -15,10 +16,10 @@ interface CardOffset {
 }
 
 const CardGroup = (props: CardGroupProps) => {
-  const { cardGroup, index, dimensions, GCZId, mockRenderIds } = props;
+  const { cardGroup, dimensions } = props;
   const { cardHeight, cardLeftSpread } = dimensions;
 
-  const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
+  const getOffset = (card: UiGameCard, cardGroupIndex: number): CardOffset => {
     if (card.cardType === "bff") return { top: cardHeight / 2, left: cardLeftSpread / 2 };
     if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
     if (cardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
@@ -40,24 +41,18 @@ const CardGroup = (props: CardGroupProps) => {
         position: "relative",
       }}
     >
-      {cardGroup.cards.map((card, cardGroupIndex) =>
-        mockRenderIds.includes(card.id) ? (
-          <TableCardMockRender cardId={card.id} index={index} dimensions={dimensions} key={card.id + "MockRender"} />
-        ) : (
-          <Card
-            offsetTop={getOffset(card, cardGroupIndex).top}
-            offsetLeft={getOffset(card, cardGroupIndex).left}
-            //cardGroupIndex={cardGroupIndex}
-            id={card.id}
-            image={card.image}
-            index={index}
-            dimensions={dimensions}
-            key={card.id}
-            placeId={GCZId}
-            placeType="GCZ"
-          />
-        )
-      )}
+      {cardGroup.cards.map((card, cardGroupIndex) => (
+        <CardElement
+          offsetTop={getOffset(card, cardGroupIndex).top}
+          offsetLeft={getOffset(card, cardGroupIndex).left}
+          //cardGroupIndex={cardGroupIndex}
+          card={card}
+          cardType="tableCard"
+          dimensions={dimensions}
+          key={card.id}
+          placeType="GCZ"
+        />
+      ))}
     </div>
   );
 };

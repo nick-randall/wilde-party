@@ -39,7 +39,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
 
   return (
     <NewMockRenderProvider placeId={id} placeType="GCZ" player={0}>
-      {(cards, mockRenderIds) => (
+      {(cards) => (
         <div
           id="pl0GCZ"
           className={devSettings.grid.on ? "place-grid" : ""}
@@ -78,7 +78,7 @@ function GCZ(props: GCZProps & GCZReduxProps) {
               <Dragger draggerId={cardGroup.id} index={index} containerId={id} key={cardGroup.id} numElementsAt={numElementsAt}>
                 {draggerProps => (
                   <div ref={draggerProps.ref} onMouseDown={draggerProps.handleDragStart}>
-                    <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id} mockRenderIds={mockRenderIds} />
+                    <CardGroup cardGroup={cardGroup} index={index} dimensions={dimensions} key={cardGroup.id} GCZId={id} />
                   </div>
                 )}
               </Dragger>
