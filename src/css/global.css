@@ -1,19 +1,29 @@
-div{
-  margin:0px;
-  user-drag: none; 
-user-select: none;
--moz-user-select: none;
--webkit-user-drag: none;
--webkit-user-select: none;
--ms-user-select: none;
-  
+div {
+  margin: 0px;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
-body{
+body {
   background-color: blue;
-  margin:0px;
+  margin: 0px;
 }
 
 @font-face {
   font-family: wilde-party-font;
-  src: url('Grandstander-clean.otf');
+  src: url("Grandstander-clean.otf");
+}
+
+.splash-screen {
+  background-image: url("./splashscreen.jpg");
+  background-size: cover;
+  height: 100vh;
+}
+.background-tile {
+  background-image: url("./background_tile.jpg");
+  background-repeat: repeat;
+  height: 100vh;
 }

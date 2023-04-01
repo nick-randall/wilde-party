@@ -31,7 +31,7 @@ export const Table = () => {
   }, [dispatch, gameStarted]);
 
   return (
-    <div>
+    <div className="background-tile">
       <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
         <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
 

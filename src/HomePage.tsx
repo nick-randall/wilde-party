@@ -1,6 +1,7 @@
 import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
+import "./css/global.css";
 
 type GameStartedProps = {
   imageHeight?: number;
@@ -24,8 +25,8 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 
 const HomePage: React.FC = () => {
   return (
-    // <div style={{backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover"}}>
-      /* <img
+    <div className="splash-screen">
+    {/* <img
         src="./images/splashscreen.jpg"
         alt="background"
         style={{
@@ -36,7 +37,7 @@ const HomePage: React.FC = () => {
           position: "fixed",
           backgroundRepeat: "repeat"
         }}
-      /> */
+      />  */}
       <div style={{ position: "relative", display: "flex", justifyContent: "center", backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover", }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ height: "65vh" }} />
@@ -53,7 +54,7 @@ const HomePage: React.FC = () => {
         
       </div>
 
-    // </div>
+    </div>
     // </div>
   );
 };
