@@ -8,8 +8,9 @@ div {
   -ms-user-select: none;
 }
 body {
-  background-color: blue;
-  margin: 0px;
+  background-image: url("./background_tile.jpg");
+  background-repeat: repeat;
+  background-size: 130px;  margin: 0px;
 }
 
 @font-face {
@@ -25,5 +26,5 @@ body {
 .background-tile {
   background-image: url("./background_tile.jpg");
   background-repeat: repeat;
-  height: 100vh;
+  background-size: 130px;
 }
