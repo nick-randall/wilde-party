@@ -18,12 +18,12 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       const newTransition = buildTransitionFromChanges({ prevSnapshot, newSnapshot }, "drawCard", 0);
       dispatch(addTransition(newTransition));
     } else {
-      setTimeout(() => dealStartingGuest(player), 10);
+      setTimeout(() => dealStartingGuest(player), 250);
     }
   };
 
-
   const dealCard = (player: number, finalCard: boolean) => {
+    console.log(`dealing card ${finalCard}`);
     const handId = gameSnapshot.players[player].places.hand.id;
     const prevSnapshot = getState().gameSnapshot;
     const transitionData = getState().transitionData;
@@ -38,8 +38,10 @@ export const dealInitialHands = () => (dispatch: Function, getState: () => RootS
       dispatch(addTransition(newTransition));
       // Would be better to use getState().gameSnapshot...numHandCards for each player
       // to determine if no more cards should be dealt
-      if (finalCard) dispatch({ type: "END_CURRENT_PHASE" });
-    } else setTimeout(() => dealCard(player, finalCard), 50);
+      if (finalCard) {
+        dispatch({ type: "END_CURRENT_PHASE" });
+      }
+    } else setTimeout(() => dealCard(player, finalCard), 950);
   };
 
   for (let i = 0; i < numPlayers; i++) dealStartingGuest(i);

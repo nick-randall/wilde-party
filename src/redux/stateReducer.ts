@@ -3,14 +3,12 @@ import { addDraggedUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { locate } from "../helperFunctions/locateFunctions";
-import { initialGameSnapshot } from "../initialCards";
 import { Action } from "./actions";
 import { enchant } from "../helperFunctions/gameSnapshotUpdates/enchant";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
-import { generateGame } from "../createGameSnapshot/old_create_Game";
 import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";

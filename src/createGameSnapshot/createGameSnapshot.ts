@@ -9,8 +9,8 @@ export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
   let { deck: deckCards, deckId } = getPreppedDeck();
   const startingGuests = createStartingGuests(numPlayers);
-  deckCards.unshift(...startingGuests)
-  
+  deckCards.unshift(...startingGuests);
+
   for (let i = 0; i < numPlayers; i++) {
     const playerId = uuidv4();
     const GCZId = uuidv4();
@@ -55,12 +55,9 @@ export const createGameSnapshot = () => {
         },
       },
     };
-    
+
     players.push(player);
   }
-
-  
-
 
   const gameSnapshot: GameSnapshot = {
     current: {
@@ -80,6 +77,5 @@ export const createGameSnapshot = () => {
       },
     },
   };
-
   return gameSnapshot;
 };
