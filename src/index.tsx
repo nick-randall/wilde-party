@@ -1,29 +1,24 @@
-import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Table } from "./Table";
 import store from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import  HomePage  from "./HomePage";
-
-
+import HomePage from "./HomePage";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-            {/* can put layout wrapper here*
+  <Provider store={store}>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        {/* can put layout wrapper here*
             <Route /> */}
-            <Route path= "game" element={<Table />} />
-          
-          {/* <Table /> */}
-        </Routes>
-      </Router>
-    </Provider>
-  </React.StrictMode>,
+        <Route path="game" element={<Table />} />
+
+        {/* <Table /> */}
+      </Routes>
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 
