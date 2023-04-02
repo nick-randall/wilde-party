@@ -7,19 +7,19 @@ div {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-body {
+/* body {
   background-image: url("./background_tile.jpg");
   background-repeat: repeat;
   background-size: 130px;  margin: 0px;
-}
+} */
 
 @font-face {
   font-family: wilde-party-font;
   src: url("Grandstander-clean.otf");
 }
 
-/* .splash-screen {
+.splash-screen {
   background-image: url("./splashscreen.jpg");
   background-size: cover;
   height: 100vh;
-} */
+}
