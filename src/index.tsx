@@ -14,7 +14,7 @@ ReactDOM.render(
         {/* can put layout wrapper here*
             <Route /> */}
         <Route path="game" element={<Table />} />
-
+        <Route path="*" element={<HomePage />} />
         {/* <Table /> */}
       </Routes>
     </Router>

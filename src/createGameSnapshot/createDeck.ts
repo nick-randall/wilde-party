@@ -15,7 +15,6 @@ export const createDeck = () => {
   deck.push(...unwanteds);
   deck.push(...enchantCards);
   //deck.push(...destroyCards);
-
   return deck;
 };
 

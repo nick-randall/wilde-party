@@ -86,13 +86,13 @@ type BlitzActionType = "";
 
 type ActionType = PlaceActionType | CardActionType | PlayerActionType;
 
-type HighlightType = "card" | "place" | "player" | "";
+type CardHighlightType = "card" | "place" | "player" | "";
 
 type TargetPlayerType = "enemy" | "self";
 
 type CardAction = {
   actionType: ActionType;
-  highlightType: HighlightType;
+  highlightType: CardHighlightType;
   targetPlayerType: TargetPlayerType;
   cardHighlightType?: CardType;
   placeHighlightType?: PlaceType;

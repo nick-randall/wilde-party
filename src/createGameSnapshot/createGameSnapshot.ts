@@ -77,5 +77,6 @@ export const createGameSnapshot = () => {
       },
     },
   };
+  console.log(JSON.stringify(gameSnapshot));
   return gameSnapshot;
 };
