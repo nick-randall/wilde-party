@@ -7,29 +7,29 @@ type GCZRearrangingData = {
 }
 
 type SimpleGCZRearrangingData = {
-  cardGroupId: string,
+  cardGroupid: number,
   index: number,
 }
 
 
 type RearrangingData = {
-  placeId: string,
+  placeId: number,
   card: GameCard,
   index: number
 }
 
 type SimpleRearrangingData = {
-  placeId: string,
-  draggableId: string,
+  placeId: number,
+  draggableId: number,
   sourceIndex: number
 }
 
 type DraggedOverData = {
-  placeId: string,
+  placeId: number,
   index: number
 }
 
 type UpdateDragData = {
-  droppableId: string,
+  droppableId: number,
   index: number
 }

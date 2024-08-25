@@ -7,7 +7,7 @@ import { RootState } from "./redux/store";
 interface SpecialsCardsColumnProps {
   cards: GameCard[];
   dimensions: AllDimensions;
-  specialsZoneId: string;
+  specialsZoneid: number;
   columnIndex: number;
 }
 

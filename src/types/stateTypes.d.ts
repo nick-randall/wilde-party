@@ -8,12 +8,12 @@ type GCZRearrangingData = {
 
 
 type RearrangingData = {
-  placeId: string,
+  placeId: number,
   card: GameCard,
   index: number
 }
 
 type DraggedOverData = {
-  placeId: string,
+  placeId: number,
   index: number
 }

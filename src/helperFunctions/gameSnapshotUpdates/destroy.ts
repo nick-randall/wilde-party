@@ -8,7 +8,7 @@ function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
-export const destroyCardUpdateSnapshot = (targetCardId: string, gameSnapshot: GameSnapshot): GameSnapshot =>
+export const destroyCardUpdateSnapshot = (targetCardid: number, gameSnapshot: GameSnapshot): GameSnapshot =>
   produce(gameSnapshot, draft => {
     const { player } = locate(targetCardId, gameSnapshot);
     if (player !== null) {

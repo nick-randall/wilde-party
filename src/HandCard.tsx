@@ -7,7 +7,7 @@ import { CardInspector } from "./renderPropsComponents/CardInspector";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
 export interface HandCardProps {
-  id: string;
+  id: number;
   index: number;
   image: string;
   dimensions: AllDimensions;

@@ -7,10 +7,10 @@ export const moveItem = (currIndex: number, newIndex: number, array: any) => {
 };
 
 
-// const curriedNormalizePlaceCardsFromSnapshot = (gameSnapshot: GameSnapshot) => (placeId: string) =>
+// const curriedNormalizePlaceCardsFromSnapshot = (gameSnapshot: GameSnapshot) => (placeId: number) =>
 //   R.pipe(getCardGroupObjsFromSnapshot, filterAllByPlace(placeId), extractCards, assignNewIndexes, R.flatten)(gameSnapshot);
 
-// export const normalizePlaceCards = (gameSnapshot: GameSnapshot, placeId: string) => curriedNormalizePlaceCardsFromSnapshot(gameSnapshot)(placeId);
+// export const normalizePlaceCards = (gameSnapshot: GameSnapshot, placeId: number) => curriedNormalizePlaceCardsFromSnapshot(gameSnapshot)(placeId);
 
 
 // export const rearrange = (currIndex: number, newIndex: number, gameSnapshot: GameSnapshot) =>

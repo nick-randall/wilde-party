@@ -11,7 +11,7 @@ import React from "react";
 
 
 export interface EnemyCardProps {
-  id: string;
+  id: number;
   index: number;
   image: string;
   dimensions: AllDimensions;

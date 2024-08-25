@@ -11,7 +11,7 @@ import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearra
 import { RootState } from "./redux/store";
 
 interface GCZProps {
-  id: string;
+  id: number;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
   playerZoneSize: {width: number, height: number}
@@ -47,7 +47,7 @@ function GCZ(props: GCZProps) {
 
 
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={!allowDropping}>
+    <Droppable droppableId={`${id}`} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
         className="pl0GCZ"

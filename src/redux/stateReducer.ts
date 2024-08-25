@@ -9,7 +9,6 @@ import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour"
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
-import { createGameSnapshot } from "../createGameSnapshot/createGameSnapshot";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { destroyCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/destroy";
 
@@ -26,21 +25,21 @@ export interface State {
   screenSize: { width: number; height: number };
   transitionData: TransitionData[];
   dragUpdate: UpdateDragData;
-  BFFdraggedOverSide: string | undefined;
+  BFFdraggedOverSide: number | undefined;
   rearrangingData: SimpleRearrangingData;
   draggedHandCard: GameCard | undefined;
-  highlights: string[];
+  highlights: number[];
   highlightType: string;
   aiPlaying: string;
 }
 
-const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "GCZ";
+const isGCZ = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(parseInt(source.droppableId), gameSnapshot).place === "GCZ";
 
-const isSpecialsZone = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(source.droppableId, gameSnapshot).place === "specialsZone";
+const isSpecialsZone = (source: DraggableLocation, gameSnapshot: GameSnapshot) => locate(parseInt(source.droppableId), gameSnapshot).place === "specialsZone";
 
-const isSpecialsColumn = (droppableId: string, gameSnapshot: GameSnapshot) => locate(droppableId.slice(1), gameSnapshot).place === "specialsZone";
+const isSpecialsColumn = (droppableId: number, gameSnapshot: GameSnapshot) => locate(droppableId.slice(1), gameSnapshot).place === "specialsZone";
 
-const getDraggedHandCard = (state: State, draggableId: string | undefined) =>
+const getDraggedHandCard = (state: State, draggableId: number | undefined) =>
   draggableId ? state.gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
 const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
@@ -51,10 +50,10 @@ export const stateReducer = (
   state: State = {
     gameSnapshot: createGameSnapshot(),
     screenSize: getScreenSize(),
-    dragUpdate: { droppableId: "", index: -1 },
+    dragUpdate: { droppableId: -1, index: -1 },
     BFFdraggedOverSide: undefined,
     transitionData: [],
-    rearrangingData: { placeId: "", draggableId: "", sourceIndex: -1 },
+    rearrangingData: { placeId: -1, draggableId: -1, sourceIndex: -1 },
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",

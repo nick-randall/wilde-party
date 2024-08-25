@@ -12,7 +12,7 @@ import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 
 interface SpecialsZoneProps {
   specialsCards: GameCard[];
-  id: string;
+  id: number;
   playerZoneSize: { width: number; height: number };
 }
 

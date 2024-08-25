@@ -4,7 +4,7 @@ import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
 
 export const getPlacesLayout = (
-  id: string,
+  id: number,
   playerZoneSize: { width: number; height: number },
   state: RootState | null = null
 ): { x: number; y: number } => {

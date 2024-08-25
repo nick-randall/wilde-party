@@ -3,7 +3,7 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 
 interface EnemyGCZProps {
-  id: string;
+  id: number;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
   playerZoneSize: { width: number; height: number };

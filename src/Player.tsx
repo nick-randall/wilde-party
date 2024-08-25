@@ -8,7 +8,7 @@ import { SpecialsZone } from "./SpecialsZone";
 import UWZ from "./UWZ";
 
 interface PlayerProps {
-  id: string;
+  id: number;
   screenSize: { width: number; height: number };
   places: PlayerPlaces;
   current: boolean

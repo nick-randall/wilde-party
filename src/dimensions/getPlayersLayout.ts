@@ -17,7 +17,7 @@ const getEnemyPlayerHeight = (player: number | null, gameSnapshot: GameSnapshot,
   return (screenHeight / 2) + (playerIsCurrentPlayer ? handHeight : 0)
 }
 
-const getPlayersLayout = (screenSize: { width: number; height: number }, playerId: string | null, state: RootState | null = null): PlayerLayout => {
+const getPlayersLayout = (screenSize: { width: number; height: number }, playerid: number | null, state: RootState | null = null): PlayerLayout => {
   if (state === null) state = store.getState();
   const { gameSnapshot } = state;
   let player: number | null;

@@ -4,12 +4,12 @@ import { getIdListObject } from "../getIdList";
 
 const extractCards = (cardGroups: CardGroupObj[]) => cardGroups.map(g => g.cards);
 
-const filterByPlace = (cardGroup: CardGroupObj, placeId: string): CardGroupObj => ({
+const filterByPlace = (cardGroup: CardGroupObj, placeId: number): CardGroupObj => ({
   ...cardGroup,
   cards: cardGroup.cards.filter(card => card.placeId === placeId),
 });
 
-const filterAllByPlace = (placeId: string) => (cardGroups: CardGroupObj[]) => cardGroups.map(g => filterByPlace(g, placeId));
+const filterAllByPlace = (placeId: number) => (cardGroups: CardGroupObj[]) => cardGroups.map(g => filterByPlace(g, placeId));
 
 const assignNewIndex = (cardGroup: CardGroup, cardGroupIndex: number, indexArray: number[]): GameCard[] =>
   cardGroup.map((card, index) =>
@@ -21,14 +21,14 @@ const assignNewIndexes = (cardGroups: CardGroup[], indexArray: number[]) =>
 
 const getCardRowShape = (cardGroupObjs: CardGroupObj[]): number[] => R.pipe(mapSizes, addZeroAtFirstIndex, getCumulativeSum)(cardGroupObjs);
 
-const cardGroupsToCardArray = (cardGroupObjs: CardGroupObj[], placeId: string): GameCard[] => {
+const cardGroupsToCardArray = (cardGroupObjs: CardGroupObj[], placeId: number): GameCard[] => {
   const shape = getCardRowShape(cardGroupObjs);
   const cardGroups = R.pipe(filterAllByPlace(placeId), extractCards)(cardGroupObjs);
   const cardArray = R.pipe(assignNewIndexes, R.flatten)(cardGroups, shape);
   return cardArray;
 };
 
-// const cardGroupsToCardArray = (cardGroups: CardGroupObj[], placeId: string): GameCard[] =>
+// const cardGroupsToCardArray = (cardGroups: CardGroupObj[], placeId: number): GameCard[] =>
 //   R.pipe(filterAllByPlace(placeId), extractCards, assignNewIndexes, R.flatten)(cardGroups);
 
 const currieCardGroupsToCardArrays = (gameSnapshot: GameSnapshot) => (cardGroups: CardGroupObj[]) => {

@@ -8,7 +8,7 @@ import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import EnemyHandCard from "./EnemyHandCard";
 interface EnemyHandProps {
-  id: string;
+  id: number;
   handCards: GameCard[];
   playerZoneSize: { width: number; height: number };
 }

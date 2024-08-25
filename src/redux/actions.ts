@@ -2,7 +2,7 @@ import { DropResult } from "react-beautiful-dnd";
 
 export type LocationData = {
   index: number;
-  droppableId: string;
+  droppableId: number;
 };
 
 export type SetScreenSize = {
@@ -50,7 +50,7 @@ export type EndDragCleanup = {
 
 export type DrawCard = {
   type: "DRAW_CARD";
-  payload: { handId: string; player: number };
+  payload: { handid: number; player: number };
 };
 
 export type DestroyCard = {

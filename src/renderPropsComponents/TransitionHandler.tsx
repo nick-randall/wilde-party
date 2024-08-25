@@ -6,7 +6,7 @@ import { RootState } from "../redux/store";
 
 interface TransitionHandlerProps {
   index: number;
-  id: string;
+  id: number;
   render: (style: CSSProperties) => JSX.Element;
 }
 

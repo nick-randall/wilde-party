@@ -4,7 +4,7 @@ import store from "../redux/store";
 import { addDraggedThunk, enchantThunk } from "../redux/thunks";
 import destroyCardThunk from "../thunks/destroyCardThunk";
 
-const isHandCard = (source: DraggableLocation) => locate(source.droppableId).place === "hand";
+const isHandCard = (source: DraggableLocation) => locate(parseInt(source.droppableId)).place === "hand";
 
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
@@ -13,16 +13,16 @@ const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destinatio
 const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
 const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); 
+  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId)); 
   return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
 };
 
 const isDestroy =  (d: DropResult, gameSnapshot: GameSnapshot) => {
-  const handCard = getDraggedHandCard(gameSnapshot, d.draggableId); 
+  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId)); 
   return handCard?.action.actionType === "destroy";
 };
 
-const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: string | undefined) =>
+const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: number | undefined) =>
   draggableId ? gameSnapshot.players[0].places.hand.cards.find(e => e.id === draggableId) : undefined;
 
 const cardDidLeaveHand = (d: DropResult) => d.destination && d.destination.droppableId !== d.source.droppableId;
@@ -33,10 +33,10 @@ const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(
 
 
 ///
-export const handleBeforeCapture = ({ draggableId }: { draggableId: string }) =>
+export const handleBeforeCapture = ({ draggableId }: { draggableId: number }) =>
   store.dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
 
-export const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
+export const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: number }) => {
   if (isHandCard(source)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
   else {
     store.dispatch({ type: "START_REARRANGING", payload: { placeId: source.droppableId, sourceIndex: source.index, draggableId: draggableId } });

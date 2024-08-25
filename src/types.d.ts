@@ -37,7 +37,7 @@ type AllDimensions = {
   draggedCardzIndex: number;
   tableCardzIndex: number;
   rotation: (index: number) => number;
-  scale: number
+  scale: number;
   featuredCardScale: number;
   zIndex: number;
   handToTableScaleFactor: number;
@@ -47,24 +47,41 @@ type AllDimensions = {
   // topOffset: number;
 };
 
-type LegalTargetCardStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "placeIsLegalTarget" | "placeIsRearranging";
-type LegalTargetPlaceStatus = "noLegalTargets" | "legalTarget" | "notAmongLegalTargets" | "rearranging" | "enchantmentsRowRearranging";
+type SnapshotUpdateType =
+  | "initialSnapshot"
+  | "dealingInitialCards"
+  | "dealingCards"
+  | "rearrangingHand"
+  | "rearrangingTablePlace"
+  | "drawingWildeParty"
+  | ActionType;
 
-type OriginalStyles = {
-  left: number;
-  top: number;
-  height?: number;
-  width?: number;
+type SnapshotUpdateData = {
+  type: SnapshotUpdateType;
+  playedCardIds: [number]; // plural needed for dealt cards, as well as CardGroup rearrange
+  targetId: number; // can be playerId, placeId, or cardId
+  secondaryCardId?: number; // necessary for swap
+};
+
+type CardActionResult = {
+  isLegalTarget: boolean;
+  resultingGameSnapshot: GameSnapshot;
+  targetType: LegalTargetType;
+  actionType: CardActionType;
+};
+
+type CardActionResultsMap = {
+  [cardId: number]: CardActionResult;
 };
 
 type LegalTargetType = "player" | "place" | "card";
 
 type GameCard = {
   [key: string]: value;
-  id: string;
+  id: number;
   name: string;
   playerId?: string; // player should be an id ??
-  placeId: string; // place should be an id ??
+  placeId: number; // place should be an id ??
   index: number;
   image: string;
   cardType: CardType;
@@ -98,18 +115,12 @@ type CardAction = {
   placeHighlightType?: PlaceType;
 };
 
-type LocationData = {droppableId: string, index: number}
+type LocationData = { droppableId: number; index: number };
 
 type DropResultEvent = {
-  source: LocationData,
-  destination: LocationData
-}
-
-// type TablePositionLocator = {
-//   targetIndex: number;
-//   targetPlace: PlaceType;
-//   targetPlayer: number;
-// };
+  source: LocationData;
+  destination: LocationData;
+};
 
 type CardType = "guest" | "unwanted" | "instant" | "interrupt" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
 
@@ -125,14 +136,14 @@ type PlaceType = "GCZ" | "UWZ" | "specialsZone" | "hand" | "deck" | "discardPile
 
 // DB prototype
 type Place = {
-  id: string;
+  id: number;
   maxNumCards: number;
   acceptedCardType: CardType;
   player: number;
 };
 // Game object
 type GamePlace = {
-  id: string;
+  id: number;
   placeType: PlaceType;
   playerId?: string;
   cards: GameCard[];
@@ -140,14 +151,13 @@ type GamePlace = {
 };
 
 type GamePlayer = {
-  id: string;
+  id: number;
   name: string;
   places: PlayerPlaces;
   glitzaglitza: boolean;
   skipNextTurn: boolean;
 };
-type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" |"counterPhase" ;
-
+type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" | "counterPhase";
 
 type PlayerPlaces = {
   [type: string]: GamePlace;
@@ -158,17 +168,18 @@ type NonPlayerPlaces = {
 };
 
 type Current = {
-  player: number,
-  phase: Phase,
-  plays: number,
-  draws: number,
-  rolls: number, 
-}
+  player: number;
+  phase: Phase;
+  plays: number;
+  draws: number;
+  rolls: number;
+};
 
 type GameSnapshot = {
   current: Current;
   players: GamePlayer[];
   nonPlayerPlaces: NonPlayerPlaces;
+  snapshotUpdateData: SnapshotUpdateData;
 };
 
 type CardTransitionData = {
@@ -179,14 +190,14 @@ type CardTransitionData = {
 };
 
 type TransitionData = {
-  cardId: string;
+  cardid: number;
   originDelta: TopLeftCoordinates;
   wait: number; // if transition is not first in the queue
   duration: number;
   curve: string;
   originDimensions: AllDimensions;
   cardInitialrotation: number;
-  startAnimationDuration: number
+  startAnimationDuration: number;
   startAnimation: string;
 };
 
@@ -197,21 +208,12 @@ type TransitionDataEvents = {
   duration: number;
 }[];
 
-type LegalTarget = {
-  type: LegalTargetType;
-  targetId: string;
-  draggedCard: GameCard;
-  isRearrange?: boolean;
-  placeOffset?: number;
-  draggedOverIndex?: number;
-};
-
 type Refs = {
-  [id: string]: HTMLElement;
+  [id: number]: HTMLElement;
 };
 
 type CardGroupObj = {
-  id: string;
+  id: number;
   size: number;
   cards: CardGroup;
 };

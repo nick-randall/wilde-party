@@ -6,7 +6,7 @@ import { RootState } from "./redux/store";
 interface EmptySpecialsColumnProps {
   acceptedSpecialsTypes: GuestCardType[];
   index: number;
-  specialsZoneId: string;
+  specialsZoneid: number;
   dimensions: AllDimensions;
 }
 

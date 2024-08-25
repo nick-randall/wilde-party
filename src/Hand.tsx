@@ -7,7 +7,7 @@ import { RootState } from "./redux/store";
 import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 interface HandProps {
-  id: string;
+  id: number;
   handCards: GameCard[];
   playerZoneSize: { width: number; height: number };
 }

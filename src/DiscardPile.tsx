@@ -4,7 +4,7 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 
 interface DiscardPileProps {
   cards: GameCard[];
-  id: string;
+  id: number;
   zoneSize: {width: number, height: number}
 }
 

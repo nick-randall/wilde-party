@@ -8,7 +8,7 @@ import { RootState } from "./redux/store";
 import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 
 export interface CardProps {
-  id: string;
+  id: number;
   index: number;
   image: string;
   dimensions: AllDimensions;

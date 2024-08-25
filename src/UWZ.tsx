@@ -8,7 +8,7 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
 
 interface UWZProps {
-  id: string;
+  id: number;
   unwantedCards: GameCard[];
   playerZoneSize: {width: number, height: number}
 }

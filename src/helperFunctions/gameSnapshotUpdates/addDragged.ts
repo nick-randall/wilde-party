@@ -11,13 +11,13 @@ export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
-const uuidIsToLong = (uuid: string) => uuid.length > 36;
+const uuidIsToLong = (uuid: number) => uuid.length > 36;
 
 export const addDraggedUpdateSnapshot = (
   gameSnapshot: GameSnapshot,
-  sourcePlaceId: string,
+  sourcePlaceid: number,
   sourceIndex: number,
-  destinationPlaceId: string,
+  destinationPlaceid: number,
   destinationIndex: number
 ): GameSnapshot =>
   produce(gameSnapshot, draft => {
@@ -84,7 +84,7 @@ export const addDraggedUpdateSnapshot = (
     }
   });
 
-// export const addDraggedUpdateSnapshot = (gameSnapshot: GameSnapshot, sourcePlaceId: string, sourceIndex: number, destinationPlaceId: string, destinationIndex: number): GameSnapshot =>
+// export const addDraggedUpdateSnapshot = (gameSnapshot: GameSnapshot, sourcePlaceid: number, sourceIndex: number, destinationPlaceid: number, destinationIndex: number): GameSnapshot =>
 // produce(gameSnapshot, draft => {
 //   let { player: destPlayer, destPlace } = locate(destinationPlaceId, gameSnapshot);
 //   let sourcePlayer = locatePlayer(sourcePlaceId, gameSnapshot)

@@ -11,7 +11,7 @@ export const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "ha
 export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 // working!
-export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number => {
+export const getNumCards = (placeId: number, gameSnapshot: GameSnapshot): number => {
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -30,7 +30,7 @@ export const getNumCards = (placeId: string, gameSnapshot: GameSnapshot): number
   return 0;
 };
 
-export const locate = (id: string, gameSnapshot: GameSnapshot | null = null): Locator => {
+export const locate = (id: number, gameSnapshot: GameSnapshot | null = null): Locator => {
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
@@ -58,7 +58,7 @@ export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlaye
   Object.keys(gameSnapshot.players[gameSnapshot.players.indexOf(player)].places);
 export const getNonPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.nonPlayerPlaces);
 
-export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
+export const locate2 = (id: number, gameSnapshot: GameSnapshot) => {
   const player: GamePlayer | undefined = gameSnapshot.players.find(player =>
     getPlayerPlaceKeys(gameSnapshot, player).map(placeKey => player.places[placeKey].cards.find(card => card.id === id))
   );
@@ -79,7 +79,7 @@ export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
 // const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.players.map((player) => player.places));
 // const getNonPlayerPlaceKeys = (gameSnapshot: GameSnapshot) => Object.keys(gameSnapshot.nonPlayerPlaces);
 
-// export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
+// export const locate2 = (id: number, gameSnapshot: GameSnapshot) => {
 //   const player: GamePlayer | undefined = gameSnapshot.players.find((player) =>
 //     getPlayerPlaceKeys(gameSnapshot).map((placeKey) => player.places[placeKey].cards.find((card) => card.id === id))
 //   );
@@ -97,7 +97,7 @@ export const locate2 = (id: string, gameSnapshot: GameSnapshot) => {
 //   }
 // };
 
-export const getIndex = (cardId: string, gameSnapshot: GameSnapshot): number => {
+export const getIndex = (cardId: number, gameSnapshot: GameSnapshot): number => {
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -116,7 +116,7 @@ export const getIndex = (cardId: string, gameSnapshot: GameSnapshot): number => 
   return -1;
 };
 
-export const getImage = (cardId: string, gameSnapshot: GameSnapshot): string => {
+export const getImage = (cardId: number, gameSnapshot: GameSnapshot): string => {
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -135,7 +135,7 @@ export const getImage = (cardId: string, gameSnapshot: GameSnapshot): string => 
   return "";
 };
 
-export const getCard = (cardId: string, gameSnapshot: GameSnapshot): GameCard => {
+export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard => {
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
@@ -152,9 +152,9 @@ export const getCard = (cardId: string, gameSnapshot: GameSnapshot): GameCard =>
     }
   }
   const card: GameCard = {
-    id: "123123",
+    id: 123123,
     name: "bffs1",
-    placeId: "324562132300",
+    placeId: 324562132300,
     playerId: "l93fld9",
     index: 1,
     pointValue: 1,
@@ -167,7 +167,7 @@ export const getCard = (cardId: string, gameSnapshot: GameSnapshot): GameCard =>
   return card;
 };
 
-export const getPlaceType = (placeId: string, gameSnapshot: GameSnapshot): PlaceType => {
+export const getPlaceType = (placeId: number, gameSnapshot: GameSnapshot): PlaceType => {
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {

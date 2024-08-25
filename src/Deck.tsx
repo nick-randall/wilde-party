@@ -7,7 +7,7 @@ import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";
 
 interface DeckProps {
-  id: string;
+  id: number;
   cards: GameCard[];
   zoneSize: { width: number; height: number };
 }

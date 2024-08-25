@@ -5,7 +5,7 @@ import store from "../../redux/store";
 const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
 const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
-export const locatePlayer = (id: string, gameSnapshot: GameSnapshot | null = null): number | null => {
+export const locatePlayer = (id: number, gameSnapshot: GameSnapshot | null = null): number | null => {
   //if (id === null) return null;
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
 

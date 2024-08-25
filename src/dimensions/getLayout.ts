@@ -4,7 +4,7 @@ import { sortSpecials2 } from "../helperFunctions/getSpecialsOfType";
 import { getNumCards, locate } from "../helperFunctions/locateFunctions";
 import store, { RootState } from "../redux/store";
 
-export const getLayout = (id: string, screenSize: { width: number; height: number }, state: RootState | null = null): { x: number; y: number } => {
+export const getLayout = (id: number, screenSize: { width: number; height: number }, state: RootState | null = null): { x: number; y: number } => {
   if (state === null) 
   state =  store.getState();
   const { gameSnapshot, dragUpdate, draggedHandCard } = state;
