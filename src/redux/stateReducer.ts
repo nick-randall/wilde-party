@@ -10,6 +10,7 @@ import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/d
 import { produce } from "immer";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
 import { initialGameSnapshot } from "../initialCards";
+import { createGameSnapshot } from "../helperFunctions/createGameSnapshot/createGameSnapshot";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
@@ -53,7 +54,7 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: initialGameSnapshot,
+    gameSnapshot: createGameSnapshot(),
     screenSize: getScreenSize(),
     draggedOver: undefined,
     BFFdraggedOverSide: undefined,
