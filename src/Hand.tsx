@@ -22,6 +22,7 @@ const Hand = (props: HandProps) => {
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
   const enemysTurn = useSelector((state: RootState) => state.gameSnapshot.current.player !== 0);
+  const droppableId = JSON.stringify({ type: "place", id });
 
   useEffect(() => {
     if (shouldSpread) {
@@ -33,10 +34,9 @@ const Hand = (props: HandProps) => {
 
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <Droppable droppableId={id} direction="horizontal" isDropDisabled={true}>
+    <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={true}>
       {provided => (
         <div
-          id={props.id}
           onMouseEnter={() => setShouldSpread(true)}
           onMouseLeave={() => setShouldSpread(false)}
           style={{

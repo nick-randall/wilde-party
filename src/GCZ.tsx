@@ -20,18 +20,16 @@ interface GCZProps {
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards, playerZoneSize } = props;
 
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
-  const rearrange = useSelector((state: RootState) => state.rearrangingData);
+  const {draggedOver, rearrangingData, draggedHandCard, highlights} = useSelector((state: RootState) => state);
+  const droppableId = JSON.stringify({ type: "place", id });
 
-  const ghostCardIndex = draggedOver.droppableId === id ? draggedOver.index : rearrange.sourceIndex;
-  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
-  const cardRow = getCardGroupObjs(enchantmentsRowCards, GCZCards);
-  const cardRowShape = rearrange.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrange.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
-  const ghostCardGroup = cardRow.find(e => rearrange.draggableId === e.id);
-
-  const highlights = useSelector((state: RootState) => state.highlights);
+  const cardRow: CardGroupObj[] = getCardGroupObjs(enchantmentsRowCards, GCZCards);
+  const cardRowShape = rearrangingData.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
+  
+  const ghostCardGroup = cardRow.find(e => rearrangingData.draggedId === e.id);
 
   const isHighlighted = highlights.includes(id);
 
@@ -47,7 +45,7 @@ function GCZ(props: GCZProps) {
 
 
   return (
-    <Droppable droppableId={`${id}`} direction="horizontal" isDropDisabled={!allowDropping}>
+    <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
         className="pl0GCZ"

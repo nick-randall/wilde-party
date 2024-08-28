@@ -1,10 +1,10 @@
-import { DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
+import { BeforeCapture, DraggableLocation, DragUpdate, DropResult, ResponderProvided } from "react-beautiful-dnd";
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
-import { addDraggedThunk, enchantThunk } from "../redux/thunks";
-import destroyCardThunk from "../thunks/destroyCardThunk";
+import { addDraggedThunk } from "../redux/thunks";
+import { rearrange, startRearranging, updateDraggedOver } from "../redux/actions";
 
-const isHandCard = (source: DraggableLocation) => locate(parseInt(source.droppableId)).place === "hand";
+const isHandCard = (sourceId: number) => locate(sourceId).place === "hand";
 
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
@@ -13,12 +13,12 @@ const cardMovedWithinOnePlace = (d: DropResult) => d.destination && d.destinatio
 const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
 
 const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId)); 
+  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId));
   return handCard?.action.actionType === "enchant" || handCard?.action.actionType === "enchantWithBff";
 };
 
-const isDestroy =  (d: DropResult, gameSnapshot: GameSnapshot) => {
-  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId)); 
+const isDestroy = (d: DropResult, gameSnapshot: GameSnapshot) => {
+  const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId));
   return handCard?.action.actionType === "destroy";
 };
 
@@ -31,30 +31,53 @@ const cardDroppedElswhere = (d: DropResult) => d.destination;
 
 const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(d);
 
-
 ///
-export const handleBeforeCapture = ({ draggableId }: { draggableId: number }) =>
-  store.dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: draggableId });
+export const onBeforeCapture = (source: BeforeCapture) => store.dispatch({ type: "SET_DRAGGED_HAND_CARD", payload: source.draggableId });
 
-export const handleDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: number }) => {
-  if (isHandCard(source)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+export const onDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
+  const draggableData: DraggableData = JSON.parse(draggableId);
+  const droppableData: DroppableData = JSON.parse(source.droppableId);
+  if (isHandCard(droppableData.id)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
   else {
-    store.dispatch({ type: "START_REARRANGING", payload: { placeId: source.droppableId, sourceIndex: source.index, draggableId: draggableId } });
+    store.dispatch(
+      startRearranging({
+        placeId: droppableData.id,
+        sourceIndex: source.index,
+        draggedId: draggableData.id,
+      })
+    );
   }
 };
 
-export const handleDragUpdate = (d: DragUpdate) =>
-  d.destination
-    ? store.dispatch({ type: "UPDATE_DRAG", payload: d.destination })
-    : store.dispatch({ type: "UPDATE_DRAG", payload: { droppableId: "", index: -1 } });
+export const onDragUpdate = (dragUpdate: DragUpdate) => {
+  let draggedOverData: DraggedOverData | undefined;
+  if (dragUpdate.destination) {
+    const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
+    const { id, type, calculatedIndex } = droppableData;
+    const index = calculatedIndex ?? dragUpdate.destination.index;
+    draggedOverData = { type, id, index };
+  } else {
+    draggedOverData = undefined;
+  }
+  store.dispatch(updateDraggedOver(draggedOverData));
+};
 
-export const handleDragEnd = (d: DropResult) => {
+export const onDragEnd = (d: DropResult) => {
   const gameSnapshot = store.getState().gameSnapshot;
-  if (d.destination) {
-    if (isRearrange(d)) store.dispatch({ type: "REARRANGE", payload: { source: d.source, destination: d.destination } });
-    else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ENCHANT", payload: d });
-    else if(isDestroy(d,gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }))
-    else if (isAddDrag(d)) store.dispatch(addDraggedThunk({ source: d.source, destination: d.destination }))//store.dispatch({ type: "ADD_DRAGGED", payload: { source: d.source, destination: d.destination } });
+  const { source, destination } = d;
+
+  if (destination) {
+    const sourceData: DroppableData = JSON.parse(source.droppableId);
+    const destinationData: DroppableData = JSON.parse(destination.droppableId);
+    const { type: sourceType, id: sourceId } = sourceData;
+    const { type: destinationType, id: destinationId } = destinationData;
+    const sourceResult = { id: sourceId, type: sourceType, index: source.index };
+    const destResult = { id: destinationId, type: destinationType, index: destination.index };
+
+    if (isRearrange(d)) store.dispatch(rearrange(sourceResult, destResult));
+    // else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }));
+    // else if (isDestroy(d, gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }));
+    else if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
   }
   store.dispatch({ type: "END_DRAG_CLEANUP" });
 };

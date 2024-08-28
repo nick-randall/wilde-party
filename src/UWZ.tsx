@@ -1,7 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
-import { getLayout } from "./dimensions/getLayout";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -15,15 +14,13 @@ interface UWZProps {
 
 export const UWZ = (props: UWZProps) => {
   const { id, unwantedCards, playerZoneSize } = props;
+  const droppableData: DroppableData = { type: "place", id };
+  const droppableId = JSON.stringify(droppableData);
 
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate);
-  const rearrange = useSelector((state: RootState) => state.rearrangingData);
+  const {draggedHandCard, draggedOver, highlights, rearrangingData} = useSelector((state: RootState) => state);
 
-  const ghostCardIndex = draggedOver.droppableId === id ? draggedOver.index : rearrange.sourceIndex;
-  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+  const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
-
-  const highlights = useSelector((state: RootState) => state.highlights);
 
   const isHighlighted = highlights.includes(id);
 
@@ -38,7 +35,7 @@ export const UWZ = (props: UWZProps) => {
       {unwantedCards.map((card, index) => (
         <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} />
       ))}
-      <Droppable droppableId={id} isDropDisabled={!allowDropping}>
+      <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
         {provided => (
           <div
             {...provided.droppableProps}

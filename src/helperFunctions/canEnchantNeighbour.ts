@@ -16,7 +16,7 @@ export const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: Game
 
 export const leftNeighbourIsEnchantable = (index: number, array: GameCard[]) => hasLeftNeighbour(index) && !leftNeighbourIsEnchanted(index, array);
 
-export const getLeftOrRightNeighbour = (gameSnapshot: GameSnapshot, targetCardid: number) => {
+export const getLeftOrRightNeighbour = (gameSnapshot: GameSnapshot, targetCardId: number) => {
   const { player } = locate(targetCardId, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];

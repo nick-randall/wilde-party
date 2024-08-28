@@ -15,6 +15,12 @@ interface CardOffset {
 const CardGroup = (props: CardGroupProps) => {
   const { cardGroup, index, dimensions } = props;
   const { cardHeight, cardLeftSpread } = dimensions;
+  const draggableData: DraggableData = {
+    id: cardGroup.id,
+    type: "cardGroup",
+    numCards: cardGroup.cards.length,
+  };
+  const draggableId = JSON.stringify(draggableData);
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
     if (card.cardType === "bff") return { top: cardHeight / 2, left: cardLeftSpread / 2 };
@@ -24,7 +30,7 @@ const CardGroup = (props: CardGroupProps) => {
   };
 
   return (
-    <Draggable draggableId={cardGroup.id} index={index} key={cardGroup.id}>
+    <Draggable draggableId={draggableId} index={index} key={cardGroup.id}>
       {provided => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <div
@@ -44,7 +50,7 @@ const CardGroup = (props: CardGroupProps) => {
             >
               {cardGroup.cards.map((card, cardGroupIndex) => (
                 <Card
-                  offsetTop={getOffset(card, cardGroupIndex).top} 
+                  offsetTop={getOffset(card, cardGroupIndex).top}
                   offsetLeft={getOffset(card, cardGroupIndex).left}
                   //cardGroupIndex={cardGroupIndex}
                   id={card.id}

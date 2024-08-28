@@ -1,4 +1,3 @@
-import { isNonNullChain } from "typescript";
 import store from "../redux/store";
 
 export interface Locator {
@@ -28,6 +27,25 @@ export const getNumCards = (placeId: number, gameSnapshot: GameSnapshot): number
   }
   console.log("failed to getNumCards for" + placeId);
   return 0;
+};
+
+export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
+  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
+
+  const { players, nonPlayerPlaces } = gameSnapshot;
+  for (let i: number = 0; i < players.length; i++) {
+    for (let j: number = 0; j < playerPlacesTypes.length; j++) {
+      const placeType = playerPlacesTypes[j];
+      const place = players[i]["places"][placeType];
+      if (placeId === place.id) return place;
+    }
+  }
+  for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
+    const placeType = nonPlayerPlacesTypes[k];
+    const place = nonPlayerPlaces[placeType];
+    if (placeId === place.id) return place;
+  }
+  throw new Error("Place could not be found!");
 };
 
 export const locate = (id: number, gameSnapshot: GameSnapshot | null = null): Locator => {
@@ -155,7 +173,7 @@ export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard =>
     id: 123123,
     name: "bffs1",
     placeId: 324562132300,
-    playerId: "l93fld9",
+    playerId: 1,
     index: 1,
     pointValue: 1,
     bffs: false,

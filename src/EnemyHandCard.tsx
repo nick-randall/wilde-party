@@ -51,8 +51,6 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
              src={"./images/back.jpg"}
             // src={`./images/${image}.jpg`}
             draggable = "false"
-
-            id={id}
             style={{
               ...normalStyles,
               ...transitionStyles,

@@ -13,7 +13,7 @@ export const getHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot)
   else return getPlayerHighlights(draggedCard, gameSnapshot)
 };
 
-const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): number[] => {
   const { action } = draggedCard;
   const { actionType } = action;
 
@@ -23,7 +23,7 @@ const getCardHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): s
   return highlights.map((e) => R.prop("id", e))
 };
 
-const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): number[] => {
   const { action } = draggedCard;
   const { actionType } = action;
 
@@ -33,7 +33,7 @@ const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): 
   return highlights.map((e) => R.prop("id", e))
 };
 
-const getPlayerHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): string[] => {
+const getPlayerHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): number[] => {
   const { action } = draggedCard;
   const { actionType } = action;
 

@@ -56,31 +56,13 @@ type SnapshotUpdateType =
   | "drawingWildeParty"
   | ActionType;
 
-type SnapshotUpdateData = {
-  type: SnapshotUpdateType;
-  playedCardIds: [number]; // plural needed for dealt cards, as well as CardGroup rearrange
-  targetId: number; // can be playerId, placeId, or cardId
-  secondaryCardId?: number; // necessary for swap
-};
-
-type CardActionResult = {
-  isLegalTarget: boolean;
-  resultingGameSnapshot: GameSnapshot;
-  targetType: LegalTargetType;
-  actionType: CardActionType;
-};
-
-type CardActionResultsMap = {
-  [cardId: number]: CardActionResult;
-};
-
 type LegalTargetType = "player" | "place" | "card";
 
 type GameCard = {
   [key: string]: value;
   id: number;
   name: string;
-  playerId?: string; // player should be an id ??
+  playerId?: number; // player should be an id ??
   placeId: number; // place should be an id ??
   index: number;
   image: string;
@@ -93,7 +75,7 @@ type GameCard = {
   action: CardAction;
 };
 
-type PlaceActionType = "addDragged";
+type PlaceActionType = "addDragged" | "rearrange";
 
 type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap";
 
@@ -116,11 +98,6 @@ type CardAction = {
 };
 
 type LocationData = { droppableId: number; index: number };
-
-type DropResultEvent = {
-  source: LocationData;
-  destination: LocationData;
-};
 
 type CardType = "guest" | "unwanted" | "instant" | "interrupt" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
 
@@ -145,7 +122,7 @@ type Place = {
 type GamePlace = {
   id: number;
   placeType: PlaceType;
-  playerId?: string;
+  playerId?: number;
   cards: GameCard[];
   acceptedCardType?: CardType;
 };
@@ -189,8 +166,12 @@ type CardTransitionData = {
   animation: AnimationData;
 };
 
+// type LocationData = {
+
+// }
+
 type TransitionData = {
-  cardid: number;
+  cardId: number;
   originDelta: TopLeftCoordinates;
   wait: number; // if transition is not first in the queue
   duration: number;
@@ -212,10 +193,5 @@ type Refs = {
   [id: number]: HTMLElement;
 };
 
-type CardGroupObj = {
-  id: number;
-  size: number;
-  cards: CardGroup;
-};
 
 type Hover = "shortHover" | "longHover" | "none";

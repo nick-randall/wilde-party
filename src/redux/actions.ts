@@ -1,8 +1,8 @@
 import { DropResult } from "react-beautiful-dnd";
 
-export type LocationData = {
+export type DraggableLocation = {
   index: number;
-  droppableId: number;
+  droppableId: string;
 };
 
 export type SetScreenSize = {
@@ -16,7 +16,7 @@ export type SetHandCardDrag = {
 
 export type SetHighlights = {
   type: "SET_HIGHLIGHTS";
-  payload: string | undefined;
+  payload: number | undefined;
 };
 
 export type StartRearranging = {
@@ -24,19 +24,25 @@ export type StartRearranging = {
   payload: SimpleRearrangingData;
 };
 
+export const startRearranging = (data: SimpleRearrangingData) => ({type: "START_REARRANGING", payload: data});
+
 export type UpdateDrag = {
-  type: "UPDATE_DRAG";
-  payload: LocationData;
+  type: "UPDATE_DRAGGED_OVER";
+  payload: DraggedOverData | undefined;
 };
+
+export const updateDraggedOver = (data: DraggedOverData | undefined):  UpdateDrag  => ({type: "UPDATE_DRAGGED_OVER", payload: data});
 
 export type Rearrange = {
   type: "REARRANGE";
-  payload: { source: LocationData; destination: LocationData };
+  payload: { source: DraggedOverData; destination: DraggedOverData };
 };
+
+export const rearrange = (source: DraggedOverData, destination: DraggedOverData): Rearrange => ({type: "REARRANGE", payload: {source, destination}});
 
 export type AddDragged = {
   type: "ADD_DRAGGED";
-  payload: { source: LocationData; destination: LocationData };
+  payload: { source: DraggableLocation; destination: DraggableLocation };
 };
 
 export type Enchant = {
@@ -50,12 +56,12 @@ export type EndDragCleanup = {
 
 export type DrawCard = {
   type: "DRAW_CARD";
-  payload: { handid: number; player: number };
+  payload: { handId: number; player: number };
 };
 
 export type DestroyCard = {
   type: "DESTROY_CARD";
-  payload: string;
+  payload: number;
 };
 
 export type AddTranstion = {
@@ -65,12 +71,12 @@ export type AddTranstion = {
 
 export type RemoveTransition = {
   type: "REMOVE_TRANSITION";
-  payload: string;
+  payload: number;
 };
 
 export type DiscardPlayedCard = {
   type: "DISCARD_PLAYED_CARD";
-  payload: string;
+  payload: number;
 };
 
 export type ChangeNumDraws = {
@@ -98,7 +104,7 @@ export type DealStartingGuest = {
   payload: number;
 };
 
-export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: string };
+export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: number };
 
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
 

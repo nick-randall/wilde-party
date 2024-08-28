@@ -1,11 +1,10 @@
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { handleBeforeCapture, handleDragEnd, handleDragStart, handleDragUpdate } from "./dragEventHandlers/dragEventHandlers";
+import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "./dragEventHandlers/dragEventHandlers";
 import { useEffect, useState } from "react";
 import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
-import { dealInitialHands } from "./thunks/dealInitialCards";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
 
@@ -25,14 +24,14 @@ export const Table = () => {
   useEffect(() => {
     if (!gameStarted) {
       console.log("called it");
-      dispatch(dealInitialHands());
+      // dispatch(dealInitialHands());
       setGameStarted(true);
     }
   }, [dispatch, gameStarted]);
 
   return (
     <div className="background-tile">
-      <DragDropContext onDragStart={handleDragStart} onDragUpdate={handleDragUpdate} onDragEnd={handleDragEnd} onBeforeCapture={handleBeforeCapture}>
+      <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd} onBeforeCapture={onBeforeCapture}>
         <NonPlayerPlaces places={gameSnapshot.nonPlayerPlaces} screenSize={screenSize} />
 
         <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />

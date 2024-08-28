@@ -19,12 +19,12 @@ const HandCard = (props: HandCardProps) => {
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
 
-  const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
-  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
-  const BFFDraggedOverSide = useSelector((state: RootState) => state.BFFdraggedOverSide);
-  const isDraggedOverAnyPlace = useSelector((state: RootState) => state.dragUpdate.droppableId !== "");
+  const draggableId = JSON.stringify({ id, type: "card" });
 
-  const highlightType = useSelector((state: RootState) => state.highlightType);
+  const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
+  const {draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver} = useSelector((state: RootState) => state);
+  const isDraggedOverAnyPlace = draggedOver !== undefined;
+
   const transitionUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
 
   const { player, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
@@ -70,7 +70,7 @@ const HandCard = (props: HandCardProps) => {
       console.log(moveTo);
       if (highlightType === "card") {
         if (draggedHandCard && draggedHandCard.cardType === "bff") {
-          x = BFFDraggedOverSide === "left" ? -60 : 40;
+          x = BFFdraggedOverSide === "left" ? -60 : 40;
         } else x = -15;
         y = 60;
       } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")) {
@@ -97,7 +97,7 @@ const HandCard = (props: HandCardProps) => {
   };
 
   return (
-    <Draggable draggableId={id} index={index} key={id} isDragDisabled={!canPlay}>
+    <Draggable draggableId={draggableId} index={index} key={id} isDragDisabled={!canPlay}>
       {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <div
@@ -123,7 +123,6 @@ const HandCard = (props: HandCardProps) => {
                       onClick={handleClick}
                       onMouseEnter={()=>setShortHover(true)}
                       onMouseLeave={() => endShortAndLongHover(handleMouseLeave)}
-                      id={id}
                       style={{
                         ...normalStyles,
                         ...inspectedStyles,

@@ -26,7 +26,6 @@ const EnemyHand = (props: EnemyHandProps) => {
   const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
     <div
-      id={props.id}
       style={{
         position: "absolute",
         // display: "flex",

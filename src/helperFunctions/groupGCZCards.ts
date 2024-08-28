@@ -13,7 +13,7 @@ const getCardGroupsArray = (enchantmentsCards: GameCard[], GCZCards: GameCard[])
   );
 
 const convertCardGroupToObj = (cardGroupArray: CardGroup[]): CardGroupObj[] =>
-  cardGroupArray.map(cardGroup => ({ id: `cardGroup${cardGroup[0].name}`, size: cardGroup.length < 3 ? 1 : 2, cards: cardGroup }));
+  cardGroupArray.map(cardGroup => ({ id: cardGroup[0].id, size: cardGroup.length < 3 ? 1 : 2, cards: cardGroup }));
 
 export const getCardGroupObjs = (enchantmentsCards: GameCard[], GCZCards: GameCard[]): CardGroupObj[] =>
   pipe(getCardGroupsArray, filterOutDuplicates, convertCardGroupToObj)(enchantmentsCards, GCZCards);

@@ -6,27 +6,46 @@ import { RootState } from "./redux/store";
 
 interface SpecialsCardsColumnProps {
   cards: GameCard[];
+  cardType: GuestCardType;
   dimensions: AllDimensions;
-  specialsZoneid: number;
+  specialsZoneId: number;
+  startingIndex: number;
   columnIndex: number;
 }
 
-export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
-  const { cards, dimensions, specialsZoneId, columnIndex } = props;
-  const highlights = useSelector((state: RootState) => state.highlights);
-  const draggedHandCard = useSelector((state: RootState) => state.draggedHandCard);
+export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
+  cards,
+  dimensions,
+  cardType,
+  columnIndex,
+  specialsZoneId,
+  startingIndex,
+}) => {
+  const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state);
   const specialsColumnType = cards[0].specialsCardType;
 
-  // Represents the next index where a new card of this special type will be inserted;
-  const specialsColumnId = columnIndex + specialsZoneId;
+  const draggableData: DraggableData = {
+    type: "cardGroup",
+    id: cards[0].id,
+  };
+
+  const droppableData: DroppableData = {
+    type: "place",
+    id: specialsZoneId,
+    calculatedIndex: startingIndex,
+  };
+
+  const draggableId = JSON.stringify(draggableData);
+  const droppableId = JSON.stringify(droppableData);
+
   const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
-  const draggedOver = useSelector((state: RootState) => state.dragUpdate.droppableId === specialsColumnId && isHighlighted);
+  const isDraggedOver = isHighlighted && draggedOver?.id === specialsZoneId && draggedOver?.index === startingIndex;
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
-  const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
+  const ghostCard = draggedHandCard && isDraggedOver ? draggedHandCard : undefined;
   const allowDropping = isHighlighted;
 
   return (
-    <Draggable draggableId={specialsColumnId + "draggableId"} index={columnIndex} isDragDisabled={true}>
+    <Draggable draggableId={draggableId} index={columnIndex} isDragDisabled={true}>
       {provided => (
         <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
           <div style={{ width: dimensions.cardLeftSpread, height: dimensions.cardHeight }}>
@@ -41,11 +60,10 @@ export const SpecialsCardsColumn = (props: SpecialsCardsColumnProps) => {
                   offsetTop={index * dimensions.cardTopSpread}
                 />
               ))}
-
-              <Droppable droppableId={specialsColumnId} isDropDisabled={!allowDropping}>
+              {/* This👇 is the drop box */}
+              <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
                 {provided => (
                   <div
-                    // This is the drop box
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={{

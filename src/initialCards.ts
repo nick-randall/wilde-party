@@ -1,10 +1,10 @@
 // Sort Queries by index so the array structure reflects the
 const myGCZCards: GameCard[] = [
   {
-    id: "092832908423",
+    id: 3000,
     name: "saufnase1",
-    playerId: "l93fld9",
-    placeId: "pd0s9fd",
+    playerId: 3000,
+    placeId: 3000,
     index: 0,
     image: "saufnase0",
     cardType: "guest",
@@ -14,10 +14,10 @@ const myGCZCards: GameCard[] = [
   },
 
   {
-    id: "xxxasdfsdaf",
+    id: 3000,
     name: "saufnase6",
-    playerId: "l93fld9",
-    placeId: "pd0s9fd",
+    playerId: 3000,
+    placeId: 3000,
     index: 1,
     image: "saufnase2",
     cardType: "guest",
@@ -29,10 +29,10 @@ const myGCZCards: GameCard[] = [
 
 export const myHandCards: GameCard[] = [
   {
-    id: "3w3323434",
+    id: 3000,
     name: "bffs5",
-    placeId: "324562132300",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 0,
     pointValue: 1,
     image: "bffs",
@@ -40,10 +40,10 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "enchantWithBff", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
   {
-    id: "asdf",
+    id: 3000,
     name: "musikfuersichalleinebeansprucherin",
-    placeId: "324562132300",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 1,
     pointValue: 0,
     image: "musikfuersichalleinebeansprucherin",
@@ -51,10 +51,10 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
   },
   // {
-  //   id: "9d2304jf",
+  //   id: 3000,
   //   name: "partypizza",
-  //   placeId: "klsjfd",
-  //   playerId: "l93fld9",
+  //   placeId: 3000,
+  //   playerId: 3000,
   //   index: 1,
   //   pointValue: 0,
   //   image: "partypizza",
@@ -64,10 +64,10 @@ export const myHandCards: GameCard[] = [
   // },
 
   {
-    id: "asdf2r42345",
+    id: 3000,
     name: "zwilling2",
-    placeId: "pqewoi",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 2,
     pointValue: 1,
     image: "zwilling",
@@ -76,10 +76,10 @@ export const myHandCards: GameCard[] = [
   },
   
   {
-    id: "123123",
+    id: 3000,
     name: "barkeeperin",
-    placeId: "pqewoi",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 3,
     pointValue: 1,
     image: "barkeeperin",
@@ -88,10 +88,10 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
   },
   {
-    id: "asdf2r42345",
+    id: 3000,
     name: "zwilling2",
-    placeId: "324562132300",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 4,
     pointValue: 1,
     image: "zwilling",
@@ -99,10 +99,10 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
   {
-    id: "fffff",
+    id: 3000,
     name: "rumgroelerin2",
-    placeId: "pd0s9fd",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 5,
     image: "rumgroelerin2", //TODO change
     pointValue: 1,
@@ -111,10 +111,10 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: "mbv",
+    id: 3000,
     name: "quasselstrippe1",
-    placeId: "0239842kl",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 6,
     pointValue: 0,
     image: "quasselstrippe",
@@ -128,10 +128,10 @@ export const myEnchantmentsRowCards: GameCard[] = [
 
 const mySpecialsZoneCards: GameCard[] = [
   {
-    id: "mnbvyxcv",
+    id: 3000,
     name: "nebelmaschine",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 1,
     pointValue: 0,
     image: "nebelmaschine",
@@ -140,10 +140,10 @@ const mySpecialsZoneCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
   },
   {
-    id: "pppppppf1",
+    id: 3000,
     name: "playlist",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 2,
     pointValue: 0,
     image: "playlist",
@@ -153,10 +153,10 @@ const mySpecialsZoneCards: GameCard[] = [
   },
 
   {
-    id: "pppppppf2",
+    id: 3000,
     name: "prost",
-    placeId: "klsjfd",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 4,
     pointValue: 0,
     image: "prost",
@@ -170,10 +170,10 @@ const myUWZCards: GameCard[] = [];
 
 const player1HandCards: GameCard[] = [
   {
-    id: "kkkkkkkkk",
+    id: 3000,
     name: "rumgroelerin0",
-    placeId: "2kopvjops",
-    playerId: "enemy",
+    placeId: 3000,
+    playerId: 3000,
     index: 0,
     image: "rumgroelerin0", //TODO change
     pointValue: 1,
@@ -182,10 +182,10 @@ const player1HandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: "01293219312832183",
+    id: 3000,
     name: "taenzerin2",
-    playerId: "enemy",
-    placeId: "2kopvjops",
+    playerId: 3000,
+    placeId: 3000,
     index: 1,
     image: "taenzerin2", //TODO change
     cardType: "guest",
@@ -194,10 +194,10 @@ const player1HandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: "50340395343",
+    id: 3000,
     name: "schleckermaul2",
-    playerId: "enemy",
-    placeId: "2kopvjops",
+    playerId: 3000,
+    placeId: 3000,
     index: 2,
     image: "schleckermaul2", //TODO change
     pointValue: 1,
@@ -206,10 +206,10 @@ const player1HandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: "a953433",
+    id: 3000,
     name: "schleckermaul",
-    placeId: "2kopvjops",
-    playerId: "enemy",
+    placeId: 3000,
+    playerId: 3000,
     index: 3,
     image: "schleckermaul3", //TODO change
     pointValue: 1,
@@ -221,10 +221,10 @@ const player1HandCards: GameCard[] = [
 
 const player1GCZCards: GameCard[] = [
   {
-    id: "hosey",
+    id: 3000,
     name: "rumgroelerin4",
-    placeId: "2kopvjops",
-    playerId: "enemy",
+    placeId: 3000,
+    playerId: 3000,
     index: 0,
     image: "rumgroelerin4",
     pointValue: 1,
@@ -236,10 +236,10 @@ const player1GCZCards: GameCard[] = [
 
 const deckCards: GameCard[] = [
   {
-    id: "gogogogo",
+    id: 3000,
     name: "megaphon",
-    placeId: "klasdf",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 0,
     pointValue: 0,
     image: "megaphon",
@@ -248,10 +248,10 @@ const deckCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
   },
   {
-    id: "hosey",
+    id: 3000,
     name: "rumgroelerin3",
-    placeId: "klasdf",
-    playerId: "l93fld9",
+    placeId: 3000,
+    playerId: 3000,
     index: 1,
     image: "rumgroelerin3",
     pointValue: 1,
@@ -260,10 +260,10 @@ const deckCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: "jadsif293jfnjskdnv",
+    id: 3000,
     name: "schleckermaul4",
-    playerId: "l93fld9",
-    placeId: "klasdf",
+    playerId: 3000,
+    placeId: 3000,
     index: 2,
     image: "schleckermaul4",
     cardType: "guest",
@@ -276,10 +276,10 @@ const deckCards: GameCard[] = [
 ];
 const discardPileCards: GameCard[] = [
   {
-    id: "alsvdknnakvos",
+    id: 3000,
     name: "discokugel",
-    playerId: "",
-    placeId: "klasd02mcvdlw",
+    playerId: 0,
+    placeId: 3000,
     index: 0,
     image: "discokugel", //TODO change
     cardType: "special",
@@ -291,40 +291,40 @@ const discardPileCards: GameCard[] = [
 
 export const initialGamePlayers: GamePlayer[] = [
   {
-    id: "l93fld9",
+    id: 3000,
     name: "Nick",
     places: {
       GCZ: {
-        id: "pd0s9fd",
-        playerId: "l93fld9",
+        id: 3000,
+        playerId: 3000,
         placeType: "GCZ",
         acceptedCardType: "guest",
         cards: myGCZCards,
       },
       UWZ: {
-        id: "0239842kl",
-        playerId: "l93fld9",
+        id: 3000,
+        playerId: 3000,
         placeType: "UWZ",
         acceptedCardType: "unwanted",
         cards: myUWZCards,
       },
       specialsZone: {
-        id: "klsjfd",
-        playerId: "l93fld9",
+        id: 3000,
+        playerId: 3000,
         placeType: "specialsZone",
         acceptedCardType: "special",
 
         cards: mySpecialsZoneCards,
       },
       hand: {
-        id: "pqewoi",
-        playerId: "l93fld9",
+        id: 3000,
+        playerId: 3000,
         placeType: "hand",
         cards: myHandCards,
       },
       enchantmentsRow: {
-        id: "324562132300",
-        playerId: "l93fld9",
+        id: 3000,
+        playerId: 3000,
         placeType: "enchantmentsRow",
         cards: myEnchantmentsRowCards,
       },
@@ -350,7 +350,7 @@ export const initialGameSnapshot: GameSnapshot = {
   },
   players: [
     {
-      id: "l93fld9",
+      id: 3000,
       name: "Nick",
       // current: true,
       // currentPhase: "normalPhase",
@@ -362,42 +362,42 @@ export const initialGameSnapshot: GameSnapshot = {
       skipNextTurn: false,
       places: {
         GCZ: {
-          id: "pd0s9fd",
-          playerId: "l93fld9",
+          id: 3000,
+          playerId: 3000,
           placeType: "GCZ",
           acceptedCardType: "guest",
           cards: myGCZCards,
         },
         UWZ: {
-          id: "0239842kl",
-          playerId: "l93fld9",
+          id: 3000,
+          playerId: 3000,
           placeType: "UWZ",
           acceptedCardType: "unwanted",
           cards: myUWZCards,
         },
         specialsZone: {
-          id: "klsjfd",
-          playerId: "l93fld9",
+          id: 3000,
+          playerId: 3000,
           placeType: "specialsZone",
           cards: mySpecialsZoneCards,
           acceptedCardType: "special",
         },
         hand: {
-          id: "pqewoi",
-          playerId: "l93fld9",
+          id: 3000,
+          playerId: 3000,
           placeType: "hand",
           cards: myHandCards,
         },
         enchantmentsRow: {
-          id: "324562132300",
-          playerId: "l93fld9",
+          id: 3000,
+          playerId: 3000,
           placeType: "enchantmentsRow",
           cards: myEnchantmentsRowCards,
         },
       },
     },
     {
-      id: "enemy",
+      id: 3000,
       name: "string",
       // current: false,
       // currentPhase: "normalPhase",
@@ -409,41 +409,41 @@ export const initialGameSnapshot: GameSnapshot = {
       skipNextTurn: false,
       places: {
         GCZ: {
-          id: "jr2034jrpdsf",
-          playerId: "enemy",
+          id: 3000,
+          playerId: 3000,
           placeType: "GCZ",
           acceptedCardType:"guest",
           cards: player1GCZCards,
         },
         UWZ: {
-          id: "aqu2389uh234rj",
-          playerId: "enemy",
+          id: 3000,
+          playerId: 3000,
           placeType: "UWZ",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
-          id: "09asdufj",
-          playerId: "enemy",
+          id: 3000,
+          playerId: 3000,
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
-          id: "2kopvjops",
-          playerId: "enemy",
+          id: 3000,
+          playerId: 3000,
           placeType: "hand",
           cards: player1HandCards,
         },
         enchantmentsRow: {
-          id: "jfw3o90jvskd",
-          playerId: "enemy",
+          id: 3000,
+          playerId: 3000,
           placeType: "enchantmentsRow",
           cards: [],
         },
       },
     },
     {
-      id: "enemy2",
+      id: 3000,
       name: "string2",
       // current: false,
       // currentPhase: "normalPhase",
@@ -455,33 +455,33 @@ export const initialGameSnapshot: GameSnapshot = {
       skipNextTurn: false,
       places: {
         GCZ: {
-          id: "vvv",
-          playerId: "enemy2",
+          id: 3000,
+          playerId: 3000,
           placeType: "GCZ",
           cards: [],
         },
         UWZ: {
-          id: "mmm",
-          playerId: "enemy2",
+          id: 3000,
+          playerId: 3000,
           placeType: "UWZ",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
-          id: "jjjjj",
-          playerId: "enemy2",
+          id: 3000,
+          playerId: 3000,
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
-          id: "qqqqqwww",
-          playerId: "enemy2",
+          id: 3000,
+          playerId: 3000,
           placeType: "hand",
           cards: [],
         },
         enchantmentsRow: {
-          id: "yyyyy",
-          playerId: "enemy2",
+          id: 3000,
+          playerId: 3000,
           placeType: "enchantmentsRow",
           cards: [],
         },
@@ -491,16 +491,18 @@ export const initialGameSnapshot: GameSnapshot = {
 
   nonPlayerPlaces: {
     deck: {
-      id: "klasdf",
+      id: 3000,
       placeType: "deck",
       cards: deckCards,
     },
     discardPile: {
-      id: "klasd02mcvdlw",
+      id: 3000,
       placeType: "discardPile",
       cards: discardPileCards,
     },
   },
+  snapshotUpdateData: { type: "initialSnapshot", playedCardIds: [], targetId: -1 },
+
 };
 
 // sorts cards into their correct order based on their index according to the DB
