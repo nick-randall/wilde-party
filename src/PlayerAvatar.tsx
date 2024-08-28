@@ -13,9 +13,10 @@ height: 100px
 const PlayerAvatar = (props: PlayerProps) => {
   const { player } = props;
   const { id, name, places, glitzaglitza, skipNextTurn } = player;
+  const droppableId = JSON.stringify({ id, type: "player" });
 
   return (
-    <Droppable droppableId={id}>
+    <Droppable droppableId={droppableId}>
       {provided => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
           <img src="./images/player_avatar.png" alt="you" />

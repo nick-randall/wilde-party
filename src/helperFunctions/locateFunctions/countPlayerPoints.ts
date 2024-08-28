@@ -1,7 +1,7 @@
 import store from "../../redux/store";
 import locatePlayer from "./locatePlayer";
 
-const countPlayerPoints = (playerIdOrNumber: number | string, gameSnapshot: GameSnapshot | null = null) => {
+const countPlayerPoints = (playerIdOrNumber: number, gameSnapshot: GameSnapshot | null = null) => {
   let player: number | null;
   let playerPoints: number = 0;
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;

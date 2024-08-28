@@ -7,7 +7,7 @@ export function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
   }
 }
 
-export const drawCardUpdateSnapshot = (handid: number, player: number, gameSnapshot: GameSnapshot): GameSnapshot =>
+export const drawCardUpdateSnapshot = (handId: number, player: number, gameSnapshot: GameSnapshot): GameSnapshot =>
   produce(gameSnapshot, draft => {
     const newPlayerId = gameSnapshot.players[player].places["hand"].playerId;
     setAttributes(draft.nonPlayerPlaces["deck"].cards[0], { placeId: handId, playerId: newPlayerId, index: 0 });

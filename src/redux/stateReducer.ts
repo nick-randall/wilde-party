@@ -24,12 +24,12 @@ export interface State {
   screenSize: { width: number; height: number };
   transitionData: TransitionData[];
   draggedOver?: DraggedOverData;
-  BFFdraggedOverSide: string | undefined;
+  BFFdraggedOverSide?: string;
   rearrangingData: SimpleRearrangingData;
-  draggedHandCard: GameCard | undefined;
+  draggedHandCard?: GameCard;
   highlights: number[];
   highlightType: string;
-  aiPlaying: string;
+  // aiPlaying: string;
 }
 
 const isGCZ = (placeId: number, gameSnapshot: GameSnapshot) => locatePlace(placeId, gameSnapshot).placeType === "GCZ";
@@ -62,7 +62,7 @@ export const stateReducer = (
     draggedHandCard: undefined,
     highlights: [],
     highlightType: "",
-    aiPlaying: "",
+    // aiPlaying: "",
   },
   action: Action
 ) => {
@@ -105,7 +105,8 @@ export const stateReducer = (
       if (isSpecialsColumn(type, id, state.gameSnapshot)) {
         console.log(`Dragged over specials column at calculated index: ${index}`);
         /// TODO not sure why we set it to 0 here
-        return { ...state, draggedOver: { ...action.payload, index: 0 } };
+        const draggedOver: DraggedOverData =  { ...action.payload, index: 0 }
+        return { ...state, draggedOver };
       }
       return { ...state, draggedOver: action.payload };
     }
@@ -162,14 +163,15 @@ export const stateReducer = (
 
     // return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
     case "END_DRAG_CLEANUP":
+      const rearrangingData:SimpleRearrangingData = { placeId: -1, draggedId: -1, sourceIndex: -1 };
       return {
         ...state,
         draggedHandCard: undefined,
         highlights: [],
         highlightType: "",
-        draggedOver: { droppableId: "", index: -1 },
+        draggedOver: undefined,
         BFFdraggedOverSide: undefined,
-        rearrangingData: { placeId: -1, draggableId: "", sourceIndex: -1 },
+        rearrangingData,
       };
     case "ADD_TRANSITION":
       return { ...state, transitionData: [...state.transitionData, action.payload] };
@@ -226,10 +228,10 @@ export const stateReducer = (
       console.log(newSnapshot);
       return { ...state, gameSnapshot: newSnapshot };
     }
-    case "SET_AI_PLAYING": {
-      console.log("setting playing", action.payload);
-      return { ...state, aiPlaying: action.payload };
-    }
+    // case "SET_AI_PLAYING": {
+    //   console.log("setting playing", action.payload);
+    //   return { ...state, aiPlaying: action.payload };
+    // }
     default:
       return state;
   }

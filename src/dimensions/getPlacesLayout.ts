@@ -9,11 +9,11 @@ export const getPlacesLayout = (
   state: RootState | null = null
 ): { x: number; y: number } => {
   if (state === null) state = store.getState();
-  const { gameSnapshot, dragUpdate, draggedHandCard } = state;
+  const { gameSnapshot, draggedOver, draggedHandCard } = state;
   const { player, place } = locate(id, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = getAllDimensions(id, gameSnapshot);
   let numCards = getNumCards(id, gameSnapshot);
-  const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
+  const isDraggedOver = draggedHandCard && draggedOver?.id === id;
   let draggedOverCard = draggedOver && numCards > 0 ? 1 : 0;
 
   let numCardsWidth = numCards;

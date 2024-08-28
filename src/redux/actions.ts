@@ -24,7 +24,6 @@ export type StartRearranging = {
   payload: SimpleRearrangingData;
 };
 
-export const startRearranging = (data: SimpleRearrangingData) => ({type: "START_REARRANGING", payload: data});
 
 export type UpdateDrag = {
   type: "UPDATE_DRAGGED_OVER";
@@ -38,17 +37,16 @@ export type Rearrange = {
   payload: { source: DraggedOverData; destination: DraggedOverData };
 };
 
-export const rearrange = (source: DraggedOverData, destination: DraggedOverData): Rearrange => ({type: "REARRANGE", payload: {source, destination}});
 
 export type AddDragged = {
   type: "ADD_DRAGGED";
   payload: { source: DraggableLocation; destination: DraggableLocation };
 };
 
-export type Enchant = {
-  type: "ENCHANT";
-  payload: DropResultEvent;
-};
+// export type Enchant = {
+//   type: "ENCHANT";
+//   payload: DropResultEvent;
+// };
 
 export type EndDragCleanup = {
   type: "END_DRAG_CLEANUP";
@@ -117,7 +115,7 @@ export type Action =
   | SetHighlights
   | Rearrange
   | AddDragged
-  | Enchant
+  // | Enchant
   | EndDragCleanup
   | DrawCard
   | ChangeNumPlays

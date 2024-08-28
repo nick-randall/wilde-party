@@ -9,7 +9,7 @@ const playerPlacesTypes: PlaceType[] = [
 const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 interface IdListObject {
-  [name: string]: string;
+  [name: string]: number;
 }
 
 export const getIdListObject = (gameSnapshot: GameSnapshot) => {

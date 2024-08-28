@@ -1,4 +1,6 @@
+export const t = 0;
 // import { getNumCards, locate } from "../locateFunctions";
+
 // import { produce } from "immer";
 // import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
 // import { compareProps } from "../tests";

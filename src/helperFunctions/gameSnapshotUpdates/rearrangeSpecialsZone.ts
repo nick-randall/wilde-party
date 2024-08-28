@@ -3,7 +3,7 @@ import { flatten, pipe } from "ramda";
 import { sortSpecials2 } from "../getSpecialsOfType";
 import { addZeroAtFirstIndex, getCumulativeSum } from "../groupGCZCards";
 import { compareProps } from "../tests";
-import { setAttributes } from "./addDragged";
+// import { setAttributes } from "./addDragged";
 
 const removeSourceIndex = (sourceIndex: number, array: any[]) => array.filter((_, index) => index !== sourceIndex);
 

@@ -7,12 +7,12 @@ import store, { RootState } from "../redux/store";
 export const getLayout = (id: number, screenSize: { width: number; height: number }, state: RootState | null = null): { x: number; y: number } => {
   if (state === null) 
   state =  store.getState();
-  const { gameSnapshot, dragUpdate, draggedHandCard } = state;
+  const { gameSnapshot, draggedOver, draggedHandCard } = state;
   const { player, place } = locate(id, gameSnapshot);
   const dimensions = getAllDimensions(id, gameSnapshot);
   const { cardHeight, cardWidth, cardLeftSpread } = dimensions;
   let numCards = getNumCards(id, gameSnapshot);
-  const draggedOver = draggedHandCard && dragUpdate.droppableId === id;
+  const isDraggedOver = draggedHandCard && draggedOver?.id === id;
   let draggedOverCard = draggedOver ? 1 : 0;
 
   let numCardsWidth = numCards;
