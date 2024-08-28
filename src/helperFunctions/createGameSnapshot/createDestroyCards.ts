@@ -1,13 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 
-const getCurrCardId = (currCardId: number) => currCardId++;
-
+const getCurrCardId = (currCardId: number) => currCardId+= 297;
 const createDestroyCards = (currCardId: number): GameCard[] => {
   const numDestroyCarsPerType = 2;
   let destroyCards: GameCard[] = [];
   for (let i = 0; i < numDestroyCarsPerType + 1; i++) {
     const nachbarin: GameCard = {
-      id: getCurrCardId(currCardId),
+      id: Math.floor(Math.random() * 10000000000000),
       name: `nachbarin${i}`,
       placeId: -1,
       playerId: -1,
@@ -19,7 +18,7 @@ const createDestroyCards = (currCardId: number): GameCard[] => {
     };
     destroyCards.push(nachbarin);
     const polizei: GameCard = {
-      id: getCurrCardId(currCardId),
+      id: Math.floor(Math.random() * 10000000000000),
       name: `polizei${i}`,
       placeId: -1,
       playerId: -1,

@@ -16,14 +16,14 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   return (
     <div style={{ left: x, top: y, position: "absolute" }}>
       {GCZCards.map((card, index) => 
-      <div style={{left: index * dimensions.cardLeftSpread, position:"absolute"}}>
-        <Card dimensions={dimensions} key={card.id} id={card.id} index={index} image={card.image}  />
-      )
+      <div key={card.id} style={{left: index * dimensions.cardLeftSpread, position:"absolute"}}>
+        <Card dimensions={dimensions}  id={card.id} index={index} image={card.image}  />
+      
       </div >)}
       <div style={{ top: dimensions.cardHeight/2, position: "absolute" }}>
       {enchantmentsRowCards.map((card) => (
-        <div style={{left: card.index * dimensions.cardLeftSpread, position:"absolute"}}>
-        <Card dimensions={dimensions} key={card.id} id={card.id} index={card.index} image={card.image}  />
+        <div key={card.id} style={{left: card.index * dimensions.cardLeftSpread, position:"absolute"}}>
+        <Card dimensions={dimensions}  id={card.id} index={card.index} image={card.image}  />
         </div >))}
       </div>
     </div>

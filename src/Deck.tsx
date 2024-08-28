@@ -30,8 +30,8 @@ export const Deck = (props: DeckProps) => {
   transition: "background-color 180ms, box-shadow 180ms, left 180ms",} : {}
 
   return (
-    <div style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
-      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} id={card.id} index={index} image="back"/>)}
+    <div  style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
+      {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} key={card.id} id={card.id} index={index} image="back"/>)}
 
     </div>
   );

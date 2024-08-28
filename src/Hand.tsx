@@ -39,6 +39,7 @@ const Hand = (props: HandProps) => {
         <div
           onMouseEnter={() => setShouldSpread(true)}
           onMouseLeave={() => setShouldSpread(false)}
+          key={droppableId}
           style={{
             position: "absolute",
             display: "flex",
@@ -54,6 +55,8 @@ const Hand = (props: HandProps) => {
         >
           {handCards.map((card, index) => (
             <div
+            key={"handcard" + card.id}
+
               // This is a container div for one card and two spacers
               style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
             >

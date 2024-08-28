@@ -6,7 +6,7 @@ const getCurrCardId = (currCardId: number) => currCardId++;
 const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard[] => { 
   let startingGuests: GameCard[]  = [
   {
-    id: getCurrCardId(currCardId),
+    id: Math.floor(Math.random() * 10000000000000),
     name: "startgast_saufnase",
     playerId: -1,
     placeId: -1,
@@ -18,7 +18,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: getCurrCardId(currCardId),
+    id: Math.floor(Math.random() * 10000000000000),
     name: "startgast_taenzerin",
     playerId: -1,
     placeId: -1,
@@ -30,7 +30,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: getCurrCardId(currCardId),
+    id: Math.floor(Math.random() * 10000000000000),
     name: "startgast_rumgroelerin",
     placeId: -1,
     playerId: -1,
@@ -42,7 +42,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: getCurrCardId(currCardId),
+    id: Math.floor(Math.random() * 10000000000000),
     name: "startgast_schleckermaul",
     playerId: -1,
     placeId: -1,
@@ -54,7 +54,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
   },
   {
-    id: getCurrCardId(currCardId),
+    id: Math.floor(Math.random() * 10000000000000),
     name: "startgast_unscheinbar",
     playerId: -1,
     placeId: -1,

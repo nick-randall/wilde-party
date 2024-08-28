@@ -17,6 +17,11 @@ export const createDeck = () => {
   deck.push(...unwanteds);
   deck.push(...enchantCards);
   //deck.push(...destroyCards);
+  for(const card of deck){ 
+    if(deck.filter(c => c.id === card.id).length > 1){
+      card.id = Math.floor(Math.random() * 10000000000000);
+    }
+  }
   return deck;
 };
 

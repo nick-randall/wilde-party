@@ -10,8 +10,10 @@ let currPlayerIndex = 0;
 let currPlaceIndex = 0;
 const getCurrCardIndex = (idx: number) => idx++;
 const getCurrPlayerIndex = () => currPlayerIndex++;
-const getCurrPlaceIndex = () => currPlaceIndex++;
-
+const getCurrPlaceIndex = () => {
+  console.log(currPlaceIndex++);
+  return currPlaceIndex;
+};
 
 export const createGameSnapshot = () => {
   const players: GamePlayer[] = [];
@@ -32,7 +34,7 @@ export const createGameSnapshot = () => {
           playerId: playerId,
           placeType: "GCZ",
           acceptedCardType: "guest",
-          cards: [],
+          cards: [...deckCards.splice(0, 5)],
         },
         UWZ: {
           id: getCurrPlaceIndex(),
@@ -52,7 +54,7 @@ export const createGameSnapshot = () => {
           id: getCurrPlaceIndex(),
           playerId: playerId,
           placeType: "hand",
-          cards: [],
+          cards: [...deckCards.splice(0, 5)],
         },
         enchantmentsRow: {
           id: getCurrPlaceIndex(),
@@ -84,7 +86,6 @@ export const createGameSnapshot = () => {
       },
     },
     snapshotUpdateData: { type: "initialSnapshot", playedCardIds: [], targetId: -1 },
-
   };
   console.log(JSON.stringify(gameSnapshot));
   return gameSnapshot;

@@ -10,7 +10,7 @@ const createUnwanteds = (currCardId: number): GameCard[] => {
   let unwanteds: GameCard[] = [];
   for (let i = 0; i < numUnwantedGuestsPerType + 1; i++) {
     const musikfuersichalleinebeansprucherin: GameCard = {
-      id: getCurrCardId(currCardId),
+      id: Math.floor(Math.random() * 10000000000000),
       name: `musikfuersichalleinebeansprucherin${i}`,
       placeId: -1,
       playerId: -1,
@@ -23,7 +23,7 @@ const createUnwanteds = (currCardId: number): GameCard[] => {
     unwanteds.push(musikfuersichalleinebeansprucherin);
 
     const quasselstrippe: GameCard = {
-      id: getCurrCardId(currCardId),
+      id: Math.floor(Math.random() * 10000000000000),
       name: `quasselstrippe${i}`,
       placeId: -1,
       playerId: -1, 

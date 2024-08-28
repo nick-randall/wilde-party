@@ -98,6 +98,8 @@ export const stateReducer = (
         return { ...state, draggedOver: undefined };
       }
       const { id, index, type } = action.payload;
+      const placeName = locatePlace(id, state.gameSnapshot).placeType;
+      console.log(`Dragged over ${placeName}: (id ${id}) at calculated index: ${index}`);
 
       if (isEnchantWithBFF(state.draggedHandCard)) {
         const BFFdraggedOverSide = getLeftOrRightNeighbour(state.gameSnapshot, id);
