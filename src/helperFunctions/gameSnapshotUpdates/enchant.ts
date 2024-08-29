@@ -28,7 +28,7 @@ export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targe
     const { player } = locate(targetCardId, gameSnapshot);
     if (player !== null) {
       const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
-      const GCZ = gameSnapshot.players[player].places["GCZ"];
+      const GCZ = gameSnapshot.players[player].places["guestCardZone"];
       const enchantmentsRowId = enchantmentsRow.id;
       const newPlayerId = enchantmentsRow.playerId;
       const playedCardType = gameSnapshot.players[player].places.hand.cards[handCardIndex].cardType;

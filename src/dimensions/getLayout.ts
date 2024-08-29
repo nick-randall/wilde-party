@@ -16,13 +16,13 @@ export const getLayout = (id: number, screenSize: { width: number; height: numbe
   let draggedOverCard = draggedOver ? 1 : 0;
 
   let numCardsWidth = numCards;
-  if ((place === "specialsZone" || place === "UWZ") && player !== null) {
+  if ((place === "specialsZone" || place === "unwantedsZone") && player !== null) {
     const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
     const numSpecialsColumns = sortSpecials2(specialsZoneCards).length;
-    const numUWZColumns = 1; //gameSnapshot.players[player].places["UWZ"].cards.length > 0 ? 0 : 1;
+    const numUWZColumns = 1; //gameSnapshot.players[player].places["unwantedsZone"].cards.length > 0 ? 0 : 1;
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
-  if (place === "UWZ") draggedOverCard = 0;
+  if (place === "unwantedsZone") draggedOverCard = 0;
   if(place === "deck") numCards = 0;
 
   const fromCenterWidth = (distance: number): number =>
@@ -57,9 +57,9 @@ export const getLayout = (id: number, screenSize: { width: number; height: numbe
     switch (place) {
       case "specialsZone":
         return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
-      case "UWZ":
+      case "unwantedsZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
-      case "GCZ":
+      case "guestCardZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
         return { x: handFromCenterWidth(0), y: handFromBottom(30) };

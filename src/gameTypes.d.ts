@@ -109,7 +109,7 @@ type GhostCard = {
   place: PlaceType;
 };
 
-type PlaceType = "GCZ" | "UWZ" | "specialsZone" | "hand" | "deck" | "discardPile" | "enchantmentsRow";
+type PlaceType = "guestCardZone" | "unwantedsZone" | "specialsZone" | "hand" | "deck" | "discardPile" | "enchantmentsRow";
 
 // DB prototype
 type Place = {

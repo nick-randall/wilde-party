@@ -15,7 +15,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: Math.floor(Math.random() * 10000000000000),
@@ -27,7 +27,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     cardType: "guest",
     pointValue: 1,
     guestCardType: "taenzerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: Math.floor(Math.random() * 10000000000000),
@@ -39,7 +39,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: Math.floor(Math.random() * 10000000000000),
@@ -51,7 +51,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: Math.floor(Math.random() * 10000000000000),
@@ -62,7 +62,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     image: "startgast_unscheinbar", //TODO change
     pointValue: 1,
     cardType: "guest",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
 ];
 const shuffledStartingGuests = shuffle(startingGuests)

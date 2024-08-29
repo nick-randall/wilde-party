@@ -20,7 +20,7 @@ export const getLeftOrRightNeighbour = (gameSnapshot: GameSnapshot, targetCardId
   const { player } = locate(targetCardId, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
-    const GCZ = gameSnapshot.players[player].places["GCZ"];
+    const GCZ = gameSnapshot.players[player].places["guestCardZone"];
     const index = GCZ.cards.map(e => e.id).indexOf(targetCardId)
     if (rightNeighbourIsEnchantable(index, enchantmentsRow.cards, GCZ.cards)) return "right";
     if (leftNeighbourIsEnchantable(index, enchantmentsRow.cards)) return "left";

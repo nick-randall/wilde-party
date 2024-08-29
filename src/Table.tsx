@@ -7,11 +7,14 @@ import Player from "./Player";
 import NonPlayerPlaces from "./NonPlayerPlaces";
 import EnemyPlayer from "./EnemyPlayer";
 import "./css/global.css";
+import axios from "axios";
+import { set } from "ramda";
 
 export const Table = () => {
-  const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
+  // const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
+  const [gameSnapshot, setGameSnapshot] = useState<GameSnapshot>();
   const screenSize = useSelector((state: RootState) => state.screenSize);
-  const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
+  // const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const [gameStarted, setGameStarted] = useState(false);
 
   const dispatch = useDispatch();
@@ -25,9 +28,18 @@ export const Table = () => {
     if (!gameStarted) {
       console.log("called it");
       // dispatch(dealInitialHands());
+      axios
+        .get("/just-get-snapshot")
+        // .then(res => res.json())
+        .then(resp => {
+          setGameSnapshot(resp.data);
+        });
       setGameStarted(true);
     }
   }, [dispatch, gameStarted]);
+
+  if (!gameSnapshot) return <div className="background-tile">loading</div>;
+  const { player } = gameSnapshot.current;
 
   return (
     <div className="background-tile">

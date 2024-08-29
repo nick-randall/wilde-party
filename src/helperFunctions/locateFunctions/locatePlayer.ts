@@ -2,7 +2,7 @@ import store from "../../redux/store";
 
 // Returns the player index given a placeId or playerId
 
-const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
+const playerPlacesTypes: PlaceType[] = ["guestCardZone", "unwantedsZone", "specialsZone", "hand", "enchantmentsRow"];
 const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 export const locatePlayer = (id: number, gameSnapshot: GameSnapshot | null = null): number | null => {

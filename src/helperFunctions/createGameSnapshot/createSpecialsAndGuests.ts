@@ -32,7 +32,7 @@ const createSpecialsAndGuests = (currCardId: number) => {
       image: `unscheinbar${i}`,
       pointValue: 1,
       cardType: "guest",
-      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
     };
     specialsAndGuests.push(unscheibarerGast);
   }
@@ -46,7 +46,7 @@ const createSpecialsAndGuests = (currCardId: number) => {
       image: `einfach${i}`,
       pointValue: 1,
       cardType: "guest",
-      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
     };
     specialsAndGuests.push(einfacherGuestCard);
     const doppelterGuestCard: GameCard = {
@@ -58,7 +58,7 @@ const createSpecialsAndGuests = (currCardId: number) => {
       image: `doppelt${i}`,
       pointValue: 2,
       cardType: "guest",
-      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
     };
     specialsAndGuests.push(doppelterGuestCard);
   }
@@ -75,7 +75,7 @@ const createSpecialsAndGuests = (currCardId: number) => {
         pointValue: 1,
         cardType: "guest",
         guestCardType: `${guestCardType}`,
-        action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+        action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
       };
       specialsAndGuests.push(guestCard);
     }

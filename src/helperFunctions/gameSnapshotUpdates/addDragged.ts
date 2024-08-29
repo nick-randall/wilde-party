@@ -31,9 +31,9 @@ export const t = 0;
 //     let { player: sourcePlayer, place: sourcePlace } = locate(sourcePlaceId, gameSnapshot);
 //     let targetIndex = destinationIndex;
 //     if (sourcePlayer !== null && destPlayer !== null && destPlace !== null) {
-//       if (destPlace === "GCZ") {
+//       if (destPlace === "guestCardZone") {
 //         const enchantmentsRow = gameSnapshot.players[destPlayer].places["enchantmentsRow"];
-//         const GCZ = gameSnapshot.players[destPlayer].places["GCZ"];
+//         const GCZ = gameSnapshot.players[destPlayer].places["guestCardZone"];
 
 //         const cardGroupObjs = getCardGroupObjs(enchantmentsRow.cards, GCZ.cards);
 //         const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs);
@@ -61,7 +61,7 @@ export const t = 0;
 //           destinationPlaceId = destinationPlaceId.slice(1);
 //           console.log(destinationPlaceId);
 //         }
-//       } else if (destPlace === "UWZ") {
+//       } else if (destPlace === "unwantedsZone") {
 //         targetIndex = getNumCards(destinationPlaceId, gameSnapshot);
 //         console.log(targetIndex + " is targetIndex of unwanted " + draft.players[sourcePlayer].places.hand.cards[sourceIndex].name)
 //         compareProps(draft.players[destPlayer].places[destPlace].cards);
@@ -77,7 +77,7 @@ export const t = 0;
 //       const [handCard] = draft.players[sourcePlayer].places.hand.cards.splice(sourceIndex, 1);
 //       draft.players[destPlayer].places[destPlace].cards.splice(targetIndex, 0, handCard);
 //       draft.players[destPlayer].places[destPlace].cards = draft.players[destPlayer].places[destPlace].cards.map((c, i) => ({ ...c, index: i }));
-//       // if(destPlace === "GCZ")
+//       // if(destPlace === "guestCardZone")
 //       if(sourcePlace && handCard.cardType === "unwanted")
 //       console.log((draft.players[sourcePlayer].places[sourcePlace].cards))
     
@@ -109,15 +109,15 @@ export const t = 0;
 // //   }
 
 // //   if (sourcePlayer !== null && destPlayer !== null && destPlace !== null) {
-// //     if (destPlace === "GCZ") {
+// //     if (destPlace === "guestCardZone") {
 // //       const enchantmentsRow = gameSnapshot.players[destPlayer].places["enchantmentsRow"];
-// //       const GCZ = gameSnapshot.players[destPlayer].places["GCZ"];
+// //       const GCZ = gameSnapshot.players[destPlayer].places["guestCardZone"];
 
 // //       const cardGroupObjs = getCardGroupObjs(enchantmentsRow.cards, GCZ.cards);
 // //       const cardRowShape = getCardRowShapeOnDraggedOver(cardGroupObjs);
 // //       targetIndex = cardRowShape[destinationIndex];
 // //     }
-// //     else if (destPlace === "UWZ") {
+// //     else if (destPlace === "unwantedsZone") {
 // //       targetIndex = getNumCards(destinationPlaceId, gameSnapshot)
 // //     }
 

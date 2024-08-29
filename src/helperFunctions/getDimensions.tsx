@@ -29,7 +29,7 @@ export const getAllDimensions = (placeId: number, gameSnapshot: GameSnapshot | n
     tableCardHeight: tableCardHeight,
     tableCardWidth: tableCardWidth,
     cardLeftSpread: numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3,
-    cardTopSpread: place !== "specialsZone" ? (place === "UWZ" ? -40 : 0) : -30,
+    cardTopSpread: place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30,
     zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
     draggedCardScale: 1.1,
     draggedCardWidth: 112,

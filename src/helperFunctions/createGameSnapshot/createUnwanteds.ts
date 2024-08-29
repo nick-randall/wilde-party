@@ -18,7 +18,7 @@ const createUnwanteds = (currCardId: number): GameCard[] => {
       image: `musikfuersichalleinebeansprucherin`,
       pointValue: -1,
       cardType: "unwanted",
-      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
     };
     unwanteds.push(musikfuersichalleinebeansprucherin);
 
@@ -31,7 +31,7 @@ const createUnwanteds = (currCardId: number): GameCard[] => {
       image: `quasselstrippe`,
       pointValue: -1,
       cardType: "unwanted",
-      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
+      action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
     };
     unwanteds.push(quasselstrippe);
   }

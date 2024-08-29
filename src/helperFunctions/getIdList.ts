@@ -1,6 +1,6 @@
 const playerPlacesTypes: PlaceType[] = [
-  "GCZ",
-  "UWZ",
+  "guestCardZone",
+  "unwantedsZone",
   "specialsZone",
   "hand",
   "enchantmentsRow",

@@ -21,7 +21,7 @@ export const highlightCardHasEnchantableNeighbour = (highlightCard: GameCard, dr
   const { player } = locate(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
-    const GCZ = gameSnapshot.players[player].places["GCZ"].cards;
+    const GCZ = gameSnapshot.players[player].places["guestCardZone"].cards;
     if (isOnlyCardInPlace(GCZ)) return false;
     if (rightNeighbourIsEnchantable(highlightCard.index, enchantmentsRow, GCZ)) return true;
     else return leftNeighbourIsEnchantable(highlightCard.index, enchantmentsRow);

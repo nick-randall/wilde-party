@@ -2,6 +2,8 @@ import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
 import "./css/global.css";
+import { useEffect } from "react";
+import axios from "axios";
 
 type GameStartedProps = {
   imageHeight?: number;
@@ -24,9 +26,23 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 `;
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    // axios.get("/just-get-snapshot").then(data => console.log(data.data));
+
+    fetch("/just-get-snapshot")
+      // .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        data.json().then(data => {
+          const gs: GameSnapshot = data;
+          console.log(gs);
+          console.log(gs.players[0].places.hand)
+        });
+      });
+  }, []);
   return (
     <div className="splash-screen">
-    {/* <img
+      {/* <img
         src="./images/splashscreen.jpg"
         alt="background"
         style={{
@@ -38,7 +54,15 @@ const HomePage: React.FC = () => {
           backgroundRepeat: "repeat"
         }}
       />  */}
-      <div style={{ position: "relative", display: "flex", justifyContent: "center", backgroundImage: `url("./images/splashscreen.jpg")`, backgroundSize: "cover", }}>
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url("./images/splashscreen.jpg")`,
+          backgroundSize: "cover",
+        }}
+      >
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ height: "65vh" }} />
           <Link to="/game">
@@ -51,9 +75,7 @@ const HomePage: React.FC = () => {
             </a>
           </HomeScreenButton>
         </div>
-        
       </div>
-
     </div>
     // </div>
   );

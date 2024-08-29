@@ -22,7 +22,7 @@ const allTrueWithArgs =
 // add
 export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
   
-  locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;
+  locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
 
 
 // export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
@@ -30,11 +30,11 @@ export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedC
 //     highlightPlace.placeType,
 //     highlightPlace.id,
 //     highlightPlace.playerId,
-//     locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards,
+//     locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards,
 //     "highlightPlaceHasEnoughSpace"
 //   );
 
-//   return locate(highlightPlace.id, gameSnapshot).place !== "GCZ" ? true : highlightPlace.cards.length < maxNumGuestCards;
+//   return locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
 // };
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 

@@ -52,7 +52,7 @@ const curriedUpdateGCZAndEnchant =
   ({ updatedGCZCards, updatedEnchantmentsRowCards }: { updatedGCZCards: GameCard[]; updatedEnchantmentsRowCards: GameCard[] }) => {
     const enchantCards = R.lensPath(["players", 0, "places", "enchantmentsRow", "cards"]);
     const snapshotWithUpdatedEnchantCards = R.set(enchantCards, updatedEnchantmentsRowCards, gameSnapshot);
-    const GCZCards = R.lensPath(["players", 0, "places", "GCZ", "cards"]);
+    const GCZCards = R.lensPath(["players", 0, "places", "guestCardZone", "cards"]);
     const snapshotwithBothUpdated = R.set(GCZCards, updatedGCZCards, snapshotWithUpdatedEnchantCards);
     return snapshotwithBothUpdated;
   };

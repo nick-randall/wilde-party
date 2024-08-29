@@ -10,7 +10,7 @@ const myGCZCards: GameCard[] = [
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
 
   {
@@ -23,7 +23,7 @@ const myGCZCards: GameCard[] = [
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
 ];
 
@@ -48,7 +48,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 0,
     image: "musikfuersichalleinebeansprucherin",
     cardType: "unwanted",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
   },
   // {
   //   id: 3000,
@@ -108,7 +108,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: 3000,
@@ -119,7 +119,7 @@ export const myHandCards: GameCard[] = [
     pointValue: 0,
     image: "quasselstrippe",
     cardType: "unwanted",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "UWZ", targetPlayerType: "enemy" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
   },
 ];
 export const myEnchantmentsRowCards: GameCard[] = [
@@ -179,7 +179,7 @@ const player1HandCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: 3000,
@@ -191,7 +191,7 @@ const player1HandCards: GameCard[] = [
     cardType: "guest",
     pointValue: 2,
     guestCardType: "taenzerin", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: 3000,
@@ -203,7 +203,7 @@ const player1HandCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: 3000,
@@ -215,7 +215,7 @@ const player1HandCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
 ];
 
@@ -230,7 +230,7 @@ const player1GCZCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
 ];
 
@@ -257,7 +257,7 @@ const deckCards: GameCard[] = [
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin",
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
   {
     id: 3000,
@@ -269,7 +269,7 @@ const deckCards: GameCard[] = [
     cardType: "guest",
     pointValue: 1,
     guestCardType: "schleckermaul", //???
-    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "GCZ", targetPlayerType: "self" },
+    action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
     
   
@@ -297,14 +297,14 @@ export const initialGamePlayers: GamePlayer[] = [
       GCZ: {
         id: 3000,
         playerId: 3000,
-        placeType: "GCZ",
+        placeType: "guestCardZone",
         acceptedCardType: "guest",
         cards: myGCZCards,
       },
       UWZ: {
         id: 3000,
         playerId: 3000,
-        placeType: "UWZ",
+        placeType: "unwantedsZone",
         acceptedCardType: "unwanted",
         cards: myUWZCards,
       },
@@ -364,14 +364,14 @@ export const initialGameSnapshot: GameSnapshot = {
         GCZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "GCZ",
+          placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: myGCZCards,
         },
         UWZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "UWZ",
+          placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: myUWZCards,
         },
@@ -411,14 +411,14 @@ export const initialGameSnapshot: GameSnapshot = {
         GCZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "GCZ",
+          placeType: "guestCardZone",
           acceptedCardType:"guest",
           cards: player1GCZCards,
         },
         UWZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "UWZ",
+          placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },
@@ -457,13 +457,13 @@ export const initialGameSnapshot: GameSnapshot = {
         GCZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "GCZ",
+          placeType: "guestCardZone",
           cards: [],
         },
         UWZ: {
           id: 3000,
           playerId: 3000,
-          placeType: "UWZ",
+          placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },

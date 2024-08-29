@@ -33,7 +33,7 @@ export interface State {
   // aiPlaying: string;
 }
 
-const isGCZ = (placeId: number, gameSnapshot: GameSnapshot) => locatePlace(placeId, gameSnapshot).placeType === "GCZ";
+const isGCZ = (placeId: number, gameSnapshot: GameSnapshot) => locatePlace(placeId, gameSnapshot).placeType === "guestCardZone";
 
 const isSpecialsZone = (type: DroppableEntityType, placeId: number, gameSnapshot: GameSnapshot) => {
   if (type !== "place") return false;

@@ -32,14 +32,14 @@ export const createGameSnapshot = () => {
         GCZ: {
           id: getCurrPlaceIndex(),
           playerId: playerId,
-          placeType: "GCZ",
+          placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: [...deckCards.splice(0, 5)],
         },
         UWZ: {
           id: getCurrPlaceIndex(),
           playerId: playerId,
-          placeType: "UWZ",
+          placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },

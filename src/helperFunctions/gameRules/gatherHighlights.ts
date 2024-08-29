@@ -31,7 +31,7 @@ const getPlaceHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): 
   const potentialHighlights = getAllPlayerPlaces(gameSnapshot)
   const highlights = potentialHighlights.filter(e => highlightFunction(e, draggedCard, gameSnapshot));
   // return highlights.map((e) => R.prop("id", e))
-  return potentialHighlights.filter(place => place.placeType === "GCZ").map(place => R.prop("id", place))
+  return potentialHighlights.filter(place => place.placeType === "guestCardZone").map(place => R.prop("id", place))
 };
 
 const getPlayerHighlights = (draggedCard: GameCard, gameSnapshot: GameSnapshot): number[] => {

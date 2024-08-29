@@ -5,7 +5,7 @@ export interface Locator {
   place: PlaceType;
 }
 
-export const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
+export const playerPlacesTypes: PlaceType[] = ["guestCardZone", "unwantedsZone", "specialsZone", "hand", "enchantmentsRow"];
 
 export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
@@ -16,7 +16,7 @@ export const getNumCards = (placeId: number, gameSnapshot: GameSnapshot): number
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];
       if (placeId === players[i]["places"][place].id) {
-        if (place === "enchantmentsRow") return players[i]["places"]["GCZ"].cards.length;
+        if (place === "enchantmentsRow") return players[i]["places"]["guestCardZone"].cards.length;
         return players[i]["places"][place].cards.length;
       }
     }
@@ -69,7 +69,7 @@ export const locate = (id: number, gameSnapshot: GameSnapshot | null = null): Lo
     if (id === nonPlayerPlaces[place].id) return { player: null, place: place };
   }
   console.log("cardId" + id);
-  return { player: null, place: "GCZ" };
+  return { player: null, place: "guestCardZone" };
 };
 
 export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlayer) =>
@@ -203,5 +203,5 @@ export const getPlaceType = (placeId: number, gameSnapshot: GameSnapshot): Place
     }
     if (placeId === nonPlayerPlaces[place].id) return place;
   }
-  return "GCZ";
+  return "guestCardZone";
 };

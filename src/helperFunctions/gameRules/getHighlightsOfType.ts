@@ -1,8 +1,8 @@
-const playerPlacesTypes: PlaceType[] = ["GCZ", "UWZ", "specialsZone", "hand", "enchantmentsRow"];
+const playerPlacesTypes: PlaceType[] = ["guestCardZone", "unwantedsZone", "specialsZone", "hand", "enchantmentsRow"];
 
 const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
-const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("GCZ") ? Object.entries(placeObject) : []);
+const checkCardsInPlace = (placeObject: GamePlace) => (placeObject.hasOwnProperty("guestCardZone") ? Object.entries(placeObject) : []);
 
 export const getAllPlayerPlaces = (gameSnapshot: any): GamePlace[] => {
   let places: GamePlace[] = [];

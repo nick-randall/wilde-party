@@ -17,14 +17,14 @@ export const getPlacesLayout = (
   let draggedOverCard = draggedOver && numCards > 0 ? 1 : 0;
 
   let numCardsWidth = numCards;
-  if ((place === "specialsZone" || place === "UWZ") && player !== null) {
+  if ((place === "specialsZone" || place === "unwantedsZone") && player !== null) {
     const specialsZoneCards = gameSnapshot.players[player].places["specialsZone"].cards;
     const numSpecialsColumns = sortSpecials2(specialsZoneCards).length;
     // Always one UWZ column only
     const numUWZColumns = 1;
     numCardsWidth = numSpecialsColumns + numUWZColumns;
   }
-  if (place === "UWZ") draggedOverCard = 0;
+  if (place === "unwantedsZone") draggedOverCard = 0;
   if (place === "deck" || place ==="discardPile") numCardsWidth = 0;
 
   const fromCenterWidth = (distance: number): number => distance + (playerZoneSize.width / 2 - ((numCardsWidth + draggedOverCard) * cardWidth) / 2);
@@ -39,9 +39,9 @@ export const getPlacesLayout = (
     switch (place) {
       case "specialsZone":
         return { x: fromCenterWidth(0 + cardWidth * 2), y: fromCenterHeight(-cardHeight*1.5) };
-      case "UWZ":
+      case "unwantedsZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight * 1.5) };
-      case "GCZ":
+      case "guestCardZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight * 0.5) };
       case "hand":
         return { x: handFromCenterWidth(-200), y: handFromBottom(80) };
@@ -51,9 +51,9 @@ export const getPlacesLayout = (
     switch (place) {
       case "specialsZone":
         return { x: fromCenterWidth(0 + cardWidth), y: fromCenterHeight(-cardHeight) };
-      case "UWZ":
+      case "unwantedsZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(-cardHeight) };
-      case "GCZ":
+      case "guestCardZone":
         return { x: fromCenterWidth(0), y: fromCenterHeight(0) };
       case "hand":
         return { x: (handFromCenterWidth(0)), y: handFromBottom(0) };
