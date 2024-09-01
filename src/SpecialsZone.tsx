@@ -80,7 +80,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id
               />
             )
           )}
-          {ghostCard ? <GhostCard index={draggedOver?.index ?? 0} imageName={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+          {ghostCard ? <GhostCard index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

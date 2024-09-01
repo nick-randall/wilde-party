@@ -21,6 +21,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
     if (ghostCardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
     else return { top: 0, left: 0 };
   };
+  console.log(ghostCardGroup);
 
   return (
     <div id={`ghostcard-absolute-positioning-container${ghostCardGroup}`} style={{ position: "absolute", zIndex: 0 }}>
@@ -28,7 +29,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
         {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
           <GhostCard
             index={index}
-            imageName={ghostCard.image}
+            imageName={ghostCard.imageName}
             dimensions={dimensions}
             key={ghostCard.id}
             offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}

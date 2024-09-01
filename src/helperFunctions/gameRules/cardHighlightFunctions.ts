@@ -45,7 +45,6 @@ export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: Gam
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const leftNeighbourEnchantCard = enchantmentsRow.find(card => card.index === highlightCard.index - 1);
     if (!leftNeighbourEnchantCard) return true;
-    console.log(leftNeighbourEnchantCard?.image);
     return leftNeighbourEnchantCard?.cardType !== "bff";
   }
   return false;

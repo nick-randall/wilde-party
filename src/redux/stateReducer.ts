@@ -81,6 +81,7 @@ export const stateReducer = (
       return { ...state, draggedHandCard: draggedHandCard };
     }
     case "START_REARRANGING": {
+      console.log(action.payload);
       return { ...state, rearrangingData: action.payload };
     }
     case "SET_HIGHLIGHTS": {

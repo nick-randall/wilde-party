@@ -26,20 +26,20 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 `;
 
 const HomePage: React.FC = () => {
-  useEffect(() => {
-    // axios.get("/just-get-snapshot").then(data => console.log(data.data));
+  // useEffect(() => {
+  //   // axios.get("/just-get-snapshot").then(data => console.log(data.data));
 
-    fetch("/just-get-snapshot")
-      // .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        data.json().then(data => {
-          const gs: GameSnapshot = data;
-          console.log(gs);
-          console.log(gs.players[0].places.hand)
-        });
-      });
-  }, []);
+  //   fetch("/just-get-snapshot")
+  //     // .then(res => res.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       data.json().then(data => {
+  //         const gs: GameSnapshot = data;
+  //         console.log(gs);
+  //         console.log(gs.players[0].places.hand)
+  //       });
+  //     });
+  // }, []);
   return (
     <div className="splash-screen">
       {/* <img

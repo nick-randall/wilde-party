@@ -73,19 +73,19 @@ export const Table = () => {
           <SpecialsZone specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
           <EnemyGCZ
             id={gameSnapshot.players[1].id}
-            enchantmentsRowCards={p01places.enchantmentsRow.cards}
-            GCZCards={p01places.guestCardZone.cards}
+            enchantmentsRowCards={p02places.enchantmentsRow.cards}
+            GCZCards={p02places.guestCardZone.cards}
             alignment="top-left"
           />
           <div></div>
           <EnemyGCZ
             id={gameSnapshot.players[2].id}
-            enchantmentsRowCards={p02places.enchantmentsRow.cards}
+            enchantmentsRowCards={p03places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}
             alignment="top-right"
           />
           <div className="grid-item center-column align-start">
-            <SpecialsZone specialsZoneData={gameSnapshot.players[0].places.specialsZone} alignment="" />
+            <SpecialsZone specialsZoneData={p01places.specialsZone} alignment="" />
             <GCZ id={p01places.guestCardZone.id} enchantmentsRowCards={p01places.enchantmentsRow.cards} GCZCards={p01places.guestCardZone.cards} />
           </div>
           <Hand id={p01places.hand.id} handCards={p01places.hand.cards} />

@@ -40,7 +40,10 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  console.log(GCZCards)
+  console.log(ghostCard)
+  console.log(ghostCardIndex)
+  console.log(draggedOver)
+  console.log(ghostCardGroup)
 
   return (
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
@@ -69,7 +72,7 @@ function GCZ(props: GCZProps) {
           {provided.placeholder}
 
           {ghostCardGroup ? <GhostCardGroup ghostCardGroup={ghostCardGroup} index={cardRowShape[ghostCardIndex]} dimensions={dimensions} /> : null}
-          {ghostCard ? <GhostCard index={cardRowShape[ghostCardIndex]} imageName={ghostCard.image} dimensions={dimensions} zIndex={0} /> : null}
+          {ghostCard ? <GhostCard index={cardRowShape[ghostCardIndex]} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={0} /> : null}
         </div>
       )}
     </Droppable>

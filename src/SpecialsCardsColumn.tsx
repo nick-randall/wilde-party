@@ -77,7 +77,7 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
                     }}
                   >
                     {provided.placeholder}
-                    {ghostCard ? <GhostCard index={0} imageName={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                    {ghostCard ? <GhostCard index={0} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={9} /> : null}
                   </div>
                 )}
               </Droppable>

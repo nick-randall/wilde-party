@@ -111,7 +111,7 @@ const EnemyCard = (props: EnemyCardProps) => {
               index={0}
               offsetLeft={cardLeftSpread * BFFOffset}
               offsetTop={cardHeight / 2}
-              imageName={ghostCard.image}
+              imageName={ghostCard.imageName}
               dimensions={dimensions}
               zIndex={5}
             />

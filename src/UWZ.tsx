@@ -50,7 +50,7 @@ export const UWZ = (props: UWZProps) => {
             }}
           >
             {provided.placeholder}
-            {ghostCard ? <GhostCard index={ghostCardIndex} imageName={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+            {ghostCard ? <GhostCard index={ghostCardIndex} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={9} /> : null}
           </div>
         )}
       </Droppable>

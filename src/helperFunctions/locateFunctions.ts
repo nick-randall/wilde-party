@@ -145,14 +145,14 @@ export const getImage = (cardId: number, gameSnapshot: GameSnapshot): string => 
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];
       for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
-        if (players[i]["places"][place].cards[l].id === cardId) return players[i]["places"][place].cards[l].image;
+        if (players[i]["places"][place].cards[l].id === cardId) return players[i]["places"][place].cards[l].imageName;
       }
     }
   }
   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
     const place = nonPlayerPlacesTypes[k];
     for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
-      if (nonPlayerPlaces[place].cards[l].id === cardId) return nonPlayerPlaces[place].cards[l].image;
+      if (nonPlayerPlaces[place].cards[l].id === cardId) return nonPlayerPlaces[place].cards[l].imageName;
     }
   }
   return "";
