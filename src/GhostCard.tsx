@@ -1,6 +1,6 @@
 interface GhostCardProps {
   index: number;
-  image: string;
+  imageName: string;
   offsetLeft?: number;
   offsetTop?: number;
   dimensions: AllDimensions;
@@ -9,14 +9,14 @@ interface GhostCardProps {
 }
 
 export const GhostCard = (props: GhostCardProps) => {
-  const { dimensions, rotation, image, index, offsetLeft, offsetTop, zIndex } = props;
+  const { dimensions, rotation, imageName, index, offsetLeft, offsetTop, zIndex } = props;
   const {cardLeftSpread, cardWidth} = dimensions;
-  const id = "ghostCard" + image;
+  const id = "ghostCard" + imageName;
 
   return (
         <img
-          alt={image}
-          src={`./images/${image}.jpg`}
+          alt={imageName}
+          src={`./images/${imageName}.jpg`}
           id={id}
           style={{
             WebkitFilter: "grayscale(100%)",

@@ -40,7 +40,7 @@ const EnemyHand = (props: EnemyHandProps) => {
     >
       {handCards.map((card, index) => (
 
-        <EnemyHandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+        <EnemyHandCard id={card.id} index={index} imageName={card.imageName} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
       ))}
     </div>
   );

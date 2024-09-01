@@ -16,7 +16,6 @@ const Hand = (props: HandProps) => {
   const [shouldSpread, setShouldSpread] = useState(false);
   const dimensions = getAllDimensions(id);
   const { cardLeftSpread } = dimensions;
-  console.log(handCards)
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
@@ -36,6 +35,7 @@ const Hand = (props: HandProps) => {
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={true}>
       {provided => (
         <div
+        className="grid-item center"
           onMouseEnter={() => setShouldSpread(true)}
           onMouseLeave={() => setShouldSpread(false)}
           key={droppableId}
@@ -45,7 +45,7 @@ const Hand = (props: HandProps) => {
             display: "flex",
             bottom: 30,
             // This causes whole card row to move left on spread
-            left: (-spread / 2 - 0.5) * handCards.length,
+            // left: (-spread / 2 - 0.5) * handCards.length,
             //left: x - (spread / 2) * handCards.length,
             transition: "180ms",
             height: dimensions.cardHeight,
@@ -69,7 +69,7 @@ const Hand = (props: HandProps) => {
                   // zIndex: 100
                 }}
               />
-              <HandCard id={card.id} index={index} image={card.imageName} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+              <HandCard id={card.id} index={index} imageName={card.imageName} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
 
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.

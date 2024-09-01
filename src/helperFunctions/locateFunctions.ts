@@ -183,7 +183,7 @@ export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard =>
     pointValue: 1,
     bffs: false,
     zwilling: false,
-    image: "bffs1.jpg",
+    imageName: "bffs1.jpg",
     cardType: "bff",
     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   };

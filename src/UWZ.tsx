@@ -32,7 +32,7 @@ export const UWZ = (props: UWZProps) => {
   return (
     <div style={{ transition:"left 180ms" }} className={`grid-item ${alignment}`}>
       {unwantedCards.map((card, index) => (
-        <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} />
+        <Card id={card.id} imageName={card.imageName} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} />
       ))}
       <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
         {provided => (
@@ -50,7 +50,7 @@ export const UWZ = (props: UWZProps) => {
             }}
           >
             {provided.placeholder}
-            {ghostCard ? <GhostCard index={ghostCardIndex} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+            {ghostCard ? <GhostCard index={ghostCardIndex} imageName={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
           </div>
         )}
       </Droppable>

@@ -8,7 +8,7 @@ div {
   /* border: 1px solid black; */
 }
 body {
-  background-image: url("background_tile.jpg");
+  background-imageName: url("background_tile.jpg");
   background-repeat: repeat;
   background-size: 130px;
   margin: 0px;
@@ -20,7 +20,7 @@ body {
 }
 
 .splash-screen {
-  background-image: url("splashscreen.jpg");
+  background-imageName: url("splashscreen.jpg");
   background-size: cover;
   height: 100vh;
 }

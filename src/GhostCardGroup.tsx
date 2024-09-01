@@ -28,7 +28,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
         {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
           <GhostCard
             index={index}
-            image={ghostCard.image}
+            imageName={ghostCard.image}
             dimensions={dimensions}
             key={ghostCard.id}
             offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}

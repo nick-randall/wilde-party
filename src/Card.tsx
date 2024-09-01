@@ -10,7 +10,7 @@ import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 export interface CardProps {
   id: number;
   index: number;
-  image: string;
+  imageName: string;
   dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
@@ -19,7 +19,7 @@ export interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-  const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
+  const { id, index, dimensions, offsetTop, offsetLeft, imageName } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const settings = getSettings();
 
@@ -77,9 +77,9 @@ const Card = (props: CardProps) => {
                       <img
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        alt={image}
+                        alt={imageName}
                         draggable="false"
-                        src={`./images/${image}.jpg`}
+                        src={`./images/${imageName}.jpg`}
                         onClick={handleClick}
                         onMouseLeave={handleMouseLeave}
                         // id={id}
@@ -102,7 +102,7 @@ const Card = (props: CardProps) => {
                 index={0}
                 offsetLeft={cardLeftSpread * BFFOffset}
                 offsetTop={cardHeight / 2}
-                image={ghostCard.image}
+                imageName={ghostCard.image}
                 dimensions={dimensions}
                 zIndex={5}
               />

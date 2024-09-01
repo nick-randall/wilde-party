@@ -66,7 +66,7 @@ type GameCard = {
   playerId?: number; // player should be an id ??
   placeId: number; // place should be an id ??
   index: number;
-  image: string;
+  imageName: string;
   cardType: CardType;
   pointValue: number;
   guestCardType?: GuestCardType;

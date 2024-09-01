@@ -54,7 +54,7 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
                 <Card
                   index={card.index}
                   id={card.id}
-                  image={card.image}
+                  imageName={card.imageName}
                   dimensions={dimensions}
                   key={card.id}
                   offsetTop={index * dimensions.cardTopSpread}
@@ -77,7 +77,7 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
                     }}
                   >
                     {provided.placeholder}
-                    {ghostCard ? <GhostCard index={0} image={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
+                    {ghostCard ? <GhostCard index={0} imageName={ghostCard.image} dimensions={dimensions} zIndex={9} /> : null}
                   </div>
                 )}
               </Droppable>

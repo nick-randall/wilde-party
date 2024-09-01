@@ -6,7 +6,7 @@ const myGCZCards: GameCard[] = [
     playerId: 3000,
     placeId: 3000,
     index: 0,
-    image: "saufnase0",
+    imageName: "saufnase0",
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
@@ -19,7 +19,7 @@ const myGCZCards: GameCard[] = [
     playerId: 3000,
     placeId: 3000,
     index: 1,
-    image: "saufnase2",
+    imageName: "saufnase2",
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
@@ -35,7 +35,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 0,
     pointValue: 1,
-    image: "bffs",
+    imageName: "bffs",
     cardType: "bff",
     action: { actionType: "enchantWithBff", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
@@ -46,7 +46,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 1,
     pointValue: 0,
-    image: "musikfuersichalleinebeansprucherin",
+    imageName: "musikfuersichalleinebeansprucherin",
     cardType: "unwanted",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
   },
@@ -57,7 +57,7 @@ export const myHandCards: GameCard[] = [
   //   playerId: 3000,
   //   index: 1,
   //   pointValue: 0,
-  //   image: "partypizza",
+  //   imageName: "partypizza",
   //   cardType: "special",
   //   specialsCardType: "schleckermaul",
   //   action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -70,7 +70,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 2,
     pointValue: 1,
-    image: "zwilling",
+    imageName: "zwilling",
     cardType: "zwilling",
     action: { targetPlayerType: "self", actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
@@ -82,7 +82,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 3,
     pointValue: 1,
-    image: "barkeeperin",
+    imageName: "barkeeperin",
     cardType: "special",
     specialsCardType: "saufnase",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -94,7 +94,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 4,
     pointValue: 1,
-    image: "zwilling",
+    imageName: "zwilling",
     cardType: "zwilling",
     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },
   },
@@ -104,7 +104,7 @@ export const myHandCards: GameCard[] = [
     placeId: 3000,
     playerId: 3000,
     index: 5,
-    image: "rumgroelerin2", //TODO change
+    imageName: "rumgroelerin2", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
@@ -117,7 +117,7 @@ export const myHandCards: GameCard[] = [
     playerId: 3000,
     index: 6,
     pointValue: 0,
-    image: "quasselstrippe",
+    imageName: "quasselstrippe",
     cardType: "unwanted",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
   },
@@ -132,7 +132,7 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: 3000,
     index: 1,
     pointValue: 0,
-    image: "nebelmaschine",
+    imageName: "nebelmaschine",
     cardType: "special",
     specialsCardType: "taenzerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -144,7 +144,7 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: 3000,
     index: 2,
     pointValue: 0,
-    image: "playlist",
+    imageName: "playlist",
     cardType: "special",
     specialsCardType: "taenzerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -157,7 +157,7 @@ const mySpecialsZoneCards: GameCard[] = [
     playerId: 3000,
     index: 4,
     pointValue: 0,
-    image: "prost",
+    imageName: "prost",
     cardType: "special",
     specialsCardType: "saufnase",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -173,7 +173,7 @@ const player1HandCards: GameCard[] = [
     placeId: 3000,
     playerId: 3000,
     index: 0,
-    image: "rumgroelerin0", //TODO change
+    imageName: "rumgroelerin0", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
@@ -185,7 +185,7 @@ const player1HandCards: GameCard[] = [
     playerId: 3000,
     placeId: 3000,
     index: 1,
-    image: "taenzerin2", //TODO change
+    imageName: "taenzerin2", //TODO change
     cardType: "guest",
     pointValue: 2,
     guestCardType: "taenzerin", //???
@@ -197,7 +197,7 @@ const player1HandCards: GameCard[] = [
     playerId: 3000,
     placeId: 3000,
     index: 2,
-    image: "schleckermaul2", //TODO change
+    imageName: "schleckermaul2", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
@@ -209,7 +209,7 @@ const player1HandCards: GameCard[] = [
     placeId: 3000,
     playerId: 3000,
     index: 3,
-    image: "schleckermaul3", //TODO change
+    imageName: "schleckermaul3", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
@@ -224,7 +224,7 @@ const player1GCZCards: GameCard[] = [
     placeId: 3000,
     playerId: 3000,
     index: 0,
-    image: "rumgroelerin4",
+    imageName: "rumgroelerin4",
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin",
@@ -240,7 +240,7 @@ const deckCards: GameCard[] = [
     playerId: 3000,
     index: 0,
     pointValue: 0,
-    image: "megaphon",
+    imageName: "megaphon",
     cardType: "special",
     specialsCardType: "rumgroelerin",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "specialsZone", targetPlayerType: "self" },
@@ -251,7 +251,7 @@ const deckCards: GameCard[] = [
     placeId: 3000,
     playerId: 3000,
     index: 1,
-    image: "rumgroelerin3",
+    imageName: "rumgroelerin3",
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin",
@@ -263,7 +263,7 @@ const deckCards: GameCard[] = [
     playerId: 3000,
     placeId: 3000,
     index: 2,
-    image: "schleckermaul4",
+    imageName: "schleckermaul4",
     cardType: "guest",
     pointValue: 1,
     guestCardType: "schleckermaul", //???
@@ -277,7 +277,7 @@ const discardPileCards: GameCard[] = [
     playerId: 0,
     placeId: 3000,
     index: 0,
-    image: "discokugel", //TODO change
+    imageName: "discokugel", //TODO change
     cardType: "special",
     pointValue: 0,
     guestCardType: "taenzerin", //???

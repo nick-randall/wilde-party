@@ -11,7 +11,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     playerId: -1,
     placeId: -1,
     index: 0,
-    image: "startgast_saufnase",
+    imageName: "startgast_saufnase",
     cardType: "guest",
     pointValue: 1,
     guestCardType: "saufnase", //???
@@ -23,7 +23,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     playerId: -1,
     placeId: -1,
     index: 1,
-    image: "startgast_taenzerin", //TODO change
+    imageName: "startgast_taenzerin", //TODO change
     cardType: "guest",
     pointValue: 1,
     guestCardType: "taenzerin", //???
@@ -35,7 +35,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     placeId: -1,
     playerId: -1,
     index: 0,
-    image: "startgast_rumgroelerin", //TODO change
+    imageName: "startgast_rumgroelerin", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "rumgroelerin", //???
@@ -47,7 +47,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     playerId: -1,
     placeId: -1,
     index: 2,
-    image: "startgast_schleckermaul", //TODO change
+    imageName: "startgast_schleckermaul", //TODO change
     pointValue: 1,
     cardType: "guest",
     guestCardType: "schleckermaul", //???
@@ -59,7 +59,7 @@ const createStartingGuests = (numPlayers: number, currCardId: number) : GameCard
     playerId: -1,
     placeId: -1,
     index: 2,
-    image: "startgast_unscheinbar", //TODO change
+    imageName: "startgast_unscheinbar", //TODO change
     pointValue: 1,
     cardType: "guest",
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },

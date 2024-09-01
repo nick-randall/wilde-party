@@ -9,13 +9,13 @@ import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 export interface HandCardProps {
   id: number;
   index: number;
-  image: string;
+  imageName: string;
   dimensions: AllDimensions;
   numHandCards: number;
 }
 
 const HandCard = (props: HandCardProps) => {
-  const { id, index, image, dimensions } = props;
+  const { id, index, imageName, dimensions } = props;
   console.log(id)
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
@@ -117,8 +117,8 @@ const HandCard = (props: HandCardProps) => {
                   id={id}
                   render={(transitionStyles: CSSProperties) => (
                     <img
-                      alt={image}
-                      src={`./images/${image}.jpg`}
+                      alt={imageName}
+                      src={`./images/${imageName}.jpg`}
                       draggable="false"
                       ref={cardRef}
                       onClick={handleClick}

@@ -8,13 +8,13 @@ import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
 export interface EnemyHandCardProps {
   id: number;
   index: number;
-  image: string;
+  imageName: string;
   dimensions: AllDimensions;
   numHandCards: number;
 }
 
 const EnemyHandCard = (props: EnemyHandCardProps) => {
-  const { id, index, image, dimensions } = props;
+  const { id, index, imageName, dimensions } = props;
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
 
@@ -47,9 +47,9 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
         id={id}
         render={(transitionStyles: CSSProperties) => (
           <img
-            alt={image}
+            alt={imageName}
              src={"./images/back.jpg"}
-            // src={`./images/${image}.jpg`}
+            // src={`./images/${imageName}.jpg`}
             draggable = "false"
             style={{
               ...normalStyles,

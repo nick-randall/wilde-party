@@ -13,7 +13,7 @@ import React from "react";
 export interface EnemyCardProps {
   id: number;
   index: number;
-  image: string;
+  imageName: string;
   dimensions: AllDimensions;
   numHandCards: number;
   offsetLeft?: number;
@@ -24,7 +24,7 @@ export interface EnemyCardProps {
 }
 
 const EnemyCard = (props: EnemyCardProps) => {
-  const { id, index, dimensions, offsetTop, offsetLeft, image } = props;
+  const { id, index, dimensions, offsetTop, offsetLeft, imageName } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
   const {highlights, BFFdraggedOverSide, draggedOver, draggedHandCard} = useSelector((state: RootState) => state);
   const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
@@ -87,9 +87,9 @@ const EnemyCard = (props: EnemyCardProps) => {
                     <img
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      alt={image}
+                      alt={imageName}
                       draggable="false"
-                      src={`./images/${image}.jpg`}
+                      src={`./images/${imageName}.jpg`}
                       onClick={handleClick}
                       onMouseLeave={handleMouseLeave}
                       style={{
@@ -111,7 +111,7 @@ const EnemyCard = (props: EnemyCardProps) => {
               index={0}
               offsetLeft={cardLeftSpread * BFFOffset}
               offsetTop={cardHeight / 2}
-              image={ghostCard.image}
+              imageName={ghostCard.image}
               dimensions={dimensions}
               zIndex={5}
             />
