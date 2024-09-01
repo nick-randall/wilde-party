@@ -55,7 +55,12 @@ export const locate = (id: number, gameSnapshot: GameSnapshot | null = null): Lo
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];
-      if (id === players[i]["places"][place].id) return { player: i, place: place };
+      if (!players[i]["places"][place]) {
+        console.log(place);
+        console.log(players[i]);
+        console.log(gameSnapshot === null);
+      }
+      if (id === players[i].places[place].id) return { player: i, place: place };
       for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
         if (players[i]["places"][place].cards[l].id === id) return { player: i, place: place }; // player is i, place is place
       }

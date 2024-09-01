@@ -74,7 +74,7 @@ export const myHandCards: GameCard[] = [
     cardType: "zwilling",
     action: { targetPlayerType: "self", actionType: "enchant", highlightType: "card", cardHighlightType: "guest" },
   },
-  
+
   {
     id: 3000,
     name: "barkeeperin",
@@ -122,9 +122,7 @@ export const myHandCards: GameCard[] = [
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "unwantedsZone", targetPlayerType: "enemy" },
   },
 ];
-export const myEnchantmentsRowCards: GameCard[] = [
-
-];
+export const myEnchantmentsRowCards: GameCard[] = [];
 
 const mySpecialsZoneCards: GameCard[] = [
   {
@@ -271,8 +269,6 @@ const deckCards: GameCard[] = [
     guestCardType: "schleckermaul", //???
     action: { actionType: "addDragged", highlightType: "place", placeHighlightType: "guestCardZone", targetPlayerType: "self" },
   },
-    
-  
 ];
 const discardPileCards: GameCard[] = [
   {
@@ -412,7 +408,7 @@ export const initialGameSnapshot: GameSnapshot = {
           id: 3000,
           playerId: 3000,
           placeType: "guestCardZone",
-          acceptedCardType:"guest",
+          acceptedCardType: "guest",
           cards: player1GCZCards,
         },
         UWZ: {
@@ -502,7 +498,155 @@ export const initialGameSnapshot: GameSnapshot = {
     },
   },
   snapshotUpdateData: { type: "initialSnapshot", playedCardIds: [], targetId: -1 },
+};
 
+export const emptyGameSnapshot: GameSnapshot = {
+  current: {
+    player: 0,
+    phase: "dealPhase",
+    draws: 1,
+    plays: 1,
+    rolls: 1,
+  },
+  players: [
+    {
+      id: 1000,
+      name: "p1",
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        guestCardZone: {
+          id: 3000,
+          playerId: 1000,
+          placeType: "guestCardZone",
+          acceptedCardType: "guest",
+          cards: [],
+        },
+        unwantedsZone: {
+          id: 101,
+          playerId: 1000,
+          placeType: "unwantedsZone",
+          cards: [],
+        },
+        specialsZone: {
+          id: 102,
+          playerId: 1000,
+          placeType: "specialsZone",
+          cards: [],
+        },
+        hand: {
+          id: 103,
+          playerId: 1000,
+          placeType: "hand",
+          cards: [],
+        },
+        enchantmentsRow: {
+          id: 104,
+          playerId: 1000,
+          placeType: "enchantmentsRow",
+          cards: [],
+        },
+      },
+    },
+    {
+      id: 2000,
+      name: "string",
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        guestCardZone: {
+          id: 201,
+          playerId: 2000,
+          placeType: "guestCardZone",
+          acceptedCardType: "guest",
+          cards: [],
+        },
+        unwantedsZone: {
+          id: 202,
+          playerId: 2000,
+          placeType: "unwantedsZone",
+          acceptedCardType: "unwanted",
+          cards: [],
+        },
+        specialsZone: {
+          id: 203,
+          playerId: 2000,
+          placeType: "specialsZone",
+          cards: [],
+        },
+        hand: {
+          id: 204,
+          playerId: 2000,
+          placeType: "hand",
+          cards: [],
+        },
+        enchantmentsRow: {
+          id: 205,
+          playerId: 2000,
+          placeType: "enchantmentsRow",
+          cards: [],
+        },
+      },
+    },
+    {
+      id: 3000,
+      name: "string2",
+
+      glitzaglitza: false,
+      skipNextTurn: false,
+      places: {
+        guestCardZone: {
+          id: 301,
+          playerId: 3000,
+          placeType: "guestCardZone",
+          cards: [],
+        },
+        unwantedsZone: {
+          id: 302,
+          playerId: 3000,
+          placeType: "unwantedsZone",
+          acceptedCardType: "unwanted",
+          cards: [],
+        },
+        specialsZone: {
+          id: 303,
+          playerId: 3000,
+          placeType: "specialsZone",
+          cards: [],
+        },
+        hand: {
+          id: 304,
+          playerId: 3000,
+          placeType: "hand",
+          cards: [],
+        },
+        enchantmentsRow: {
+          id: 305,
+          playerId: 3000,
+          placeType: "enchantmentsRow",
+          cards: [],
+        },
+      },
+    },
+  ],
+
+  nonPlayerPlaces: {
+    deck: {
+      id: 3000,
+      placeType: "deck",
+      cards: [],
+    },
+    discardPile: {
+      id: 3000,
+      placeType: "discardPile",
+      cards: [],
+    },
+  },
+  snapshotUpdateData: {
+    type: "emptySnapshot",
+    playedCardIds: [],
+    targetId: -1,
+  },
 };
 
 // sorts cards into their correct order based on their index according to the DB

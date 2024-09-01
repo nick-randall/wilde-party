@@ -18,8 +18,8 @@ const PlayerAvatar = (props: PlayerProps) => {
   return (
     <Droppable droppableId={droppableId}>
       {provided => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          <img src="./images/player_avatar.png" alt="you" />
+        <div className="grid-item center"   ref={provided.innerRef} {...provided.droppableProps}>
+          <img src="./images/player_avatar.png" alt="your avatar"  style={{height: 50}}/>
         </div>
       )}
     </Droppable>

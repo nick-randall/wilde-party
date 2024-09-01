@@ -1,4 +1,4 @@
-import R, { flatten } from "ramda";
+import R, { flatten, is } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { getPlacesLayout } from "./dimensions/getPlacesLayout";
@@ -9,9 +9,8 @@ import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 import "./css/global.css";
 
 interface SpecialsZoneProps {
-  specialsCards: GameCard[];
-  id: number;
-  playerZoneSize: { width: number; height: number };
+  specialsZoneData: GamePlace;
+  alignment: string;
 }
 
 type SpecialsColumnCards = {
@@ -35,17 +34,16 @@ const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] 
   });
 };
 
-export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsCards, id, playerZoneSize }) => {
+export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment }) => {
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
 
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight } = dimensions;
   const {draggedOver, draggedHandCard} = useSelector((state: RootState) => state);
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id));
   const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
-  const specialsCardsColumns = groupSpecialsColumns(specialsCards); // R.groupWith<GameCard>((a, b) => a.specialsCardType === b.specialsCardType, specialsCards);
+  const specialsCardsColumns = groupSpecialsColumns(cards); // R.groupWith<GameCard>((a, b) => a.specialsCardType === b.specialsCardType, specialsCards);
   const draggedSpecialsType = draggedHandCard?.specialsCardType;
   const allowDropping = isHighlighted && specialsCardsColumns.some(column => column.cardType === draggedSpecialsType && column.cards.length === 0);
 
@@ -57,15 +55,12 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsCards, id, p
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
         <div
+        className={`grid-item ${alignment} ${isHighlighted ? "highlighted" : ""}`}
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className = {isHighlighted ? "highlighted" : ""}
           style={{
             display: "flex",
-            position: "absolute",
             margin: 0,
-            top: y,
-            left: x,
             width: specialsCardsColumns.length * cardWidth,
             minWidth: cardWidth,
             height: cardHeight,

@@ -30,8 +30,6 @@ export type UpdateDrag = {
   payload: DraggedOverData | undefined;
 };
 
-export const updateDraggedOver = (data: DraggedOverData | undefined):  UpdateDrag  => ({type: "UPDATE_DRAGGED_OVER", payload: data});
-
 export type Rearrange = {
   type: "REARRANGE";
   payload: { source: DraggedOverData; destination: DraggedOverData };
@@ -102,6 +100,11 @@ export type DealStartingGuest = {
   payload: number;
 };
 
+export type SetGameSnapshot = { 
+  type: "SET_GAME_SNAPSHOT";
+  payload: GameSnapshot;
+}
+
 export type SetAiPlaying = { type: "SET_AI_PLAYING"; payload: number };
 
 //export type Thunk = (args: any) => (dispatch: Function, getState: Function) => void
@@ -115,6 +118,7 @@ export type Action =
   | SetHighlights
   | Rearrange
   | AddDragged
+  | SetGameSnapshot
   // | Enchant
   | EndDragCleanup
   | DrawCard

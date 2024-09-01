@@ -16,6 +16,7 @@ export interface HandCardProps {
 
 const HandCard = (props: HandCardProps) => {
   const { id, index, image, dimensions } = props;
+  console.log(id)
 
   const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
 

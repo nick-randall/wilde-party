@@ -9,7 +9,7 @@ import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/re
 import { drawCardUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/drawCard";
 import { produce } from "immer";
 import { dealStartingGuestUpdateSnapshot } from "../helperFunctions/gameSnapshotUpdates/dealStartingGuest";
-import { initialGameSnapshot } from "../initialCards";
+import { emptyGameSnapshot, initialGameSnapshot } from "../initialCards";
 import { createGameSnapshot } from "../helperFunctions/createGameSnapshot/createGameSnapshot";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -54,7 +54,7 @@ const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.ac
 
 export const stateReducer = (
   state: State = {
-    gameSnapshot: createGameSnapshot(),
+    gameSnapshot: emptyGameSnapshot,
     screenSize: getScreenSize(),
     draggedOver: undefined,
     BFFdraggedOverSide: undefined,
@@ -112,6 +112,9 @@ export const stateReducer = (
         return { ...state, draggedOver };
       }
       return { ...state, draggedOver: action.payload };
+    }
+    case "SET_GAME_SNAPSHOT": {
+      return { ...state, gameSnapshot: action.payload };
     }
     case "REARRANGE": {
       const { source, destination } = action.payload;

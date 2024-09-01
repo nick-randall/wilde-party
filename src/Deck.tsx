@@ -5,16 +5,16 @@ import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { enactDrawCardEvent } from "./redux/actionCreators";
 import { RootState } from "./redux/store";
 import { drawCardThunk } from "./redux/thunks";
+import "./css/grid.css";
 
 interface DeckProps {
   id: number;
   cards: GameCard[];
-  zoneSize: { width: number; height: number };
+  // zoneSize: { width: number; height: number };
 }
 
 export const Deck = (props: DeckProps) => {
-  const { id, zoneSize, cards } = props;
-  const { x, y } = getPlacesLayout(id, zoneSize);
+  const { id, cards } = props;
   const dispatch = useDispatch();
   const dimensions = getAllDimensions(id);
   const { player, draws, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
@@ -30,7 +30,7 @@ export const Deck = (props: DeckProps) => {
   transition: "background-color 180ms, box-shadow 180ms, left 180ms",} : {}
 
   return (
-    <div  style={{ left: x, top: y, height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
+    <div  style={{ height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
       {cardsInReverseOrder.map((card, index) => <Card dimensions={dimensions} key={card.id} id={card.id} index={index} image="back"/>)}
 
     </div>

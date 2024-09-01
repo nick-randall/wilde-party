@@ -9,14 +9,14 @@ import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 interface HandProps {
   id: number;
   handCards: GameCard[];
-  playerZoneSize: { width: number; height: number };
 }
 
 const Hand = (props: HandProps) => {
-  const { id, handCards, playerZoneSize } = props;
+  const { id, handCards } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
   const dimensions = getAllDimensions(id);
   const { cardLeftSpread } = dimensions;
+  console.log(handCards)
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
@@ -32,7 +32,6 @@ const Hand = (props: HandProps) => {
     }
   }, [transitionsUnderway, shouldSpread, handCardDragged, maxCardLeftSpread, cardLeftSpread, enemysTurn]);
 
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={true}>
       {provided => (
@@ -41,13 +40,13 @@ const Hand = (props: HandProps) => {
           onMouseLeave={() => setShouldSpread(false)}
           key={droppableId}
           style={{
-            position: "absolute",
+            position: "relative",
+            minWidth: 0, // This stops the whole grid expanding with the cards
             display: "flex",
             bottom: 30,
             // This causes whole card row to move left on spread
-            left: x - (spread / 2 - 0.5) * handCards.length,
+            left: (-spread / 2 - 0.5) * handCards.length,
             //left: x - (spread / 2) * handCards.length,
-            top: y,
             transition: "180ms",
             height: dimensions.cardHeight,
           }}
@@ -70,7 +69,7 @@ const Hand = (props: HandProps) => {
                   // zIndex: 100
                 }}
               />
-              <HandCard id={card.id} index={index} image={card.image} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+              <HandCard id={card.id} index={index} image={card.imageName} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
 
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.

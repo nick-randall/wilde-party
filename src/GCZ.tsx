@@ -14,11 +14,10 @@ interface GCZProps {
   id: number;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
-  playerZoneSize: {width: number, height: number}
 }
 
 function GCZ(props: GCZProps) {
-  const { id, enchantmentsRowCards, GCZCards, playerZoneSize } = props;
+  const { id, enchantmentsRowCards, GCZCards } = props;
 
   const {draggedOver, rearrangingData, draggedHandCard, highlights} = useSelector((state: RootState) => state);
   const droppableId = JSON.stringify({ type: "place", id });
@@ -41,7 +40,6 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
 
 
   return (
@@ -49,7 +47,7 @@ function GCZ(props: GCZProps) {
       {provided => (
         <div
         className="pl0GCZ"
-
+        
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{
@@ -58,8 +56,6 @@ function GCZ(props: GCZProps) {
             position: "absolute",
             margin: 0,
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
-            left: x,
-            top: y,
             height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
             minWidth: dimensions.cardWidth,
             backgroundColor: isHighlighted ? "yellowgreen" : "",

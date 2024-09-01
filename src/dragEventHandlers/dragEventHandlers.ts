@@ -2,7 +2,7 @@ import { BeforeCapture, DraggableLocation, DragUpdate, DropResult, ResponderProv
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";
-import { updateDraggedOver } from "../redux/actions";
+import { updateDraggedOver } from "../redux/actionCreators";
 import { rearrange, startRearranging } from "../redux/actionCreators";
 
 const isHandCard = (sourceId: number) => locate(sourceId).place === "hand";

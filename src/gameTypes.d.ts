@@ -48,6 +48,7 @@ type AllDimensions = {
 };
 
 type SnapshotUpdateType =
+  | "emptySnapshot"
   | "initialSnapshot"
   | "dealingInitialCards"
   | "dealingCards"
@@ -192,6 +193,5 @@ type TransitionDataEvents = {
 type Refs = {
   [id: number]: HTMLElement;
 };
-
 
 type Hover = "shortHover" | "longHover" | "none";

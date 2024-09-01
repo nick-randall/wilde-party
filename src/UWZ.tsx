@@ -9,11 +9,11 @@ import { RootState } from "./redux/store";
 interface UWZProps {
   id: number;
   unwantedCards: GameCard[];
-  playerZoneSize: {width: number, height: number}
+  alignment: string;
 }
 
 export const UWZ = (props: UWZProps) => {
-  const { id, unwantedCards, playerZoneSize } = props;
+  const { id, unwantedCards, alignment } = props;
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
 
@@ -29,9 +29,8 @@ export const UWZ = (props: UWZProps) => {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight, cardTopSpread } = dimensions;
-  const { x, y } = getPlacesLayout(id, playerZoneSize);
   return (
-    <div style={{ position: "absolute", left: x, top: y, transition:"left 180ms" }}>
+    <div style={{ transition:"left 180ms" }} className={`grid-item ${alignment}`}>
       {unwantedCards.map((card, index) => (
         <Card id={card.id} image={card.image} index={index} dimensions={dimensions} offsetTop={ index * dimensions.cardTopSpread} key={card.id} />
       ))}
