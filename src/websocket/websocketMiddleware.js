@@ -58,18 +58,18 @@ export const stompMiddleware = ({ dispatch }) => {
 
         break;
       }
-      case "sendMessageToRoom": {
+      case "SEND_MESSAGE_TO_ROOM": {
         const { currMsg } = action.payload;
         console.log("sending message to room: " + currMsg);
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: currMsg, type: "CHAT" }));
         break;
       }
-      case "inviteUserToGame": {
+      case "INVITE_USER_TO_GAME": {
         const { inviteeId } = action.payload;
         console.log("sending invite to user: " + inviteeId);
         stompClient.send("/app/invite", {}, inviteeId.toString());
 
-        // stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: inviteeId, type: "INVITE" }));
+        // stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: inviteeId, type: "invite" }));
         break;
       }
       case "disconnectWs":
@@ -89,6 +89,6 @@ export const disconnectWebsocket = () => ({ type: "disconnectWs" });
 
 export const sendMessage = (currMsg, user) => ({ type: "sendMessage", payload: { username: user.username } });
 
-export const sendMessageToRoom = currMsg => ({ type: "sendMessageToRoom", payload: { currMsg } });
+export const SEND_MESSAGE_TO_ROOM = currMsg => ({ type: "SEND_MESSAGE_TO_ROOM", payload: { currMsg } });
 
-export const inviteUserToGame = inviteeId => ({ type: "inviteUserToGame", payload: { inviteeId } });
+export const INVITE_USER_TO_GAME = inviteeId => ({ type: "INVITE_USER_TO_GAME", payload: { inviteeId } });

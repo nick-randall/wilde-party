@@ -15,3 +15,16 @@ type CardActionResult = {
 type CardActionResultsMap = {
   [cardId: number]: CardActionResult;
 };
+
+type ChatMessage = {
+  type: MessageType;
+  content: string;
+  sender: User;
+};
+
+type GameSnapshotUpdates = { 
+  type: string
+  gameSnapshots: GameSnapshot[]
+}
+
+type MessageType = "chat" | "join" | "leave" | "starting_game";
