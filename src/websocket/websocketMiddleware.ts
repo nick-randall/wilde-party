@@ -11,6 +11,8 @@ import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSnapshotE
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
   let gameSubscription: StompSubscription;
+  let chatRoomSubscription: StompSubscription;
+  let usersInChatRoomSubscription: StompSubscription;
 
   return (next: AppDispatch) => (action: WebsocketAction) => {
     // Allow the user to see that the connection is lost when trying to send messages etc.
@@ -41,6 +43,20 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           dispatch(setConnectedToWs());
         });
 
+        // Subscribe to personal messages
+        stompClient.subscribe("/users/queue/messages", (payload: Message) => {
+          console.log("Received personal message: ");
+          const { type } = JSON.parse(payload.body);
+          if (type === "invite") {
+            console.log("Received invite");
+            dispatch(addInvitation(JSON.parse(payload.body)));
+          } else if (type === "not_in_game_error") {
+            console.log("Error subscribing to game");
+            gameSubscription.unsubscribe();
+            dispatch(setNotInGameError(JSON.parse(payload.body)));
+          }
+        });
+
         break;
       case "JOIN_CHAT_ROOM":
         const onChatMessageReceived = (payload: Message) => {
@@ -54,21 +70,14 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         const onRoomUsersReceived = (payload: Message) => {
           dispatch(updateRoomUsers(JSON.parse(payload.body)));
         };
-        const onPersonalMessageReceived = (payload: Message) => {
-          console.log("Received personal message: ");
-          const { type } = JSON.parse(payload.body);
-          if (type === "invite") {
-            console.log("Received invite");
-            dispatch(addInvitation(JSON.parse(payload.body)));
-          } else if (type === "not_in_game_error") {
-            console.log("Error subscribing to game");
-            gameSubscription.unsubscribe();
-            dispatch(setNotInGameError(JSON.parse(payload.body)));
-          }
+        const subscribeToGame = () => {
+          chatRoomSubscription = stompClient.subscribe("/topic/public", onChatMessageReceived);
+          usersInChatRoomSubscription = stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
         };
-        stompClient.subscribe("/users/queue/messages", onPersonalMessageReceived);
-        stompClient.subscribe("/topic/public", onChatMessageReceived);
-        stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
+        if (!stompClient.active) {
+          // If no active websocket connection, defer subscription to the connect websocket event.
+          dispatch(connectWebsocket(subscribeToGame));
+        } else subscribeToGame();
         break;
       case "SEND_MESSAGE_TO_ROOM": {
         const message = action.payload;
@@ -83,11 +92,11 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         // The game id will be checked on the server
         // to block subscription the user is not part of the game.
         const subscribeToGame = () => {
-          gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots);
+          gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots, {gameId: gameId.toString()});
         };
 
         if (!stompClient.active) {
-          // If the connection is lost, defer subscription to the connect websocket event.
+          // If no active websocket connection, defer subscription to the connect websocket event.
           dispatch(connectWebsocket(subscribeToGame));
         } else subscribeToGame();
         break;
