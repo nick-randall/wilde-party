@@ -34,9 +34,9 @@ const Card = (props: CardProps) => {
     setMessinessOffset({ x: rndX * settings.messiness, y: rndY * settings.messiness });
   }, [setMessinessRotation, setMessinessOffset, index, settings.messiness]);
 
-  const { highlights, highlightType, BFFdraggedOverSide, draggedHandCard } = useSelector((state: RootState) => state);
+  const { highlights, highlightType, BFFdraggedOverSide, draggedHandCard } = useSelector((state: RootState) => state.dragEventState);
   const droppableId = JSON.stringify({ id, type: "card" });
-  const draggedOver = useSelector((state: RootState) => state.draggedOver?.id === id);
+  const draggedOver = useSelector((state: RootState) => state.dragEventState.draggedOver?.id === id);
 
   const ghostCard = draggedHandCard && draggedOver ? draggedHandCard : undefined;
   const BFFOffset = !BFFdraggedOverSide ? 0 : BFFdraggedOverSide === "left" ? -0.5 : 0.5;

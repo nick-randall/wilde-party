@@ -1,16 +1,22 @@
-import { AnyAction, applyMiddleware, createStore } from "@reduxjs/toolkit";
-import { stateReducer } from "./stateReducer";
-import thunkMiddleware, { ThunkDispatch } from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { configureStore } from "@reduxjs/toolkit";
+import websocketReducer from "../websocket/websocketSlice";
+import userReducer from "../user/userSlice";
+import { stompMiddleware } from "../websocket/websocketMiddleware";
+import chatReducer from "../chat/chatSlice";
+import dragEventReducer from "./dragEventReducer";
 
+const store = configureStore({
+  reducer: {
+    dragEventState: dragEventReducer,
+    websocket: websocketReducer,
+    user: userReducer,
+    chat: chatReducer,
+  },
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stompMiddleware),
+});
 
-const composedEnhancer = composeWithDevTools(applyMiddleware<ThunkDispatch<any, undefined, AnyAction>>(thunkMiddleware))
-
-export const store = createStore(stateReducer, composedEnhancer);
-
-  // // Infer the `RootState` and `AppDispatch` types from the store itself
-  export type RootState = ReturnType<typeof store.getState>;
-  // // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-  export type AppDispatch = ThunkDispatch<any, undefined, AnyAction>;
+export type AppStore = typeof store;
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;

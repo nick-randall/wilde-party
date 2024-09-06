@@ -4,8 +4,6 @@ import { Droppable } from "react-beautiful-dnd";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { getLayout } from "./dimensions/getLayout";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 interface HandProps {
   id: number;
   handCards: GameCard[];
@@ -18,9 +16,9 @@ const Hand = (props: HandProps) => {
   const { cardLeftSpread } = dimensions;
   const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
   const [spread, setSpread] = useState(cardLeftSpread);
-  const handCardDragged = useSelector((state: RootState) => state.draggedHandCard);
-  const transitionsUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
-  const enemysTurn = useSelector((state: RootState) => state.gameSnapshot.current.player !== 0);
+  const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
+  const transitionsUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
+  const enemysTurn = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.player !== 0);
   const droppableId = JSON.stringify({ type: "place", id });
 
   useEffect(() => {

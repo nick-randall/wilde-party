@@ -30,7 +30,7 @@ export const getNumCards = (placeId: number, gameSnapshot: GameSnapshot): number
 };
 
 export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
-  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
+  if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
@@ -49,7 +49,7 @@ export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null =
 };
 
 export const locate = (id: number, gameSnapshot: GameSnapshot | null = null): Locator => {
-  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
+  if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {

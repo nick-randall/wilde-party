@@ -16,20 +16,22 @@ import { p } from "./EnemyPlayer";
 import GCZ from "./GCZ";
 import Hand from "./Hand";
 import UWZ from "./UWZ";
+import { SET_GAME_SNAPSHOT, SET_SCREEN_SIZE } from "./redux/dragEventReducer";
+import { joinChatRoom, SEND_MESSAGE_TO_ROOM } from "./websocket/websocketActionCreators";
 
 export const Table = () => {
   // const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
-  const screenSize = useSelector((state: RootState) => state.screenSize);
+  const screenSize = useSelector((state: RootState) => state.dragEventState.screenSize);
   // const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
   const [gameStarted, setGameStarted] = useState(false);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    window.addEventListener("resize", () => {
-      dispatch({ type: "SET_SCREEN_SIZE" });
-    });
-  });
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     dispatch(SET_SCREEN_SIZE());
+  //   });
+  // });
   useEffect(() => {
     if (!gameStarted) {
       console.log("called it");
@@ -38,12 +40,14 @@ export const Table = () => {
         .get("/just-get-snapshot")
         // .then(res => res.json())
         .then(resp => {
-          dispatch({ type: "SET_GAME_SNAPSHOT", payload: resp.data });
+          console.log("got snapshot");
+          dispatch(SET_GAME_SNAPSHOT( resp.data));
+          dispatch(SEND_MESSAGE_TO_ROOM("BASDF"))
         });
       setGameStarted(true);
     }
   }, [dispatch, gameStarted]);
-  const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
+  const gameSnapshot = useSelector((state: RootState) => state.dragEventState.gameSnapshot);
   console.log(gameSnapshot);
   if (!gameSnapshot) return <div className="background-tile">loading</div>;
   const { player } = gameSnapshot.current;
@@ -51,12 +55,7 @@ export const Table = () => {
   const p01places = gameSnapshot.players[0].places;
   const p02places = gameSnapshot.players[1].places;
   const p03places = gameSnapshot.players[2].places;
-  const playerPlacesTypes: PlaceType[] = ["guestCardZone", "unwantedsZone", "specialsZone", "hand", "enchantmentsRow"];
-  for (let i = 0; i < playerPlacesTypes.length; i++) {
-    const place = playerPlacesTypes[i];
-    console.log(place);
-    console.log(gameSnapshot.players[0].places[place].placeType);
-  }
+
 
   return (
     <div>

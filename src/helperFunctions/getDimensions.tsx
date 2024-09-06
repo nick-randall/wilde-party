@@ -2,7 +2,7 @@ import store from "../redux/store";
 import { getNumCards, locate } from "./locateFunctions";
 
 export const getAllDimensions = (placeId: number, gameSnapshot: GameSnapshot | null = null) => {
-  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshot;
+  if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
   const { place, player } = locate(placeId, gameSnapshot);
 
   const placeType = place;

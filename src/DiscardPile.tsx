@@ -1,5 +1,4 @@
 import Card from "./Card";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 
 interface DiscardPileProps {

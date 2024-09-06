@@ -2,7 +2,7 @@ import { CompatClient, Message, Stomp, StompSubscription } from "@stomp/stompjs"
 import SockJS from "sockjs-client";
 
 import { setLoadingWs, setWsError, setConnectedToWs, setDisconnectedFromWs } from "./websocketSlice";
-import { AppDispatch } from "../store";
+import { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
 import { addInvitation, addMessage, updateRoomUsers } from "../chat/chatSlice";
@@ -15,12 +15,17 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
   let usersInChatRoomSubscription: StompSubscription;
 
   return (next: AppDispatch) => (action: WebsocketAction) => {
+    console.log(action);
     // Allow the user to see that the connection is lost when trying to send messages etc.
-    if (action.type !== "CONNECT_WS") {
-      if (stompClient === undefined || !stompClient.active) {
-        dispatch(setDisconnectedFromWs());
-        return;
-      }
+    if (
+      (action.type === "JOIN_CHAT_ROOM" ||
+        action.type === "SEND_MESSAGE_TO_ROOM" ||
+        action.type === "JOIN_GAME" ||
+        action.type === "INVITE_USER_TO_GAME") &&
+      (stompClient === undefined || !stompClient.active)
+    ) {
+      dispatch(setDisconnectedFromWs());
+      return;
     }
     switch (action.type) {
       case "CONNECT_WS":
@@ -92,7 +97,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         // The game id will be checked on the server
         // to block subscription the user is not part of the game.
         const subscribeToGame = () => {
-          gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots, {gameId: gameId.toString()});
+          gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots, { gameId: gameId.toString() });
         };
 
         if (!stompClient.active) {
@@ -114,7 +119,10 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         stompClient.disconnect();
         break;
       default:
-        return next(action);
+        console.log("default");
+        console.log(next)
+        console.log(action)
+         next(action);
     }
   };
 };

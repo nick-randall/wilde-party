@@ -26,14 +26,13 @@ export interface EnemyCardProps {
 const EnemyCard = (props: EnemyCardProps) => {
   const { id, index, dimensions, offsetTop, offsetLeft, imageName } = props;
   const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
-  const {highlights, BFFdraggedOverSide, draggedOver, draggedHandCard} = useSelector((state: RootState) => state);
-  const highlightTypeIsCard = useSelector((state: RootState) => state.highlightType === "card");
+  const {highlights, BFFdraggedOverSide, draggedOver, draggedHandCard} = useSelector((state: RootState) => state.dragEventState);
+  const highlightTypeIsCard = useSelector((state: RootState) => state.dragEventState.highlightType === "card");
   const droppableId = JSON.stringify({ id, type: "card" });
   const isDraggedOver = useSelector((state: RootState) => draggedOver?.id === id);
   const notAmongHighlights = (highlightTypeIsCard && !highlights.includes(id)) || props.showNotAmongHighlights;
-  const transitionData = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
+  const transitionData = useSelector((state: RootState) => state.dragEventState.transitionData.find(t => t.cardId === id));
   console.log("transitionData")
-  const dispatch = useDispatch();
   interface TransitionStyles {
     [status: string]: {};
   }

@@ -1,9 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
-import { getLayout } from "./dimensions/getLayout";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
-import { PlayerLayout } from "./dimensions/getPlayersLayout";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
@@ -19,7 +16,7 @@ interface GCZProps {
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards } = props;
 
-  const {draggedOver, rearrangingData, draggedHandCard, highlights} = useSelector((state: RootState) => state);
+  const {draggedOver, rearrangingData, draggedHandCard, highlights} = useSelector((state: RootState) => state.dragEventState);
   const droppableId = JSON.stringify({ type: "place", id });
 
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
@@ -29,10 +26,10 @@ function GCZ(props: GCZProps) {
   const cardRowShape = rearrangingData.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
   
   const ghostCardGroup = cardRow.find(e => rearrangingData.draggedId === e.id);
-
+  console.log("ghostCardGroup", ghostCardGroup);
   const isHighlighted = highlights.includes(id);
 
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
+  const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
 
   // const containsTargetedCard =
   //   highlights.some(h => enchantmentsRowCards.map(e => e.id).includes(h)) || highlights.some(h => GCZCards.map(e => e.id).includes(h));
@@ -40,11 +37,6 @@ function GCZ(props: GCZProps) {
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);
   const { cardHeight } = dimensions;
-  console.log(ghostCard)
-  console.log(ghostCardIndex)
-  console.log(draggedOver)
-  console.log(ghostCardGroup)
-
   return (
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
@@ -56,8 +48,9 @@ function GCZ(props: GCZProps) {
           style={{
             display: "flex",
             // top: 100,
-            position: "absolute",
+            // position: "absolute",
             margin: 0,
+            border: "1px solid black",
             //left: 600 - (dimensions.cardLeftSpread / 2) * GCZCards.length,
             height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
             minWidth: dimensions.cardWidth,

@@ -1,7 +1,6 @@
 import R, { flatten, is } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
@@ -40,9 +39,9 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id
 
   const dimensions = getAllDimensions(id);
   const { cardWidth, cardHeight } = dimensions;
-  const {draggedOver, draggedHandCard} = useSelector((state: RootState) => state);
-  const isHighlighted = useSelector((state: RootState) => state.highlights.includes(id));
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
+  const {draggedOver, draggedHandCard} = useSelector((state: RootState) => state.dragEventState);
+  const isHighlighted = useSelector((state: RootState) => state.dragEventState.highlights.includes(id));
+  const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
   const specialsCardsColumns = groupSpecialsColumns(cards); // R.groupWith<GameCard>((a, b) => a.specialsCardType === b.specialsCardType, specialsCards);
   const draggedSpecialsType = draggedHandCard?.specialsCardType;
   const allowDropping = isHighlighted && specialsCardsColumns.some(column => column.cardType === draggedSpecialsType && column.cards.length === 0);

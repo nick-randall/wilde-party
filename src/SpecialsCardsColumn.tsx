@@ -21,7 +21,7 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
   specialsZoneId,
   startingIndex,
 }) => {
-  const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state);
+  const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state.dragEventState);
   const specialsColumnType = cards[0].specialsCardType;
 
   const draggableData: DraggableData = {

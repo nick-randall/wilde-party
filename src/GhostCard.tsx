@@ -12,6 +12,7 @@ export const GhostCard = (props: GhostCardProps) => {
   const { dimensions, rotation, imageName, index, offsetLeft, offsetTop, zIndex } = props;
   const {cardLeftSpread, cardWidth} = dimensions;
   const id = "ghostCard" + imageName;
+  console.log("GhostCard");
 
   return (
         <img

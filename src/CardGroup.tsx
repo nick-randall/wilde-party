@@ -28,7 +28,6 @@ const CardGroup = (props: CardGroupProps) => {
     if (cardGroupIndex > 0) return { top: 0, left: cardLeftSpread };
     else return { top: 0, left: 0 };
   };
-  console.log(cardGroup.id)
 
   return (
     <Draggable draggableId={draggableId} index={index} key={cardGroup.id}>

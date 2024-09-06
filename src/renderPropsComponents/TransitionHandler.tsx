@@ -17,7 +17,7 @@ interface TransitionStylesObj {
 export const TransitionHandler = (props: TransitionHandlerProps) => {
   const { index, id } = props;
   const dispatch = useDispatch();
-  const data = useSelector((state: RootState) => state.transitionData.find(t => t.cardId === id));
+  const data = useSelector((state: RootState) => state.dragEventState.transitionData.find(t => t.cardId === id));
   // if(data){
   //   console.log(useSelector((state:RootState)=> stat))
   //   console.log(data)}

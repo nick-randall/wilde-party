@@ -2,8 +2,11 @@ import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
 import "./css/global.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { whoami } from "./user/userSlice";
+import { END_DRAG_CLEANUP, SET_DRAGGED_HAND_CARD } from "./redux/dragEventReducer";
 
 type GameStartedProps = {
   imageHeight?: number;
@@ -26,20 +29,63 @@ const HomeScreenButton = styled.div<GameStartedProps>`
 `;
 
 const HomePage: React.FC = () => {
-  // useEffect(() => {
-  //   // axios.get("/just-get-snapshot").then(data => console.log(data.data));
+//   const [currMsg, setCurrMsg] = useState("");
+//   const [users, setUsers] = useState([]);
 
-  //   fetch("/just-get-snapshot")
-  //     // .then(res => res.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       data.json().then(data => {
-  //         const gs: GameSnapshot = data;
-  //         console.log(gs);
-  //         console.log(gs.players[0].places.hand)
-  //       });
-  //     });
-  // }, []);
+//   // const { connected, messages } = useSelector(state => state.stomp);
+
+  const dispatch = useDispatch();
+//   const user = useSelector(state => state.user.user);
+//   const userLoading = useSelector(state => state.user.isLoading);
+//   const userError = useSelector(state => state.user.error);
+
+//   const { wsConnected, wsLoading, wsError } = useSelector(state => state.websocket);
+
+  useEffect(() => {
+    // if (userLoading || userError) return;
+
+    // if (!user) {
+      dispatch(END_DRAG_CLEANUP());
+    // }
+  }, []);
+  // [dispatch, user, userError, userLoading]);
+
+//   useEffect(() => {
+//     if (wsLoading || wsError) return;
+
+//     if (!wsConnected && user && user.id !== -1) {
+//       dispatch(connectWebsocket());
+//     }
+//   }, [dispatch, user, userError, userLoading, wsConnected, wsError, wsLoading]);
+
+//   if (userError !== "") {
+//     return (
+//       <CenterContent>
+//         <p>Error: {userError}</p>
+//         <button onClick={() => dispatch(logout())}>Start over</button>
+//       </CenterContent>
+//     );
+//   }
+
+//   if (userLoading || !user) {
+//     return (
+//       <CenterContent>
+//         <div>Loading...</div>
+//       </CenterContent>
+//     );
+//   }
+//   if (user.id === -1) {
+//     return (
+//       <CenterContent>
+//         <EnterNameScreenWithRedux connectToWs={connectWebsocket} />
+//       </CenterContent>
+//     );
+//   }
+
+//   if (!user) return <div>loading...</div>;
+
+//   return <ChatRoom user={user} />;
+// }
   return (
     <div className="splash-screen">
       {/* <img

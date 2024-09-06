@@ -2,7 +2,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = { user: null, isLoading: false, error: "" };
+
+type UserState = {  
+  user?: User;
+  isLoading: boolean;
+  error: string;
+};
+
+const initialState: UserState = { user: undefined, isLoading: false, error: "" };
 
 export const whoami = createAsyncThunk("user/whoami", async () => {
   //TODO handle network errors
@@ -36,7 +43,7 @@ const userSlice = createSlice({
         state.user = action.payload;
       } else {
         state.user = {
-          username: "",
+          name: "",
           id: -1,
         };
       }
@@ -65,7 +72,7 @@ const userSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(logout.fulfilled, state => {
-      state.user = null;
+      state.user = undefined;
       state.isLoading = false;
     });
     builder.addCase(logout.rejected, state => {

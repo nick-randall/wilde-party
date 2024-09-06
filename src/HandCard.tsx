@@ -1,6 +1,6 @@
 import { CSSProperties, useState } from "react";
 import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import "./animations/animations.css";
 import { CardInspector } from "./renderPropsComponents/CardInspector";
@@ -22,13 +22,13 @@ const HandCard = (props: HandCardProps) => {
 
   const draggableId = JSON.stringify({ id, type: "card" });
 
-  const isDragging = useSelector((state: RootState) => state.draggedHandCard !== undefined && state.draggedHandCard.id === id);
-  const {draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver} = useSelector((state: RootState) => state);
+  const isDragging = useSelector((state: RootState) => state.dragEventState.draggedHandCard !== undefined && state.dragEventState.draggedHandCard.id === id);
+  const {draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver} = useSelector((state: RootState) => state.dragEventState);
   const isDraggedOverAnyPlace = draggedOver !== undefined;
 
-  const transitionUnderway = useSelector((state: RootState) => state.transitionData.length > 0);
+  const transitionUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
 
-  const { player, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
+  const { player, phase } = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current);
 
   const canPlay = true// player === 0 && phase === "playPhase" && !transitionUnderway;
 

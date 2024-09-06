@@ -2,8 +2,7 @@ import { BeforeCapture, DraggableLocation, DragUpdate, DropResult, ResponderProv
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";
-import { updateDraggedOver } from "../redux/actionCreators";
-import { rearrange, startRearranging } from "../redux/actionCreators";
+import { REARRANGE, START_REARRANGING, UPDATE_DRAGGED_OVER } from "../redux/dragEventReducer";
 
 const isHandCard = (sourceId: number) => locate(sourceId).place === "hand";
 
@@ -41,7 +40,7 @@ export const onDragStart = ({ source, draggableId }: { source: DraggableLocation
   if (isHandCard(droppableData.id)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
   else {
     store.dispatch(
-      startRearranging({
+      START_REARRANGING({
         placeId: droppableData.id,
         sourceIndex: source.index,
         draggedId: draggableData.id,
@@ -60,11 +59,10 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
   } else {
     draggedOverData = undefined;
   }
-  store.dispatch(updateDraggedOver(draggedOverData));
+  store.dispatch(UPDATE_DRAGGED_OVER(draggedOverData));
 };
 
 export const onDragEnd = (d: DropResult) => {
-  const gameSnapshot = store.getState().gameSnapshot;
   const { source, destination } = d;
 
   if (destination) {
@@ -74,8 +72,8 @@ export const onDragEnd = (d: DropResult) => {
     const { type: destinationType, id: destinationId } = destinationData;
     const sourceResult = { id: sourceId, type: sourceType, index: source.index };
     const destResult = { id: destinationId, type: destinationType, index: destination.index };
-
-    if (isRearrange(d)) store.dispatch(rearrange(sourceResult, destResult));
+    console.log(sourceResult, destResult);
+    if (isRearrange(d)) store.dispatch(REARRANGE({source: sourceResult, destination: destResult}));
     // else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }));
     // else if (isDestroy(d, gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }));
     else if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));

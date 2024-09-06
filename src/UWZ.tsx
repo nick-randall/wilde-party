@@ -1,7 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
-import { getPlacesLayout } from "./dimensions/getPlacesLayout";
 import GhostCard from "./GhostCard";
 import { getAllDimensions } from "./helperFunctions/getDimensions";
 import { RootState } from "./redux/store";
@@ -17,14 +16,14 @@ export const UWZ = (props: UWZProps) => {
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
 
-  const {draggedHandCard, draggedOver, highlights, rearrangingData} = useSelector((state: RootState) => state);
+  const {draggedHandCard, draggedOver, highlights, rearrangingData} = useSelector((state: RootState) => state.dragEventState);
 
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
   const isHighlighted = highlights.includes(id);
 
-  const rearranging = useSelector((state: RootState) => state.rearrangingData.placeId === id);
+  const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
   const dimensions = getAllDimensions(id);

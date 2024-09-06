@@ -15,7 +15,7 @@ const nextPlayer = (gameSnapshot: GameSnapshot) => {
   return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
 };
 
-export interface State {
+export interface DragEventState {
   gameSnapshot: GameSnapshot;
   screenSize: { width: number; height: number };
   transitionData: TransitionData[];
@@ -43,7 +43,7 @@ const isSpecialsColumn = (type: DroppableEntityType, id: number, gameSnapshot: G
 const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
 
 
-export interface State {
+export interface DragEventState {
   gameSnapshot: GameSnapshot;
   screenSize: { width: number; height: number };
   transitionData: TransitionData[];
@@ -55,7 +55,7 @@ export interface State {
   highlightType: string;
 }
 
-const initialState: State = {
+const initialState: DragEventState = {
   gameSnapshot: emptyGameSnapshot,
   screenSize: getScreenSize(),
   draggedOver: undefined,
@@ -67,8 +67,8 @@ const initialState: State = {
   highlightType: "",
 };
 
-export const websocketSlice = createSlice({
-  name: "websocket",
+export const dragEventSlice = createSlice({
+  name: "dragEventState",
   initialState,
   reducers: {
     SET_SCREEN_SIZE: state => {
@@ -99,8 +99,10 @@ export const websocketSlice = createSlice({
       }
     },
     UPDATE_DRAGGED_OVER: (state, action: PayloadAction<DraggedOverData | undefined>) => {
+      console.log(`UPDATE_DRAGGED_OVER`);
       if (action.payload === undefined) {
         state.draggedOver = undefined;
+        return;
       }
       const { id, index, type } = action.payload as DraggedOverData;
       const placeName = locatePlace(id, state.gameSnapshot).placeType;
@@ -118,6 +120,7 @@ export const websocketSlice = createSlice({
       return { ...state, draggedOver: action.payload };
     },
     SET_GAME_SNAPSHOT: (state, action: PayloadAction<GameSnapshot>) => {
+      console.log("Setting game snapshot");
       state.gameSnapshot = action.payload;
     },
     REARRANGE: (state, action: PayloadAction<{ source: DraggedOverData; destination: DraggedOverData }>) => {
@@ -130,6 +133,7 @@ export const websocketSlice = createSlice({
     },
 
     END_DRAG_CLEANUP: state => {
+      console.log("Clean up!")
       const rearrangingData: SimpleRearrangingData = { placeId: -1, draggedId: -1, sourceIndex: -1 };
       return {
         ...state,
@@ -149,6 +153,8 @@ export const websocketSlice = createSlice({
   },
 });
 
+export default dragEventSlice.reducer;
+
 export const {
   SET_SCREEN_SIZE,
   SET_DRAGGED_HAND_CARD,
@@ -158,4 +164,4 @@ export const {
   SET_GAME_SNAPSHOT,
   REARRANGE,
   END_DRAG_CLEANUP,
-} = websocketSlice.actions;
+} = dragEventSlice.actions;
