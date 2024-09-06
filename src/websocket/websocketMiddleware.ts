@@ -6,7 +6,7 @@ import { AppDispatch } from "../store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
 import { addInvitation, addMessage, updateRoomUsers } from "../chat/chatSlice";
-import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSnapshotEventsSlice";
+import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSlice";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
