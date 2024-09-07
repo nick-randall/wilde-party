@@ -2,7 +2,7 @@ import { BeforeCapture, DraggableLocation, DragUpdate, DropResult, ResponderProv
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";
-import { REARRANGE, START_REARRANGING, UPDATE_DRAGGED_OVER } from "../redux/dragEventReducer";
+import { END_DRAG_CLEANUP, REARRANGE, START_REARRANGING, UPDATE_DRAGGED_OVER } from "../redux/dragEventReducer";
 
 const isHandCard = (sourceId: number) => locate(sourceId).place === "hand";
 
@@ -78,5 +78,5 @@ export const onDragEnd = (d: DropResult) => {
     // else if (isDestroy(d, gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }));
     else if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
   }
-  store.dispatch({ type: "END_DRAG_CLEANUP" });
+  store.dispatch(END_DRAG_CLEANUP());
 };

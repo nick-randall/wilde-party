@@ -2,23 +2,23 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-type UserState = {  
+type UserGameState = {
   user?: User;
+  gameId?: number;
   isLoading: boolean;
   error: string;
 };
 
-const initialState: UserState = { user: undefined, isLoading: false, error: "" };
+const initialState: UserGameState = { user: undefined, gameId: undefined, isLoading: false, error: "" };
 
-export const whoami = createAsyncThunk("user/whoami", async () => {
+export const whoami = createAsyncThunk("userGameState/whoami", async () => {
   //TODO handle network errors
   const whoamiResponse = await axios.post("/whoami");
   return whoamiResponse.data;
 });
 
-export const logout = createAsyncThunk("user/logout", async () => {
-    //TODO handle network errors
+export const logout = createAsyncThunk("userGameState/logout", async () => {
+  //TODO handle network errors
 
   await axios.post("/logout");
 });
@@ -30,7 +30,7 @@ export const addUser = createAsyncThunk("user/addUser", async (username: string)
 });
 
 const userSlice = createSlice({
-  name: "user",
+  name: "userGameState",
   initialState,
   reducers: {},
   extraReducers: builder => {
@@ -40,7 +40,8 @@ const userSlice = createSlice({
     });
     builder.addCase(whoami.fulfilled, (state, action) => {
       if (action.payload) {
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.gameId = action.payload.gameId;
       } else {
         state.user = {
           name: "",
@@ -81,5 +82,6 @@ const userSlice = createSlice({
     });
   },
 });
+
 
 export default userSlice.reducer;

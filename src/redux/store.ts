@@ -9,7 +9,7 @@ const store = configureStore({
   reducer: {
     dragEventState: dragEventReducer,
     websocket: websocketReducer,
-    user: userReducer,
+    userGameState: userReducer,
     chat: chatReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stompMiddleware),
