@@ -1,8 +1,7 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
-import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
 import { locate } from "../locateFunctions";
 import { getCardFunctions } from "./cardHighlightFunctions";
-import { HighlightCardFunction, HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
+import {  HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
 const allTrue =
   (...funcs: ((...args: any[]) => boolean)[]) =>

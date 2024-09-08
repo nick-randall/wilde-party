@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import GamePage from "./pages/GamePage";
+import ChatPage from "./pages/ChatPage";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -14,7 +15,7 @@ ReactDOM.render(
         <Route path="/" element={<HomePage />} />
         {/* can put layout wrapper here*
             <Route /> */}
-        <Route path="chat" element={< div/>} />
+        <Route path="chat" element={< ChatPage/>} />
         <Route path="game" element={<GamePage />} />
         <Route path="*" element={<HomePage />} />
         {/* <Table /> */}

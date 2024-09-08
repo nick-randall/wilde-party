@@ -15,18 +15,17 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
   let usersInChatRoomSubscription: StompSubscription;
 
   return (next: AppDispatch) => (action: WebsocketAction) => {
-    console.log(action);
     // Allow the user to see that the connection is lost when trying to send messages etc.
-    if (
-      (action.type === "JOIN_CHAT_ROOM" ||
-        action.type === "SEND_MESSAGE_TO_ROOM" ||
-        action.type === "JOIN_GAME" ||
-        action.type === "INVITE_USER_TO_GAME") &&
-      (stompClient === undefined || !stompClient.active)
-    ) {
-      dispatch(setDisconnectedFromWs());
-      return;
-    }
+    // if (
+    //   (action.type === "JOIN_CHAT_ROOM" ||
+    //     action.type === "SEND_MESSAGE_TO_ROOM" ||
+    //     action.type === "JOIN_GAME" ||
+    //     action.type === "INVITE_USER_TO_GAME") &&
+    //   (stompClient === undefined || !stompClient.active)
+    // ) {
+    //   dispatch(setDisconnectedFromWs());
+    //   // return;
+    // }
     switch (action.type) {
       case "CONNECT_WS":
         const { onConnectCallback } = action.payload;
@@ -64,6 +63,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
 
         break;
       case "JOIN_CHAT_ROOM":
+        console.log("HEREHREH")
         const onChatMessageReceived = (payload: Message) => {
           if (payload.body) {
             console.log("got global message");
@@ -79,7 +79,8 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           chatRoomSubscription = stompClient.subscribe("/topic/public", onChatMessageReceived);
           usersInChatRoomSubscription = stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
         };
-        if (!stompClient.active) {
+        if (!stompClient || !stompClient.active) {
+          console.log("here")
           // If no active websocket connection, defer subscription to the connect websocket event.
           dispatch(connectWebsocket(subscribeToGame));
         } else subscribeToGame();
@@ -119,9 +120,6 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         stompClient.disconnect();
         break;
       default:
-        console.log("default");
-        console.log(next)
-        console.log(action)
          next(action);
     }
   };

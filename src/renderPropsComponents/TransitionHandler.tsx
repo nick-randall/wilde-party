@@ -1,7 +1,6 @@
-import React, { CSSProperties, useRef, useState } from "react";
+import { CSSProperties } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Transition, TransitionStatus } from "react-transition-group";
-import { rotate } from "../helperFunctions/equations";
+import { Transition } from "react-transition-group";
 import { RootState } from "../redux/store";
 
 interface TransitionHandlerProps {

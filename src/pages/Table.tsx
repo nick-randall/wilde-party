@@ -1,61 +1,35 @@
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "../dragEventHandlers/dragEventHandlers";
-import { useEffect, useState } from "react";
-import "../css/global.css";
+import { useEffect } from "react";
 import "../css/grid.css";
-import axios from "axios";
-import { set } from "ramda";
 import { Deck } from "../gameComponents/Deck";
 import DiscardPile from "../gameComponents/DiscardPile";
 import PlayerAvatar from "../gameComponents/PlayerAvatar";
 import { SpecialsZone } from "../gameComponents/SpecialsZone";
 import EnemyGCZ from "../gameComponents/EnemyGCZ";
-import { p } from "../gameComponents/EnemyPlayer";
 import GCZ from "../gameComponents/GCZ";
 import Hand from "../gameComponents/Hand";
 import UWZ from "../gameComponents/UWZ";
-import { SET_GAME_SNAPSHOT, SET_SCREEN_SIZE } from "../redux/dragEventReducer";
-import { joinChatRoom, SEND_MESSAGE_TO_ROOM } from "../websocket/websocketActionCreators";
+import { joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
 
 interface TableProps {
   gameData: GameData;
 }
 
-export const Table: React.FC<TableProps> = () => {
-  console.log("Table");
-  // const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
-  const screenSize = useSelector((state: RootState) => state.dragEventState.screenSize);
-  // const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
-  const [gameStarted, setGameStarted] = useState(false);
+export const Table: React.FC<TableProps> = ({gameData}) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", () => {
-  //     dispatch(SET_SCREEN_SIZE());
-  //   });
-  // });
-  useEffect(() => {
-    if (!gameStarted) {
-      console.log("called it");
-      // dispatch(dealInitialHands());
-      axios
-        .get("/just-get-snapshot")
-        // .then(res => res.json())
-        .then(resp => {
-          console.log("got snapshot");
-          dispatch(SET_GAME_SNAPSHOT( resp.data));
-          dispatch(SEND_MESSAGE_TO_ROOM("BASDF"))
-        });
-      setGameStarted(true);
-    }
-  }, [dispatch, gameStarted]);
+  useEffect(()=> {
+    dispatch(joinGame(gameData.id))
+
+  },[dispatch, gameData.id])
+
+
   const gameSnapshot = useSelector((state: RootState) => state.dragEventState.gameSnapshot);
-  console.log(gameSnapshot);
-  if (!gameSnapshot) return <div className="background-tile">loading</div>;
-  const { player } = gameSnapshot.current;
+
   const { nonPlayerPlaces } = gameSnapshot;
   const p01places = gameSnapshot.players[0].places;
   const p02places = gameSnapshot.players[1].places;

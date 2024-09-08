@@ -33,15 +33,3 @@ const TextInput: React.FC<WidlePartyInputProps> = ({ name, value, onChange }) =>
 };
 
 export default TextInput;
-
-   // style= {  {
-      //   width: "300px",
-      //   fontSize: "30px",
-      //   borderRadius: "30px",
-      //   boxShadow: "4px 5px 0px black",
-      //   backgroundColor: "white",
-      //   color: "#f9ca44",
-      //   border: "thin black solid",
-      //   padding: "10px 15px 10px 15px",
-      // }}
-     // />
