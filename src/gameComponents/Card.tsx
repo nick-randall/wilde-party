@@ -1,11 +1,11 @@
 import React, { CSSProperties, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
-import { getSettings } from "./gameSettings/uiSettings";
 import GhostCard from "./GhostCard";
-import { RootState } from "./redux/store";
-import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
+import { CardInspector } from "../renderPropsComponents/CardInspector";
+import TransitionHandler from "../renderPropsComponents/TransitionHandler";
+import { RootState } from "../redux/store";
+import { getSettings } from "../gameSettings/uiSettings";
 
 export interface CardProps {
   id: number;

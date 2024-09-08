@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
 import { Droppable } from "react-beautiful-dnd";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { RootState } from "../redux/store";
 interface HandProps {
   id: number;
   handCards: GameCard[];

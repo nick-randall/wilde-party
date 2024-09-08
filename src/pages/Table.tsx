@@ -1,23 +1,23 @@
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "./dragEventHandlers/dragEventHandlers";
+import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "../dragEventHandlers/dragEventHandlers";
 import { useEffect, useState } from "react";
-import "./css/global.css";
-import "./css/grid.css";
+import "../css/global.css";
+import "../css/grid.css";
 import axios from "axios";
 import { set } from "ramda";
-import { Deck } from "./Deck";
-import DiscardPile from "./DiscardPile";
-import PlayerAvatar from "./PlayerAvatar";
-import { SpecialsZone } from "./SpecialsZone";
-import EnemyGCZ from "./EnemyGCZ";
-import { p } from "./EnemyPlayer";
-import GCZ from "./GCZ";
-import Hand from "./Hand";
-import UWZ from "./UWZ";
-import { SET_GAME_SNAPSHOT, SET_SCREEN_SIZE } from "./redux/dragEventReducer";
-import { joinChatRoom, SEND_MESSAGE_TO_ROOM } from "./websocket/websocketActionCreators";
+import { Deck } from "../gameComponents/Deck";
+import DiscardPile from "../gameComponents/DiscardPile";
+import PlayerAvatar from "../gameComponents/PlayerAvatar";
+import { SpecialsZone } from "../gameComponents/SpecialsZone";
+import EnemyGCZ from "../gameComponents/EnemyGCZ";
+import { p } from "../gameComponents/EnemyPlayer";
+import GCZ from "../gameComponents/GCZ";
+import Hand from "../gameComponents/Hand";
+import UWZ from "../gameComponents/UWZ";
+import { SET_GAME_SNAPSHOT, SET_SCREEN_SIZE } from "../redux/dragEventReducer";
+import { joinChatRoom, SEND_MESSAGE_TO_ROOM } from "../websocket/websocketActionCreators";
+import { RootState } from "../redux/store";
 
 export const Table = () => {
   // const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);

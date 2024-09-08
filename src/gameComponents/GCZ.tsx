@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "./helperFunctions/groupGCZCards";
-import { RootState } from "./redux/store";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "../helperFunctions/groupGCZCards";
+import { RootState } from "../redux/store";
 
 interface GCZProps {
   id: number;

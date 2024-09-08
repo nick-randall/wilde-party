@@ -1,10 +1,10 @@
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Table } from "./Table";
+import { Table } from "./pages/Table";
 import store from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./HomePage";
+import HomePage from "./pages/HomePage";
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { enactDrawCardEvent } from "./redux/actionCreators";
-import { RootState } from "./redux/store";
-import { drawCardThunk } from "./redux/thunks";
-import "./css/grid.css";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { RootState } from "../redux/store";
+import { drawCardThunk } from "../redux/thunks";
+import "../css/grid.css";
 
 interface DeckProps {
   id: number;

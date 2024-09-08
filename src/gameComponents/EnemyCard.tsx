@@ -1,11 +1,10 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./redux/store";
-import { getSettings } from "./gameSettings/uiSettings";
-import { Transition, TransitionStatus } from "react-transition-group";
+import { RootState } from "../redux/store";
+import { getSettings } from "../gameSettings/uiSettings";
 import { Droppable } from "react-beautiful-dnd";
-import { CardInspector } from "./renderPropsComponents/CardInspector";
-import TransitionHandler from "./renderPropsComponents/TransitionHandler";
+import { CardInspector } from "../renderPropsComponents/CardInspector";
+import TransitionHandler from "../renderPropsComponents/TransitionHandler";
 import GhostCard from "./GhostCard";
 import React from "react";
 

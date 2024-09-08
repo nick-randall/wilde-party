@@ -1,9 +1,9 @@
 import { CSSProperties } from "react";
 import { useSelector } from "react-redux";
 import "./animations/animations.css";
-import locatePlayer from "./helperFunctions/locateFunctions/locatePlayer";
-import { RootState } from "./redux/store";
-import { TransitionHandler } from "./renderPropsComponents/TransitionHandler";
+import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
+import { RootState } from "../redux/store";
+import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
 
 export interface EnemyHandCardProps {
   id: number;

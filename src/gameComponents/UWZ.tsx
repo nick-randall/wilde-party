@@ -2,8 +2,8 @@ import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import Card from "./Card";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { RootState } from "./redux/store";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { RootState } from "../redux/store";
 
 interface UWZProps {
   id: number;

@@ -2,10 +2,10 @@ import R, { flatten, is } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
-import { RootState } from "./redux/store";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { RootState } from "../redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
-import "./css/global.css";
+import "../css/global.css";
 
 interface SpecialsZoneProps {
   specialsZoneData: GamePlace;

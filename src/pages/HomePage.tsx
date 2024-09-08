@@ -1,13 +1,13 @@
 import { url } from "inspector";
 import { Link } from "react-router-dom";
 import styled, { StyledComponent } from "styled-components";
-import "./css/global.css";
+import "../css/global.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, logout, whoami } from "./user/userSlice";
-import { END_DRAG_CLEANUP, SET_DRAGGED_HAND_CARD } from "./redux/dragEventReducer";
-import useUserGame from "./user/useUserGame";
+import { addUser, logout, whoami } from "../user/userSlice";
+import { END_DRAG_CLEANUP, SET_DRAGGED_HAND_CARD } from "../redux/dragEventReducer";
+import useUserGame from "../user/useUserGame";
 
 type GameStartedProps = {
   imageHeight?: number;

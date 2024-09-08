@@ -1,5 +1,5 @@
 import Card from "./Card";
-import { getAllDimensions } from "./helperFunctions/getDimensions";
+import { getAllDimensions } from "../helperFunctions/getDimensions";
 
 interface EnemyGCZProps {
   id: number;
