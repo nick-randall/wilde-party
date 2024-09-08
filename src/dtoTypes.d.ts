@@ -27,4 +27,10 @@ type GameSnapshotUpdates = {
   gameSnapshots: GameSnapshot[]
 }
 
+type PlayerDTO = {
+  id: number;
+  name: string;
+  isHuman: boolean;
+}
+
 type MessageType = "chat" | "join" | "leave" | "starting_game";

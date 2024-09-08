@@ -2,14 +2,15 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-type UserGameState = {
+export type UserGameState = {
   user?: User;
-  gameId?: number;
+  gameData?: GameData;
   isLoading: boolean;
+  isUserGameDataRetrieved: boolean;
   error: string;
 };
 
-const initialState: UserGameState = { user: undefined, gameId: undefined, isLoading: false, error: "" };
+const initialState: UserGameState = {isUserGameDataRetrieved: false,  user: undefined, gameData: undefined, isLoading: false, error: "" };
 
 export const whoami = createAsyncThunk("userGameState/whoami", async () => {
   //TODO handle network errors
@@ -19,7 +20,7 @@ export const whoami = createAsyncThunk("userGameState/whoami", async () => {
 
 export const logout = createAsyncThunk("userGameState/logout", async () => {
   //TODO handle network errors
-
+  console.log("logging out");
   await axios.post("/logout");
 });
 
@@ -41,18 +42,17 @@ const userSlice = createSlice({
     builder.addCase(whoami.fulfilled, (state, action) => {
       if (action.payload) {
         state.user = action.payload.user;
-        state.gameId = action.payload.gameId;
+        state.gameData = action.payload.gameData;
       } else {
-        state.user = {
-          name: "",
-          id: -1,
-        };
       }
+      state.isUserGameDataRetrieved = true;
+
       state.isLoading = false;
     });
     builder.addCase(whoami.rejected, state => {
       console.log("whoami rejected");
       state.isLoading = false;
+      state.isUserGameDataRetrieved = false;
       state.error = "Error getting user info";
     });
     builder.addCase(addUser.pending, state => {
@@ -61,6 +61,8 @@ const userSlice = createSlice({
     builder.addCase(addUser.fulfilled, (state, action) => {
       state.user = action.payload;
       console.log(action.payload);
+      state.isUserGameDataRetrieved = true;
+
 
       state.isLoading = false;
     });
