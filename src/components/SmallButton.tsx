@@ -1,26 +1,25 @@
-import React from "react";
 import styled from "styled-components";
 
 const Button = styled.button`
   cursor: pointer;
-  width: 300px;
   font-family: wilde-party-font;
-  font-size: 30px;
+  font-size: 20px;
   border-radius: 30px;
   box-shadow: 4px 5px 0px black;
   background-color: white;
-  color: #f9ca44;
+  text-shadow: none;
+  color: black;
   border: thin black solid;
-  padding: 10px 15px 10px 15px;
+  padding: 10px 10px 5px 10px;
 `;
 
-interface WildePartyButtonProps {
+interface SmallButtonProps {
   onClick?: () => void;
   text?: string;
   link?: string;
 }
 
-const WildePartyButton: React.FC<WildePartyButtonProps> = ({ onClick, text, link }) => {
+const SmallButton: React.FC<SmallButtonProps> = ({ onClick, text, link }) => {
   if (link) {
     return (
       <a href={link} style={{ textDecoration: "none", color: "inherit" }}>
@@ -35,4 +34,4 @@ const WildePartyButton: React.FC<WildePartyButtonProps> = ({ onClick, text, link
   );
 };
 
-export default WildePartyButton;
+export default SmallButton;

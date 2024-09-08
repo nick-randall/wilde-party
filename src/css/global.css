@@ -5,7 +5,6 @@ div {
   -webkit-user-drag: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  /* border: 1px solid black; */
 }
 *{
   font-family: wilde-party-font;
@@ -13,6 +12,7 @@ div {
   color: white;
   text-align: center;
   text-shadow: 2px 2px 4px black;
+  box-sizing: border-box;
 }
 body {
   background-image: url("background_tile.jpg");

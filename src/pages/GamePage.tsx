@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import WildePartyButton from "../components/WildePartyButton";
+import LargeButton from "../components/LargeButton";
 import useUserGameData from "../user/useUserGameData";
 import { Table } from "./Table";
 import { Center } from "../components/Center";
@@ -22,7 +22,8 @@ const UserGameErrors = () => {
   return (
     <Center>
       You aren't supposed to be in this game!
-       <WildePartyButton onClick={() => navigate("/")} text="Start Over"></WildePartyButton>
+      <div style={{height: "10px"}}/>
+       <LargeButton onClick={() => navigate("/")} text="Start Over"></LargeButton>
     </Center>
   );
 };
