@@ -1,7 +1,14 @@
-export const CenterContent:React.FC = ({children}) => (
-  <header className="App-header">
-    <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-      <div style={{ display: "flex", flexDirection: "column"}}>{children}</div>
-    </div>
-  </header>
+export const Center: React.FC = ({ children }) => (
+  <div
+    style={{
+      width: "100vw",
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    {children}
+  </div>
 );

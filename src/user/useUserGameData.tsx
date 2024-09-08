@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { UserGameState, whoami } from "./userSlice";
 
-const useUserGame = (): UserGameState => {
+const useUserGameData = (): UserGameState => {
   const dispatch = useDispatch();
   const { isUserGameDataRetrieved, user, isLoading, error, gameData } = useSelector((state: RootState) => state.userGameState);
 
@@ -16,4 +16,4 @@ const useUserGame = (): UserGameState => {
   return { isUserGameDataRetrieved, isLoading, error, user, gameData };
 };
 
-export default useUserGame;
+export default useUserGameData;

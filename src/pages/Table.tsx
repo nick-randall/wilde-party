@@ -19,7 +19,12 @@ import { SET_GAME_SNAPSHOT, SET_SCREEN_SIZE } from "../redux/dragEventReducer";
 import { joinChatRoom, SEND_MESSAGE_TO_ROOM } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
 
-export const Table = () => {
+interface TableProps {
+  gameData: GameData;
+}
+
+export const Table: React.FC<TableProps> = () => {
+  console.log("Table");
   // const gameSnapshot = useSelector((state: RootState) => state.gameSnapshot);
   const screenSize = useSelector((state: RootState) => state.dragEventState.screenSize);
   // const { player, plays, draws, rolls, phase } = useSelector((state: RootState) => state.gameSnapshot.current);
