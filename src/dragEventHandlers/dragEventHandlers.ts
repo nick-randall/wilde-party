@@ -1,4 +1,4 @@
-import { BeforeCapture, DraggableLocation, DragUpdate, DropResult, ResponderProvided } from "react-beautiful-dnd";
+import { BeforeCapture, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
 import { locate } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";

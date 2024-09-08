@@ -12,7 +12,7 @@ height: 100px
 
 const PlayerAvatar = (props: PlayerProps) => {
   const { player } = props;
-  const { id, name, places, glitzaglitza, skipNextTurn } = player;
+  const { id} = player;
   const droppableId = JSON.stringify({ id, type: "player" });
 
   return (

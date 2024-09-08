@@ -23,7 +23,6 @@ export const addDraggedThunk = (source: DraggedOverData, destination: DraggedOve
   const state = getState();
   const { gameSnapshot } = state.dragEventState;
   const { place: originPlace, player: originPlayer } = locate(source.id, gameSnapshot);
-  const { place: destPlace, player: destPlayer } = locate(destination.id, gameSnapshot);
   let playedCard: GameCard | null = null;
   if (originPlayer && originPlace) playedCard = gameSnapshot.players[originPlayer].places[originPlace].cards[destination.index];
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
