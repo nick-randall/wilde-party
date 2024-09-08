@@ -25,10 +25,9 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
     // ) {
     //   dispatch(setDisconnectedFromWs());
     //   // return;
-    // }
+    console.log(action.type);
     switch (action.type) {
       case "CONNECT_WS":
-        const { onConnectCallback } = action.payload;
         dispatch(setLoadingWs());
         const socket = new SockJS("/ws");
         stompClient = Stomp.over(socket);
@@ -41,29 +40,29 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           dispatch(setDisconnectedFromWs());
         };
 
-        stompClient.onConnect = onConnectCallback;
-
         stompClient.connect({}, () => {
           dispatch(setConnectedToWs());
         });
-
-        // Subscribe to personal messages
-        stompClient.subscribe("/users/queue/messages", (payload: Message) => {
-          console.log("Received personal message: ");
-          const { type } = JSON.parse(payload.body);
-          if (type === "invite") {
-            console.log("Received invite");
-            dispatch(addInvitation(JSON.parse(payload.body)));
-          } else if (type === "not_in_game_error") {
-            console.log("Error subscribing to game");
-            gameSubscription.unsubscribe();
-            dispatch(setNotInGameError(JSON.parse(payload.body)));
-          }
-        });
+        stompClient.onConnect = () => {
+          // Subscribe to personal messages
+          stompClient.subscribe("/users/queue/messages", (payload: Message) => {
+            console.log("Received personal message: ");
+            const { type } = JSON.parse(payload.body);
+            if (type === "invite") {
+              console.log("Received invite");
+              dispatch(addInvitation(JSON.parse(payload.body)));
+            } else if (type === "not_in_game_error") {
+              console.log("Error subscribing to game");
+              gameSubscription.unsubscribe();
+              dispatch(setNotInGameError(JSON.parse(payload.body)));
+            }
+          });
+          dispatch(setConnectedToWs());
+        };
 
         break;
       case "JOIN_CHAT_ROOM":
-        console.log("HEREHREH")
+        console.log("HEREHREH");
         const onChatMessageReceived = (payload: Message) => {
           if (payload.body) {
             console.log("got global message");
@@ -75,15 +74,8 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         const onRoomUsersReceived = (payload: Message) => {
           dispatch(updateRoomUsers(JSON.parse(payload.body)));
         };
-        const subscribeToGame = () => {
-          chatRoomSubscription = stompClient.subscribe("/topic/public", onChatMessageReceived);
-          usersInChatRoomSubscription = stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
-        };
-        if (!stompClient || !stompClient.active) {
-          console.log("here")
-          // If no active websocket connection, defer subscription to the connect websocket event.
-          dispatch(connectWebsocket(subscribeToGame));
-        } else subscribeToGame();
+        chatRoomSubscription = stompClient.subscribe("/topic/public", onChatMessageReceived);
+        usersInChatRoomSubscription = stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
         break;
       case "SEND_MESSAGE_TO_ROOM": {
         const message = action.payload;
@@ -101,10 +93,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots, { gameId: gameId.toString() });
         };
 
-        if (!stompClient.active) {
-          // If no active websocket connection, defer subscription to the connect websocket event.
-          dispatch(connectWebsocket(subscribeToGame));
-        } else subscribeToGame();
+        subscribeToGame();
         break;
       }
 
@@ -120,7 +109,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         stompClient.disconnect();
         break;
       default:
-         next(action);
+        next(action);
     }
   };
 };

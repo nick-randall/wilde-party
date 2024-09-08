@@ -6,10 +6,11 @@ import useUserGameData from "../user/useUserGameData";
 import LargeButton from "../components/LargeButton";
 import TextInput from "../components/TextInput";
 import SmallButton from "../components/SmallButton";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const { isUserGameDataRetrieved, isLoading, error, user, gameData } = useUserGameData();
-
+  const navigate  = useNavigate();
   return (
     <div className="splash-screen flex-column">
       <div style={{ height: "20vh" }} />
@@ -17,7 +18,7 @@ const HomePage: React.FC = () => {
       {isLoading && <Loading />}
       {isUserGameDataRetrieved && !user && <EnterName />}
       {user && !gameData && <UserGreetings user={user} />}
-      {gameData && <LargeButton link="/game" text="Return to game" />}
+      {gameData && <LargeButton onClick={()=> navigate("/chat")} text="Return to game" />}
     </div>
   );
 };
@@ -38,10 +39,10 @@ const Loading = () => <div>Loading...</div>;
 
 const UserGreetings = (props: { user: User }) => {
   return (
-    <div style={{color: "black", textShadow:"none"}}>
+    <div style={{color: "black", textShadow :"none"}}>
       Welcome, {props.user.name}!
       <div style={{ height: "20px" }} />
-      <LargeButton link="/chat" text="Start Game" />
+      <LargeButton link={`/chat/?userid=${props.user.id}&username=${props.user.name}`} text="Start Game" />
     </div>
   );
 };

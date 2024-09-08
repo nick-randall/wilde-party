@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { inviteUserToGame, joinChatRoom, sendMessageToRoom } from "../websocket/websocketActionCreators";
+import { connectWebsocket, inviteUserToGame, joinChatRoom, sendMessageToRoom } from "../websocket/websocketActionCreators";
 import { useSelector, useDispatch } from "react-redux";
 import ChatAvatar from "../components/ChatAvatar";
 import { RootState } from "../redux/store";
@@ -7,6 +7,8 @@ import ChatMessageText from "../components/ChatMessage";
 import { setConnectedToWs } from "../websocket/websocketSlice";
 import { Center } from "../components/Center";
 import LargeButton from "../components/LargeButton";
+import "../css/global.css";
+import { useParams, useSearchParams } from "react-router-dom";
 
 interface ChatRoomProps {
   user: User;
@@ -19,13 +21,23 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
 
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
   const { messages, usersInRoom } = useSelector((state: RootState) => state.chat);
+  const [subscribed, setSubscribed] = useState(false);
+  console.log(`connected ${wsConnected} loading ${wsLoading} error ${wsError}`);
+
 
   useEffect(() => {
-    if (wsConnected || wsLoading) return;
-    dispatch(joinChatRoom());
+    if (wsLoading || wsError || wsError) return;
+    if (!wsConnected) {
+      dispatch(connectWebsocket());
+    }
+  }, [dispatch, wsConnected, wsError, wsLoading]);
 
-    // TODO separate join chat room and connect to ws
-  }, [dispatch]);
+  useEffect(() => {
+    if (wsConnected && !subscribed) {
+      dispatch(joinChatRoom());
+      setSubscribed(true);
+    }
+  }, [user, wsConnected, subscribed, dispatch, wsLoading, wsError]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrMsg(e.target.value);
@@ -49,17 +61,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     return roomUser.id !== user.id;
   });
 
-  // useEffect(() => {
-  //   if (!wsConnected || subscribed) return;
-  //   dispatch(joinChatRoom());
-  //   setSubscribed(true);
-  // }, [user, wsConnected, subscribed, dispatch]);
-
   return (
     <div className="chat-room">
       {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
       {gameData && gameData.status === "created" && <GoToGame />}
-      <div className="header centered">
+      <div className="header">
         <div> ChatRoom</div>
       </div>
       <div className="grid-left" style={{ display: "wrap" }}>

@@ -6,7 +6,7 @@ import { UserGameState, whoami } from "./userSlice";
 const useUserGameData = (): UserGameState => {
   const dispatch = useDispatch();
   const { isUserGameDataRetrieved, user, isLoading, error, gameData } = useSelector((state: RootState) => state.userGameState);
-
+  console.log(`isUserGameDataRetrieved ${isUserGameDataRetrieved} user ${user} isLoading ${isLoading} error ${error} gameData ${gameData}`);
   useEffect(() => {
     if (isLoading || error || isUserGameDataRetrieved) return;
 
