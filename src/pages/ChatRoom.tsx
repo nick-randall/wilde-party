@@ -7,7 +7,7 @@ import ChatMessageText from "../components/ChatMessage";
 import { setConnectedToWs } from "../websocket/websocketSlice";
 import { Center } from "../components/Center";
 import LargeButton from "../components/LargeButton";
-import "../css/global.css";
+import "../css/chat-room.css";
 import { useParams, useSearchParams } from "react-router-dom";
 
 interface ChatRoomProps {
@@ -22,11 +22,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
   const { messages, usersInRoom } = useSelector((state: RootState) => state.chat);
   const [subscribed, setSubscribed] = useState(false);
-  console.log(`connected ${wsConnected} loading ${wsLoading} error ${wsError}`);
-
 
   useEffect(() => {
-    if (wsLoading || wsError || wsError) return;
+    if (wsLoading || wsError) return;
     if (!wsConnected) {
       dispatch(connectWebsocket());
     }
@@ -60,13 +58,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     console.log(roomUser);
     return roomUser.id !== user.id;
   });
-
+console.log(`wsConnected ${wsConnected} wsLoading ${wsLoading} gameData ${gameData} messages ${messages} usersInRoom ${usersInRoom} subscribed ${subscribed} usersInRoomWithoutSelf ${usersInRoomWithoutSelf}`);
   return (
     <div className="chat-room">
+      {!wsConnected && <div className="loading-overlay">Lost connection to chat...</div>}
+
       {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
       {gameData && gameData.status === "created" && <GoToGame />}
       <div className="header">
-        <div> ChatRoom</div>
+        <div> Chat Room</div>
       </div>
       <div className="grid-left" style={{ display: "wrap" }}>
         <ChatAvatar name={user!.name} index={0} isMe />
@@ -85,7 +85,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
           <img src="./send.svg" alt="send" onClick={handleSendMessage} className="send-button" />
         </div>
       </div>
-      <div className="grid-right">Rules of game</div>
+      <div className="grid-right">Rules of the game</div>
       <div className="bottom"></div>
     </div>
   );

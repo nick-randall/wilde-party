@@ -1,0 +1,36 @@
+.chat-room {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-rows: 3fr 50fr 1fr;
+  justify-content: center;
+  height: 100vh;
+}
+
+.chat-room .header {
+  grid-column: 1/-1;
+}
+
+.chat-window {
+  box-sizing: border-box;
+  line-height: 3em;
+  overflow: scroll;
+  padding: 5px;
+  border: 4px double #debb07;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  
+}
+
+.loading-overlay {
+  position: absolute;
+  background-color: #debb07;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

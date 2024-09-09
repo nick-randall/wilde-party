@@ -14,6 +14,7 @@ const Input = styled.div`
   color: #f9ca44;
   border: thin black solid;
   padding: 7px 15px 7px 15px;
+  background-color: white;
 `;
 
 const TextInput: React.FC<WidlePartyInputProps> = ({ name, value, onChange }) => {

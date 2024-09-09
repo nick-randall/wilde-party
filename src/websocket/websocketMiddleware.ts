@@ -36,7 +36,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           dispatch(setWsError());
         };
 
-        stompClient.onDisconnect = () => {
+        stompClient.onWebSocketClose = () => {
           dispatch(setDisconnectedFromWs());
         };
 
@@ -62,7 +62,6 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
 
         break;
       case "JOIN_CHAT_ROOM":
-        console.log("HEREHREH");
         const onChatMessageReceived = (payload: Message) => {
           if (payload.body) {
             console.log("got global message");
