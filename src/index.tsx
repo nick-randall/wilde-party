@@ -16,7 +16,7 @@ ReactDOM.render(
         {/* can put layout wrapper here*
             <Route /> */}
         <Route path="chat" element={< ChatPage/>} />
-        <Route path="game" element={<GamePage />} />
+        <Route path="game" element={<GamePage />} />  
         <Route path="*" element={<HomePage />} />
         {/* <Table /> */}
       </Routes>
@@ -24,8 +24,11 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
+//  chat/?userid=${props.user.id}&username=${props.user.name}`
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

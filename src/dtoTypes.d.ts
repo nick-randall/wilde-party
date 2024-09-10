@@ -22,15 +22,36 @@ type ChatMessage = {
   sender: User;
 };
 
-type GameSnapshotUpdates = { 
-  type: string
-  gameSnapshots: GameSnapshot[]
-}
+type GameSnapshotUpdates = {
+  type: string;
+  gameSnapshots: GameSnapshot[];
+};
 
 type PlayerDTO = {
   id: number;
   name: string;
   isHuman: boolean;
-}
+};
+
+type OutgoingInvitationMessage = {
+  type:InvitationMessageType;
+  inviteeId?: number;
+  invitationId?: number;
+};
+
+type IncomingInvitationMessage = {
+  type: InvitationMessageType;
+  // invitation: Invitation;
+  sender: User;
+  userInvitations: Invitation[];
+};
+
+type Invitation = {
+  id: number;
+  inviter: User;
+  invitee: User;
+};
+
+type InvitationMessageType = "invite" | "accept" | "decline";
 
 type MessageType = "chat" | "join" | "leave" | "starting_game";

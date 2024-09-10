@@ -24,10 +24,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
 
   useEffect(() => {
     if (!wsConnected && !wsLoading && !wsError) {
-      dispatch(connectWebsocket({actionOnConnect: joinChatRoom()}));
+      dispatch(connectWebsocket({ actionOnConnect: joinChatRoom() }));
     }
   }, [dispatch, wsConnected, wsError, wsLoading]);
-
 
   const handleChatInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrMsg(e.target.value);
@@ -51,9 +50,17 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     return roomUser.id !== user.id;
   });
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
+  //     // dispatch({ type: "SEND_MESSAGE_TO_ROOM", payload: { inviteeId: 1 } });
+
+  //   }, 1000);
+  // },[]);
+
   return (
     <div className="chat-room">
-      {(wsError) && <div className="loading-overlay">Lost connection to chat...</div>}
+      {wsError && <div className="loading-overlay">Lost connection to chat...</div>}
       {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
       {gameData && gameData.status === "created" && <GoToGame />}
       <div className="header">

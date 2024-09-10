@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ActionCreatorWithPayload, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ChatState = {
   messages: ChatMessage[];
@@ -20,12 +20,16 @@ export const chatSlice = createSlice({
       console.log("updateRoomUsers", action.payload);
       state.usersInRoom = action.payload;
     },
-    addInvitation: (state, action) => {
-      state.invitations.push(action.payload);
+    handleInvitation: (state, action:PayloadAction<IncomingInvitationMessage>) => {
+      const {type, sender, userInvitations } = action.payload;
+      console.log(`handleInvitation ${type}`, sender, userInvitations);
+      if(type === "invite") {
+        console.log("Invitation received from ", sender);
+      }
     },
   },
 });
 
-export const { addMessage, updateRoomUsers, addInvitation } = chatSlice.actions;
+export const { addMessage, updateRoomUsers, handleInvitation } = chatSlice.actions;
 
 export default chatSlice.reducer;
