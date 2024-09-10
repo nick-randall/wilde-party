@@ -11,42 +11,42 @@ import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSlice";
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
   let gameSubscription: StompSubscription;
-  let chatRoomSubscription: StompSubscription;
-  let usersInChatRoomSubscription: StompSubscription;
 
   return (next: AppDispatch) => (action: WebsocketAction) => {
     // Allow the user to see that the connection is lost when trying to send messages etc.
-    // if (
-    //   (action.type === "JOIN_CHAT_ROOM" ||
-    //     action.type === "SEND_MESSAGE_TO_ROOM" ||
-    //     action.type === "JOIN_GAME" ||
-    //     action.type === "INVITE_USER_TO_GAME") &&
-    //   (stompClient === undefined || !stompClient.active)
-    // ) {
-    //   dispatch(setDisconnectedFromWs());
-    //   // return;
+    if (
+      (action.type === "JOIN_CHAT_ROOM" ||
+        action.type === "SEND_MESSAGE_TO_ROOM" ||
+        action.type === "JOIN_GAME" ||
+        action.type === "INVITE_USER_TO_GAME") &&
+      (stompClient === undefined || !stompClient.active)
+    ) {
+      dispatch(setWsError(" Not connected to websocket"));
+      return;
+    }
     console.log(action.type);
     switch (action.type) {
       case "CONNECT_WS":
+        const { actionOnConnect } = action.payload;
         dispatch(setLoadingWs());
         const socket = new SockJS("/ws");
         stompClient = Stomp.over(socket);
 
         stompClient.onStompError = function (frame) {
-          dispatch(setWsError());
+          dispatch(setWsError(frame.body));
         };
 
         stompClient.onWebSocketClose = () => {
-          dispatch(setDisconnectedFromWs());
+          dispatch(setWsError("ost connection to websocket"));
         };
 
-        stompClient.connect({}, () => {
-          dispatch(setConnectedToWs());
-        });
-        stompClient.onConnect = () => {
+        stompClient.onConnect = (f) => {
+          console.log(f)
           // Subscribe to personal messages
           stompClient.subscribe("/users/queue/messages", (payload: Message) => {
             console.log("Received personal message: ");
+            console.log(payload.body);
+            // TODO create types for personal messages
             const { type } = JSON.parse(payload.body);
             if (type === "invite") {
               console.log("Received invite");
@@ -58,23 +58,27 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
             }
           });
           dispatch(setConnectedToWs());
+          dispatch(actionOnConnect);
         };
+        stompClient.activate();
 
         break;
       case "JOIN_CHAT_ROOM":
+        if (!stompClient || !stompClient.connected) {
+          dispatch(setWsError("Not connected to websocket"));
+          return;
+        }
         const onChatMessageReceived = (payload: Message) => {
-          if (payload.body) {
-            console.log("got global message");
-            dispatch(addMessage(JSON.parse(payload.body)));
-          } else {
-            console.log("got empty message");
+          const message: ChatMessage = JSON.parse(payload.body);
+          dispatch(addMessage(JSON.parse(payload.body)));
+
+          if (message.type === "chat") {
+          } else if (message.type === "join") {
+            const usersInRooom = JSON.parse(message.content);
+            dispatch(updateRoomUsers(usersInRooom));
           }
         };
-        const onRoomUsersReceived = (payload: Message) => {
-          dispatch(updateRoomUsers(JSON.parse(payload.body)));
-        };
-        chatRoomSubscription = stompClient.subscribe("/topic/public", onChatMessageReceived);
-        usersInChatRoomSubscription = stompClient.subscribe("/topic/users-in-chat-room", onRoomUsersReceived);
+        stompClient.subscribe("/topic/public", onChatMessageReceived);
         break;
       case "SEND_MESSAGE_TO_ROOM": {
         const message = action.payload;

@@ -13,7 +13,7 @@ const ChatMessageText: React.FC<ChatMessageProps> = ({ msg, onClick, me }) => {
         <span style={{ color: "black", textDecoration: "none" }}>{msg.sender.name} has joined the chat! </span>
 
         {me.id !== msg.sender.id && (
-          <span style={{ color: "#0000EE", textDecoration: "underline", cursor: "pointer", fontSize: 13 }} onClick={onClick}>
+          <span style={{ color: "#0000EE", textDecoration: "underline", cursor: "pointer", fontSize: 14 }} onClick={onClick}>
             Invite {msg.sender.name} to a game
           </span>
         )}

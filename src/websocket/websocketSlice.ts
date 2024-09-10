@@ -8,16 +8,21 @@ export const websocketSlice = createSlice({
   reducers: {
     setLoadingWs: state => {
       state.wsLoading = true;
+      // state.wsError = "";
     },
-    setWsError: state => {
-      state.wsError = "An error occurred";
+    setWsError: (state, action) => {
+      state.wsError = action.payload;
+      state.wsLoading = false;
     },
     setConnectedToWs: state => {
       state.wsLoading = false;
       state.wsConnected = true;
+      state.wsError = "";
     },
     setDisconnectedFromWs: state => {
       state.wsConnected = false;
+      state.wsLoading = false;
+
     },
   },
 });

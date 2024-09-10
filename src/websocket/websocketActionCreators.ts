@@ -1,4 +1,4 @@
-export const connectWebsocket = (): ConnectWebsocket => ({ type: "CONNECT_WS" });
+export const connectWebsocket = ({actionOnConnect}: {actionOnConnect: WebsocketAction}): ConnectWebsocket => ({ type: "CONNECT_WS", payload: { actionOnConnect } });
 
 export const joinChatRoom = (): JoinChatRoom => ({ type: "JOIN_CHAT_ROOM" });
 export const joinGame = (gameId: number): JoinGame => ({ type: "JOIN_GAME", payload: { gameId } });

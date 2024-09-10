@@ -42,7 +42,7 @@ const UserGreetings = (props: { user: User }) => {
     <div style={{color: "black", textShadow :"none"}}>
       Welcome, {props.user.name}!
       <div style={{ height: "20px" }} />
-      <LargeButton link={`/chat/?userid=${props.user.id}&username=${props.user.name}`} text="Start Game" />
+      <LargeButton link={`/chat`} text="Start Game" />
     </div>
   );
 };

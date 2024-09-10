@@ -34,3 +34,16 @@
   justify-content: center;
   align-items: center;
 }
+
+.chat-input-row{
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  width: 100%;
+
+}
+
+.send-button {
+height: 40px;
+cursor: pointer;
+}

@@ -1,4 +1,6 @@
-type ConnectWebsocket = { type: "CONNECT_WS" };
+type ConnectWebsocket = { type: "CONNECT_WS", payload:  {actionOnConnect: WebsocketAction} };
+
+type PageWithWs = "chat" | "game";
 
 type JoinChatRoom = { type: "JOIN_CHAT_ROOM" };
 
