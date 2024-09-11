@@ -5,7 +5,7 @@ import { setLoadingWs, setWsError, setConnectedToWs, setDisconnectedFromWs } fro
 import { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
-import {  addMessage, handleInvitation, updateRoomUsers } from "../chat/chatSlice";
+import { addMessage, handleInvitation, updateRoomUsers } from "../chat/chatSlice";
 import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSlice";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
@@ -40,8 +40,8 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           dispatch(setWsError("Lost connection to websocket"));
         };
 
-        stompClient.onConnect = (f) => {
-          console.log(f)
+        stompClient.onConnect = f => {
+          console.log(f);
           // Subscribe to personal messages
           stompClient.subscribe("/users/queue/messages", (payload: Message) => {
             console.log("Received personal message: ");
@@ -49,8 +49,8 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
             // TODO create types for personal messages
             // const { type } = JSON.parse(payload.body);
             // if (type === "invite") {
-              console.log("Received invite");
-              dispatch(handleInvitation(JSON.parse(payload.body)));
+            console.log("Received invite");
+            dispatch(handleInvitation(JSON.parse(payload.body)));
             // } else if (type === "not_in_game_error") {
             //   console.log("Error subscribing to game");
             //   gameSubscription.unsubscribe();
@@ -103,7 +103,17 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       case "INVITE_USER_TO_GAME": {
         const { inviteeId } = action.payload;
         console.log("sending invite to user: " + inviteeId);
-        const message: OutgoingInvitationMessage = { type: "invite", inviteeId }
+        const message: OutgoingInvitationMessage = { type: "invite", inviteeId };
+        console.log(JSON.stringify(message));
+        stompClient.send("/app/invitations", {}, JSON.stringify(message));
+
+        // stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: inviteeId, type: "invite" }));
+        break;
+      }
+      case "RESPOND_TO_INVITATION": {
+        const { invitationId, accept } = action.payload;
+        console.log("responding accept: " + accept + "  to invitation: " + invitationId);
+        const message: OutgoingInvitationMessage = { type: accept? "accept" : "decline" , invitationId };
         console.log(JSON.stringify(message));
         stompClient.send("/app/invitations", {}, JSON.stringify(message));
 

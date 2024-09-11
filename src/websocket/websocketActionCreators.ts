@@ -10,3 +10,6 @@ export const disconnectWebsocket = (): DisconnectWebsocket => ({ type: "DISCONNE
 export const sendMessageToRoom = (message: string): SendMessageToRoom => ({ type: "SEND_MESSAGE_TO_ROOM", payload:  message  });
 
 export const inviteUserToGame = (inviteeId: number): InviteUserToGame => ({ type: "INVITE_USER_TO_GAME", payload: { inviteeId } });
+
+
+export const respondToInvitation = (invitationId: number, accept: boolean): RespondToInvitation => ({ type: "RESPOND_TO_INVITATION", payload: { invitationId, accept } });

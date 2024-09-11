@@ -34,16 +34,16 @@ type PlayerDTO = {
 };
 
 type OutgoingInvitationMessage = {
-  type:InvitationMessageType;
+  type: InvitationMessageType;
   inviteeId?: number;
   invitationId?: number;
 };
 
 type IncomingInvitationMessage = {
   type: InvitationMessageType;
-  // invitation: Invitation;
-  sender: User;
-  userInvitations: Invitation[];
+  message: string;
+  sentInvitations: Invitation[];
+  receivedInvitations: Invitation[];
 };
 
 type Invitation = {

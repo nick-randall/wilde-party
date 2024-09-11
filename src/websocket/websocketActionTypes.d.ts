@@ -1,4 +1,4 @@
-type ConnectWebsocket = { type: "CONNECT_WS", payload:  {actionOnConnect: WebsocketAction} };
+type ConnectWebsocket = { type: "CONNECT_WS"; payload: { actionOnConnect: WebsocketAction } };
 
 type PageWithWs = "chat" | "game";
 
@@ -8,8 +8,10 @@ type JoinGame = { type: "JOIN_GAME"; payload: { gameId: number } };
 
 type DisconnectWebsocket = { type: "DISCONNECT_WS" };
 
-type SendMessageToRoom = { type: "SEND_MESSAGE_TO_ROOM"; payload:  string  };
+type SendMessageToRoom = { type: "SEND_MESSAGE_TO_ROOM"; payload: string };
 
 type InviteUserToGame = { type: "INVITE_USER_TO_GAME"; payload: { inviteeId: number } };
 
-type WebsocketAction = ConnectWebsocket | JoinChatRoom | JoinGame | DisconnectWebsocket | SendMessageToRoom | InviteUserToGame;
+type RespondToInvitation = { type: "RESPOND_TO_INVITATION"; payload: { invitationId: number; accept: boolean } };
+
+type WebsocketAction = ConnectWebsocket | JoinChatRoom | JoinGame | DisconnectWebsocket | SendMessageToRoom | InviteUserToGame | RespondToInvitation;

@@ -4,11 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ChatAvatar from "../components/ChatAvatar";
 import { RootState } from "../redux/store";
 import ChatMessageText from "../components/ChatMessage";
-import { setConnectedToWs } from "../websocket/websocketSlice";
 import { Center } from "../components/Center";
 import LargeButton from "../components/LargeButton";
 import "../css/chat-room.css";
-import { useParams, useSearchParams } from "react-router-dom";
 
 interface ChatRoomProps {
   user: User;
@@ -50,13 +48,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     return roomUser.id !== user.id;
   });
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
-  //     // dispatch({ type: "SEND_MESSAGE_TO_ROOM", payload: { inviteeId: 1 } });
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
+      // dispatch({ type: "SEND_MESSAGE_TO_ROOM", payload: { inviteeId: 1 } });
 
-  //   }, 1000);
-  // },[]);
+    }, 1000);
+  },[]);
 
   return (
     <div className="chat-room">
