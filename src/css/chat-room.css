@@ -47,3 +47,15 @@
 height: 40px;
 cursor: pointer;
 }
+
+.invite-dialog {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #debb07;
+  padding: 20px;
+  border: 4px double #debb07;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}

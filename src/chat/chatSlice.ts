@@ -3,9 +3,9 @@ import { ActionCreatorWithPayload, createSlice, PayloadAction } from "@reduxjs/t
 export type ChatState = {
   messages: ChatMessage[];
   usersInRoom: User[];
-  receivedInvitations: { inviter: User }[];
-  sentInvitations: { invitee: User }[];
-  gameStarted?: GameData;
+  receivedInvitations: Invitation[];
+  sentInvitations: Invitation[];
+  gameData?: GameData;
 };
 
 const initialState: ChatState = {
@@ -13,7 +13,7 @@ const initialState: ChatState = {
   usersInRoom: [],
   receivedInvitations: [],
   sentInvitations: [],
-  gameStarted: undefined,
+  gameData: undefined,
 };
 
 export const chatSlice = createSlice({
@@ -29,13 +29,14 @@ export const chatSlice = createSlice({
       state.usersInRoom = action.payload;
     },
     handleInvitation: (state, action: PayloadAction<IncomingInvitationMessage>) => {
-      const { type, message, sentInvitations, receivedInvitations } = action.payload;
-      console.log(`type: "${type}", message: ${message}, sentInvitations: ${sentInvitations}, receivedInvitations: ${receivedInvitations}`);
+      const { type, message, sentInvitations, receivedInvitations, gameData } = action.payload;
+      console.log(`type: "${type}", message: ${message}, sentInvitations: ${sentInvitations}, receivedInvitations: ${receivedInvitations}, gameData: ${gameData} `);
       // if (type === "invite") {
         console.log("Invitation message received");
         state.messages.push({ type: "chat", content: message, sender: { id: -1, name: "System" } });
         state.sentInvitations = sentInvitations;
         state.receivedInvitations = receivedInvitations;
+        state.gameData = gameData;
       // }
     },
   },

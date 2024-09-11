@@ -9,8 +9,10 @@ const useUserGameData = (): UserGameState => {
   console.log(`isUserGameDataRetrieved ${isUserGameDataRetrieved} user ${user} isLoading ${isLoading} error ${error} gameData ${gameData}`);
   useEffect(() => {
     if (isLoading || error || isUserGameDataRetrieved) return;
-
-    dispatch(whoami());
+    setTimeout(() => {
+      dispatch(whoami());
+    }, 500);
+    
   }, [dispatch, user, isUserGameDataRetrieved, isLoading, error]);
 
   return { isUserGameDataRetrieved, isLoading, error, user, gameData };

@@ -7,6 +7,7 @@ import ChatMessageText from "../components/ChatMessage";
 import { Center } from "../components/Center";
 import LargeButton from "../components/LargeButton";
 import "../css/chat-room.css";
+import InviteDialog from "../components/InviteDialog";
 
 interface ChatRoomProps {
   user: User;
@@ -14,11 +15,10 @@ interface ChatRoomProps {
 }
 
 const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
-  const [currMsg, setCurrMsg] = useState("");
   const dispatch = useDispatch();
 
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
-  const { messages, usersInRoom } = useSelector((state: RootState) => state.chat);
+  const { messages, usersInRoom, receivedInvitations, gameData: gameDataFromChat } = useSelector((state: RootState) => state.chat);
 
   useEffect(() => {
     if (!wsConnected && !wsLoading && !wsError) {
@@ -26,6 +26,39 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     }
   }, [dispatch, wsConnected, wsError, wsLoading]);
 
+  const usersInRoomWithoutSelf = usersInRoom.filter(roomUser => {
+    console.log(roomUser);
+    return roomUser.id !== user.id;
+  });
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
+  //     // dispatch({ type: "SEND_MESSAGE_TO_ROOM", payload: { inviteeId: 1 } });
+
+  //   }, 1000);
+  // },[]);
+  if (gameData) console.log(gameData);
+  if (gameDataFromChat) console.log(gameDataFromChat);
+  return (
+    <>
+      {receivedInvitations.length > 0 && <InviteDialog recievedInvitations={receivedInvitations} />}
+      {wsError && <div className="loading-overlay">Lost connection to chat...</div>}
+      {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
+      {gameData && <GoToGame user={user} gameData={gameData} alreadyStarted={false} />}
+      {gameDataFromChat && <GoToGame user={user} gameData={gameDataFromChat} alreadyStarted={true} />}
+      <ChatRoomLayout user={user} messages={messages} usersInRoomWithoutSelf={usersInRoomWithoutSelf} />
+    </>
+  );
+};
+
+const ChatRoomLayout: React.FC<{ user: User; messages: ChatMessage[]; usersInRoomWithoutSelf: User[] }> = ({
+  user,
+  messages,
+  usersInRoomWithoutSelf,
+}) => {
+  const [currMsg, setCurrMsg] = useState("");
+  const dispatch = useDispatch();
   const handleChatInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrMsg(e.target.value);
   };
@@ -40,30 +73,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
   const inviteUser = (invitee: User) => {
     dispatch(inviteUserToGame(invitee.id));
   };
-
-  // const [subscribed, setSubscribed] = useState(false);
-
-  const usersInRoomWithoutSelf = usersInRoom.filter(roomUser => {
-    console.log(roomUser);
-    return roomUser.id !== user.id;
-  });
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
-      // dispatch({ type: "SEND_MESSAGE_TO_ROOM", payload: { inviteeId: 1 } });
-
-    }, 1000);
-  },[]);
-
   return (
     <div className="chat-room">
-      {wsError && <div className="loading-overlay">Lost connection to chat...</div>}
-      {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
-      {gameData && gameData.status === "created" && <GoToGame />}
-      <div className="header">
-        <div> Chat Room</div>
-      </div>
+      <div className="header"> Chat Room</div>
+
       <div className="grid-left" style={{ display: "wrap" }}>
         <ChatAvatar name={user!.name} isMe />
 
@@ -87,10 +100,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
   );
 };
 
-const GoToGame = () => {
+const GoToGame: React.FC<{ user: User; gameData: GameData; alreadyStarted: boolean }> = ({ user, gameData, alreadyStarted }) => {
+  const otherHumanPlayer = gameData.players.find(player => player.id !== user.id && player.isHuman);
   return (
     <Center>
-      Your game is ready to begin!
+      Your game with {otherHumanPlayer?.name} is ready to begin!
       <LargeButton link="/game" text="Go to Game"></LargeButton>
     </Center>
   );

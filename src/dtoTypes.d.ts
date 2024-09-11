@@ -44,6 +44,7 @@ type IncomingInvitationMessage = {
   message: string;
   sentInvitations: Invitation[];
   receivedInvitations: Invitation[];
+  gameData? : GameData;
 };
 
 type Invitation = {
