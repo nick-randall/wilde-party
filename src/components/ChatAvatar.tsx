@@ -1,11 +1,15 @@
-interface ChatAvatarProps { 
+import React from "react";
+import styled from "styled-components";
+
+interface ChatAvatarProps {
   name: string;
   isMe?: boolean;
   onClick?: () => void;
 }
 
-const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, isMe=false, onClick }) => {
+const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, isMe = false, onClick }) => {
   return (
+    // <div style={{ display: "flex",  alignItems: "end", justifyContent: "space-around" }}>
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <img
         onClick={onClick}
@@ -13,9 +17,26 @@ const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, isMe=false, onClick }) =>
         src="https://png.pngtree.com/png-vector/20220618/ourmid/pngtree-bald-man-avatar-illustration-user-png-image_5209160.png"
         alt="avatar"
       />
-      <div style={{backgroundColor: isMe ? "yellow": "white"}}>{name}</div>
+      <div>{name}</div>
+      <div style={{ height: 10 }} />
+      {!isMe && onClick !== undefined && (
+       <InviteButton onClick={onClick}/>
+      )}
     </div>
   );
 };
 
 export default ChatAvatar;
+
+const Button = styled.div`
+  backgroundcolor: transparent;
+  fontsize: 12;
+  color: yellow;
+  borderradius: 8;
+  padding: 6;
+  cursor: pointer;
+`;
+
+const InviteButton: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
+  return <button onClick={onClick} style={{backgroundColor: "black"}}><Button> Invite to a Game</Button> </button>;
+}

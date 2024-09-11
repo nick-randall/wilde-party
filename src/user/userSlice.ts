@@ -41,6 +41,7 @@ const userSlice = createSlice({
     });
     builder.addCase(whoami.fulfilled, (state, action) => {
       if (action.payload) {
+        console.log(action.payload);
         state.user = action.payload.user;
         state.gameData = action.payload.gameData;
       } else {

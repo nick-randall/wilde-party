@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { respondToInvitation } from "../websocket/websocketActionCreators";
+import ChatAvatar from "./ChatAvatar";
 
 interface InviteDialogProps {
   recievedInvitations: Invitation[];
@@ -15,7 +16,8 @@ const InviteDialog: React.FC<InviteDialogProps> = ({recievedInvitations}) => {
       <h3>{msg}</h3>
       {recievedInvitations.map((invite) => (
         <div key={invite.id}>
-          <div>{invite.inviter.name}</div>
+         <ChatAvatar name={invite.inviter.name} isMe={false}/>
+         wants to play a game with you!
           <div>
             <button onClick={() => onAccept(invite)}>Accept</button>
             <button onClick={() => onDecline(invite)}>Decline</button>

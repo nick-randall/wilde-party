@@ -26,11 +26,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
     }
   }, [dispatch, wsConnected, wsError, wsLoading]);
 
-  const usersInRoomWithoutSelf = usersInRoom.filter(roomUser => {
-    console.log(roomUser);
-    return roomUser.id !== user.id;
-  });
-
   // useEffect(() => {
   //   setTimeout(() => {
   //     dispatch({ type: "INVITE_USER_TO_GAME", payload: { inviteeId: 1 } });
@@ -43,22 +38,22 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ user, gameData }) => {
   return (
     <>
       {receivedInvitations.length > 0 && <InviteDialog recievedInvitations={receivedInvitations} />}
-      {wsError && <div className="loading-overlay">Lost connection to chat...</div>}
+      {wsError && <LostConnection />}
       {wsLoading && <div className="loading-overlay">Connecting to Chat...</div>}
       {gameData && <GoToGame user={user} gameData={gameData} alreadyStarted={false} />}
       {gameDataFromChat && <GoToGame user={user} gameData={gameDataFromChat} alreadyStarted={true} />}
-      <ChatRoomLayout user={user} messages={messages} usersInRoomWithoutSelf={usersInRoomWithoutSelf} />
+      <ChatRoomLayout user={user} messages={messages} usersInRoom={usersInRoom} />
     </>
   );
 };
 
-const ChatRoomLayout: React.FC<{ user: User; messages: ChatMessage[]; usersInRoomWithoutSelf: User[] }> = ({
-  user,
-  messages,
-  usersInRoomWithoutSelf,
-}) => {
+const ChatRoomLayout: React.FC<{ user: User; messages: ChatMessage[]; usersInRoom: User[] }> = ({ user, messages, usersInRoom }) => {
   const [currMsg, setCurrMsg] = useState("");
   const dispatch = useDispatch();
+  const usersInRoomWithoutSelf = usersInRoom.filter(roomUser => {
+    console.log(roomUser);
+    return roomUser.id !== user.id;
+  });
   const handleChatInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrMsg(e.target.value);
   };
@@ -81,7 +76,9 @@ const ChatRoomLayout: React.FC<{ user: User; messages: ChatMessage[]; usersInRoo
         <ChatAvatar name={user!.name} isMe />
 
         {usersInRoomWithoutSelf.map((roomUser, i) => {
-          return <ChatAvatar key={i + "avatar"} name={roomUser.name} onClick={() => inviteUser(roomUser)} />;
+          return (
+              <ChatAvatar key={i + "avatar"} name={roomUser.name} onClick={() => inviteUser(roomUser)} />
+          );
         })}
       </div>
       <div className="chat-window grid-center">
@@ -96,6 +93,23 @@ const ChatRoomLayout: React.FC<{ user: User; messages: ChatMessage[]; usersInRoo
       </div>
       <div className="grid-right">Rules of the game</div>
       <div className="bottom"></div>
+    </div>
+  );
+};
+
+const LostConnection: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const reconnect = () => {
+    dispatch(connectWebsocket({ actionOnConnect: joinChatRoom() }));
+  };
+  return (
+    <div className="loading-overlay">
+      <Center>
+        Lost connection to chat...
+        <div style={{ height: 10 }} />
+        <LargeButton text="Re-connect" onClick={reconnect} />{" "}
+      </Center>
     </div>
   );
 };

@@ -5,11 +5,11 @@ import { Table } from "./Table";
 import { Center } from "../components/Center";
 
 const Game: React.FC = () => {
-  const { isLoading, error, user, gameData } = useUserGameData();
+  const {isUserGameDataRetrieved, isLoading, error, user, gameData } = useUserGameData();
   return (
     <div className="background-tile">
-      {(error || !gameData) && <UserGameErrors />}
-      {isLoading && <Center>Loading...</Center>}
+      {(error || !gameData) && isUserGameDataRetrieved && <UserGameErrors />}
+      {(isLoading || !isUserGameDataRetrieved) && <Center>Loading...</Center>}
       {user && gameData && <Table gameData={gameData} />}
     </div>
   );

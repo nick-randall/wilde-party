@@ -6,11 +6,9 @@ import useUserGameData from "../user/useUserGameData";
 import LargeButton from "../components/LargeButton";
 import TextInput from "../components/TextInput";
 import SmallButton from "../components/SmallButton";
-import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const { isUserGameDataRetrieved, isLoading, error, user, gameData } = useUserGameData();
-  const navigate  = useNavigate();
   return (
     <div className="splash-screen flex-column">
       <div style={{ height: "20vh" }} />
@@ -18,7 +16,7 @@ const HomePage: React.FC = () => {
       {isLoading && <Loading />}
       {isUserGameDataRetrieved && !user && <EnterName />}
       {user && !gameData && <UserGreetings user={user} />}
-      {gameData && <LargeButton onClick={()=> navigate("/chat")} text="Return to game" />}
+      {gameData && <ReturnToGame/>}
     </div>
   );
 };
@@ -39,7 +37,7 @@ const Loading = () => <div>Loading...</div>;
 
 const UserGreetings = (props: { user: User }) => {
   return (
-    <div style={{color: "black", textShadow :"none"}}>
+    <div style={{ color: "black", textShadow: "none" }}>
       Welcome, {props.user.name}!
       <div style={{ height: "20px" }} />
       <LargeButton link={`/chat`} text="Start Game" />
@@ -50,10 +48,10 @@ const UserGreetings = (props: { user: User }) => {
 const EnterName = () => {
   const [newUserName, setNewUserName] = useState("");
   const handleClick = () => dispatch(addUser(newUserName));
-  const handleSubmit = (e: React.FormEvent) => { 
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleClick();
-  }
+  };
   const dispatch = useDispatch();
   return (
     <form onSubmit={handleSubmit}>
@@ -61,8 +59,22 @@ const EnterName = () => {
       <div style={{ height: "20px" }} />
       <TextInput name="username" value={newUserName} onChange={v => setNewUserName(v.target.value)} />
       <div style={{ height: "10px" }} />
-      <SmallButton onClick={handleClick} text="OK"/>
+      <SmallButton onClick={handleClick} text="OK" />
     </form>
+  );
+};
+
+const ReturnToGame: React.FC = () => {
+  return (
+    <div>
+      You already have an active game!
+      <div style={{ height: "20px" }} />
+      <LargeButton link={"/game"} text="Return to game" />
+      <div style={{ height: "10px" }} />
+
+      <SmallButton text="End game" />
+
+    </div>
   );
 };
 
