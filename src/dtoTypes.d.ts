@@ -34,15 +34,15 @@ type PlayerDTO = {
 };
 
 type OutgoingInvitationMessage = {
-  type: InvitationMessageType;
+  type: ChatRoomUpdateType;
   inviteeId?: number;
   invitationId?: number;
 };
 
 //TODO rename to ChatRoomDataUpdate
 
-type IncomingInvitationMessage = {
-  type: InvitationMessageType;
+type ChatRoomDataUpdate = {
+  type: ChatRoomUpdateType;
   message: string;
   sentInvitations: Invitation[];
   receivedInvitations: Invitation[];
@@ -55,6 +55,6 @@ type Invitation = {
   invitee: User;
 };
 
-type InvitationMessageType = "invite" | "accept" | "decline";
+type ChatRoomUpdateType = "update" | "invite" | "accept" | "decline";
 
 type MessageType = "chat" | "join" | "leave" | "starting_game";

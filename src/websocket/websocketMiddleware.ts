@@ -5,7 +5,7 @@ import { setLoadingWs, setWsError, setConnectedToWs, setDisconnectedFromWs } fro
 import { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
-import { addMessage, handleInvitation, updateRoomUsers } from "../chat/chatSlice";
+import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
 import { handleNewGameSnapshots, setNotInGameError } from "../game/gameSlice";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
@@ -50,7 +50,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
             // const { type } = JSON.parse(payload.body);
             // if (type === "invite") {
             console.log("Received invite");
-            dispatch(handleInvitation(JSON.parse(payload.body)));
+            dispatch(handleChatRoomDataUpdate(JSON.parse(payload.body)));
             // } else if (type === "not_in_game_error") {
             //   console.log("Error subscribing to game");
             //   gameSubscription.unsubscribe();
