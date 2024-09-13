@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 interface ChatAvatarProps {
   name: string;
-  isMe?: boolean;
+  showInviteButton?: boolean;
   onClick?: () => void;
 }
 
-const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, isMe = false, onClick }) => {
+const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, showInviteButton = true, onClick }) => {
   return (
     // <div style={{ display: "flex",  alignItems: "end", justifyContent: "space-around" }}>
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -19,7 +19,7 @@ const ChatAvatar: React.FC<ChatAvatarProps> = ({ name, isMe = false, onClick }) 
       />
       <div>{name}</div>
       <div style={{ height: 10 }} />
-      {!isMe && onClick !== undefined && (
+      {showInviteButton && onClick !== undefined && (
        <InviteButton onClick={onClick}/>
       )}
     </div>

@@ -29,9 +29,7 @@ const LargeButton: React.FC<WildePartyButtonProps> = ({ onClick, text, link }) =
     );
   }
   return (
-    <div onClick={onClick}>
-      <Button>{text}</Button>
-    </div>
+      <Button onClick={onClick}>{text}</Button>
   );
 };
 

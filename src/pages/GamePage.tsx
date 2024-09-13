@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import LargeButton from "../components/LargeButton";
 import useUserGameData from "../user/useUserGameData";
 import { Table } from "./Table";
@@ -18,12 +17,11 @@ const Game: React.FC = () => {
 export default Game;
 
 const UserGameErrors = () => {
-  const navigate = useNavigate();
   return (
     <Center>
       You aren't supposed to be in this game!
       <div style={{height: "10px"}}/>
-       <LargeButton onClick={() => navigate("/")} text="Start Over"></LargeButton>
+       <LargeButton link="/" text="Start Over" />
     </Center>
   );
 };

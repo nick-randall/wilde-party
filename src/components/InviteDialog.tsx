@@ -16,7 +16,7 @@ const InviteDialog: React.FC<InviteDialogProps> = ({recievedInvitations}) => {
       <h3>{msg}</h3>
       {recievedInvitations.map((invite) => (
         <div key={invite.id}>
-         <ChatAvatar name={invite.inviter.name} isMe={false}/>
+         <ChatAvatar name={invite.inviter.name} showInviteButton={false}/>
          wants to play a game with you!
           <div>
             <button onClick={() => onAccept(invite)}>Accept</button>

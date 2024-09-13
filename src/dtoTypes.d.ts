@@ -39,6 +39,8 @@ type OutgoingInvitationMessage = {
   invitationId?: number;
 };
 
+//TODO rename to ChatRoomDataUpdate
+
 type IncomingInvitationMessage = {
   type: InvitationMessageType;
   message: string;
