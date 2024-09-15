@@ -1,51 +1,48 @@
 type CardGroup = GameCard[];
 
-type PlaceDimensions = {
-  cardHeight: number;
-  cardWidth: number;
-  cardLeftSpread: number;
-  cardTopSpread: number;
-  leftOffset: number;
-  topOffset: number;
-  zIndex: number;
-  featuredCardScale: number;
-};
+// type PlaceDimensions = {
+//   cardHeight: number;
+//   cardWidth: number;
+//   cardLeftSpread: number;
+//   cardTopSpread: number;
+//   leftOffset: number;
+//   topOffset: number;
+//   zIndex: number;
+//   featuredCardScale: number;
+// };
 
 type CardDimensions = {
   cardHeight: number;
   cardWidth: number;
-  cardLeftSpread: number;
-  cardTopSpread: number;
-  leftOffset: number;
-  topOffset: number;
-  draggedCardScale: number;
-  draggedCardWidth: number;
-  draggedCardzIndex: number;
-  tableCardzIndex: number;
-  rotation: number;
-  featuredCardScale: number;
+  left: number;
+  top: number;
+  rotate: number;
+  rotateY: number;
+  scale: number;
+  zIndex: number;
+  boxShadow: string;
 };
 
-type AllDimensions = {
-  cardHeight: number;
-  cardWidth: number;
-  cardLeftSpread: number;
-  cardTopSpread: number;
-  maxCardLeftSpread?: number;
-  draggedCardScale: number;
-  draggedCardWidth: number;
-  draggedCardzIndex: number;
-  tableCardzIndex: number;
-  rotation: (index: number) => number;
-  scale: number;
-  featuredCardScale: number;
-  zIndex: number;
-  handToTableScaleFactor: number;
-  tableCardHeight: number;
-  tableCardWidth: number;
-  // leftOffset: number;
-  // topOffset: number;
-};
+// type AllDimensions = {
+//   cardHeight: number;
+//   cardWidth: number;
+//   cardLeftSpread: number;
+//   cardTopSpread: number;
+//   maxCardLeftSpread?: number;
+//   draggedCardScale: number;
+//   draggedCardWidth: number;
+//   draggedCardzIndex: number;
+//   tableCardzIndex: number;
+//   rotation: (index: number) => number;
+//   scale: number;
+//   featuredCardScale: number;
+//   zIndex: number;
+//   handToTableScaleFactor: number;
+//   tableCardHeight: number;
+//   tableCardWidth: number;
+//   // leftOffset: number;
+//   // topOffset: number;
+// };
 
 type SnapshotUpdateType =
   | "emptySnapshot"
@@ -63,8 +60,8 @@ type GameCard = {
   [key: string]: value;
   id: number;
   name: string;
-  playerId?: number; // player should be an id ??
-  placeId: number; // place should be an id ??
+  // playerId?: number; // player should be an id ??
+  // placeId: number; // place should be an id ??
   index: number;
   imageName: string;
   cardType: CardType;

@@ -1,5 +1,5 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
-import { locate } from "../locateFunctions";
+import { locateCard } from "../locateFunctions";
 import { getCardFunctions } from "./cardHighlightFunctions";
 import {  HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
@@ -21,7 +21,7 @@ const allTrueWithArgs =
 // add
 export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
   
-  locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
+  locateCard(highlightPlace.id, gameSnapshot).placeType !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
 
 
 // export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
@@ -29,11 +29,11 @@ export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedC
 //     highlightPlace.placeType,
 //     highlightPlace.id,
 //     highlightPlace.playerId,
-//     locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards,
+//     locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards,
 //     "highlightPlaceHasEnoughSpace"
 //   );
 
-//   return locate(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
+//   return locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
 // };
 
 export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
@@ -54,16 +54,16 @@ export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: 
 // };
 
 export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
-(draggedCard.action.targetPlayerType === "enemy" &&locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-  (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+(draggedCard.action.targetPlayerType === "enemy" &&locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+  (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
 
 // export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
 //   console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, (draggedCard.action.targetPlayerType === "enemy" &&
-//     locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-//   (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
+//     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
 //   return  (draggedCard.action.targetPlayerType === "enemy" &&
-//     locate(highlightPlace.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-//   (draggedCard.action.targetPlayerType === "self" && locate(highlightPlace.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+//     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
 // }
 
 //canAddDragged

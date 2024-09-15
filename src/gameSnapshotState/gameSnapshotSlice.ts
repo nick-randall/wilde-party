@@ -1,79 +1,53 @@
-import { Action, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { emptyGameSnapshot } from "../initialCards";
 
 export type GameState = {
   error: string;
+  activePlayers: User[];
+  currSnapshot: GameSnapshot;
+  newSnapshots: GameSnapshot[];
 };
 
-const initialState: GameState = { error: "" };
+const initialState: GameState = {
+  currSnapshot: emptyGameSnapshot,
+  newSnapshots: [],
+  error: "",
+  activePlayers: [],
+};
 
-export const chatSlice = createSlice({
-  name: "chat",
+export const gameSnapshotSlice = createSlice({
+  name: "gameSnapshot",
   initialState,
   reducers: {
-    // case "DRAW_CARD":
-    //   if (state.gameSnapshot.nonPlayerPlaces.deck.cards.length === 0) return state;
-    //   const { player, handId } = action.payload;
-    //   const gameSnapshot = drawCardUpdateSnapshot(handId, player, state.gameSnapshot);
-    //   return { ...state, gameSnapshot };
-    // case "CHANGE_NUM_DRAWS": {
-    //   const change = action.payload;
-    //   const newSnapshot = produce(state.gameSnapshot, draft => {
-    //     draft.current.draws += change;
-    //   });
-    //   return { ...state, gameSnapshot: newSnapshot };
-    // }
-    // case "CHANGE_NUM_PLAYS": {
-    //   const change = action.payload;
-    //   const newSnapshot = produce(state.gameSnapshot, draft => {
-    //     draft.current.plays += change;
-    //   });
-    //   return { ...state, gameSnapshot: newSnapshot };
-    // }
-    // case "CHANGE_NUM_ROLLS": {
-    //   const change = action.payload;
-    //   const newSnapshot = produce(state.gameSnapshot, draft => {
-    //     draft.current.draws += change;
-    //   });
-    //   return { ...state, gameSnapshot: newSnapshot };
-    // }
-    // case "END_CURRENT_PHASE":
-    //   // currently only ends the deal phase
-    //   const phases: Phase[] = ["dealPhase", "playPhase", "drawPhase", "rollPhase", "counterPhase"];
-    //   const newSnapshot = produce(state.gameSnapshot, draft => {
-    //     switch (state.gameSnapshot.current.phase) {
-    //       case "dealPhase":
-    //         draft.current.phase = "drawPhase";
-    //         break;
-    //       case "drawPhase":
-    //         draft.current.phase = "playPhase";
-    //         break;
-    //       default:
-    //         draft.current.phase = "playPhase";
-    //     }
-    //   });
-    //   console.log("here");
-    //   return { ...state, gameSnapshot: newSnapshot };
-    // case "END_CURRENT_TURN": {
-    //   const { gameSnapshot } = state;
-    //   const newSnapshot = produce(gameSnapshot, draft => {
-    //     draft.current.player = nextPlayer(gameSnapshot);
-    //     draft.current.draws = 1;
-    //     draft.current.plays = 1;
-    //     draft.current.rolls = 1;
-    //     draft.current.phase = "drawPhase";
-    //   });
-    //   console.log(newSnapshot);
-    //   return { ...state, gameSnapshot: newSnapshot };
-    // }
+    handleNewGameSnapshots: (state, action: PayloadAction<GameSnapshotUpdates>) => {
+      const { type, newSnapshots } = action.payload;
+      if (type !== "snapshots") return;
+      if (newSnapshots.length === 0) return;
+
+      state.newSnapshots = newSnapshots;
+      console.log("this many new snapshots: " + newSnapshots.length);
+      // const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0], "server");
+
+      // // If no animations are necessary to show updated state, update game state and deal with the next newsnaphots...
+      // if (animationTemplates.length === 0) {
+      //   console.log("no animation templates");
+      //   replaceCurrentSnapshotWithNewSnapshot(newSnapshots[0]);
+      //   handleNewSnapshots(getState().newSnapshots);
+      //   return;
+      // }
+      // console.log(animationTemplates.length + " animation template groups");
+      // // Otherwise set up the animation process
+      // dispatch(setAnimationTemplates(animationTemplates));
+    },
+    setNotInGameError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+    updateActivePlayers: (state, action: PayloadAction<User[]>) => {
+      state.activePlayers = action.payload;
     },
   },
-)
+});
 
-// export const {handleNewGameSnapshots, setNotInGameError} = chatSlice.actions;
+export const { handleNewGameSnapshots, setNotInGameError } = gameSnapshotSlice.actions;
 
-export default chatSlice.reducer;
-
-
-
-
-// return { ...state, gameSnapshot, transitionData: [...state.transitionData, newTransition] };
+export default gameSnapshotSlice.reducer;

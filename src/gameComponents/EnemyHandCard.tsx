@@ -4,31 +4,31 @@ import "./animations/animations.css";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";
 import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
+import { getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 export interface EnemyHandCardProps {
   id: number;
   index: number;
   imageName: string;
-  dimensions: AllDimensions;
   numHandCards: number;
 }
 
 const EnemyHandCard = (props: EnemyHandCardProps) => {
-  const { id, index, imageName, dimensions } = props;
+  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { id, index, imageName } = props;
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight, cardLeftSpread } = dimensions;
-
+  const { zIndex, cardWidth, top, rotate, cardHeight, left } = getCardStyleValues(id, currSnapshot);
 
   const normalStyles: CSSProperties = {
-    zIndex: tableCardzIndex,
+    zIndex: zIndex,
     width: cardWidth,
     height: cardHeight,
 
     //left: - 100 * (index - (numHandCards / 2 - 0.5)),
-    top:  cardTopSpread,
-    left: index * cardLeftSpread,
+    top: top,
+    left: left,
     position: "absolute",
-    transform: `rotate(${rotation(index)}deg)`,
+    transform: `rotate(${rotate}deg)`,
     transition: `left 250ms, width 180ms, transform 180ms, opacity 300ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
@@ -36,30 +36,31 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   const cardPlayer = locatePlayer(id);
   const ownerIsCurrentPlayer = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.player === cardPlayer);
   const currentPhaseIsDeal = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.phase === "dealPhase");
-  const disappearingStyles = ownerIsCurrentPlayer || currentPhaseIsDeal ? {
-    opacity : 1
-  } :{ opacity:0}
+  const disappearingStyles =
+    ownerIsCurrentPlayer || currentPhaseIsDeal
+      ? {
+          opacity: 1,
+        }
+      : { opacity: 0 };
 
   return (
-   
-      <TransitionHandler
-        index={index}
-        id={id}
-        render={(transitionStyles: CSSProperties) => (
-          <img
-            alt={imageName}
-             src={"./images/back.jpg"}
-            // src={`./images/${imageName}.jpg`}
-            draggable = "false"
-            style={{
-              ...normalStyles,
-              ...transitionStyles,
-              ...disappearingStyles
-            }}
-          />
-        )}
-      />
-
+    <TransitionHandler
+      index={index}
+      id={id}
+      render={(transitionStyles: CSSProperties) => (
+        <img
+          alt={imageName}
+          src={"./images/back.jpg"}
+          // src={`./images/${imageName}.jpg`}
+          draggable="false"
+          style={{
+            ...normalStyles,
+            ...transitionStyles,
+            ...disappearingStyles,
+          }}
+        />
+      )}
+    />
   );
 };
 export default EnemyHandCard;

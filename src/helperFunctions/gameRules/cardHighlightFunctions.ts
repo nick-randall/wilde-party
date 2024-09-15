@@ -1,6 +1,6 @@
 import { maxNumGuestCards } from "../../gameSettings/gameSettings";
 import { isOnlyCardInPlace, leftNeighbourIsEnchantable, rightNeighbourIsEnchantable } from "../canEnchantNeighbour";
-import { locate } from "../locateFunctions";
+import { locateCard } from "../locateFunctions";
 //import { ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted } from "./cardHighlightFunctions";
 import { HighlightCardFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
 
@@ -17,7 +17,7 @@ const allTrueWithArgs =
 // checks whether a BFF can target a particular card:
 // requirement = that card has an enchantable neighbour
 export const highlightCardHasEnchantableNeighbour = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  const { player } = locate(highlightCard.id, gameSnapshot);
+  const { player } = locateCard(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const GCZ = gameSnapshot.players[player].places["guestCardZone"].cards;
@@ -29,7 +29,7 @@ export const highlightCardHasEnchantableNeighbour = (highlightCard: GameCard, dr
 };
 
 export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  const { player } = locate(highlightCard.id, gameSnapshot);
+  const { player } = locateCard(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const enchantmentsRowIndexes = enchantmentsRow.map(e => e.index);
@@ -39,7 +39,7 @@ export const highlightCardUnenchanted = (highlightCard: GameCard, draggedCard: G
 };
 
 export const leftNeighbourOfHighlightCardIsNotBFFEnchanted = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
-  const { player } = locate(highlightCard.id, gameSnapshot);
+  const { player } = locateCard(highlightCard.id, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"].cards;
     const leftNeighbourEnchantCard = enchantmentsRow.find(card => card.index === highlightCard.index - 1);
@@ -66,7 +66,7 @@ export const highlightCardIsOfAcceptedType = (highlightCard: GameCard, draggedCa
 export const highlightCardIsNotMine = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot) => {
   console.log("warning: logic for this test not implemented");
   return true;
-}; //locate(highlightCard.playerId).player !== 0;
+}; //locateCard(highlightCard.playerId).player !== 0;
 
 //canSteal
 export const canSteal = allTrueWithArgs(pl0GCZenoughSpace, highlightCardIsOfAcceptedType, highlightCardIsNotMine);
@@ -86,26 +86,26 @@ const highlightCardCorrectType = (highlightCard: GameCard, draggedCard: GameCard
 //const correctTypes = draggedCard.legalTargets[0].cardTypes
 //};
 // const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-//   console.log(locate(highlightCard.id, gameSnapshot).place, highlightCard.id, (draggedCard.action.targetPlayerType === "enemy" &&
-//     locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-//   (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player), "highlightCardPlayerIsOfCorrectType")
+//   console.log(locateCard(highlightCard.id, gameSnapshot).place, highlightCard.id, (draggedCard.action.targetPlayerType === "enemy" &&
+//     locateCard(highlightCard.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightCard.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player), "highlightCardPlayerIsOfCorrectType")
 //   return  (draggedCard.action.targetPlayerType === "enemy" &&
-//     locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player) ||
-//   (draggedCard.action.targetPlayerType === "self" && locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player);
+//     locateCard(highlightCard.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+//   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightCard.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
 // }
 
 // const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
 
-//   const highlightCardPlayerIsOfCorrectTypee = (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
+//   const highlightCardPlayerIsOfCorrectTypee = (locateCard(highlightCard.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player &&
 //     draggedCard.action.targetPlayerType === "enemy") ||
-//   (locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
+//   (locateCard(highlightCard.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
 //   console.log(highlightCard.name, highlightCardPlayerIsOfCorrectTypee)
 //   return highlightCardPlayerIsOfCorrectTypee
 // }
 
-const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => (locate(highlightCard.id, gameSnapshot).player !== locate(draggedCard.id, gameSnapshot).player &&
+const highlightCardPlayerIsOfCorrectType = (highlightCard: GameCard, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => (locateCard(highlightCard.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player &&
 draggedCard.action.targetPlayerType === "enemy") ||
-(locate(highlightCard.id, gameSnapshot).player === locate(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
+(locateCard(highlightCard.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player && draggedCard.action.targetPlayerType === "self");
 
 
 //canEnchantWithZwilling Or With e.g. perplex

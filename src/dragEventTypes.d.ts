@@ -23,6 +23,8 @@ type UpdateDragData = {
 type DroppableData = {
   type: DroppableEntityType,
   id: number,
+  // placeType?: string,
+  // playerIndex?: number,
   calculatedIndex?: number // use this as destination index instead if not undefined 
 }
 

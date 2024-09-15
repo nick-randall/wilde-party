@@ -5,20 +5,22 @@ import { RootState } from "../redux/store";
 import "../animations/animations.css";
 import { CardInspector } from "../renderPropsComponents/CardInspector";
 import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
+import { get } from "http";
+import { dimensionConstants, getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 export interface HandCardProps {
   id: number;
   index: number;
   imageName: string;
-  dimensions: AllDimensions;
   numHandCards: number;
 }
 
 const HandCard = (props: HandCardProps) => {
-  const { id, index, imageName, dimensions } = props;
-  console.log(id)
+  const { id, index, imageName } = props;
+  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);  
+  const styles = getCardStyleValues(id, currSnapshot)
 
-  const { tableCardzIndex, cardWidth, cardTopSpread, rotation, cardHeight } = dimensions;
+  const { zIndex, cardWidth, top: cardTopSpread, rotate, cardHeight } = styles;
 
   const draggableId = JSON.stringify({ id, type: "card" });
 
@@ -48,13 +50,13 @@ const HandCard = (props: HandCardProps) => {
       : {};
   const normalStyles: CSSProperties = {
     // should be in dimensions
-    zIndex: shortHover ? 30 : tableCardzIndex,
+    zIndex: shortHover ? 30 : zIndex,
     width: cardWidth,
     height: cardHeight,
     top: index * cardTopSpread,
     left: 0,
     position: "absolute",
-    transform: `rotate(${rotation(index)}deg) scale(${shortHover ? 1.1 :1})`,
+    transform: `rotate(${rotate}deg) scale(${shortHover ? 1.1 :1})`,
     transition: `left 250ms, width 180ms, transform 180ms`,
     pointerEvents: "auto",
     boxShadow: "10px 10px 10px black",
@@ -83,7 +85,7 @@ const HandCard = (props: HandCardProps) => {
       }
 
       const translate = `translate(${x}px, ${y}px)`;
-      const scale = `scale(${dimensions.handToTableScaleFactor})`;
+      const scale = `scale(${dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
       return {
         ...style,
         transform: `${translate} ${scale}`,
@@ -106,11 +108,11 @@ const HandCard = (props: HandCardProps) => {
             // move aside and make room in other droppables.
             // When not dragging it has a width of 0, which
             // tucks hand cards together
-            style={{ width: isDragging ? dimensions.tableCardWidth : 0, position: "relative" }}
+            style={{ width: isDragging ? styles.cardWidth : 0, position: "relative" }}
           >
             <CardInspector
-              dimensions={dimensions}
-              cardRotation={10 * index - rotation(index)}
+              dimensions={styles}
+              cardRotation={rotate}
               render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
                 <TransitionHandler
                   index={index}

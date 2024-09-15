@@ -1,4 +1,4 @@
-import { locate } from "./locateFunctions";
+import { locateCard } from "./locateFunctions";
 
 const hasRightNeighbour = (index: number, array: GameCard[]) => index < array.length - 1;
 
@@ -17,7 +17,7 @@ export const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: Game
 export const leftNeighbourIsEnchantable = (index: number, array: GameCard[]) => hasLeftNeighbour(index) && !leftNeighbourIsEnchanted(index, array);
 
 export const getLeftOrRightNeighbour = (gameSnapshot: GameSnapshot, targetCardId: number) => {
-  const { player } = locate(targetCardId, gameSnapshot);
+  const { player } = locateCard(targetCardId, gameSnapshot);
   if (player !== null) {
     const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
     const GCZ = gameSnapshot.players[player].places["guestCardZone"];

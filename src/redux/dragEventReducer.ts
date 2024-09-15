@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { emptyGameSnapshot } from "../initialCards";
-import { locate, locatePlace } from "../helperFunctions/locateFunctions";
+import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
@@ -37,7 +37,7 @@ const isSpecialsZone = (type: DroppableEntityType, placeId: number, gameSnapshot
 
 const isSpecialsColumn = (type: DroppableEntityType, id: number, gameSnapshot: GameSnapshot) => {
   if (type !== "cardGroup") return false;
-  return locate(id, gameSnapshot).place === "specialsZone";
+  return locateCard(id, gameSnapshot).placeType === "specialsZone";
 };
 
 const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";

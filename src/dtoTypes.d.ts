@@ -24,7 +24,7 @@ type ChatMessage = {
 
 type GameSnapshotUpdates = {
   type: string;
-  gameSnapshots: GameSnapshot[];
+  newSnapshots: GameSnapshot[];
 };
 
 type PlayerDTO = {

@@ -4,12 +4,14 @@ import userReducer from "../user/userSlice";
 import { stompMiddleware } from "../websocket/websocketMiddleware";
 import chatReducer from "../chat/chatSlice";
 import dragEventReducer from "./dragEventReducer";
+import gameSnapshotReducer from "../gameSnapshotState/gameSnapshotSlice";
 
 const store = configureStore({
   reducer: {
     dragEventState: dragEventReducer,
     websocket: websocketReducer,
     userGameState: userReducer,
+    gameSnapshotState: gameSnapshotReducer,
     chat: chatReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stompMiddleware),

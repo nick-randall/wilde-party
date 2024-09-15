@@ -1,5 +1,7 @@
+import { useSelector } from "react-redux";
+import { getCardStyleValues } from "../helperFunctions/getCardStyles";
 import Card from "./Card";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { RootState } from "../redux/store";
 
 interface EnemyGCZProps {
   id: number;
@@ -10,18 +12,19 @@ interface EnemyGCZProps {
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
   const { GCZCards, enchantmentsRowCards, id, alignment } = props;
-  const dimensions = getAllDimensions(id);
+  const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
+  const styles = getCardStyleValues(id, currSnapshot);
   return (
     <div className={`grid-item ${alignment}`}>
       {GCZCards.map((card, index) => (
-        <div key={card.id} style={{ left: index * dimensions.cardLeftSpread, position: "absolute" }}>
-          <Card dimensions={dimensions} id={card.id} index={index} imageName={card.imageName} />
+        <div key={card.id} style={{ left: index * styles.left, position: "absolute" }}>
+          <Card id={card.id} index={index} imageName={card.imageName} />
         </div>
       ))}
-      <div style={{ top: dimensions.cardHeight / 2, position: "absolute" }}>
+      <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
         {enchantmentsRowCards.map(card => (
-          <div key={card.id} style={{ left: card.index * dimensions.cardLeftSpread, position: "absolute" }}>
-            <Card dimensions={dimensions} id={card.id} index={card.index} imageName={card.imageName} />
+          <div key={card.id} style={{ left: card.index * styles.left, position: "absolute" }}>
+            <Card id={card.id} index={card.index} imageName={card.imageName} />
           </div>
         ))}
       </div>

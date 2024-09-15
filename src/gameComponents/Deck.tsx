@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { RootState } from "../redux/store";
 import { drawCardThunk } from "../redux/thunks";
 import "../css/grid.css";
+import { getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 interface DeckProps {
   id: number;
@@ -14,7 +14,8 @@ interface DeckProps {
 export const Deck = (props: DeckProps) => {
   const { id, cards } = props;
   const dispatch = useDispatch();
-  const dimensions = getAllDimensions(id);
+  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const dimensions = getCardStyleValues(id, currSnapshot);
   const { player, draws, phase } = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current);
   const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
   const handleClick = () => {
@@ -34,7 +35,7 @@ export const Deck = (props: DeckProps) => {
   return (
     <div style={{ height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
       {cardsInReverseOrder.map((card, index) => (
-        <Card dimensions={dimensions} key={card.id} id={card.id} index={index} imageName="back" />
+        <Card key={card.id} id={card.id} index={index} imageName="back" />
       ))}
     </div>
   );

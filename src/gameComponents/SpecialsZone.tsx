@@ -2,14 +2,15 @@ import R, { flatten, is } from "ramda";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import GhostCard from "./GhostCard";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { RootState } from "../redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 import "../css/global.css";
+import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 
 interface SpecialsZoneProps {
   specialsZoneData: GamePlace;
   alignment: string;
+  player: number
 }
 
 type SpecialsColumnCards = {
@@ -33,12 +34,12 @@ const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] 
   });
 };
 
-export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment }) => {
+export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment, player }) => {
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
-
-  const dimensions = getAllDimensions(id);
-  const { cardWidth, cardHeight } = dimensions;
+  const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
+  const styles = getCardStyleValuesFromPlaceAndPlayer("specialsZone", player, currSnapshot);
+  const { cardWidth, cardHeight } = styles;
   const {draggedOver, draggedHandCard} = useSelector((state: RootState) => state.dragEventState);
   const isHighlighted = useSelector((state: RootState) => state.dragEventState.highlights.includes(id));
   const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
@@ -69,17 +70,17 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id
           {specialsCardsColumns.map((column, index) =>
             column.cards.length === 0 ? null : (
               <SpecialsCardsColumn
+              cardStyles={styles}
                 cards={column.cards}
                 cardType={column.cardType}
                 columnIndex={index}
                 startingIndex={column.startingIndex}
-                dimensions={dimensions}
                 key={column.cards[0].id + index}
                 specialsZoneId={id}
               />
             )
           )}
-          {ghostCard ? <GhostCard index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={9} /> : null}
+          {ghostCard ? <GhostCard cardId ={ghostCard.id} index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} zIndex={9} /> : null}
 
           {provided.placeholder}
         </div>

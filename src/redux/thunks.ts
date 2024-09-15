@@ -1,4 +1,4 @@
-import { locate } from "../helperFunctions/locateFunctions";
+import { locateCard } from "../helperFunctions/locateFunctions";
 import { RootState } from "./store";
 
 export const shouldEndTurn = (gameSnapshot: GameSnapshot) => gameSnapshot.current.draws < 1 && gameSnapshot.current.plays < 1;
@@ -22,14 +22,14 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
 export const addDraggedThunk = (source: DraggedOverData, destination: DraggedOverData) => (dispatch: Function, getState: () => RootState) => {
   const state = getState();
   const { gameSnapshot } = state.dragEventState;
-  const { place: originPlace, player: originPlayer } = locate(source.id, gameSnapshot);
+  const { placeType: originPlace, player: originPlayer } = locateCard(source.id, gameSnapshot);
   let playedCard: GameCard | null = null;
   if (originPlayer && originPlace) playedCard = gameSnapshot.players[originPlayer].places[originPlace].cards[destination.index];
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
 
   if (originPlayer !== 0 && playedCard && playedCard.card !== "unwanted") {
-    locate(destination.id, gameSnapshot);
+    locateCard(destination.id, gameSnapshot);
     console.log("origin player !=0");
   }
 

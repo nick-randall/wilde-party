@@ -18,15 +18,12 @@ interface TableProps {
   gameData: GameData;
 }
 
-export const Table: React.FC<TableProps> = ({gameData}) => {
-
+export const Table: React.FC<TableProps> = ({ gameData }) => {
   const dispatch = useDispatch();
 
-  useEffect(()=> {
-    dispatch(joinGame(gameData.id))
-
-  },[dispatch, gameData.id])
-
+  useEffect(() => {
+    dispatch(joinGame(gameData.id));
+  }, [dispatch, gameData.id]);
 
   const gameSnapshot = useSelector((state: RootState) => state.dragEventState.gameSnapshot);
 
@@ -35,7 +32,6 @@ export const Table: React.FC<TableProps> = ({gameData}) => {
   const p02places = gameSnapshot.players[1].places;
   const p03places = gameSnapshot.players[2].places;
 
-
   return (
     <div>
       <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd} onBeforeCapture={onBeforeCapture}>
@@ -43,12 +39,12 @@ export const Table: React.FC<TableProps> = ({gameData}) => {
           <PlayerAvatar player={gameSnapshot.players[1]} />
           <div></div>
           <PlayerAvatar player={gameSnapshot.players[2]} />
-          <SpecialsZone specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-left" />
+          <SpecialsZone player={1} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-left" />
           <div className="grid-item center-gap-row">
             <Deck id={nonPlayerPlaces.deck.id} cards={nonPlayerPlaces.deck.cards} />
             <DiscardPile id={nonPlayerPlaces.discardPile.id} cards={nonPlayerPlaces.discardPile.cards} />
           </div>
-          <SpecialsZone specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
+          <SpecialsZone player={2} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
           <EnemyGCZ
             id={gameSnapshot.players[1].id}
             enchantmentsRowCards={p02places.enchantmentsRow.cards}
@@ -63,11 +59,16 @@ export const Table: React.FC<TableProps> = ({gameData}) => {
             alignment="top-right"
           />
           <div className="grid-item center-column align-start">
-            <SpecialsZone specialsZoneData={p01places.specialsZone} alignment="" />
-            <GCZ id={p01places.guestCardZone.id} enchantmentsRowCards={p01places.enchantmentsRow.cards} GCZCards={p01places.guestCardZone.cards} />
+            <SpecialsZone player={0} specialsZoneData={p01places.specialsZone} alignment="" />
+            <GCZ
+              player={0}
+              id={p01places.guestCardZone.id}
+              enchantmentsRowCards={p01places.enchantmentsRow.cards}
+              GCZCards={p01places.guestCardZone.cards}
+            />
           </div>
           <Hand id={p01places.hand.id} handCards={p01places.hand.cards} />
-          <UWZ id={p01places.unwantedsZone.id} unwantedCards={p01places.unwantedsZone.cards} alignment="center-right"/>
+          <UWZ player={0} id={p01places.unwantedsZone.id} unwantedCards={p01places.unwantedsZone.cards} alignment="center-right" />
           {/* <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
           <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />
           <EnemyPlayer id={gameSnapshot.players[2].id} screenSize={screenSize} places={gameSnapshot.players[2].places} current={player === 2} /> */}

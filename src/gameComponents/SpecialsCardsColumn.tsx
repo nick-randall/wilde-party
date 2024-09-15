@@ -7,22 +7,24 @@ import { RootState } from "../redux/store";
 interface SpecialsCardsColumnProps {
   cards: GameCard[];
   cardType: GuestCardType;
-  dimensions: AllDimensions;
   specialsZoneId: number;
   startingIndex: number;
   columnIndex: number;
+  cardStyles: CardDimensions
 }
 
 export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
   cards,
-  dimensions,
+  cardStyles,
   cardType,
   columnIndex,
   specialsZoneId,
   startingIndex,
 }) => {
   const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state.dragEventState);
-  const specialsColumnType = cards[0].specialsCardType;
+
+  const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
+    const specialsColumnType = cards[0].specialsCardType;
 
   const draggableData: DraggableData = {
     type: "cardGroup",
@@ -48,16 +50,15 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
     <Draggable draggableId={draggableId} index={columnIndex} isDragDisabled={true}>
       {provided => (
         <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-          <div style={{ width: dimensions.cardLeftSpread, height: dimensions.cardHeight }}>
+          <div style={{ width: cardStyles.left, height: cardStyles.cardHeight }}>
             <div style={{ position: "relative" }}>
               {cards.map((card, index) => (
                 <Card
                   index={card.index}
                   id={card.id}
                   imageName={card.imageName}
-                  dimensions={dimensions}
                   key={card.id}
-                  offsetTop={index * dimensions.cardTopSpread}
+                  offsetTop={index * cardStyles.top}
                 />
               ))}
               {/* This👇 is the drop box */}
@@ -67,17 +68,17 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={{
-                      height: dimensions.cardHeight,
-                      width: dimensions.cardWidth,
+                      height: cardStyles.cardHeight,
+                      width: cardStyles.cardWidth,
                       backgroundColor: isHighlighted ? "yellowgreen" : "",
                       boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
                       transition: "background-color 180ms, box-shadow 180ms, left 180ms",
                       position: "absolute",
-                      top: cards.length * dimensions.cardTopSpread,
+                      top: cards.length * cardStyles.top,
                     }}
                   >
                     {provided.placeholder}
-                    {ghostCard ? <GhostCard index={0} imageName={ghostCard.imageName} dimensions={dimensions} zIndex={9} /> : null}
+                    {ghostCard ? <GhostCard cardId={ghostCard.id} index={0} imageName={ghostCard.imageName} zIndex={9} /> : null}
                   </div>
                 )}
               </Droppable>

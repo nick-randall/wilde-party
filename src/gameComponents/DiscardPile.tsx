@@ -1,5 +1,7 @@
+import {  useSelector } from "react-redux";
 import Card from "./Card";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
+import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { RootState } from "../redux/store";
 
 interface DiscardPileProps {
   cards: GameCard[];
@@ -7,13 +9,15 @@ interface DiscardPileProps {
 }
 
 const DiscardPile = (props: DiscardPileProps) => {
+  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+
   const { id, cards } = props;
-  const dimensions = getAllDimensions(id);
+  const dimensions = getCardStyleValues(id, currSnapshot);
   return (
     <div>
       {cards.map((card, index) => (
         // <img src={card.imageName} alt={card.imageName} style={{ height: cardHeight, width: cardWidth }} />
-        <Card id={card.id} key={card.id} index={0} imageName={card.imageName} dimensions={dimensions} offsetLeft={index* 3}/>
+        <Card id={card.id} key={card.id} index={0} imageName={card.imageName} offsetLeft={index* 3}/>
       ))}
     </div>
   );

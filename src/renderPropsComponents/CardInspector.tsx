@@ -3,7 +3,7 @@ import React, { CSSProperties, useRef, useState } from "react";
 import { rotate } from "../helperFunctions/equations";
 
 interface CardInspectorProps {
-  dimensions: AllDimensions;
+  dimensions: CardDimensions;
   cardRotation: number;
   render: (ref: React.Ref<HTMLImageElement>, handleClick: (event: React.MouseEvent) => void, handleMouseLeave: () => void, style: CSSProperties)=>JSX.Element
 }

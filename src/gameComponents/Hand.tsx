@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import HandCard from "./HandCard";
 import { Droppable } from "react-beautiful-dnd";
-import { getAllDimensions } from "../helperFunctions/getDimensions";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { dimensionConstants, getCardStyleValues } from "../helperFunctions/getCardStyles";
 interface HandProps {
   id: number;
   handCards: GameCard[];
@@ -12,9 +12,10 @@ interface HandProps {
 const Hand = (props: HandProps) => {
   const { id, handCards } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
-  const dimensions = getAllDimensions(id);
-  const { cardLeftSpread } = dimensions;
-  const maxCardLeftSpread = dimensions.maxCardLeftSpread || 0;
+  const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
+  const styles = getCardStyleValues(id, currSnapshot);
+  const { left: cardLeftSpread } = styles;
+  const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
   const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
@@ -46,7 +47,7 @@ const Hand = (props: HandProps) => {
             // left: (-spread / 2 - 0.5) * handCards.length,
             //left: x - (spread / 2) * handCards.length,
             transition: "180ms",
-            height: dimensions.cardHeight,
+            height: styles.cardHeight,
           }}
           ref={provided.innerRef}
         >
@@ -55,26 +56,26 @@ const Hand = (props: HandProps) => {
             key={"handcard" + card.id}
 
               // This is a container div for one card and two spacers
-              style={{ height: dimensions.cardHeight, display: "flex", position: "relative" }}
+              style={{ height: styles.cardHeight, display: "flex", position: "relative" }}
             >
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                 style={{
                   width: spread / 2,
                   transition: "all 180ms",
-                  height: dimensions.cardHeight,
+                  height: styles.cardHeight,
                   // border:"thin green solid",
                   // zIndex: 100
                 }}
               />
-              <HandCard id={card.id} index={index} imageName={card.imageName} dimensions={dimensions} numHandCards={handCards.length} key={card.id} />
+              <HandCard id={card.id} index={index} imageName={card.imageName} numHandCards={handCards.length} key={card.id} />
 
               <div
                 // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                 style={{
                   width: spread / 2,
                   transition: "all 180ms",
-                  height: dimensions.cardHeight,
+                  height: styles.cardHeight,
                   // border:"thin red solid",
                   // zIndex: 100
                 }}

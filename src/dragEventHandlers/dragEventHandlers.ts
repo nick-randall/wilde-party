@@ -1,10 +1,10 @@
 import { BeforeCapture, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locate } from "../helperFunctions/locateFunctions";
+import { locateCard } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";
 import { END_DRAG_CLEANUP, REARRANGE, START_REARRANGING, UPDATE_DRAGGED_OVER } from "../redux/dragEventReducer";
 
-const isHandCard = (sourceId: number) => locate(sourceId).place === "hand";
+const isHandCard = (sourceId: number, gameSnapshot: GameSnapshot) => locateCard(sourceId, gameSnapshot).placeType === "hand";
 
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 
@@ -37,7 +37,7 @@ export const onBeforeCapture = (source: BeforeCapture) => store.dispatch({ type:
 export const onDragStart = ({ source, draggableId }: { source: DraggableLocation; draggableId: string }) => {
   const draggableData: DraggableData = JSON.parse(draggableId);
   const droppableData: DroppableData = JSON.parse(source.droppableId);
-  if (isHandCard(droppableData.id)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
+  if (isHandCard(droppableData.id, store.getState().gameSnapshotState.currSnapshot)) store.dispatch({ type: "SET_HIGHLIGHTS", payload: draggableId });
   else {
     store.dispatch(
       START_REARRANGING({

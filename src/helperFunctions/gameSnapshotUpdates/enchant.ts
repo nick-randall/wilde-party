@@ -1,6 +1,6 @@
 import produce from "immer";
 import { convertSnapshot } from "../../initialCards";
-import { locate } from "../locateFunctions";
+import { locateCard } from "../locateFunctions";
 import { compareProps } from "../tests";
 
 function setAttributes(card: GameCard, attrs: { [key: string]: any }) {
@@ -25,7 +25,7 @@ const rightNeighbourIsEnchantable = (index: number, enchantmentsRow: GameCard[],
 
 export const enchant = (gameSnapshot: GameSnapshot, handCardIndex: number, targetCardId: number): GameSnapshot =>
   produce(gameSnapshot, draft => {
-    const { player } = locate(targetCardId, gameSnapshot);
+    const { player } = locateCard(targetCardId, gameSnapshot);
     if (player !== null) {
       const enchantmentsRow = gameSnapshot.players[player].places["enchantmentsRow"];
       const GCZ = gameSnapshot.players[player].places["guestCardZone"];

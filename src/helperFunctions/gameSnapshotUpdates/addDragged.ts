@@ -1,5 +1,5 @@
 export const t = 0;
-// import { getNumCards, locate } from "../locateFunctions";
+// import { getNumCards, locateCard } from "../locateFunctions";
 
 // import { produce } from "immer";
 // import { getCardGroupObjs, getCardRowShapeOnDraggedOver } from "../groupGCZCards";
@@ -25,10 +25,10 @@ export const t = 0;
 //   produce(gameSnapshot, draft => {
 //     console.log(destinationPlaceId);
 //     const { place: destPlace, player: destPlayer } = uuidIsToLong(destinationPlaceId)
-//       ? locate(destinationPlaceId.slice(1), gameSnapshot)
-//       : locate(destinationPlaceId, gameSnapshot);
+//       ? locateCard(destinationPlaceId.slice(1), gameSnapshot)
+//       : locateCard(destinationPlaceId, gameSnapshot);
 
-//     let { player: sourcePlayer, place: sourcePlace } = locate(sourcePlaceId, gameSnapshot);
+//     let { player: sourcePlayer, place: sourcePlace } = locateCard(sourcePlaceId, gameSnapshot);
 //     let targetIndex = destinationIndex;
 //     if (sourcePlayer !== null && destPlayer !== null && destPlace !== null) {
 //       if (destPlace === "guestCardZone") {
@@ -88,23 +88,23 @@ export const t = 0;
 
 // // export const addDraggedUpdateSnapshot = (gameSnapshot: GameSnapshot, sourcePlaceid: number, sourceIndex: number, destinationPlaceid: number, destinationIndex: number): GameSnapshot =>
 // // produce(gameSnapshot, draft => {
-// //   let { player: destPlayer, destPlace } = locate(destinationPlaceId, gameSnapshot);
+// //   let { player: destPlayer, destPlace } = locateCard(destinationPlaceId, gameSnapshot);
 // //   let sourcePlayer = locatePlayer(sourcePlaceId, gameSnapshot)
 // //   let targetIndex = destinationIndex;
 // //   let targetPlaceId = destinationPlaceId;
 // //   // if destPlace is null check specialsZone
 // //   if (destPlace === null) {
-// //     if (locate(destinationPlaceId.replace("dropZone", ""), gameSnapshot).destPlace === "specialsZone") {
+// //     if (locateCard(destinationPlaceId.replace("dropZone", ""), gameSnapshot).destPlace === "specialsZone") {
 // //       targetPlaceId = destinationPlaceId.replace("dropZone", "");
 // //       destPlace = "specialsZone";
 // //       destPlayer = 0;
 // //       targetIndex = gameSnapshot.players[0].places["specialsZone"].cards.length;
-// //     } else if (locate(destinationPlaceId.slice(0, destinationPlaceId.length - 1), gameSnapshot).destPlace === "specialsZone") {
+// //     } else if (locateCard(destinationPlaceId.slice(0, destinationPlaceId.length - 1), gameSnapshot).destPlace === "specialsZone") {
 // //       targetIndex = Number(destinationPlaceId.charAt(destinationPlaceId.length - 1));
 // //       const targetDestinationId = destinationPlaceId.slice(0, destinationPlaceId.length - 1);
 // //       targetPlaceId = targetDestinationId;
 // //       destPlace = "specialsZone";
-// //       destPlayer = locate(targetDestinationId, gameSnapshot).player;
+// //       destPlayer = locateCard(targetDestinationId, gameSnapshot).player;
 // //     } else return gameSnapshot;
 // //   }
 

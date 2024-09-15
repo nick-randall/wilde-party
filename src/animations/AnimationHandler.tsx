@@ -1,0 +1,54 @@
+import styled, { keyframes } from "styled-components";
+
+
+interface AnimationHandlerProvidedProps {
+  animated: boolean;
+  className?: string;
+}
+export interface AnimationHandlerProps {
+  animationData?: AnimationData;
+  className?: string;
+  children: (animationHandlerProvidedProps: AnimationHandlerProvidedProps) => JSX.Element;
+}
+
+const AnimationHandler: React.FC<AnimationHandlerProps> = ({ animationData, children }) => {
+  // const animationData = useSelector((state: RootState) => state.animationData.find(animation => animation.cardId === cardId));
+  const keyframesString = animationData?.keyframesString ?? "";
+  return (
+    <InjectedAnimationHandler
+      keyframesString={keyframesString}
+      animated={animationData !== undefined}
+      totalDuration={animationData?.totalDuration || 0}
+      children={children}
+    />
+  );
+};
+
+type InjectedAnimationHandlerProps = {
+  keyframesString: string;
+  totalDuration: number;
+  animated: boolean;
+  className?: string;
+  children: (animationHandlerProvidedProps: AnimationHandlerProvidedProps) => React.ReactNode;
+};
+
+/**
+ * This component receives all animation data but can't access it directly.
+ * Instead, the InjectedAnimationHandler uses the animation data (to, from, delay etc.)
+ * contained in the css class (className prop) to build a dynamic animation.
+ * @param param0
+ * @returns
+ */
+const AnimationLoader: React.FC<InjectedAnimationHandlerProps> = ({ className, children, animated }) => {
+  const providedProps: AnimationHandlerProvidedProps = {
+    animated: animated,
+    className: className,
+  };
+  return <>{children(providedProps)}</>;
+};
+
+const InjectedAnimationHandler = styled(AnimationLoader)<InjectedAnimationHandlerProps>`
+  animation: ${props => keyframes`${props.keyframesString}`} ${props => props.totalDuration}ms;
+`;
+
+export default AnimationHandler;

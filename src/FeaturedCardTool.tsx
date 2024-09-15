@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
 import { ForwardedRef, forwardRef, useRef, useState } from "react";
+import { dimensionConstants } from "./helperFunctions/getCardStyles";
 interface FeaturedCardProps {
-  dimensions: AllDimensions;
+  dimensions: CardDimensions;
   offsetLeft?: number;
   offsetTop?: number;
   render: () => JSX.Element;
@@ -10,7 +11,7 @@ interface FeaturedCardProps {
 interface FeaturedCardBoxProps {
   translateX: number;
   translateY: number;
-  dimensions: AllDimensions;
+  dimensions: CardDimensions;
   offsetLeft?: number;
   offsetTop?: number;
   //render: () => JSX.Element;
@@ -18,7 +19,8 @@ interface FeaturedCardBoxProps {
 
 export const FeaturedCardBox = (props: FeaturedCardBoxProps) => {
   const { dimensions, translateX, translateY } = props;
-  const { cardHeight, cardWidth, featuredCardScale } = dimensions;
+  const { cardHeight, cardWidth } = dimensions;
+  const featuredCardScale = dimensionConstants.FEATURED_CARD_SCALE
   return (
     <div
       style={{
@@ -35,7 +37,9 @@ export const FeaturedCardBox = (props: FeaturedCardBoxProps) => {
 
 const FeaturedCardTool = (props: FeaturedCardProps) => {
   const {dimensions} =  props ;
-  const { cardHeight, cardWidth, featuredCardScale } = dimensions;
+  const { cardHeight, cardWidth } = dimensions;
+  const featuredCardScale = dimensionConstants.FEATURED_CARD_SCALE
+
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const myRef = useRef<HTMLDivElement>(null);
 

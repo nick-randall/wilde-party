@@ -6,12 +6,12 @@ import { CardInspector } from "../renderPropsComponents/CardInspector";
 import TransitionHandler from "../renderPropsComponents/TransitionHandler";
 import { RootState } from "../redux/store";
 import { getSettings } from "../gameSettings/uiSettings";
+import { getCardStyles, getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 export interface CardProps {
   id: number;
   index: number;
   imageName: string;
-  dimensions: AllDimensions;
   offsetLeft?: number;
   offsetTop?: number;
   //cardGroupIndex: number;
@@ -19,8 +19,10 @@ export interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-  const { id, index, dimensions, offsetTop, offsetLeft, imageName } = props;
-  const { tableCardzIndex, cardLeftSpread, cardHeight, cardWidth } = dimensions;
+  const { id, index, offsetTop, offsetLeft, imageName } = props;
+  const gameSnapshot = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot);
+  const { zIndex, left,cardHeight,  cardWidth } = getCardStyleValues(id, gameSnapshot);
+
   const settings = getSettings();
 
   const [messinessRotation, setMessinessRotation] = useState(0);
@@ -43,7 +45,7 @@ const Card = (props: CardProps) => {
   const notAmongHighlights = (highlightType === "card" && !highlights.includes(id)) || props.showNotAmongHighlights;
 
   const normalStyles: CSSProperties = {
-    zIndex: tableCardzIndex,
+    zIndex: zIndex,
     width: cardWidth,
     height: cardHeight,
     left: offsetLeft ? +offsetLeft + messinessOffset.x : messinessOffset.x,
@@ -66,7 +68,7 @@ const Card = (props: CardProps) => {
         {provided => (
           <div style={{ position: "absolute" }}>
             <CardInspector
-              dimensions={dimensions}
+              dimensions={getCardStyleValues(id, gameSnapshot)}
               cardRotation={messinessRotation}
               render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
                 <TransitionHandler
@@ -99,11 +101,11 @@ const Card = (props: CardProps) => {
             />
             {ghostCard ? (
               <GhostCard
+              cardId={ghostCard.id}
                 index={0}
-                offsetLeft={cardLeftSpread * BFFOffset}
+                offsetLeft={cardWidth * BFFOffset}
                 offsetTop={cardHeight / 2}
                 imageName={ghostCard.imageName}
-                dimensions={dimensions}
                 zIndex={5}
               />
             ) : null}
