@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Card from "./Card";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
-import { getCardStyleValues, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 
 interface UWZProps {
   id: number;

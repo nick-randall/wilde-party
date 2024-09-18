@@ -11,7 +11,7 @@ import EnemyGCZ from "../gameComponents/EnemyGCZ";
 import GCZ from "../gameComponents/GCZ";
 import Hand from "../gameComponents/Hand";
 import UWZ from "../gameComponents/UWZ";
-import { joinGame } from "../websocket/websocketActionCreators";
+import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
 
 interface TableProps {
@@ -20,12 +20,20 @@ interface TableProps {
 
 export const Table: React.FC<TableProps> = ({ gameData }) => {
   const dispatch = useDispatch();
+  const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
+  const { activePlayers, currSnapshot: gameSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
   useEffect(() => {
-    dispatch(joinGame(gameData.id));
-  }, [dispatch, gameData.id]);
+    if (!wsConnected && !wsLoading && !wsError) {
+      dispatch(connectWebsocket({ actionOnConnect: joinGame(gameData.id) }));
+    }
+  }, [dispatch, gameData.id, wsConnected, wsError, wsLoading]);
 
-  const gameSnapshot = useSelector((state: RootState) => state.dragEventState.gameSnapshot);
+  // useEffect(() => {
+  //   dispatch(joinGame(gameData.id));
+  // }, [dispatch, gameData.id]);
+
+  // const {gameSnapshot} = useSelector((state: RootState) => state.dragEventState);
 
   const { nonPlayerPlaces } = gameSnapshot;
   const p01places = gameSnapshot.players[0].places;
@@ -46,6 +54,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           </div>
           <SpecialsZone player={2} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
           <EnemyGCZ
+          player={1}
             id={gameSnapshot.players[1].id}
             enchantmentsRowCards={p02places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}
@@ -53,6 +62,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           />
           <div></div>
           <EnemyGCZ
+            player={2}
             id={gameSnapshot.players[2].id}
             enchantmentsRowCards={p03places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}

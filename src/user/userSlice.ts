@@ -25,6 +25,7 @@ export const logout = createAsyncThunk("userGameState/logout", async () => {
 });
 
 export const addUser = createAsyncThunk("user/addUser", async (username: string) => {
+  console.log("adding user");
   const addUserRequest = { username: username };
   const resp = await axios.post("/addUser", addUserRequest);
   return resp.data;

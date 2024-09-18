@@ -3,7 +3,7 @@ import Card from "./Card";
 import { RootState } from "../redux/store";
 import { drawCardThunk } from "../redux/thunks";
 import "../css/grid.css";
-import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 
 interface DeckProps {
   id: number;
@@ -15,7 +15,7 @@ export const Deck = (props: DeckProps) => {
   const { id, cards } = props;
   const dispatch = useDispatch();
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-  const dimensions = getCardStyleValues(id, currSnapshot);
+  const dimensions = getCardStyleValuesFromPlaceAndPlayer("deck", null, currSnapshot);
   const { player, draws, phase } = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current);
   const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
   const handleClick = () => {

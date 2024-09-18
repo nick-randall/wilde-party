@@ -2,23 +2,25 @@ import { CSSProperties } from "styled-components";
 import { CardCSSMap } from "../animations/animationHelperFunctions";
 import { getCard, getNumCards, locateCard } from "./locateFunctions";
 
-export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, player: number, gameSnapshot: GameSnapshot) => {
-  const card: GameCard = {
-    pointValue: 1,
-    action: { actionType: "addDragged", highlightType: "card", targetPlayerType: "enemy" },
-    name: "temp",
-    id: 99999999999,
-    imageName: "test",
-    cardType: "guest",
-    index: 0,
-  };
-  gameSnapshot.players[player].places[placeType].cards.push(card);
-  return getCardStyleValues(card.id, gameSnapshot);
-};
+//   const card: GameCard = {
+//     pointValue: 1,
+//     action: { actionType: "addDragged", highlightType: "card", targetPlayerType: "enemy" },
+//     name: "temp",
+//     id: 99999999999,
+//     imageName: "test",
+//     cardType: "guest",
+//     index: 0,
+//   };
+//   gameSnapshot.players[player].places[placeType].cards.push(card);
+//   return getCardStyleValues(card.id, gameSnapshot);
+// };
 
 export const getCardStyleValues = (cardId: number, gameSnapshot: GameSnapshot) => {
   const { index, placeType, player } = locateCard(cardId, gameSnapshot);
-
+  return getCardStyleValuesFromPlaceAndPlayer(placeType, player, gameSnapshot, index);
+};
+export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, player: number | null, gameSnapshot: GameSnapshot, index: number = -1) => {
+  console.log(placeType, player, gameSnapshot, index);
   const place = placeType;
 
   const numCards = getNumCards(player, placeType, gameSnapshot);

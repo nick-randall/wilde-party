@@ -7,8 +7,8 @@ const Game: React.FC = () => {
   const {isUserGameDataRetrieved, isLoading, error, user, gameData } = useUserGameData();
   return (
     <div className="background-tile">
-      {(error || !gameData) && isUserGameDataRetrieved && <UserGameErrors />}
-      {(isLoading || !isUserGameDataRetrieved) && <Center>Loading...</Center>}
+      {error  && <UserGameErrors />}
+      {(!error &&  (isLoading || !isUserGameDataRetrieved)) && <Center>Loading...</Center>}
       {user && gameData && <Table gameData={gameData} />}
     </div>
   );

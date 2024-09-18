@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
       {isLoading && <Loading />}
       {isUserGameDataRetrieved && !user && <EnterName />}
       {user && !gameData && <UserGreetings user={user} />}
-      {gameData && <ReturnToGame/>}
+      {gameData && <ReturnToGame />}
     </div>
   );
 };
@@ -47,7 +47,12 @@ const UserGreetings = (props: { user: User }) => {
 
 const EnterName = () => {
   const [newUserName, setNewUserName] = useState("");
-  const handleClick = () => dispatch(addUser(newUserName));
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    if (clicked) return;
+    setClicked(true);
+    dispatch(addUser(newUserName));
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleClick();
@@ -71,9 +76,7 @@ const ReturnToGame: React.FC = () => {
       <div style={{ height: "20px" }} />
       <LargeButton link={"/game"} text="Return to game" />
       <div style={{ height: "10px" }} />
-
       <SmallButton text="End game" />
-
     </div>
   );
 };

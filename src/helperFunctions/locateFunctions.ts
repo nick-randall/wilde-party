@@ -36,6 +36,8 @@ export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 export const getNumCards = (player: number | null, placeType: PlaceType, gameSnapshot: GameSnapshot) => {
   if(player === null) {
+    console.log(player)
+    console.log(placeType)
     return gameSnapshot.nonPlayerPlaces[placeType].cards.length;
   }
   else {

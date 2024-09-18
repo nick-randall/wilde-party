@@ -12,7 +12,7 @@ const DiscardPile = (props: DiscardPileProps) => {
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
   const { id, cards } = props;
-  const dimensions = getCardStyleValues(id, currSnapshot);
+  // const dimensions = getCardStyleValues(id, currSnapshot);
   return (
     <div>
       {cards.map((card, index) => (

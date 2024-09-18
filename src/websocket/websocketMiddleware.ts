@@ -113,7 +113,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       case "RESPOND_TO_INVITATION": {
         const { invitationId, accept } = action.payload;
         console.log("responding accept: " + accept + "  to invitation: " + invitationId);
-        const message: OutgoingInvitationMessage = { type: accept? "accept" : "decline" , invitationId };
+        const message: OutgoingInvitationMessage = { type: accept ? "accept" : "decline", invitationId };
         console.log(JSON.stringify(message));
         stompClient.send("/app/invitations", {}, JSON.stringify(message));
 

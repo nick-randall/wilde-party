@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
-import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import Card from "./Card";
 import { RootState } from "../redux/store";
 
 interface EnemyGCZProps {
+  player: number;
   id: number;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
@@ -11,9 +12,11 @@ interface EnemyGCZProps {
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-  const { GCZCards, enchantmentsRowCards, id, alignment } = props;
+  const { GCZCards, enchantmentsRowCards, id, alignment, player } = props;
   const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
-  const styles = getCardStyleValues(id, currSnapshot);
+  console.log("PLAYER " + player +  " GCZ")
+
+  const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, currSnapshot);
   return (
     <div className={`grid-item ${alignment}`}>
       {GCZCards.map((card, index) => (

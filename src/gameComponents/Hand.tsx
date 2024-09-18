@@ -3,7 +3,7 @@ import HandCard from "./HandCard";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { dimensionConstants, getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { dimensionConstants, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 interface HandProps {
   id: number;
   handCards: GameCard[];
@@ -13,7 +13,7 @@ const Hand = (props: HandProps) => {
   const { id, handCards } = props;
   const [shouldSpread, setShouldSpread] = useState(false);
   const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
-  const styles = getCardStyleValues(id, currSnapshot);
+  const styles = getCardStyleValuesFromPlaceAndPlayer("hand", 0, currSnapshot);
   const { left: cardLeftSpread } = styles;
   const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
   const [spread, setSpread] = useState(cardLeftSpread);

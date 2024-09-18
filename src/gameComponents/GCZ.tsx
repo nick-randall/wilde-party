@@ -5,7 +5,7 @@ import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "../helperFunctions/groupGCZCards";
 import { RootState } from "../redux/store";
-import {  getCardStyleValues, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import {  getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 
 interface GCZProps {
   id: number;
