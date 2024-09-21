@@ -12,6 +12,10 @@ const Button = styled.button`
   color: #f9ca44;
   border: thin black solid;
   padding: 12px 15px 7px 15px;
+  &:hover {
+    background-color: #f9ca44;
+    color: white;
+  }
 `;
 
 interface WildePartyButtonProps {
@@ -28,9 +32,7 @@ const LargeButton: React.FC<WildePartyButtonProps> = ({ onClick, text, link }) =
       </a>
     );
   }
-  return (
-      <Button onClick={onClick}>{text}</Button>
-  );
+  return <Button onClick={onClick}>{text}</Button>;
 };
 
 export default LargeButton;

@@ -8,6 +8,7 @@ import { Center } from "../components/Center";
 import LargeButton from "../components/LargeButton";
 import "../css/chat-room.css";
 import InviteDialog from "../components/InviteDialog";
+import SendIcon from "../components/SendIcon";
 
 interface ChatRoomProps {
   user: User;
@@ -99,7 +100,8 @@ const ChatRoomLayout: React.FC<{
         <form onSubmit={handleSendMessage}></form>
         <div className="chat-input-row">
           <input value={currMsg} onChange={handleChatInputChange} />
-          <img src="./send.svg" alt="send" onClick={handleSendMessage} className="send-button" />
+          {/* <img src="./icons/send.svg" alt="send" onClick={handleSendMessage} className="send-button" /> */}
+        <SendIcon onClick={handleSendMessage} />
         </div>
       </div>
       <div className="grid-right">Rules of the game</div>

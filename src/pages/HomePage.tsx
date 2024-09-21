@@ -48,7 +48,17 @@ const UserGreetings = (props: { user: User }) => {
 const EnterName = () => {
   const [newUserName, setNewUserName] = useState("");
   const [clicked, setClicked] = useState(false);
+  const [error, setError] = useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    setNewUserName(e.target.value)
+    setError("");
+  }
+
   const handleClick = () => {
+    if(!newUserName) { 
+      setError("Please enter a name");
+      return;
+    }
     if (clicked) return;
     setClicked(true);
     dispatch(addUser(newUserName));
@@ -62,9 +72,10 @@ const EnterName = () => {
     <form onSubmit={handleSubmit}>
       Enter your name:
       <div style={{ height: "20px" }} />
-      <TextInput name="username" value={newUserName} onChange={v => setNewUserName(v.target.value)} />
+      <TextInput name="username" value={newUserName} onChange={handleChange} />
       <div style={{ height: "10px" }} />
       <SmallButton onClick={handleClick} text="OK" />
+      {error && <div className="error-text">{error}</div>}
     </form>
   );
 };

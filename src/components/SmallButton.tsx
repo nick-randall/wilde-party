@@ -11,6 +11,10 @@ const Button = styled.button`
   color: black;
   border: thin black solid;
   padding: 10px 10px 5px 10px;
+    &:hover {
+    background-color: #f9ca44;
+    color: white;
+  }
 `;
 
 interface SmallButtonProps {

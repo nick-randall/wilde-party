@@ -30,12 +30,14 @@ export const chatSlice = createSlice({
     },
     handleChatRoomDataUpdate: (state, action: PayloadAction<ChatRoomDataUpdate>) => {
       const { type, message, sentInvitations, receivedInvitations, gameData } = action.payload;
-      console.log(`type: "${type}", message: ${message}, sentInvitations: ${sentInvitations}, receivedInvitations: ${receivedInvitations}, gameData: ${gameData} `);
-        console.log("Chat room data received");
-        state.messages.push({ type: "chat", content: message, sender: { id: -1, name: "System" } });
-        state.sentInvitations = sentInvitations;
-        state.receivedInvitations = receivedInvitations;
-        state.gameData = gameData;
+      console.log(
+        `type: "${type}", message: ${message}, sentInvitations: ${sentInvitations}, receivedInvitations: ${receivedInvitations}, gameData: ${gameData} `
+      );
+      console.log("Chat room data received");
+      if (message) state.messages.push({ type: "chat", content: message, sender: { id: -1, name: "System" } });
+      state.sentInvitations = sentInvitations;
+      state.receivedInvitations = receivedInvitations;
+      state.gameData = gameData;
     },
   },
 });

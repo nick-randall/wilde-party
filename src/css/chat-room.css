@@ -12,7 +12,7 @@
 
 .chat-window {
   box-sizing: border-box;
-  line-height: 3em;
+  line-height: 1.6em;
   overflow: scroll;
   padding: 5px;
   border: 4px double #debb07;
@@ -39,7 +39,7 @@
   display: flex;
   justify-content: stretch;
   align-items: center;
-  width: 100%;
+  /* width: 50%; */
 
 }
 
