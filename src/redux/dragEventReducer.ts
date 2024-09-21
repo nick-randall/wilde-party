@@ -5,6 +5,7 @@ import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
 import { rearrangeGCZ } from "../helperFunctions/gameSnapshotUpdates/rearrangeGCZ";
 import { rearrangeSpecialsZone } from "../helperFunctions/gameSnapshotUpdates/rearrangeSpecialsZone";
 import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
+import store from "./store";
 
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -99,6 +100,7 @@ export const dragEventSlice = createSlice({
       }
     },
     UPDATE_DRAGGED_OVER: (state, action: PayloadAction<DraggedOverData | undefined>) => {
+      const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
       console.log(`UPDATE_DRAGGED_OVER`);
       if (action.payload === undefined) {
         state.draggedOver = undefined;

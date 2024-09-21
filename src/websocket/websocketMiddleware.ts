@@ -2,11 +2,12 @@ import { CompatClient, Message, Stomp, StompSubscription } from "@stomp/stompjs"
 import SockJS from "sockjs-client";
 
 import { setLoadingWs, setWsError, setConnectedToWs, setDisconnectedFromWs } from "./websocketSlice";
-import { AppDispatch } from "../redux/store";
+import store, { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
 import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
-import { handleNewGameSnapshots, setNotInGameError } from "../gameSnapshotState/gameSnapshotSlice";
+import { handleNewGameSnapshots, setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
+import { on } from "events";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
@@ -42,21 +43,6 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
 
         stompClient.onConnect = f => {
           console.log(f);
-          // Subscribe to personal messages
-          stompClient.subscribe("/users/queue/messages", (payload: Message) => {
-            console.log("Received personal message: ");
-            console.log(payload.body);
-            // TODO create types for personal messages
-            // const { type } = JSON.parse(payload.body);
-            // if (type === "invite") {
-            console.log("Received invite");
-            dispatch(handleChatRoomDataUpdate(JSON.parse(payload.body)));
-            // } else if (type === "not_in_game_error") {
-            //   console.log("Error subscribing to game");
-            //   gameSubscription.unsubscribe();
-            //   dispatch(setNotInGameError(JSON.parse(payload.body)));
-            // }
-          });
           dispatch(setConnectedToWs());
           dispatch(actionOnConnect);
         };
@@ -78,6 +64,12 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
             dispatch(updateRoomUsers(usersInRooom));
           }
         };
+        const onChatRoomDataUpdate = (payload: Message) => {
+          console.log("Received personal message: ");
+          dispatch(handleChatRoomDataUpdate(JSON.parse(payload.body)));
+        };
+        // Subscribe to personal messages
+        stompClient.subscribe("/users/queue/messages", onChatRoomDataUpdate);
         stompClient.subscribe("/topic/public", onChatMessageReceived);
         break;
       case "SEND_MESSAGE_TO_ROOM": {
@@ -89,14 +81,41 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       case "JOIN_GAME": {
         const { gameId } = action.payload;
 
-        const handleIncomingSnapshots = (message: Message) => dispatch(handleNewGameSnapshots(JSON.parse(message.body)));
-        // The game id will be checked on the server
-        // to block subscription the user is not part of the game.
-        const subscribeToGame = () => {
-          gameSubscription = stompClient.subscribe(`/app/game/${gameId}`, handleIncomingSnapshots, { gameId: gameId.toString() });
+        const onIncomingGameMessages = (message: Message) => {
+          const gameMessage: IncomingGameMessage = JSON.parse(message.body);
+          console.log(gameMessage);
+          if (gameMessage.type === "join") {
+            if (!gameMessage.activePlayers) throw new Error("No active players in game message");
+            dispatch(updateActivePlayers(gameMessage.activePlayers));
+          } else if (gameMessage.type === "gameSnapshots") {
+            if (!gameMessage.newSnapshots) throw new Error("No new snapshots in game message");
+                  const gameData = store.getState().userGameState.gameData;
+
+            dispatch(handleNewGameSnapshots({snapshots: gameMessage.newSnapshots, gameData}));
+          }
+        };
+        const onPersonalMessageReceived = (payload: Message) => {
+          console.log("Received personal game message: ");
+          const message: GamePersonalMessage = JSON.parse(payload.body);
+          console.log(message);
+          console.log(message.type);
+          console.log(message.initialGameSnapshots);
+          if (message.type === "initialGameSnapshots") {
+            if (!message.initialGameSnapshots) throw new Error("No initial snapshots in personal message");
+            const gameData = store.getState().userGameState.gameData;
+
+            dispatch(handleNewGameSnapshots({snapshots: message.initialGameSnapshots, gameData}));
+                   } else if (message.type === "notInGameError") {
+            gameSubscription.unsubscribe();
+            dispatch(setNotInGameError(JSON.parse(payload.body)));
+          }
         };
 
-        subscribeToGame();
+        // Subscribe to personal messages
+        stompClient.subscribe("/users/queue/messages", onPersonalMessageReceived);
+        // The game id will be checked on the server
+        // to block subscription the user is not part of the game.
+        gameSubscription = stompClient.subscribe(`/topic/game/${gameId}`, onIncomingGameMessages, { gameId: gameId.toString() });
         break;
       }
 

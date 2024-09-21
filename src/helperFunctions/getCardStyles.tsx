@@ -20,7 +20,6 @@ export const getCardStyleValues = (cardId: number, gameSnapshot: GameSnapshot) =
   return getCardStyleValuesFromPlaceAndPlayer(placeType, player, gameSnapshot, index);
 };
 export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, player: number | null, gameSnapshot: GameSnapshot, index: number = -1) => {
-  console.log(placeType, player, gameSnapshot, index);
   const place = placeType;
 
   const numCards = getNumCards(player, placeType, gameSnapshot);

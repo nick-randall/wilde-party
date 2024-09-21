@@ -24,6 +24,7 @@ export const createGameSnapshot = () => {
   for (let i = 0; i < numPlayers; i++) {
     const playerId = 1000 + i;
     const player: GamePlayer = {
+      userId: 0,
       id: playerId,
       name: `Player ${i + 1}`,
       glitzaglitza: false,
@@ -69,6 +70,7 @@ export const createGameSnapshot = () => {
   }
 
   const gameSnapshot: GameSnapshot = {
+    index: 0,
     current: {
       player: 0,
       phase: "dealPhase",

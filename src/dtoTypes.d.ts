@@ -22,10 +22,20 @@ type ChatMessage = {
   sender: User;
 };
 
-type GameSnapshotUpdates = {
-  type: string;
-  newSnapshots: GameSnapshot[];
+type IncomingGameMessage = {
+  type: IncomingGameMessageType;
+  newSnapshots?: GameSnapshot[];
+  activePlayers?: User[];
 };
+
+type GamePersonalMessage = {
+  type: GamePersonalMessageType;
+  initialGameSnapshots?: GameSnapshot[];
+};
+
+type GamePersonalMessageType = "initialGameSnapshots" | "notInGameError";
+
+type IncomingGameMessageType = "join" | "leave" | "error" | "gameSnapshots";
 
 type PlayerDTO = {
   id: number;
@@ -46,7 +56,7 @@ type ChatRoomDataUpdate = {
   message: string;
   sentInvitations: Invitation[];
   receivedInvitations: Invitation[];
-  gameData? : GameData;
+  gameData?: GameData;
 };
 
 type Invitation = {

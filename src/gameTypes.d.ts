@@ -127,6 +127,7 @@ type GamePlace = {
 
 type GamePlayer = {
   id: number;
+  userId: number
   name: string;
   places: PlayerPlaces;
   glitzaglitza: boolean;
@@ -151,6 +152,7 @@ type Current = {
 };
 
 type GameSnapshot = {
+  index: number;
   current: Current;
   players: GamePlayer[];
   nonPlayerPlaces: NonPlayerPlaces;

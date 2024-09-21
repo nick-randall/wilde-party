@@ -289,6 +289,7 @@ export const initialGamePlayers: GamePlayer[] = [
   {
     id: 3000,
     name: "Nick",
+    userId: 3,
     places: {
       GCZ: {
         id: 3000,
@@ -337,6 +338,7 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
+  index: 0,
   current: {
     player: 0,
     phase: "dealPhase",
@@ -347,6 +349,7 @@ export const initialGameSnapshot: GameSnapshot = {
   players: [
     {
       id: 3000,
+      userId: 3,
       name: "Nick",
       // current: true,
       // currentPhase: "normalPhase",
@@ -394,6 +397,7 @@ export const initialGameSnapshot: GameSnapshot = {
     },
     {
       id: 3000,
+      userId: 3,
       name: "string",
       // current: false,
       // currentPhase: "normalPhase",
@@ -440,6 +444,7 @@ export const initialGameSnapshot: GameSnapshot = {
     },
     {
       id: 3000,
+      userId: 3,
       name: "string2",
       // current: false,
       // currentPhase: "normalPhase",
@@ -501,6 +506,7 @@ export const initialGameSnapshot: GameSnapshot = {
 };
 
 export const emptyGameSnapshot: GameSnapshot = {
+  index: 0,
   current: {
     player: 0,
     phase: "dealPhase",
@@ -511,6 +517,7 @@ export const emptyGameSnapshot: GameSnapshot = {
   players: [
     {
       id: 1000,
+      userId: 1,
       name: "p1",
       glitzaglitza: false,
       skipNextTurn: false,
@@ -550,6 +557,7 @@ export const emptyGameSnapshot: GameSnapshot = {
     },
     {
       id: 2000,
+      userId: 2,
       name: "string",
       glitzaglitza: false,
       skipNextTurn: false,
@@ -590,6 +598,7 @@ export const emptyGameSnapshot: GameSnapshot = {
     },
     {
       id: 3000,
+      userId: 3,
       name: "string2",
 
       glitzaglitza: false,
