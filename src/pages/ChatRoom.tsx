@@ -9,6 +9,7 @@ import LargeButton from "../components/LargeButton";
 import "../css/chat-room.css";
 import InviteDialog from "../components/InviteDialog";
 import SendIcon from "../components/SendIcon";
+import GameRulesSection from "./GameRulesSection";
 
 interface ChatRoomProps {
   user: User;
@@ -104,7 +105,9 @@ const ChatRoomLayout: React.FC<{
         <SendIcon onClick={handleSendMessage} />
         </div>
       </div>
-      <div className="grid-right">Rules of the game</div>
+      {/* <div className="grid-right">Rules of the game</div>
+       */}
+       <GameRulesSection />
       <div className="bottom">
         {sentInvitations.map(invite => (
           <>Pending: You invited {invite.invitee.name} to a game</>
