@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { emptyGameSnapshot } from "../initialCards";
-import store from "../redux/store";
 
 export type GameState = {
   snapshotIndex: number;
@@ -48,7 +47,7 @@ export const gameSnapshotSlice = createSlice({
         } else {
           // Create animations for the new snapshots
           console.log("creating animations for snapshot " + state.newSnapshotIndex);
-          state.snapshotIndex++;
+          state.snapshotIndex = 5;
           console.log(snapshots[state.snapshotIndex]);
           state.currSnapshot = state.snapshots[state.snapshotIndex];
           // setTimeout(startAnimatingChanges, 1000);

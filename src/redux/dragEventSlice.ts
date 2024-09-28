@@ -103,7 +103,7 @@ export const dragEventSlice = createSlice({
     UPDATE_DRAGGED_OVER: (state, action: PayloadAction<{draggedOverData: DraggedOverData | undefined, gameSnapshot: GameSnapshot}>) => {
       const {gameSnapshot, draggedOverData} = action.payload;
       console.log(`UPDATE_DRAGGED_OVER`);
-      if (!action.payload) {
+      if (!action.payload.draggedOverData) {
         state.draggedOver = undefined;
         return;
       }

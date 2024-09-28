@@ -18,11 +18,12 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const { cardHeight, left } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
 
+  
   const getOffset = (card: GameCard, ghostCardGroupIndex: number): CardOffset => {
     if (card.cardType === "bff") return { top: cardHeight / 2, left: left / 2 };
     if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
     if (ghostCardGroupIndex > 0) return { top: 0, left: left };
-    else return { top: 0, left: 0 };
+    return { top: 0, left: 0 };
   };
   console.log(ghostCardGroup);
 

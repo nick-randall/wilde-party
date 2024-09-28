@@ -36,8 +36,6 @@ export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 export const getNumCards = (player: number | null, placeType: PlaceType, gameSnapshot: GameSnapshot) => {
   if (player === null) {
-    console.log(player);
-    console.log(placeType);
     return gameSnapshot.nonPlayerPlaces[placeType].cards.length;
   } else {
     return gameSnapshot.players[player].places[placeType].cards.length;
@@ -70,11 +68,6 @@ export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): Location
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const place = playerPlacesTypes[j];
-      if (!players[i]["places"][place]) {
-        console.log(place);
-        console.log(players[i]);
-        console.log(gameSnapshot === null);
-      }
       for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
         if (players[i]["places"][place].cards[l].id === cardId) return { player: i, placeType: place, index: l }; // player is i, place is place
       }
@@ -82,9 +75,6 @@ export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): Location
   }
   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
     const place = nonPlayerPlacesTypes[k];
-    console.log("searching in " + place + " for " + cardId);
-    console.log("cardIds: " + nonPlayerPlaces[place].cards.map(card => card.id));
-
     for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
       if (nonPlayerPlaces[place].cards[l].id === cardId) return { player: null, placeType: place, index: l };
     }
