@@ -22,7 +22,7 @@ export const getCardStyleValues = (cardId: number, gameSnapshot: GameSnapshot) =
 export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, player: number | null, gameSnapshot: GameSnapshot, index: number = -1) => {
   const place = placeType;
 
-  const numCards = getNumCards(player, placeType, gameSnapshot);
+  const numCards = index > -1 ? getNumCards(player, placeType, gameSnapshot) : 0;
 
   const tableCardHeights = { enemy: 120, self: 148 };
   const handCardHeights = { enemy: 100, self: 180 };

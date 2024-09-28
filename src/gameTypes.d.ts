@@ -57,7 +57,7 @@ type SnapshotUpdateType =
 type LegalTargetType = "player" | "place" | "card";
 
 type GameCard = {
-  [key: string]: value;
+  // [key: string]: value;
   id: number;
   name: string;
   // playerId?: number; // player should be an id ??
@@ -127,7 +127,7 @@ type GamePlace = {
 
 type GamePlayer = {
   id: number;
-  userId: number
+  userId: number;
   name: string;
   places: PlayerPlaces;
   glitzaglitza: boolean;
@@ -157,6 +157,8 @@ type GameSnapshot = {
   players: GamePlayer[];
   nonPlayerPlaces: NonPlayerPlaces;
   snapshotUpdateData: SnapshotUpdateData;
+  actionResultsMap: { [key: number]: CardActionResult[] };
+  // number, CardActionResult[]
 };
 
 type CardTransitionData = {

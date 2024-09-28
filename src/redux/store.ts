@@ -3,7 +3,7 @@ import websocketReducer from "../websocket/websocketSlice";
 import userReducer from "../user/userSlice";
 import { stompMiddleware } from "../websocket/websocketMiddleware";
 import chatReducer from "../chat/chatSlice";
-import dragEventReducer from "./dragEventReducer";
+import dragEventReducer from "./dragEventSlice";
 import gameSnapshotReducer from "../gameSnapshotState/gameSnapshotSlice";
 
 const store = configureStore({

@@ -3,8 +3,7 @@ const myGCZCards: GameCard[] = [
   {
     id: 3000,
     name: "saufnase1",
-    playerId: 3000,
-    placeId: 3000,
+
     index: 0,
     imageName: "saufnase0",
     cardType: "guest",
@@ -16,8 +15,7 @@ const myGCZCards: GameCard[] = [
   {
     id: 3000,
     name: "saufnase6",
-    playerId: 3000,
-    placeId: 3000,
+
     index: 1,
     imageName: "saufnase2",
     cardType: "guest",
@@ -31,8 +29,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "bffs5",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 0,
     pointValue: 1,
     imageName: "bffs",
@@ -42,8 +39,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "musikfuersichalleinebeansprucherin",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 1,
     pointValue: 0,
     imageName: "musikfuersichalleinebeansprucherin",
@@ -66,8 +62,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "zwilling2",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 2,
     pointValue: 1,
     imageName: "zwilling",
@@ -78,8 +73,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "barkeeperin",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 3,
     pointValue: 1,
     imageName: "barkeeperin",
@@ -90,8 +84,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "zwilling2",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 4,
     pointValue: 1,
     imageName: "zwilling",
@@ -101,8 +94,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "rumgroelerin2",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 5,
     imageName: "rumgroelerin2", //TODO change
     pointValue: 1,
@@ -113,8 +105,7 @@ export const myHandCards: GameCard[] = [
   {
     id: 3000,
     name: "quasselstrippe1",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 6,
     pointValue: 0,
     imageName: "quasselstrippe",
@@ -128,8 +119,7 @@ const mySpecialsZoneCards: GameCard[] = [
   {
     id: 3000,
     name: "nebelmaschine",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 1,
     pointValue: 0,
     imageName: "nebelmaschine",
@@ -140,8 +130,7 @@ const mySpecialsZoneCards: GameCard[] = [
   {
     id: 3000,
     name: "playlist",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 2,
     pointValue: 0,
     imageName: "playlist",
@@ -153,8 +142,7 @@ const mySpecialsZoneCards: GameCard[] = [
   {
     id: 3000,
     name: "prost",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 4,
     pointValue: 0,
     imageName: "prost",
@@ -170,8 +158,7 @@ const player1HandCards: GameCard[] = [
   {
     id: 3000,
     name: "rumgroelerin0",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 0,
     imageName: "rumgroelerin0", //TODO change
     pointValue: 1,
@@ -182,8 +169,7 @@ const player1HandCards: GameCard[] = [
   {
     id: 3000,
     name: "taenzerin2",
-    playerId: 3000,
-    placeId: 3000,
+
     index: 1,
     imageName: "taenzerin2", //TODO change
     cardType: "guest",
@@ -194,8 +180,7 @@ const player1HandCards: GameCard[] = [
   {
     id: 3000,
     name: "schleckermaul2",
-    playerId: 3000,
-    placeId: 3000,
+
     index: 2,
     imageName: "schleckermaul2", //TODO change
     pointValue: 1,
@@ -206,8 +191,7 @@ const player1HandCards: GameCard[] = [
   {
     id: 3000,
     name: "schleckermaul",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 3,
     imageName: "schleckermaul3", //TODO change
     pointValue: 1,
@@ -221,8 +205,7 @@ const player1GCZCards: GameCard[] = [
   {
     id: 3000,
     name: "rumgroelerin4",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 0,
     imageName: "rumgroelerin4",
     pointValue: 1,
@@ -236,8 +219,7 @@ const deckCards: GameCard[] = [
   {
     id: 3000,
     name: "megaphon",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 0,
     pointValue: 0,
     imageName: "megaphon",
@@ -248,8 +230,7 @@ const deckCards: GameCard[] = [
   {
     id: 3000,
     name: "rumgroelerin3",
-    placeId: 3000,
-    playerId: 3000,
+
     index: 1,
     imageName: "rumgroelerin3",
     pointValue: 1,
@@ -260,8 +241,7 @@ const deckCards: GameCard[] = [
   {
     id: 3000,
     name: "schleckermaul4",
-    playerId: 3000,
-    placeId: 3000,
+
     index: 2,
     imageName: "schleckermaul4",
     cardType: "guest",
@@ -274,8 +254,7 @@ const discardPileCards: GameCard[] = [
   {
     id: 3000,
     name: "discokugel",
-    playerId: 0,
-    placeId: 3000,
+
     index: 0,
     imageName: "discokugel", //TODO change
     cardType: "special",
@@ -293,21 +272,21 @@ export const initialGamePlayers: GamePlayer[] = [
     places: {
       GCZ: {
         id: 3000,
-        playerId: 3000,
+
         placeType: "guestCardZone",
         acceptedCardType: "guest",
         cards: myGCZCards,
       },
       UWZ: {
         id: 3000,
-        playerId: 3000,
+
         placeType: "unwantedsZone",
         acceptedCardType: "unwanted",
         cards: myUWZCards,
       },
       specialsZone: {
         id: 3000,
-        playerId: 3000,
+
         placeType: "specialsZone",
         acceptedCardType: "special",
 
@@ -315,13 +294,13 @@ export const initialGamePlayers: GamePlayer[] = [
       },
       hand: {
         id: 3000,
-        playerId: 3000,
+
         placeType: "hand",
         cards: myHandCards,
       },
       enchantmentsRow: {
         id: 3000,
-        playerId: 3000,
+
         placeType: "enchantmentsRow",
         cards: myEnchantmentsRowCards,
       },
@@ -338,6 +317,7 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
+  actionResultsMap: {},
   index: 0,
   current: {
     player: 0,
@@ -362,34 +342,34 @@ export const initialGameSnapshot: GameSnapshot = {
       places: {
         GCZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: myGCZCards,
         },
         UWZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: myUWZCards,
         },
         specialsZone: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "specialsZone",
           cards: mySpecialsZoneCards,
           acceptedCardType: "special",
         },
         hand: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "hand",
           cards: myHandCards,
         },
         enchantmentsRow: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "enchantmentsRow",
           cards: myEnchantmentsRowCards,
         },
@@ -410,33 +390,33 @@ export const initialGameSnapshot: GameSnapshot = {
       places: {
         GCZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: player1GCZCards,
         },
         UWZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "hand",
           cards: player1HandCards,
         },
         enchantmentsRow: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "enchantmentsRow",
           cards: [],
         },
@@ -457,32 +437,32 @@ export const initialGameSnapshot: GameSnapshot = {
       places: {
         GCZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "guestCardZone",
           cards: [],
         },
         UWZ: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "hand",
           cards: [],
         },
         enchantmentsRow: {
           id: 3000,
-          playerId: 3000,
+
           placeType: "enchantmentsRow",
           cards: [],
         },
@@ -506,6 +486,7 @@ export const initialGameSnapshot: GameSnapshot = {
 };
 
 export const emptyGameSnapshot: GameSnapshot = {
+  actionResultsMap: {},
   index: 0,
   current: {
     player: 0,
@@ -524,32 +505,32 @@ export const emptyGameSnapshot: GameSnapshot = {
       places: {
         guestCardZone: {
           id: 3000,
-          playerId: 1000,
+
           placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: [],
         },
         unwantedsZone: {
           id: 101,
-          playerId: 1000,
+
           placeType: "unwantedsZone",
           cards: [],
         },
         specialsZone: {
           id: 102,
-          playerId: 1000,
+
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
           id: 103,
-          playerId: 1000,
+
           placeType: "hand",
           cards: [],
         },
         enchantmentsRow: {
           id: 104,
-          playerId: 1000,
+
           placeType: "enchantmentsRow",
           cards: [],
         },
@@ -564,33 +545,33 @@ export const emptyGameSnapshot: GameSnapshot = {
       places: {
         guestCardZone: {
           id: 201,
-          playerId: 2000,
+
           placeType: "guestCardZone",
           acceptedCardType: "guest",
           cards: [],
         },
         unwantedsZone: {
           id: 202,
-          playerId: 2000,
+
           placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
           id: 203,
-          playerId: 2000,
+
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
           id: 204,
-          playerId: 2000,
+
           placeType: "hand",
           cards: [],
         },
         enchantmentsRow: {
           id: 205,
-          playerId: 2000,
+
           placeType: "enchantmentsRow",
           cards: [],
         },
@@ -606,32 +587,32 @@ export const emptyGameSnapshot: GameSnapshot = {
       places: {
         guestCardZone: {
           id: 301,
-          playerId: 3000,
+
           placeType: "guestCardZone",
           cards: [],
         },
         unwantedsZone: {
           id: 302,
-          playerId: 3000,
+
           placeType: "unwantedsZone",
           acceptedCardType: "unwanted",
           cards: [],
         },
         specialsZone: {
           id: 303,
-          playerId: 3000,
+
           placeType: "specialsZone",
           cards: [],
         },
         hand: {
           id: 304,
-          playerId: 3000,
+
           placeType: "hand",
           cards: [],
         },
         enchantmentsRow: {
           id: 305,
-          playerId: 3000,
+
           placeType: "enchantmentsRow",
           cards: [],
         },

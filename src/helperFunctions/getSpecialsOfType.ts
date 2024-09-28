@@ -18,24 +18,24 @@ export const getSpecialsOfType = (array: GameCard[], typeIndex: number): GameCar
 export const getTypeofSpecials = (array: GameCard[], typeIndex: number) =>
   getSpecialsOfType(array, typeIndex).length > 0 ? getSpecialsOfType(array, typeIndex)[0].specialsCardType : undefined;
 
-// returns the index any new specials card should have
-export const getNextIndexOfSpecialsType = (cards: GameCard[], typeToFind: GuestCardType, index: number): number => {
-  if (cards.length === 0) return 0;
-  if (!cards.map(c => c.specialsCardType).includes(typeToFind)) return cards.slice(0, index).reduce((acc, curr) => curr.length + acc, 0);
-  const specialsColumns = sortSpecials(cards);
-  let cardCount = 0;
-  let currentType = specialsColumns[0][0].specialsCardType;
-  console.log("current type is " + currentType);
-  for (let column of specialsColumns) {
-    if (currentType === typeToFind) {
-      return (cardCount += column.length);
-    } else {
-      currentType = column[0].specialsCardType || "";
-      cardCount += column.length;
-    }
-  }
-  return cardCount;
-};
+// // returns the index any new specials card should have
+// export const getNextIndexOfSpecialsType = (cards: GameCard[], typeToFind: GuestCardType, index: number): number => {
+//   if (cards.length === 0) return 0;
+//   if (!cards.map(c => c.specialsCardType).includes(typeToFind)) return cards.slice(0, index).reduce((acc, curr) => curr.length + acc, 0);
+//   const specialsColumns = sortSpecials(cards);
+//   let cardCount = 0;
+//   let currentType = specialsColumns[0][0].specialsCardType;
+//   console.log("current type is " + currentType);
+//   for (let column of specialsColumns) {
+//     if (currentType === typeToFind) {
+//       return (cardCount += column.length);
+//     } else {
+//       currentType = column[0].specialsCardType || "";
+//       cardCount += column.length;
+//     }
+//   }
+//   return cardCount;
+// };
 
-export const getNextIndexOfSpecialsType2 = (array: GameCard[], startIndex: number) =>
-  array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);
+// export const getNextIndexOfSpecialsType2 = (array: GameCard[], startIndex: number) =>
+//   array.splice(startIndex, array.length).find(card => card.specialsCardType !== array.splice(startIndex, array.length)[0].specialsCardType);

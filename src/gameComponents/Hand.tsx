@@ -19,7 +19,7 @@ const Hand = (props: HandProps) => {
   const [spread, setSpread] = useState(cardLeftSpread);
   const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
   const transitionsUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
-  const enemysTurn = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.player !== 0);
+  const enemysTurn = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== 0);
   const droppableId = JSON.stringify({ type: "place", id });
 
   useEffect(() => {

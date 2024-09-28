@@ -49,8 +49,9 @@ export const gameSnapshotSlice = createSlice({
           // Create animations for the new snapshots
           console.log("creating animations for snapshot " + state.newSnapshotIndex);
           state.snapshotIndex++;
+          console.log(snapshots[state.snapshotIndex]);
           state.currSnapshot = state.snapshots[state.snapshotIndex];
-          setTimeout(startAnimatingChanges, 1000);
+          // setTimeout(startAnimatingChanges, 1000);
         }
       };
       startAnimatingChanges();

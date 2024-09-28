@@ -6,6 +6,7 @@ type SnapshotUpdateData = {
 };
 
 type CardActionResult = {
+  targetId: number;
   isLegalTarget: boolean;
   resultingGameSnapshot: GameSnapshot;
   targetType: LegalTargetType;

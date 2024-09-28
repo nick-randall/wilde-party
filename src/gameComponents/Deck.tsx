@@ -16,7 +16,7 @@ export const Deck = (props: DeckProps) => {
   const dispatch = useDispatch();
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const dimensions = getCardStyleValuesFromPlaceAndPlayer("deck", null, currSnapshot);
-  const { player, draws, phase } = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current);
+  const { player, draws, phase } = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current);
   const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
   const handleClick = () => {
     if (canDraw) dispatch(drawCardThunk(0));

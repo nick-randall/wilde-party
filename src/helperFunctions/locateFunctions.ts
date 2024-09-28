@@ -35,18 +35,17 @@ export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 // };
 
 export const getNumCards = (player: number | null, placeType: PlaceType, gameSnapshot: GameSnapshot) => {
-  if(player === null) {
-    console.log(player)
-    console.log(placeType)
+  if (player === null) {
+    console.log(player);
+    console.log(placeType);
     return gameSnapshot.nonPlayerPlaces[placeType].cards.length;
-  }
-  else {
+  } else {
     return gameSnapshot.players[player].places[placeType].cards.length;
   }
-}
+};
 
 export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
-  if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
+  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
@@ -65,7 +64,7 @@ export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null =
 };
 
 export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): LocationInfo => {
-  // if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
+  // if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
@@ -77,18 +76,21 @@ export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): Location
         console.log(gameSnapshot === null);
       }
       for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
-        if (players[i]["places"][place].cards[l].cardId === cardId) return { player: i, placeType: place, index:l }; // player is i, place is place
+        if (players[i]["places"][place].cards[l].id === cardId) return { player: i, placeType: place, index: l }; // player is i, place is place
       }
     }
   }
   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
     const place = nonPlayerPlacesTypes[k];
+    console.log("searching in " + place + " for " + cardId);
+    console.log("cardIds: " + nonPlayerPlaces[place].cards.map(card => card.id));
+
     for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
-      if (nonPlayerPlaces[place].cards[l].cardId === cardId) return { player: null, placeType: place, index: l };
+      if (nonPlayerPlaces[place].cards[l].id === cardId) return { player: null, placeType: place, index: l };
     }
   }
   console.error("cardId Not found! -- " + cardId);
-  return { player: null, placeType: "guestCardZone", index:  -1 };
+  return { player: null, placeType: "guestCardZone", index: -1 };
 };
 
 export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlayer) =>
@@ -191,12 +193,8 @@ export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard =>
   const card: GameCard = {
     id: 123123,
     name: "bffs1",
-    placeId: 324562132300,
-    playerId: 1,
     index: 1,
     pointValue: 1,
-    bffs: false,
-    zwilling: false,
     imageName: "bffs1.jpg",
     cardType: "bff",
     action: { actionType: "enchant", highlightType: "card", cardHighlightType: "guest", targetPlayerType: "self" },

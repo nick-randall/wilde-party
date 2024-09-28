@@ -6,7 +6,7 @@ export const shouldEndDrawPhase = (gameSnapshot: GameSnapshot) => gameSnapshot.c
 
 export const drawCardThunk = (player: number) => (dispatch: Function, getState: Function) => {
   const state: RootState = getState();
-  const { gameSnapshot } = state.dragEventState;
+  const { currSnapshot: gameSnapshot } = state.gameSnapshotState;
 
   const handId = gameSnapshot.players[player].places.hand.id;
   dispatch({
@@ -15,31 +15,31 @@ export const drawCardThunk = (player: number) => (dispatch: Function, getState: 
   });
   dispatch({ type: "CHANGE_NUM_DRAWS", payload: -1 });
 
-  if (shouldEndDrawPhase(getState().dragEventState.gameSnapshot)) dispatch({ type: "END_CURRENT_PHASE" });
-  if (shouldEndTurn(getState().dragEventState.gameSnapshot)) dispatch(endCurrentTurnThunk());
+  if (shouldEndDrawPhase(getState().gameSnapshotState.currSnapshot)) dispatch({ type: "END_CURRENT_PHASE" });
+  if (shouldEndTurn(getState().gameSnapshotState.currSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
 export const addDraggedThunk = (source: DraggedOverData, destination: DraggedOverData) => (dispatch: Function, getState: () => RootState) => {
   const state = getState();
-  const { gameSnapshot } = state.dragEventState;
+  const { currSnapshot: gameSnapshot } = state.gameSnapshotState;
   const { placeType: originPlace, player: originPlayer } = locateCard(source.id, gameSnapshot);
   let playedCard: GameCard | null = null;
   if (originPlayer && originPlace) playedCard = gameSnapshot.players[originPlayer].places[originPlace].cards[destination.index];
   dispatch({ type: "ADD_DRAGGED", payload: { source: source, destination: destination } });
   dispatch({ type: "CHANGE_NUM_PLAYS", payload: -1 });
 
-  if (originPlayer !== 0 && playedCard && playedCard.card !== "unwanted") {
+  if (originPlayer !== 0 && playedCard && playedCard.cardType !== "unwanted") {
     locateCard(destination.id, gameSnapshot);
     console.log("origin player !=0");
   }
 
-  console.log(shouldEndTurn(getState().dragEventState.gameSnapshot) ? "should end turn" : "should not end turn");
-  if (shouldEndTurn(getState().dragEventState.gameSnapshot)) dispatch(endCurrentTurnThunk());
+  console.log(shouldEndTurn(getState().gameSnapshotState.currSnapshot) ? "should end turn" : "should not end turn");
+  if (shouldEndTurn(getState().gameSnapshotState.currSnapshot)) dispatch(endCurrentTurnThunk());
 };
 
 export const endCurrentTurnThunk = () => (dispatch: Function, getState: () => RootState) => {
   dispatch({ type: "END_CURRENT_TURN" });
-  const { gameSnapshot } = getState().dragEventState;
+  const { currSnapshot: gameSnapshot } = getState().gameSnapshotState;
   console.log("turn ended");
   // TODO: change back to allow player 0 to play
   if (gameSnapshot.current.player !== 0) {

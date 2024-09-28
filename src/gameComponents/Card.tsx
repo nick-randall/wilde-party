@@ -6,7 +6,7 @@ import { CardInspector } from "../renderPropsComponents/CardInspector";
 import TransitionHandler from "../renderPropsComponents/TransitionHandler";
 import { RootState } from "../redux/store";
 import { getSettings } from "../gameSettings/uiSettings";
-import { getCardStyles, getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 export interface CardProps {
   id: number;
@@ -21,7 +21,7 @@ export interface CardProps {
 const Card = (props: CardProps) => {
   const { id, index, offsetTop, offsetLeft, imageName } = props;
   const gameSnapshot = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot);
-  const { zIndex, left,cardHeight,  cardWidth } = getCardStyleValues(id, gameSnapshot);
+  const { zIndex, left, cardHeight, cardWidth } = getCardStyleValues(id, gameSnapshot);
 
   const settings = getSettings();
 
@@ -101,7 +101,7 @@ const Card = (props: CardProps) => {
             />
             {ghostCard ? (
               <GhostCard
-              cardId={ghostCard.id}
+                cardId={ghostCard.id}
                 index={0}
                 offsetLeft={cardWidth * BFFOffset}
                 offsetTop={cardHeight / 2}

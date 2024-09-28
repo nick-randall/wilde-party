@@ -30,7 +30,7 @@ const HandCard = (props: HandCardProps) => {
 
   const transitionUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
 
-  const { player, phase } = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current);
+  const { player, phase } = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current);
 
   const canPlay = true// player === 0 && phase === "playPhase" && !transitionUnderway;
 

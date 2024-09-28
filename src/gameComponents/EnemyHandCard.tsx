@@ -34,8 +34,8 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
     boxShadow: "10px 10px 10px black",
   };
   const cardPlayer = locatePlayer(id);
-  const ownerIsCurrentPlayer = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.player === cardPlayer);
-  const currentPhaseIsDeal = useSelector((state: RootState) => state.dragEventState.gameSnapshot.current.phase === "dealPhase");
+  const ownerIsCurrentPlayer = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current.player === cardPlayer);
+  const currentPhaseIsDeal = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current.phase === "dealPhase");
   const disappearingStyles =
     ownerIsCurrentPlayer || currentPhaseIsDeal
       ? {

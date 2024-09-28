@@ -7,7 +7,7 @@ const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
 export const locatePlayer = (id: number, gameSnapshot: GameSnapshot | null = null): number | null => {
   //if (id === null) return null;
-  if (gameSnapshot === null) gameSnapshot = store.getState().dragEventState.gameSnapshot;
+  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   let playerId = gameSnapshot.players.map(p => p.id).indexOf(id);
