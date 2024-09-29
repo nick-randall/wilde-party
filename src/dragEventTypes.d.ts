@@ -41,7 +41,7 @@ type ActionData = {
   targetType: LegalTargetType;
 };
 
-type DraggableEntityType = "card" | "cardGroup";
+type DraggableEntityType = "card" | "handCard" | "cardGroup";
 
 type DroppableEntityType = "player" | "place" | "cardGroup" | "card";
 

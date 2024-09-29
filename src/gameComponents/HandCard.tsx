@@ -20,9 +20,9 @@ const HandCard = (props: HandCardProps) => {
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);  
   const styles = getCardStyleValues(id, currSnapshot)
 
-  const { zIndex, cardWidth, top: cardTopSpread, rotate, cardHeight } = styles;
-
-  const draggableId = JSON.stringify({ id, type: "card" });
+  const { zIndex, cardWidth, top: cardTopSpread, rotate, cardHeight, left } = styles;
+  const draggableData: DraggableData = { id, type: "handCard" };
+  const draggableId = JSON.stringify(draggableData);
 
   const isDragging = useSelector((state: RootState) => state.dragEventState.draggedHandCard !== undefined && state.dragEventState.draggedHandCard.id === id);
   const {draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver} = useSelector((state: RootState) => state.dragEventState);
@@ -54,7 +54,7 @@ const HandCard = (props: HandCardProps) => {
     width: cardWidth,
     height: cardHeight,
     top: index * cardTopSpread,
-    left: 0,
+    left: left,
     position: "absolute",
     transform: `rotate(${rotate}deg) scale(${shortHover ? 1.1 :1})`,
     transition: `left 250ms, width 180ms, transform 180ms`,

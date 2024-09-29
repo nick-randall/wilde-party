@@ -104,11 +104,13 @@ export const dragEventSlice = createSlice({
       const {gameSnapshot, draggedOverData} = action.payload;
       console.log(`UPDATE_DRAGGED_OVER`);
       if (!action.payload.draggedOverData) {
+        console.log("No dragged over data");
         state.draggedOver = undefined;
         return;
       }
       const data = draggedOverData as DraggedOverData;
       const { id, index, type } = data;
+      if(type === "place") {
       const placeName = locatePlace(id, gameSnapshot).placeType;
       console.log(`Dragged over ${placeName}: (id ${id}) at calculated index: ${index}`);
 
@@ -120,6 +122,10 @@ export const dragEventSlice = createSlice({
         console.log(`Dragged over specials column at calculated index: ${index}`);
         /// TODO not sure why we set it to 0 here
         state.draggedOver = { type, id, index: 0 };
+      }}
+      else if(type === "player") {
+        console.log(`Dragged over player ${id}`);
+        state.draggedOver = data;
       }
     },
     // SET_GAME_SNAPSHOT: (state, action: PayloadAction<GameSnapshot>) => {

@@ -13,6 +13,8 @@ import Hand from "../gameComponents/Hand";
 import UWZ from "../gameComponents/UWZ";
 import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
+import { NewHandCard } from "../gameComponents/NewHandCard";
+import NewHand from "../gameComponents/NewHand";
 
 interface TableProps {
   gameData: GameData;
@@ -55,7 +57,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           <SpecialsZone player={2} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
           <EnemyGCZ
           player={1}
-            id={gameSnapshot.players[1].id}
+            id={gameSnapshot.players[1].places.guestCardZone.id}
             enchantmentsRowCards={p02places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}
             alignment="top-left"
@@ -63,7 +65,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           <div></div>
           <EnemyGCZ
             player={2}
-            id={gameSnapshot.players[2].id}
+            id={gameSnapshot.players[2].places.guestCardZone.id}
             enchantmentsRowCards={p03places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}
             alignment="top-right"
@@ -77,7 +79,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
               GCZCards={p01places.guestCardZone.cards}
             />
           </div>
-          <Hand id={p01places.hand.id} handCards={p01places.hand.cards} />
+          <NewHand id={p01places.hand.id} handCards={p01places.hand.cards} />
           <UWZ player={0} id={p01places.unwantedsZone.id} unwantedCards={p01places.unwantedsZone.cards} alignment="center-right" />
           {/* <Player id={gameSnapshot.players[0].id} screenSize={screenSize} places={gameSnapshot.players[0].places} current={player === 0} />
           <EnemyPlayer id={gameSnapshot.players[1].id} screenSize={screenSize} places={gameSnapshot.players[1].places} current={player === 1} />

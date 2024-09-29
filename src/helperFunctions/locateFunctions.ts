@@ -44,7 +44,7 @@ export const getNumCards = (player: number | null, placeType: PlaceType, gameSna
 
 export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
-
+  console.log("locating place: " + placeId);
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {

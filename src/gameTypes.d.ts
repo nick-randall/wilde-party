@@ -16,7 +16,7 @@ type CardDimensions = {
   cardWidth: number;
   left: number;
   top: number;
-  rotate: number;
+  rotate: Rotate;
   rotateY: number;
   scale: number;
   zIndex: number;

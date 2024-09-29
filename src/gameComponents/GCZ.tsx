@@ -48,7 +48,7 @@ function GCZ(props: GCZProps) {
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{
-            display: "flex",
+            // display: "flex",
             // top: 100,
             // position: "absolute",
             margin: 0,

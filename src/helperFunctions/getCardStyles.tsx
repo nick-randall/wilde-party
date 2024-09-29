@@ -37,7 +37,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, playe
   const handCardWidth = handCardHeight / heightToWidthRatio;
 
   const cardLeftSpread = numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3;
-  const handCardLeftSpread = 35;
+  const handCardLeftSpread = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD;
   const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
   const handCardRotation = 10 * index - (numCards / 2 - 0.5) * 10;
   const handCardShadow = "10px 10px 10px black";
@@ -76,6 +76,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, playe
 
 export const dimensionConstants = {
   FEATURED_CARD_SCALE: 2,
+  MIN_HAND_CARD_LEFT_SPREAD: 35,
   MAX_HAND_CARD_LEFT_SPREAD: 125,
   DRAGGED_CARD_SCALE: 1.1,
   DRAGGED_CARD_WIDTH: 112,
