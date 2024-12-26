@@ -120,9 +120,9 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
   let draggedOverData: DraggedOverData | undefined;
   if (dragUpdate.destination) {
     const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
-    const { id, type, calculatedIndex } = droppableData;
+    const { id, type, calculatedIndex, enchantableNeighbours } = droppableData;
     const index = calculatedIndex ?? dragUpdate.destination.index;
-    draggedOverData = { type, id, index };
+    draggedOverData = { type, id, index, enchantableNeighbours };
   } else {
     draggedOverData = undefined;
   }

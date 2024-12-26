@@ -126,24 +126,24 @@ export const locate2 = (id: number, gameSnapshot: GameSnapshot) => {
 //   }
 // };
 
-export const getIndex = (cardId: number, gameSnapshot: GameSnapshot): number => {
-  const { players, nonPlayerPlaces } = gameSnapshot;
-  for (let i: number = 0; i < players.length; i++) {
-    for (let j: number = 0; j < playerPlacesTypes.length; j++) {
-      const place = playerPlacesTypes[j];
-      for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
-        if (players[i]["places"][place].cards[l].id === cardId) return players[i]["places"][place].cards[l].index;
-      }
-    }
-  }
-  for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
-    const place = nonPlayerPlacesTypes[k];
-    for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
-      if (nonPlayerPlaces[place].cards[l].id === cardId) return nonPlayerPlaces[place].cards[l].index;
-    }
-  }
-  return -1;
-};
+// export const getIndex = (cardId: number, gameSnapshot: GameSnapshot): number => {
+//   const { players, nonPlayerPlaces } = gameSnapshot;
+//   for (let i: number = 0; i < players.length; i++) {
+//     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
+//       const place = playerPlacesTypes[j];
+//       for (let l = 0; l < players[i]["places"][place].cards.length; l++) {
+//         if (players[i]["places"][place].cards[l].id === cardId) return players[i]["places"][place].cards[l].index;
+//       }
+//     }
+//   }
+//   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
+//     const place = nonPlayerPlacesTypes[k];
+//     for (let l = 0; l < nonPlayerPlaces[place].cards.length; l++) {
+//       if (nonPlayerPlaces[place].cards[l].id === cardId) return nonPlayerPlaces[place].cards[l].index;
+//     }
+//   }
+//   return -1;
+// };
 
 export const getImage = (cardId: number, gameSnapshot: GameSnapshot): string => {
   const { players, nonPlayerPlaces } = gameSnapshot;
@@ -183,7 +183,6 @@ export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard =>
   const card: GameCard = {
     id: 123123,
     name: "bffs1",
-    index: 1,
     pointValue: 1,
     imageName: "bffs1.jpg",
     cardType: "bff",

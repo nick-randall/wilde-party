@@ -4,7 +4,6 @@ const myGCZCards: GameCard[] = [
     id: 3000,
     name: "saufnase1",
 
-    index: 0,
     imageName: "saufnase0",
     cardType: "guest",
     pointValue: 1,
@@ -16,7 +15,6 @@ const myGCZCards: GameCard[] = [
     id: 3000,
     name: "saufnase6",
 
-    index: 1,
     imageName: "saufnase2",
     cardType: "guest",
     pointValue: 1,
@@ -30,7 +28,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "bffs5",
 
-    index: 0,
     pointValue: 1,
     imageName: "bffs",
     cardType: "bff",
@@ -40,7 +37,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "musikfuersichalleinebeansprucherin",
 
-    index: 1,
     pointValue: 0,
     imageName: "musikfuersichalleinebeansprucherin",
     cardType: "unwanted",
@@ -63,7 +59,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "zwilling2",
 
-    index: 2,
     pointValue: 1,
     imageName: "zwilling",
     cardType: "zwilling",
@@ -74,7 +69,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "barkeeperin",
 
-    index: 3,
     pointValue: 1,
     imageName: "barkeeperin",
     cardType: "special",
@@ -85,7 +79,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "zwilling2",
 
-    index: 4,
     pointValue: 1,
     imageName: "zwilling",
     cardType: "zwilling",
@@ -95,7 +88,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "rumgroelerin2",
 
-    index: 5,
     imageName: "rumgroelerin2", //TODO change
     pointValue: 1,
     cardType: "guest",
@@ -106,7 +98,6 @@ export const myHandCards: GameCard[] = [
     id: 3000,
     name: "quasselstrippe1",
 
-    index: 6,
     pointValue: 0,
     imageName: "quasselstrippe",
     cardType: "unwanted",
@@ -120,7 +111,6 @@ const mySpecialsZoneCards: GameCard[] = [
     id: 3000,
     name: "nebelmaschine",
 
-    index: 1,
     pointValue: 0,
     imageName: "nebelmaschine",
     cardType: "special",
@@ -131,7 +121,6 @@ const mySpecialsZoneCards: GameCard[] = [
     id: 3000,
     name: "playlist",
 
-    index: 2,
     pointValue: 0,
     imageName: "playlist",
     cardType: "special",
@@ -143,7 +132,6 @@ const mySpecialsZoneCards: GameCard[] = [
     id: 3000,
     name: "prost",
 
-    index: 4,
     pointValue: 0,
     imageName: "prost",
     cardType: "special",
@@ -159,7 +147,6 @@ const player1HandCards: GameCard[] = [
     id: 3000,
     name: "rumgroelerin0",
 
-    index: 0,
     imageName: "rumgroelerin0", //TODO change
     pointValue: 1,
     cardType: "guest",
@@ -170,7 +157,6 @@ const player1HandCards: GameCard[] = [
     id: 3000,
     name: "taenzerin2",
 
-    index: 1,
     imageName: "taenzerin2", //TODO change
     cardType: "guest",
     pointValue: 2,
@@ -181,7 +167,6 @@ const player1HandCards: GameCard[] = [
     id: 3000,
     name: "schleckermaul2",
 
-    index: 2,
     imageName: "schleckermaul2", //TODO change
     pointValue: 1,
     cardType: "guest",
@@ -192,7 +177,6 @@ const player1HandCards: GameCard[] = [
     id: 3000,
     name: "schleckermaul",
 
-    index: 3,
     imageName: "schleckermaul3", //TODO change
     pointValue: 1,
     cardType: "guest",
@@ -206,7 +190,6 @@ const player1GCZCards: GameCard[] = [
     id: 3000,
     name: "rumgroelerin4",
 
-    index: 0,
     imageName: "rumgroelerin4",
     pointValue: 1,
     cardType: "guest",
@@ -220,7 +203,6 @@ const deckCards: GameCard[] = [
     id: 3000,
     name: "megaphon",
 
-    index: 0,
     pointValue: 0,
     imageName: "megaphon",
     cardType: "special",
@@ -231,7 +213,6 @@ const deckCards: GameCard[] = [
     id: 3000,
     name: "rumgroelerin3",
 
-    index: 1,
     imageName: "rumgroelerin3",
     pointValue: 1,
     cardType: "guest",
@@ -242,7 +223,6 @@ const deckCards: GameCard[] = [
     id: 3000,
     name: "schleckermaul4",
 
-    index: 2,
     imageName: "schleckermaul4",
     cardType: "guest",
     pointValue: 1,
@@ -255,7 +235,6 @@ const discardPileCards: GameCard[] = [
     id: 3000,
     name: "discokugel",
 
-    index: 0,
     imageName: "discokugel", //TODO change
     cardType: "special",
     pointValue: 0,
@@ -317,8 +296,9 @@ export const initialGamePlayers: GamePlayer[] = [
 ];
 
 export const initialGameSnapshot: GameSnapshot = {
-  actionResultsMap: {},
   index: 0,
+  actionResultsMap: {},
+
   current: {
     player: 0,
     phase: "dealPhase",
@@ -486,8 +466,9 @@ export const initialGameSnapshot: GameSnapshot = {
 };
 
 export const emptyGameSnapshot: GameSnapshot = {
-  actionResultsMap: {},
   index: 0,
+  actionResultsMap: {},
+
   current: {
     player: 0,
     phase: "dealPhase",
@@ -641,10 +622,10 @@ export const emptyGameSnapshot: GameSnapshot = {
 
 // sorts cards into their correct order based on their index according to the DB
 // should probably be called "normaliseSnapshot"
-export const convertSnapshot = (gameSnapshot: GameSnapshot) => {
-  gameSnapshot.players.forEach(p => Object.values(p.places).forEach(pl => pl.cards.sort((c, d) => c.index - d.index)));
-  Object.values(gameSnapshot.nonPlayerPlaces).forEach(pl => pl.cards.sort((c, d) => c.index - d.index));
-  return gameSnapshot;
-};
+// export const convertSnapshot = (gameSnapshot: GameSnapshot) => {
+//   gameSnapshot.players.forEach(p => Object.values(p.places).forEach(pl => pl.cards.sort((c, d) => c.index - d.index)));
+//   Object.values(gameSnapshot.nonPlayerPlaces).forEach(pl => pl.cards.sort((c, d) => c.index - d.index));
+//   return gameSnapshot;
+// };
 
-export const convertedSnapshot = convertSnapshot(initialGameSnapshot);
+// export const convertedSnapshot = convertSnapshot(initialGameSnapshot);

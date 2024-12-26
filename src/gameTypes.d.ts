@@ -57,12 +57,8 @@ type SnapshotUpdateType =
 type LegalTargetType = "player" | "place" | "card";
 
 type GameCard = {
-  // [key: string]: value;
   id: number;
   name: string;
-  // playerId?: number; // player should be an id ??
-  // placeId: number; // place should be an id ??
-  index: number;
   imageName: string;
   cardType: CardType;
   pointValue: number;

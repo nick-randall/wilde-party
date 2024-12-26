@@ -23,25 +23,19 @@ export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, playe
   const place = placeType;
 
   const numCards = index > -1 ? getNumCards(player, placeType, gameSnapshot) : 0;
-
-  const tableCardHeights = { enemy: 120, self: 148 };
-  const handCardHeights = { enemy: 100, self: 180 };
-
   const playerType = player === 0 || player === null ? "self" : "enemy";
 
-  const heightToWidthRatio = 1500 / 973;
-  const tableCardHeight = tableCardHeights[playerType];
-  const tableCardWidth = tableCardHeight / heightToWidthRatio;
+  const tableCardHeight = dimensionConstants.TABLE_CARD_HEIGHTS[playerType];
+  const tableCardWidth = tableCardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
 
-  const handCardHeight = handCardHeights[playerType];
-  const handCardWidth = handCardHeight / heightToWidthRatio;
+  const handCardHeight = dimensionConstants.HAND_CARD_HEIGHTS[playerType];
+  const handCardWidth = handCardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
 
   const cardLeftSpread = numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3;
   const handCardLeftSpread = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD;
   const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
   const handCardRotation = 10 * index - (numCards / 2 - 0.5) * 10;
-  const handCardShadow = "10px 10px 10px black";
-  const tableCardShadow = "2px 2px 2px black";
+
   const tableCardRotate = 0;
   const tableCardRotateY = place !== "deck" ? 0 : 180;
 
@@ -55,7 +49,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, playe
     top: cardTopSpread * index,
     rotate: tableCardRotate,
     rotateY: tableCardRotateY,
-    boxShadow: tableCardShadow,
+    boxShadow: dimensionConstants.TABLE_CARD_SHADOW,
     scale: 1,
   };
 
@@ -67,14 +61,38 @@ export const getCardStyleValuesFromPlaceAndPlayer = (placeType: PlaceType, playe
     zIndex: 5,
     rotate: handCardRotation,
     rotateY: handRotateY,
-    boxShadow: handCardShadow,
+    boxShadow: dimensionConstants.HAND_CARD_SHADOW,
     scale: 1,
   };
   if (placeType === "hand") return handDimensions;
   return dimensions;
 };
 
+export const getCardGroupStyles = (cardGroup: CardGroupObj, physicalIndex: number, gameSnapshot: GameSnapshot): CardDimensions => {
+  const { player } = locateCard(cardGroup.id, gameSnapshot);
+  const playerType = player === 0 || player === null ? "self" : "enemy";
+
+  const cardHeight = dimensionConstants.TABLE_CARD_HEIGHTS[playerType];
+  const cardWidth = cardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
+
+  // Currently assuming place is GCZ
+  return {
+    cardHeight,
+    cardWidth,
+    zIndex: dimensionConstants.TABLE_CARD_Z_INDEX,
+    left: cardWidth * physicalIndex,
+    top: 0,
+    rotate: 0,
+    rotateY: 0,
+    boxShadow: dimensionConstants.TABLE_CARD_SHADOW,
+    scale: 1,
+  };
+};
+
 export const dimensionConstants = {
+  TABLE_CARD_HEIGHTS: { enemy: 120, self: 148 },
+  HAND_CARD_HEIGHTS: { enemy: 100, self: 180 },
+  HEIGHT_TO_WIDTH_RATIO: 1500 / 973,
   FEATURED_CARD_SCALE: 2,
   MIN_HAND_CARD_LEFT_SPREAD: 35,
   MAX_HAND_CARD_LEFT_SPREAD: 125,

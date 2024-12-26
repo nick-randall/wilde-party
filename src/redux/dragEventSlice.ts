@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
-import { getHighlights } from "../helperFunctions/gameRules/gatherHighlights";
-import { getLeftOrRightNeighbour } from "../helperFunctions/canEnchantNeighbour";
 
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
@@ -37,7 +35,7 @@ const isSpecialsColumn = (type: DroppableEntityType, id: number, gameSnapshot: G
   return locateCard(id, gameSnapshot).placeType === "specialsZone";
 };
 
-const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.action.actionType === "enchantWithBff";
+const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.cardType === "bff";
 
 
 export interface DragEventState {
@@ -63,6 +61,8 @@ const initialState: DragEventState = {
   highlights: [],
   highlightType: "",
 };
+
+const getHighlights = (draggedHandCard: GameCard, gameSnapshot: GameSnapshot) => [];
 
 export const dragEventSlice = createSlice({
   name: "dragEventState",
@@ -115,7 +115,14 @@ export const dragEventSlice = createSlice({
       console.log(`Dragged over ${placeName}: (id ${id}) at calculated index: ${index}`);
 
       if (isEnchantWithBFF(state.draggedHandCard)) {
-        state.BFFdraggedOverSide = getLeftOrRightNeighbour(gameSnapshot, id);
+        // TODO replace with logic based on cardGroups
+        const neighbours = draggedOverData?.enchantableNeighbours;
+        if(neighbours && neighbours.includes("left")) {
+          state.BFFdraggedOverSide = "left";   
+        }
+        else if(neighbours && neighbours.includes("right")) {
+          state.BFFdraggedOverSide = "right";
+        }
         state.draggedOver = data;
       }
       if (isSpecialsColumn(type, id, gameSnapshot)) {

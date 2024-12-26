@@ -15,6 +15,7 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   const { GCZCards, enchantmentsRowCards, id, alignment, player } = props;
   const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
   console.log("PLAYER " + player +  " GCZ")
+  console.log(enchantmentsRowCards)
 
   const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, currSnapshot);
   return (
@@ -24,13 +25,13 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
           <Card id={card.id} index={index} imageName={card.imageName} />
         </div>
       ))}
-      <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
+      {/* <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
         {enchantmentsRowCards.map(card => (
           <div key={card.id} style={{ left: card.index * styles.left, position: "absolute" }}>
             <Card id={card.id} index={card.index} imageName={card.imageName} />
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import CardGroup from "./CardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
-import { getCardGroupObjs, getCardRowShapeOnDraggedOver, getCardRowShapeOnRearrange } from "../helperFunctions/groupGCZCards";
 import { RootState } from "../redux/store";
 import {  getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { getCardGroupsObjs, NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 
 interface GCZProps {
   id: number;
@@ -13,6 +13,29 @@ interface GCZProps {
   GCZCards: GameCard[];
   player: number
 }
+
+
+const cumulativeSum = (numbers: number[]) =>
+  numbers.reduce<number[]>((acc, curr) => (acc.length === 0 ? [curr] : [...acc, acc[acc.length - 1] + curr]), []);
+
+const getCardRowShapeOnDraggedOver = (cardRow: NewCardGroupObj[]) => {
+  // let i = 0;
+  // return cardRow.map(cardGroup => {
+  //   const cumulativeWidth = i;
+  //   i += cardGroup.size;
+  //   return cumulativeWidth;
+  // });
+  const sizes = cardRow.map(cardGroup => cardGroup.size);
+  return cumulativeSum(sizes);
+};
+
+const getCardRowShapeOnRearrange = (cardRow: NewCardGroupObj[], sourceIndex: number) => {
+  const sizes = cardRow.map(cardGroup => cardGroup.size);
+  sizes.splice(sourceIndex, 1);
+  sizes.unshift(0);
+  return cumulativeSum(sizes);
+  //   pipe(mapSizes, removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(cardGroups);
+};
 
 function GCZ(props: GCZProps) {
   const { id, enchantmentsRowCards, GCZCards, player } = props;
@@ -26,12 +49,13 @@ function GCZ(props: GCZProps) {
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
-  const cardRow: CardGroupObj[] = getCardGroupObjs(enchantmentsRowCards, GCZCards);
+  const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
   const cardRowShape = rearrangingData.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
   
   const ghostCardGroup = cardRow.find(e => rearrangingData.draggedId === e.id);
   console.log("ghostCardGroup", ghostCardGroup);
   const isHighlighted = highlights.includes(id);
+  console.log(enchantmentsRowCards)
 
   const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
 

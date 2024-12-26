@@ -1,4 +1,4 @@
-import { getCard, locateCard } from "../locateFunctions";
+import { locateCard } from "../locateFunctions";
 import { produce } from "immer";
 
 interface Change {

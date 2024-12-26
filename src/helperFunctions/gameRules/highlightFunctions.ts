@@ -1,111 +1,113 @@
-import { maxNumGuestCards } from "../../gameSettings/gameSettings";
-import { locateCard } from "../locateFunctions";
-import { getCardFunctions } from "./cardHighlightFunctions";
-import {  HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
+export const x = 0;
 
-const allTrue =
-  (...funcs: ((...args: any[]) => boolean)[]) =>
-  (...args: any[]) =>
-    !funcs.map(func => func(...args)).includes(false);
+// import { maxNumGuestCards } from "../../gameSettings/gameSettings";
+// import { locateCard } from "../locateFunctions";
+// import { getCardFunctions } from "./cardHighlightFunctions";
+// import {  HighlightPlaceFunction, HighlightPlayerFunction } from "./highlightFunctionTypes";
+
+// const allTrue =
+//   (...funcs: ((...args: any[]) => boolean)[]) =>
+//   (...args: any[]) =>
+//     !funcs.map(func => func(...args)).includes(false);
+
+// // const allTrueWithArgs =
+// //   (...funcs: ((...args: any[]) => boolean)[]) =>
+// //   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
+// //     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
 // const allTrueWithArgs =
-//   (...funcs: ((...args: any[]) => boolean)[]) =>
+//   (...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot) => boolean)[]) =>
 //   (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
 //     !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
 
-const allTrueWithArgs =
-  (...funcs: ((highlight: any, draggedCard: GameCard, gameSnapshot: GameSnapshot) => boolean)[]) =>
-  (highlight: GamePlace | GameCard | GamePlayer, draggedCard: GameCard, gameSnapshot: GameSnapshot) =>
-    !funcs.map(func => func(highlight, draggedCard, gameSnapshot)).includes(false);
-
-// add
-export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
+// // add
+// export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
   
-  locateCard(highlightPlace.id, gameSnapshot).placeType !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
+//   locateCard(highlightPlace.id, gameSnapshot).placeType !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
 
 
-// export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
-//   console.log(
-//     highlightPlace.placeType,
-//     highlightPlace.id,
-//     highlightPlace.playerId,
-//     locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards,
-//     "highlightPlaceHasEnoughSpace"
-//   );
+// // export const highlightPlaceHasEnoughSpace = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+// //   console.log(
+// //     highlightPlace.placeType,
+// //     highlightPlace.id,
+// //     highlightPlace.playerId,
+// //     locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards,
+// //     "highlightPlaceHasEnoughSpace"
+// //   );
 
-//   return locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
-// };
+// //   return locateCard(highlightPlace.id, gameSnapshot).place !== "guestCardZone" ? true : highlightPlace.cards.length < maxNumGuestCards;
+// // };
 
-export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
-  draggedCard.cardType === highlightPlace.acceptedCardType;
+// export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => 
+//   draggedCard.cardType === highlightPlace.acceptedCardType;
 
 
-// export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
-//   console.log(
-//     highlightPlace.placeType,
-//     draggedCard.name,
-//     draggedCard.cardType,
-//     highlightPlace.id,
-//     highlightPlace.playerId,
-//     draggedCard.cardType === highlightPlace.acceptedCardType,
-//     "draggedIsOfAcceptedType"
-//   );
-//   return draggedCard.cardType === highlightPlace.acceptedCardType;
-// };
+// // export const draggedIsOfAcceptedType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean => {
+// //   console.log(
+// //     highlightPlace.placeType,
+// //     draggedCard.name,
+// //     draggedCard.cardType,
+// //     highlightPlace.id,
+// //     highlightPlace.playerId,
+// //     draggedCard.cardType === highlightPlace.acceptedCardType,
+// //     "draggedIsOfAcceptedType"
+// //   );
+// //   return draggedCard.cardType === highlightPlace.acceptedCardType;
+// // };
 
-export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
-(draggedCard.action.targetPlayerType === "enemy" &&locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
-  (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
-
-// export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
-//   console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, (draggedCard.action.targetPlayerType === "enemy" &&
-//     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
-//   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
-//   return  (draggedCard.action.targetPlayerType === "enemy" &&
-//     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+// export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>
+// (draggedCard.action.targetPlayerType === "enemy" &&locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
 //   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
-// }
 
-//canAddDragged
-export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType, highlightPlacePlayerIsOfCorrectType);
+// // export const highlightPlacePlayerIsOfCorrectType = (highlightPlace: GamePlace, draggedCard: GameCard, gameSnapshot: GameSnapshot): boolean =>{
+// //   console.log(highlightPlace.placeType, highlightPlace.id, highlightPlace.playerId, (draggedCard.action.targetPlayerType === "enemy" &&
+// //     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+// //   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player), "highlightPlacePlayerIsOfCorrectType")
+// //   return  (draggedCard.action.targetPlayerType === "enemy" &&
+// //     locateCard(highlightPlace.id, gameSnapshot).player !== locateCard(draggedCard.id, gameSnapshot).player) ||
+// //   (draggedCard.action.targetPlayerType === "self" && locateCard(highlightPlace.id, gameSnapshot).player === locateCard(draggedCard.id, gameSnapshot).player);
+// // }
 
-// enchant
+// //canAddDragged
+// export const canAddDragged = allTrueWithArgs(highlightPlaceHasEnoughSpace, draggedIsOfAcceptedType, highlightPlacePlayerIsOfCorrectType);
 
-// //canEnchantWithBFF
-// export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
+// // enchant
 
-// //canEnchantWithZwilling Or With e.g. perplex
-// export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
+// // //canEnchantWithBFF
+// // export const canEnchantWithBFF = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, highlightNeighborCardEnchantable, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
-export const canProtectSelf: HighlightPlayerFunction = (highlightPlayer: GamePlayer, draggedCard: GameCard, gameSnaphot: GameSnapshot) => {
-  console.log("error: this function 'canProtectSelf' has not been created yet");
-  return true;
-};
+// // //canEnchantWithZwilling Or With e.g. perplex
+// // export const canEnchant = allTrueWithArgs(ownerHighlightCardUnenchanted, highlightCardUnenchanted, leftNeighbourOfHighlightCardIsNotBFFEnchanted);
 
-// protectSelf
-// drawCardsPlayMoreCards
-// stromAusfall
-// getMoreRolls
-// interrupt
-
-export const getPlayerFunctions = (actionType: ActionType): HighlightPlayerFunction => {
-  //if (actionType === "protectSelf")
-  return canProtectSelf;
-};
-
-export const getPlaceFunctions = (actionType: ActionType): HighlightPlaceFunction => {
-  //if(actionType === "addDragged")
-  return canAddDragged;
-};
-
-export const highlightFunctions = {
-  card: getCardFunctions,
-  place: getPlaceFunctions,
-  player: getPlayerFunctions,
-};
-
-// export const getHighlightFunctions = (highlightType: HighlightType) => {
-//   if(highlightType === "card") return highlightCardFunctions;
-//   place: highlightPlaceFunctions,
-//   player: highlightPlayerFunctions,
+// export const canProtectSelf: HighlightPlayerFunction = (highlightPlayer: GamePlayer, draggedCard: GameCard, gameSnaphot: GameSnapshot) => {
+//   console.log("error: this function 'canProtectSelf' has not been created yet");
+//   return true;
 // };
+
+// // protectSelf
+// // drawCardsPlayMoreCards
+// // stromAusfall
+// // getMoreRolls
+// // interrupt
+
+// export const getPlayerFunctions = (actionType: ActionType): HighlightPlayerFunction => {
+//   //if (actionType === "protectSelf")
+//   return canProtectSelf;
+// };
+
+// export const getPlaceFunctions = (actionType: ActionType): HighlightPlaceFunction => {
+//   //if(actionType === "addDragged")
+//   return canAddDragged;
+// };
+
+// export const highlightFunctions = {
+//   card: getCardFunctions,
+//   place: getPlaceFunctions,
+//   player: getPlayerFunctions,
+// };
+
+// // export const getHighlightFunctions = (highlightType: HighlightType) => {
+// //   if(highlightType === "card") return highlightCardFunctions;
+// //   place: highlightPlaceFunctions,
+// //   player: highlightPlayerFunctions,
+// // };

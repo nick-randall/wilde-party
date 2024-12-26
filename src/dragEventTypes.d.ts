@@ -13,7 +13,8 @@ type SimpleRearrangingData = {
 type DraggedOverData = {
   type: DroppableEntityType,
   id: number,
-  index: number
+  index: number,
+  enchantableNeighbours?: EnchantableNeighbour[]
 }
 type UpdateDragData = {
   droppableData: DroppableData,
@@ -26,7 +27,30 @@ type DroppableData = {
   // placeType?: string,
   // playerIndex?: number,
   calculatedIndex?: number // use this as destination index instead if not undefined 
+  enchantableNeighbours?: EnchantableNeighbour[]
 }
+
+
+//////////
+/* Used for SnapshotUpdater
+*/
+type DraggedResult = {
+  source: DragSourceData;
+  destination: DragDestinationData;
+}
+
+
+type DragDestinationData = {
+  containerId: string;
+  index: number;
+}
+
+ type DragSourceData = {
+  containerId: string;
+  index: number;
+  numDraggedElements: number
+}
+////////////
 
 type DraggableData = {
   id: number, // If type == "cardGroup", use first id in card group as id
@@ -50,3 +74,5 @@ type CardGroupObj = {
   size: number;
   cards: CardGroup;
 };
+
+type EnchantableNeighbour = "left" | "right";

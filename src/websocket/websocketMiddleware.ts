@@ -89,9 +89,9 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
             dispatch(updateActivePlayers(gameMessage.activePlayers));
           } else if (gameMessage.type === "gameSnapshots") {
             if (!gameMessage.newSnapshots) throw new Error("No new snapshots in game message");
-                  const gameData = store.getState().userGameState.gameData;
+            const { gameData, user } = store.getState().userGameState;
 
-            dispatch(handleNewGameSnapshots({snapshots: gameMessage.newSnapshots, gameData}));
+            dispatch(handleNewGameSnapshots({ snapshots: gameMessage.newSnapshots, user, gameData }));
           }
         };
         const onPersonalMessageReceived = (payload: Message) => {
@@ -102,10 +102,10 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           console.log(message.initialGameSnapshots);
           if (message.type === "initialGameSnapshots") {
             if (!message.initialGameSnapshots) throw new Error("No initial snapshots in personal message");
-            const gameData = store.getState().userGameState.gameData;
+            const { gameData, user } = store.getState().userGameState;
 
-            dispatch(handleNewGameSnapshots({snapshots: message.initialGameSnapshots, gameData}));
-                   } else if (message.type === "notInGameError") {
+            dispatch(handleNewGameSnapshots({ snapshots: message.initialGameSnapshots, user, gameData }));
+          } else if (message.type === "notInGameError") {
             gameSubscription.unsubscribe();
             dispatch(setNotInGameError(JSON.parse(payload.body)));
           }

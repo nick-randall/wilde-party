@@ -54,7 +54,7 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
             <div style={{ position: "relative" }}>
               {cards.map((card, index) => (
                 <Card
-                  index={card.index}
+                  index={index}
                   id={card.id}
                   imageName={card.imageName}
                   key={card.id}

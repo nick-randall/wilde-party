@@ -15,6 +15,7 @@ import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators
 import { RootState } from "../redux/store";
 import { NewHandCard } from "../gameComponents/NewHandCard";
 import NewHand from "../gameComponents/NewHand";
+import NewGCZ from "../gameComponents/NewGCZ";
 
 interface TableProps {
   gameData: GameData;
@@ -72,10 +73,9 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           />
           <div className="grid-item center-column align-start">
             <SpecialsZone player={0} specialsZoneData={p01places.specialsZone} alignment="" />
-            <GCZ
+            <NewGCZ
               player={0}
               id={p01places.guestCardZone.id}
-              enchantmentsRowCards={p01places.enchantmentsRow.cards}
               GCZCards={p01places.guestCardZone.cards}
             />
           </div>

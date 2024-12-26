@@ -25,16 +25,16 @@ export const gameSnapshotSlice = createSlice({
   name: "gameSnapshot",
   initialState,
   reducers: {
-    handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData}>) => {
+    handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData, user?: User}>) => {
       console.log("handling new game snapshots");
       console.log(action.payload);
-      const {snapshots, gameData} = action.payload;
+      const {snapshots, gameData, user} = action.payload;
       const newSnapshots = snapshots.filter(snapshot => snapshot.index > state.snapshotIndex);
       newSnapshots.sort((a, b) => a.index - b.index);
       if (newSnapshots.length === 0) return;
-
-      if (!gameData) return;
-      const modifiedSnapshots = modifySnapshotsPlayerOrder(gameData, newSnapshots);
+      console.log(user)
+      if (!gameData || !user) return;
+      const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
 
       state.snapshots.push(...modifiedSnapshots);
       const startAnimatingChanges = () => {
@@ -76,8 +76,9 @@ export const gameSnapshotSlice = createSlice({
   },
 });
 
-const modifySnapshotsPlayerOrder = (gameData: GameData, snapshots: GameSnapshot[]): GameSnapshot[] => {
-  const { id: userId } = gameData;
+const modifySnapshotsPlayerOrder = (user: User,  gameData: GameData, snapshots: GameSnapshot[]): GameSnapshot[] => {
+  const { id: userId } = user;
+  console.log(gameData)
   return snapshots.map(snapshot => ({
     ...snapshot,
     players: modifyPlayerOrder(userId, snapshot.players),
@@ -85,6 +86,9 @@ const modifySnapshotsPlayerOrder = (gameData: GameData, snapshots: GameSnapshot[
 };
 
 const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] => {
+  console.log("my user id is " + userId);
+  console.log("players are");
+  console.log(players);
   const playerIndex = players.findIndex(player => player.userId === userId);
   const playersCopy = [...players];
   const numPlayersAfterUser = playersCopy.length - playerIndex;

@@ -3,6 +3,7 @@ export const onlyUnique = (value: any, index: number, self: any[]) => {
 };
 
 export const arraysShareItems = (a: any[], b: any[]) => a.map(i => b.includes(i)).includes(true);
+const arraysShareItems2 = (a: any[], b: any[]) => a.some(item => b.includes(item));
 
 export const arrayExistsIn3dArray = (twoD: any[], threeD: any[][]) => threeD.find(currArray => arraysShareItems(twoD, currArray));
 
