@@ -36,9 +36,6 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({ cardGroup, cardGroupIndex, 
   const droppableId = JSON.stringify(droppableData);
 
   const getOffset = (card: GameCard, cardIndexWithinGroup: number): CardOffset => {
-    console.log("cardtype");
-    console.log(card.cardType);
-
     // TODO check this
     if (card.cardType === "bff") return { top: cardHeight / 2, left: left + cardWidth / 2 };
     if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };

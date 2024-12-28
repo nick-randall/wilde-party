@@ -8,14 +8,13 @@ import DiscardPile from "../gameComponents/DiscardPile";
 import PlayerAvatar from "../gameComponents/PlayerAvatar";
 import { SpecialsZone } from "../gameComponents/SpecialsZone";
 import EnemyGCZ from "../gameComponents/EnemyGCZ";
-import GCZ from "../gameComponents/GCZ";
-import Hand from "../gameComponents/Hand";
 import UWZ from "../gameComponents/UWZ";
 import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
-import { NewHandCard } from "../gameComponents/NewHandCard";
 import NewHand from "../gameComponents/NewHand";
 import NewGCZ from "../gameComponents/NewGCZ";
+import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
+import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 
 interface TableProps {
   gameData: GameData;
@@ -25,6 +24,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
   const dispatch = useDispatch();
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
   const { activePlayers, currSnapshot: gameSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
   useEffect(() => {
     if (!wsConnected && !wsLoading && !wsError) {
@@ -43,6 +43,31 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
   const p02places = gameSnapshot.players[1].places;
   const p03places = gameSnapshot.players[2].places;
 
+  const testUpdate = () => {
+    const me = currSnapshot.players[0];
+    const myHand = me.places["hand"];
+    const handCardIndex = 1
+    const myGCZ = me.places.guestCardZone;
+    console.log(myHand.cards[0])
+    console.log(myGCZ.cards[0])
+    const change: Change = {
+      source: { placeId: myHand.id, index: handCardIndex, numDraggedElements: 1 },
+      destination: {placeId: myGCZ.id, index: 0},
+    };
+    const snapshotUpdateData : SnapshotUpdateData = {
+      type: "addDragged",
+      playedCardIds :[myHand.cards[handCardIndex].id],
+      targetId: myGCZ.id
+    }
+    const updater = new SnapshotUpdater(currSnapshot, snapshotUpdateData);
+    console.log(updater.getSnapshot().players[0].places.guestCardZone.cards)
+
+    updater.addChange(change);
+    updater.begin()
+    console.log(updater.getNewSnapshot().players[0].places.guestCardZone.cards)
+    dispatch(testUpdateSnapshot(updater.getNewSnapshot()));
+  };
+
   return (
     <div>
       <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd} onBeforeCapture={onBeforeCapture}>
@@ -57,7 +82,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           </div>
           <SpecialsZone player={2} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
           <EnemyGCZ
-          player={1}
+            player={1}
             id={gameSnapshot.players[1].places.guestCardZone.id}
             enchantmentsRowCards={p02places.enchantmentsRow.cards}
             GCZCards={p02places.guestCardZone.cards}
@@ -72,12 +97,9 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
             alignment="top-right"
           />
           <div className="grid-item center-column align-start">
+            <button onClick={testUpdate}></button>
             <SpecialsZone player={0} specialsZoneData={p01places.specialsZone} alignment="" />
-            <NewGCZ
-              player={0}
-              id={p01places.guestCardZone.id}
-              GCZCards={p01places.guestCardZone.cards}
-            />
+            <NewGCZ player={0} id={p01places.guestCardZone.id} GCZCards={p01places.guestCardZone.cards} />
           </div>
           <NewHand id={p01places.hand.id} handCards={p01places.hand.cards} />
           <UWZ player={0} id={p01places.unwantedsZone.id} unwantedCards={p01places.unwantedsZone.cards} alignment="center-right" />

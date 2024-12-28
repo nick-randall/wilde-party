@@ -73,6 +73,11 @@ export const gameSnapshotSlice = createSlice({
     updateActivePlayers: (state, action: PayloadAction<User[]>) => {
       state.activePlayers = action.payload;
     },
+    testUpdateSnapshot: (state, action: PayloadAction<GameSnapshot>) => {
+      console.log("test update snapshot. Curr sn index = " + state.snapshotIndex)
+      state.snapshots.push(action.payload)
+      state.snapshotIndex ++
+    }
   },
 });
 
@@ -98,6 +103,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const { handleNewGameSnapshots, updateActivePlayers, setNotInGameError } = gameSnapshotSlice.actions;
+export const { handleNewGameSnapshots, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

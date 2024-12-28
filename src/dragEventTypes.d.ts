@@ -30,28 +30,6 @@ type DroppableData = {
   enchantableNeighbours?: EnchantableNeighbour[]
 }
 
-
-//////////
-/* Used for SnapshotUpdater
-*/
-type DraggedResult = {
-  source: DragSourceData;
-  destination: DragDestinationData;
-}
-
-
-type DragDestinationData = {
-  containerId: string;
-  index: number;
-}
-
- type DragSourceData = {
-  containerId: string;
-  index: number;
-  numDraggedElements: number
-}
-////////////
-
 type DraggableData = {
   id: number, // If type == "cardGroup", use first id in card group as id
   type: DraggableEntityType,

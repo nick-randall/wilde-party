@@ -14,26 +14,6 @@ export const playerPlacesTypes: PlaceType[] = ["guestCardZone", "unwantedsZone",
 
 export const nonPlayerPlacesTypes: PlaceType[] = ["deck", "discardPile"];
 
-// working!
-// export const getNumCards = (placeId: number, gameSnapshot: GameSnapshot): number => {
-//   const { players, nonPlayerPlaces } = gameSnapshot;
-//   for (let i: number = 0; i < players.length; i++) {
-//     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
-//       const place = playerPlacesTypes[j];
-//       if (placeId === players[i]["places"][place].id) {
-//         if (place === "enchantmentsRow") return players[i]["places"]["guestCardZone"].cards.length;
-//         return players[i]["places"][place].cards.length;
-//       }
-//     }
-//   }
-//   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
-//     const place = nonPlayerPlacesTypes[k];
-//     if (placeId === nonPlayerPlaces[place].id) return nonPlayerPlaces[place].cards.length;
-//   }
-//   console.log("failed to getNumCards for" + placeId);
-//   return 0;
-// };
-
 export const getNumCards = (player: number | null, placeType: PlaceType, gameSnapshot: GameSnapshot) => {
   if (player === null) {
     return gameSnapshot.nonPlayerPlaces[placeType].cards.length;
@@ -42,7 +22,7 @@ export const getNumCards = (player: number | null, placeType: PlaceType, gameSna
   }
 };
 
-export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
+export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): {placeType: PlaceType, player: number| null} => {
   if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
   console.log("locating place: " + placeId);
   const { players, nonPlayerPlaces } = gameSnapshot;
@@ -50,7 +30,26 @@ export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null =
     for (let j: number = 0; j < playerPlacesTypes.length; j++) {
       const placeType = playerPlacesTypes[j];
       const place = players[i]["places"][placeType];
-      if (placeId === place.id) return place;
+      if (placeId === place.id) return { placeType, player: i };
+    }
+  }
+  for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
+    const placeType = nonPlayerPlacesTypes[k];
+    const place = nonPlayerPlaces[placeType];
+    if (placeId === place.id) return {placeType, player: null};
+  }
+  throw new Error("Place could not be found!");
+};
+
+export const getPlace = (placeId: number, gameSnapshot: GameSnapshot | null = null): GamePlace => {
+  if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
+  console.log("locating place: " + placeId);
+  const { players, nonPlayerPlaces } = gameSnapshot;
+  for (let i: number = 0; i < players.length; i++) {
+    for (let j: number = 0; j < playerPlacesTypes.length; j++) {
+      const placeType = playerPlacesTypes[j];
+      const place = players[i]["places"][placeType];
+      if (placeId === place.id) return  place;
     }
   }
   for (let k: number = 0; k < nonPlayerPlacesTypes.length; k++) {
@@ -61,8 +60,8 @@ export const locatePlace = (placeId: number, gameSnapshot: GameSnapshot | null =
   throw new Error("Place could not be found!");
 };
 
+
 export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): LocationInfo => {
-  // if (gameSnapshot === null) gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
 
   const { players, nonPlayerPlaces } = gameSnapshot;
   for (let i: number = 0; i < players.length; i++) {

@@ -1,7 +1,7 @@
 const buildAnimationFromUpdateData = (snapshot: GameSnapshot) => {
-  const { snapshotUpdateData } = snapshot;
+  // const { snapshotUpdateData } = snapshot;
 
-  const { type, playedCardIds, targetId, secondaryCardId } = snapshotUpdateData;
+  // const { type, playedCardIds, targetId, secondaryCardId } = snapshotUpdateData;
   // if (type === "addDragged") {
   //   const activeAnimation = createHandToTableAnimation({
   //     cardId: cardIds[0],
