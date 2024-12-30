@@ -1,7 +1,7 @@
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "../dragEventHandlers/dragEventHandlers";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "../css/grid.css";
 import { Deck } from "../gameComponents/Deck";
 import DiscardPile from "../gameComponents/DiscardPile";
@@ -15,6 +15,7 @@ import NewHand from "../gameComponents/NewHand";
 import NewGCZ from "../gameComponents/NewGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
+import { RefMap } from "../animations/animationHelperFunctions";
 
 interface TableProps {
   gameData: GameData;
@@ -42,6 +43,9 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
   const p01places = gameSnapshot.players[0].places;
   const p02places = gameSnapshot.players[1].places;
   const p03places = gameSnapshot.players[2].places;
+  
+  const placeRefMap = useRef<RefMap>({});
+
 
   const testUpdate = () => {
     const me = currSnapshot.players[0];

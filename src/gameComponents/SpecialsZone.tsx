@@ -6,6 +6,8 @@ import { RootState } from "../redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 import "../css/global.css";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { forwardRef } from "react";
+import { RefMap } from "../animations/animationHelperFunctions";
 
 interface SpecialsZoneProps {
   specialsZoneData: GamePlace;
@@ -34,7 +36,7 @@ const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] 
   });
 };
 
-export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment, player }) => {
+export const SpecialsZone = forwardRef<RefMap, SpecialsZoneProps>(({ specialsZoneData:{id, cards}, alignment, player }, refMap) => {
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
   const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
@@ -54,37 +56,37 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id
   return (
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
-        <div
-        className={`grid-item ${alignment} ${isHighlighted ? "highlighted" : ""}`}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-          style={{
-            display: "flex",
-            margin: 0,
-            width: specialsCardsColumns.length * cardWidth,
-            minWidth: cardWidth,
-            height: cardHeight,
-            transition: "left 250ms",
-          }}
-        >
-          {specialsCardsColumns.map((column, index) =>
-            column.cards.length === 0 ? null : (
-              <SpecialsCardsColumn
-              cardStyles={styles}
-                cards={column.cards}
-                cardType={column.cardType}
-                columnIndex={index}
-                startingIndex={column.startingIndex}
-                key={column.cards[0].id + index}
-                specialsZoneId={id}
-              />
-            )
-          )}
-          {ghostCard ? <GhostCard cardId ={ghostCard.id} index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} zIndex={9} /> : null}
-
-          {provided.placeholder}
-        </div>
+          <div
+          className={`grid-item ${alignment} ${isHighlighted ? "highlighted" : ""}`}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            style={{
+              display: "flex",
+              margin: 0,
+              width: specialsCardsColumns.length * cardWidth,
+              minWidth: cardWidth,
+              height: cardHeight,
+              transition: "left 250ms",
+            }}
+          >
+            {specialsCardsColumns.map((column, index) =>
+              column.cards.length === 0 ? null : (
+                <SpecialsCardsColumn
+                  ref= {refMap}
+                  cardStyles={styles}
+                  cards={column.cards}
+                  cardType={column.cardType}
+                  columnIndex={index}
+                  startingIndex={column.startingIndex}
+                  key={column.cards[0].id + index}
+                  specialsZoneId={id}
+                />
+              )
+            )}
+            {ghostCard ? <GhostCard cardId ={ghostCard.id} index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} zIndex={9} /> : null}
+            {provided.placeholder}
+          </div>
       )}
     </Droppable>
   );
-};
+});

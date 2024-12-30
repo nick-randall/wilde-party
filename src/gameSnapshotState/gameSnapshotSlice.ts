@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { emptyGameSnapshot } from "../initialCards";
+import { ActiveAnimation } from "../animations/createAnimations";
 
 export type GameState = {
   snapshotIndex: number;
   newSnapshotIndex: number;
   error: string;
   activePlayers: User[];
-  animationData: AnimationData[];
+  activeAnimation?: ActiveAnimation;
   currSnapshot: GameSnapshot;
+  newSnapshot?: GameSnapshot; 
   snapshots: GameSnapshot[];
 };
 
@@ -16,7 +18,7 @@ const initialState: GameState = {
   newSnapshotIndex: 0,
   currSnapshot: emptyGameSnapshot,
   snapshots: [],
-  animationData: [],
+  activeAnimation: undefined,
   error: "",
   activePlayers: [],
 };
@@ -25,35 +27,51 @@ export const gameSnapshotSlice = createSlice({
   name: "gameSnapshot",
   initialState,
   reducers: {
-    handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData, user?: User}>) => {
-      console.log("handling new game snapshots");
-      console.log(action.payload);
-      const {snapshots, gameData, user} = action.payload;
-      const newSnapshots = snapshots.filter(snapshot => snapshot.index > state.snapshotIndex);
-      newSnapshots.sort((a, b) => a.index - b.index);
-      if (newSnapshots.length === 0) return;
-      console.log(user)
-      if (!gameData || !user) return;
-      const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
+    addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
+      state.snapshots.push(...action.payload);
+    },
+    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation>) => {
+      state.activeAnimation = action.payload;
+      state.newSnapshotIndex ++;
+      state.newSnapshot = state.snapshots[state.newSnapshotIndex];
+      console.log("setting active animation");
+      console.log("current snapshot index is " + state.snapshotIndex);
+      console.log("updated new snapshot index to " + state.newSnapshotIndex);
+    },
+    resolveNewSnapshot: (state) => {
+      state.activeAnimation = undefined;
+      state.snapshotIndex ++;
+      state.currSnapshot = state.snapshots[state.snapshotIndex];
+    },
+    // handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData, user?: User}>) => {
+    //   console.log("handling new game snapshots");
+    //   console.log(action.payload);
+    //   const {snapshots, gameData, user} = action.payload;
+    //   const newSnapshots = snapshots.filter(snapshot => snapshot.index > state.snapshotIndex);
+      // newSnapshots.sort((a, b) => a.index - b.index);
+    //   if (newSnapshots.length === 0) return;
+    //   console.log(user)
+    //   if (!gameData || !user) return;
+    //   const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
 
-      state.snapshots.push(...modifiedSnapshots);
-      const startAnimatingChanges = () => {
-        if (state.newSnapshotIndex >= state.snapshots.length) return;
-        state.newSnapshotIndex++;
+    //   state.snapshots.push(...modifiedSnapshots);
+    //   const startAnimatingChanges = () => {
+    //     if (state.newSnapshotIndex >= state.snapshots.length) return;
+    //     state.newSnapshotIndex++;
 
-        if (state.animationData.length > 0) {
-          // If there are still animations in progress, wait for them to finish
-          return;
-        } else {
-          // Create animations for the new snapshots
-          console.log("creating animations for snapshot " + state.newSnapshotIndex);
-          state.snapshotIndex = 5;
-          console.log(snapshots[state.snapshotIndex]);
-          state.currSnapshot = state.snapshots[state.snapshotIndex];
-          // setTimeout(startAnimatingChanges, 1000);
-        }
-      };
-      startAnimatingChanges();
+    //     if (state.animationData.length > 0) {
+    //       // If there are still animations in progress, wait for them to finish
+    //       return;
+    //     } else {
+    //       // Create animations for the new snapshots
+    //       console.log("creating animations for snapshot " + state.newSnapshotIndex);
+    //       state.snapshotIndex = 5;
+    //       console.log(snapshots[state.snapshotIndex]);
+    //       state.currSnapshot = state.snapshots[state.snapshotIndex];
+    //       // setTimeout(startAnimatingChanges, 1000);
+    //     }
+    //   };
+      // startAnimatingChanges();
       // const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0], "server");
 
       // // If no animations are necessary to show updated state, update game state and deal with the next newsnaphots...
@@ -66,7 +84,7 @@ export const gameSnapshotSlice = createSlice({
       // console.log(animationTemplates.length + " animation template groups");
       // // Otherwise set up the animation process
       // dispatch(setAnimationTemplates(animationTemplates));
-    },
+    // },
     setNotInGameError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
@@ -103,6 +121,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const { handleNewGameSnapshots, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const { addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

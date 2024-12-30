@@ -36,12 +36,12 @@ export default class SnapshotUpdater {
 
   private numElements: number = 1;
 
-  constructor(snapshot: GameSnapshot, snapshotUpdateType: SnapshotUpdateData) {
+  constructor(snapshot: GameSnapshot, snapshotUpdateData: SnapshotUpdateData) {
     // this.snapshot = { ...snapshot, snapshotUpdateData: {type: snapshotUpdateType} };
     // this.newSnapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
     this.snapshot = { ...snapshot };
-    this.newSnapshot = { ...snapshot};
-    console.log("new SnapshotUpdater with newSnapshot update type as " + snapshotUpdateType);
+    this.newSnapshot = { ...snapshot, snapshotUpdateData, index: snapshot.index + 1 };
+    console.log("new SnapshotUpdater with newSnapshot update data as " + snapshotUpdateData);
   }
 
   public addChange(change: Change) {

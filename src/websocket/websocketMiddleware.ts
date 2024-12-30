@@ -8,6 +8,8 @@ import { connectWebsocket } from "./websocketActionCreators";
 import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
 import { handleNewGameSnapshots, setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
 import { on } from "events";
+import { createHandToTableAnimation } from "../animations/createAnimations";
+import { NewServerSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
@@ -81,15 +83,22 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       case "JOIN_GAME": {
         const { gameId } = action.payload;
 
-        const onIncomingGameMessages = (message: Message) => {
+        const onIncomingGameBroadcast = (message: Message) => {
           const gameMessage: IncomingGameMessage = JSON.parse(message.body);
           console.log(gameMessage);
           if (gameMessage.type === "join") {
             if (!gameMessage.activePlayers) throw new Error("No active players in game message");
             dispatch(updateActivePlayers(gameMessage.activePlayers));
           } else if (gameMessage.type === "gameSnapshots") {
-            if (!gameMessage.newSnapshots) throw new Error("No new snapshots in game message");
+            if (gameMessage.newSnapshots === undefined) throw new Error("No new snapshots in game message");
+
             const { gameData, user } = store.getState().userGameState;
+            if (!gameData || !user) throw new Error("No game data or user in game state");
+            const payload : NewServerSnapshots = { snapshots: gameMessage.newSnapshots, user, gameData };
+            dispatch({
+              type: "HANDLE_NEW_SNAPSHOTS",
+              payload
+            });
 
             dispatch(handleNewGameSnapshots({ snapshots: gameMessage.newSnapshots, user, gameData }));
           }
@@ -115,7 +124,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         stompClient.subscribe("/users/queue/messages", onPersonalMessageReceived);
         // The game id will be checked on the server
         // to block subscription the user is not part of the game.
-        gameSubscription = stompClient.subscribe(`/topic/game/${gameId}`, onIncomingGameMessages, { gameId: gameId.toString() });
+        gameSubscription = stompClient.subscribe(`/topic/game/${gameId}`, onIncomingGameBroadcast, { gameId: gameId.toString() });
         break;
       }
 

@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import Card from "./Card";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
+import { forwardRef } from "react";
+import { RefMap } from "../animations/animationHelperFunctions";
 
 interface SpecialsCardsColumnProps {
   cards: GameCard[];
@@ -13,14 +15,14 @@ interface SpecialsCardsColumnProps {
   cardStyles: CardDimensions
 }
 
-export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
+export const SpecialsCardsColumn = forwardRef<RefMap, SpecialsCardsColumnProps>(({
   cards,
   cardStyles,
   cardType,
   columnIndex,
   specialsZoneId,
   startingIndex,
-}) => {
+}, refMap) => {
   const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state.dragEventState);
 
   const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
@@ -88,4 +90,4 @@ export const SpecialsCardsColumn: React.FC<SpecialsCardsColumnProps> = ({
       )}
     </Draggable>
   );
-};
+});
