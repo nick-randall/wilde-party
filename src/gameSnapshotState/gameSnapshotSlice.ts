@@ -28,6 +28,10 @@ export const gameSnapshotSlice = createSlice({
   name: "gameSnapshot",
   initialState,
   reducers: {
+    setInitialSnapshot: (state, action: PayloadAction<GameSnapshot>) => {
+      state.currSnapshot = action.payload;
+      state.snapshots.push(action.payload);
+    },
     addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
       const newSnapshots = action.payload;
       state.snapshots.push(...newSnapshots);
@@ -126,6 +130,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const { addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const {setInitialSnapshot, addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

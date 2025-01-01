@@ -76,11 +76,8 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
       if (el === null) return;
       const { left, top } = el.getBoundingClientRect();
       const offset = { dx: left, dy: top };
-      if(offsetMap[id]) return;
+      if (offsetMap[id]) return;
       dispatch(appendOffsetMap({[id]: offset}));
-      const {placeType, player} = locatePlace(id);
-      console.log(`id: ${id} registered ${placeType} for player ${player}`);
-      console.log("offset: " + offset.dx + ", " + offset.dy);
   }
 
   return (
