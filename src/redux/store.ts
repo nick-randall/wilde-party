@@ -7,6 +7,7 @@ import dragEventReducer from "./dragEventSlice";
 import gameSnapshotReducer from "../gameSnapshotState/gameSnapshotSlice";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "../gameSnapshotState/handleNewGameSnapshots";
+import offsetMapReducer from "../offsetState/offsetMapSlice";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -16,6 +17,7 @@ const store = configureStore({
     websocket: websocketReducer,
     userGameState: userReducer,
     gameSnapshotState: gameSnapshotReducer,
+    offsetMapState: offsetMapReducer,
     chat: chatReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stompMiddleware).concat(sagaMiddleware),

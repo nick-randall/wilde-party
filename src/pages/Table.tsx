@@ -13,9 +13,10 @@ import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators
 import { RootState } from "../redux/store";
 import NewHand from "../gameComponents/NewHand";
 import NewGCZ from "../gameComponents/NewGCZ";
-import { appendOffsetMap, testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
+import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locatePlace } from "../helperFunctions/locateFunctions";
+import { appendOffsetMap } from "../offsetState/offsetMapSlice";
 
 interface TableProps {
   gameData: GameData;
@@ -24,7 +25,8 @@ interface TableProps {
 export const Table: React.FC<TableProps> = ({ gameData }) => {
   const dispatch = useDispatch();
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
-  const { activePlayers, currSnapshot: gameSnapshot, offsetMap } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { activePlayers, currSnapshot: gameSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
   useEffect(() => {

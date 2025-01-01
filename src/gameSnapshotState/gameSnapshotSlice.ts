@@ -12,7 +12,6 @@ export type GameState = {
   currSnapshot: GameSnapshot;
   newSnapshot?: GameSnapshot; 
   snapshots: GameSnapshot[];
-  offsetMap: { [key: string]: {dx: number, dy: number} };
 };
 
 const initialState: GameState = {
@@ -23,18 +22,12 @@ const initialState: GameState = {
   activeAnimation: undefined,
   error: "",
   activePlayers: [],
-  offsetMap: {},
 };
 
 export const gameSnapshotSlice = createSlice({
   name: "gameSnapshot",
   initialState,
   reducers: {
-    appendOffsetMap: (state, action: PayloadAction<{ [key: string]: {dx: number, dy: number} }>) => { 
-      state.offsetMap = {...state.offsetMap, ...action.payload};
-      console.log("appending offset map");
-      console.log(state.offsetMap);
-    },
     addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
       const newSnapshots = action.payload;
       state.snapshots.push(...newSnapshots);
@@ -133,6 +126,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const { appendOffsetMap, addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const { addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

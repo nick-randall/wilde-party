@@ -55,15 +55,16 @@ export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapsho
   const newSnapshots = removeExistingSnapshots(snapshots);
   const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
   yield put({ type: addNewSnapshots.type, payload: modifiedSnapshots });
-  const includesInitialSnapshot = modifiedSnapshots[0].index === 0
+  const includesInitialSnapshot = modifiedSnapshots[0].index === 0;
   if (includesInitialSnapshot) {
     yield call(delay, 1000);
   }
-  
+
   //
   const dealtCardsSnapshot = snapshots[snapshots.length - 1];
   if (!dealtCardsSnapshot.snapshotUpdateData) throw Error("No snapshot update data!");
-  const { snapshotIndex, currSnapshot, offsetMap } = store.getState().gameSnapshotState;
+  const { snapshotIndex, currSnapshot } = store.getState().gameSnapshotState;
+  const { offsetMap } = store.getState().offsetMapState;
 
   // const dealCardsArgs: DealCardsArgs = {
   //   cardIds: dealtCardsSnapshot.snapshotUpdateData.playedCardIds,
