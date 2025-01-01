@@ -21,9 +21,6 @@ const modifySnapshotsPlayerOrder = (user: User, gameData: GameData, snapshots: G
 };
 
 const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] => {
-  console.log("my user id is " + userId);
-  console.log("players are");
-  console.log(players);
   const playerIndex = players.findIndex(player => player.userId === userId);
   const playersCopy = [...players];
   const numPlayersAfterUser = playersCopy.length - playerIndex;
@@ -37,6 +34,7 @@ export interface NewServerSnapshots {
   snapshots: GameSnapshot[];
   user: User;
   gameData: GameData;
+  initial: boolean;
 }
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -52,22 +50,28 @@ function* resolveNewSnapshotFollowingAnimation(duration: number) {
 
 export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
   const { snapshots, user, gameData } = action.payload;
-  const { snapshotIndex, currSnapshot } = store.getState().gameSnapshotState;
   snapshots.sort((a, b) => a.index - b.index);
 
   const newSnapshots = removeExistingSnapshots(snapshots);
   const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
   yield put({ type: addNewSnapshots.type, payload: modifiedSnapshots });
+  const includesInitialSnapshot = modifiedSnapshots[0].index === 0
+  if (includesInitialSnapshot) {
+    yield call(delay, 1000);
+  }
+  
   //
   const dealtCardsSnapshot = snapshots[snapshots.length - 1];
   if (!dealtCardsSnapshot.snapshotUpdateData) throw Error("No snapshot update data!");
+  const { snapshotIndex, currSnapshot, offsetMap } = store.getState().gameSnapshotState;
+
   // const dealCardsArgs: DealCardsArgs = {
   //   cardIds: dealtCardsSnapshot.snapshotUpdateData.playedCardIds,
   //   deckId: dealtCardsSnapshot.nonPlayerPlaces.deck.id,
   //   handId: dealtCardsSnapshot.snapshotUpdateData.targetId,
   //   oldSnapshot: currSnapshot,
   //   newSnapshot: dealtCardsSnapshot,
-  //   placeRefMap: MutableRefObject<RefMap>,
+  //   placeRefMap: store.getState().gameSnapshotState.refMap,
   // };
   // const activeAnimation = createDealCardsAnimation(dealCardsArgs);
   // yield call(resolveNewSnapshotFollowingAnimation, activeAnimation.totalDuration);

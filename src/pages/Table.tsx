@@ -1,7 +1,7 @@
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { onBeforeCapture, onDragEnd, onDragStart, onDragUpdate } from "../dragEventHandlers/dragEventHandlers";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import "../css/grid.css";
 import { Deck } from "../gameComponents/Deck";
 import DiscardPile from "../gameComponents/DiscardPile";
@@ -13,9 +13,9 @@ import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators
 import { RootState } from "../redux/store";
 import NewHand from "../gameComponents/NewHand";
 import NewGCZ from "../gameComponents/NewGCZ";
-import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
+import { appendOffsetMap, testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import { RefMap } from "../animations/animationHelperFunctions";
+import { locatePlace } from "../helperFunctions/locateFunctions";
 
 interface TableProps {
   gameData: GameData;
@@ -24,7 +24,7 @@ interface TableProps {
 export const Table: React.FC<TableProps> = ({ gameData }) => {
   const dispatch = useDispatch();
   const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
-  const { activePlayers, currSnapshot: gameSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { activePlayers, currSnapshot: gameSnapshot, offsetMap } = useSelector((state: RootState) => state.gameSnapshotState);
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
   useEffect(() => {
@@ -43,34 +43,43 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
   const p01places = gameSnapshot.players[0].places;
   const p02places = gameSnapshot.players[1].places;
   const p03places = gameSnapshot.players[2].places;
-  
-  const placeRefMap = useRef<RefMap>({});
 
 
   const testUpdate = () => {
     const me = currSnapshot.players[0];
     const myHand = me.places["hand"];
-    const handCardIndex = 1
+    const handCardIndex = 1;
     const myGCZ = me.places.guestCardZone;
-    console.log(myHand.cards[0])
-    console.log(myGCZ.cards[0])
+    console.log(myHand.cards[0]);
+    console.log(myGCZ.cards[0]);
     const change: Change = {
       source: { placeId: myHand.id, index: handCardIndex, numDraggedElements: 1 },
-      destination: {placeId: myGCZ.id, index: 0},
+      destination: { placeId: myGCZ.id, index: 0 },
     };
-    const snapshotUpdateData : SnapshotUpdateData = {
+    const snapshotUpdateData: SnapshotUpdateData = {
       type: "addDragged",
-      playedCardIds :[myHand.cards[handCardIndex].id],
-      targetId: myGCZ.id
-    }
+      playedCardIds: [myHand.cards[handCardIndex].id],
+      targetId: myGCZ.id,
+    };
     const updater = new SnapshotUpdater(currSnapshot, snapshotUpdateData);
-    console.log(updater.getSnapshot().players[0].places.guestCardZone.cards)
+    console.log(updater.getSnapshot().players[0].places.guestCardZone.cards);
 
     updater.addChange(change);
-    updater.begin()
-    console.log(updater.getNewSnapshot().players[0].places.guestCardZone.cards)
+    updater.begin();
+    console.log(updater.getNewSnapshot().players[0].places.guestCardZone.cards);
     dispatch(testUpdateSnapshot(updater.getNewSnapshot()));
   };
+
+  const registerPlaceOffset = (el: HTMLElement | null, id: number) => {
+      if (el === null) return;
+      const { left, top } = el.getBoundingClientRect();
+      const offset = { dx: left, dy: top };
+      if(offsetMap[id]) return;
+      dispatch(appendOffsetMap({[id]: offset}));
+      const {placeType, player} = locatePlace(id);
+      console.log(`id: ${id} registered ${placeType} for player ${player}`);
+      console.log("offset: " + offset.dx + ", " + offset.dy);
+  }
 
   return (
     <div>
@@ -79,12 +88,22 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           <PlayerAvatar player={gameSnapshot.players[1]} />
           <div></div>
           <PlayerAvatar player={gameSnapshot.players[2]} />
-          <SpecialsZone player={1} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-left" />
+          <SpecialsZone 
+            player={1} 
+            specialsZoneData={gameSnapshot.players[1].places.specialsZone} 
+            alignment="bottom-left"
+            registerPlaceOffset={registerPlaceOffset}
+          />
           <div className="grid-item center-gap-row">
-            <Deck id={nonPlayerPlaces.deck.id} cards={nonPlayerPlaces.deck.cards} />
+            <Deck id={nonPlayerPlaces.deck.id} cards={nonPlayerPlaces.deck.cards} registerPlaceOffset={registerPlaceOffset} />
             <DiscardPile id={nonPlayerPlaces.discardPile.id} cards={nonPlayerPlaces.discardPile.cards} />
           </div>
-          <SpecialsZone player={2} specialsZoneData={gameSnapshot.players[1].places.specialsZone} alignment="bottom-right" />
+          <SpecialsZone 
+            player={2} 
+            specialsZoneData={gameSnapshot.players[2].places.specialsZone} 
+            alignment="bottom-right" 
+            registerPlaceOffset={registerPlaceOffset}
+          />
           <EnemyGCZ
             player={1}
             id={gameSnapshot.players[1].places.guestCardZone.id}
@@ -102,7 +121,12 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
           />
           <div className="grid-item center-column align-start">
             <button onClick={testUpdate}></button>
-            <SpecialsZone player={0} specialsZoneData={p01places.specialsZone} alignment="" />
+            <SpecialsZone 
+              player={0} 
+              specialsZoneData={gameSnapshot.players[0].places.specialsZone} 
+              alignment="" 
+              registerPlaceOffset={registerPlaceOffset}
+              />
             <NewGCZ player={0} id={p01places.guestCardZone.id} GCZCards={p01places.guestCardZone.cards} />
           </div>
           <NewHand id={p01places.hand.id} handCards={p01places.hand.cards} />

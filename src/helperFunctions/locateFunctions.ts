@@ -78,8 +78,8 @@ export const locateCard = (cardId: number, gameSnapshot: GameSnapshot): Location
       if (nonPlayerPlaces[place].cards[l].id === cardId) return { player: null, placeType: place, index: l };
     }
   }
-  console.error("cardId Not found! -- " + cardId);
-  return { player: null, placeType: "guestCardZone", index: -1 };
+  throw new Error("cardId Not found! -- " + cardId);
+  // return { player: null, placeType: "guestCardZone", index: -1 };
 };
 
 export const getPlayerPlaceKeys = (gameSnapshot: GameSnapshot, player: GamePlayer) =>

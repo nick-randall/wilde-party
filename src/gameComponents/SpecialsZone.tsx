@@ -6,13 +6,12 @@ import { RootState } from "../redux/store";
 import { SpecialsCardsColumn } from "./SpecialsCardsColumn";
 import "../css/global.css";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
-import { forwardRef } from "react";
-import { RefMap } from "../animations/animationHelperFunctions";
 
 interface SpecialsZoneProps {
   specialsZoneData: GamePlace;
   alignment: string;
   player: number
+  registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
 type SpecialsColumnCards = {
@@ -36,7 +35,7 @@ const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] 
   });
 };
 
-export const SpecialsZone = forwardRef<RefMap, SpecialsZoneProps>(({ specialsZoneData:{id, cards}, alignment, player }, refMap) => {
+export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment, player, registerPlaceOffset }) => {
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
   const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
@@ -56,6 +55,7 @@ export const SpecialsZone = forwardRef<RefMap, SpecialsZoneProps>(({ specialsZon
   return (
     <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
       {provided => (
+        <div ref={el => registerPlaceOffset(el, id)}>
           <div
           className={`grid-item ${alignment} ${isHighlighted ? "highlighted" : ""}`}
             ref={provided.innerRef}
@@ -72,7 +72,6 @@ export const SpecialsZone = forwardRef<RefMap, SpecialsZoneProps>(({ specialsZon
             {specialsCardsColumns.map((column, index) =>
               column.cards.length === 0 ? null : (
                 <SpecialsCardsColumn
-                  ref= {refMap}
                   cardStyles={styles}
                   cards={column.cards}
                   cardType={column.cardType}
@@ -86,7 +85,8 @@ export const SpecialsZone = forwardRef<RefMap, SpecialsZoneProps>(({ specialsZon
             {ghostCard ? <GhostCard cardId ={ghostCard.id} index={draggedOver?.index ?? 0} imageName={ghostCard.imageName} zIndex={9} /> : null}
             {provided.placeholder}
           </div>
+        </div>
       )}
     </Droppable>
   );
-});
+};

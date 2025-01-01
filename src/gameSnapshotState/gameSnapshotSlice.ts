@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { emptyGameSnapshot } from "../initialCards";
 import { ActiveAnimation } from "../animations/createAnimations";
 
+
 export type GameState = {
   snapshotIndex: number;
   newSnapshotIndex: number;
@@ -11,6 +12,7 @@ export type GameState = {
   currSnapshot: GameSnapshot;
   newSnapshot?: GameSnapshot; 
   snapshots: GameSnapshot[];
+  offsetMap: { [key: string]: {dx: number, dy: number} };
 };
 
 const initialState: GameState = {
@@ -21,18 +23,28 @@ const initialState: GameState = {
   activeAnimation: undefined,
   error: "",
   activePlayers: [],
+  offsetMap: {},
 };
 
 export const gameSnapshotSlice = createSlice({
   name: "gameSnapshot",
   initialState,
   reducers: {
+    appendOffsetMap: (state, action: PayloadAction<{ [key: string]: {dx: number, dy: number} }>) => { 
+      state.offsetMap = {...state.offsetMap, ...action.payload};
+      console.log("appending offset map");
+      console.log(state.offsetMap);
+    },
     addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
-      state.snapshots.push(...action.payload);
+      const newSnapshots = action.payload;
+      state.snapshots.push(...newSnapshots);
+      if(newSnapshots[0].index === 0) {
+        state.currSnapshot = newSnapshots[0];
+      }
     },
     setActiveAnimation : (state, action: PayloadAction<ActiveAnimation>) => {
       state.activeAnimation = action.payload;
-      state.newSnapshotIndex ++;
+      state.newSnapshotIndex = state.snapshotIndex + 1;
       state.newSnapshot = state.snapshots[state.newSnapshotIndex];
       console.log("setting active animation");
       console.log("current snapshot index is " + state.snapshotIndex);
@@ -121,6 +133,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const { addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const { appendOffsetMap, addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

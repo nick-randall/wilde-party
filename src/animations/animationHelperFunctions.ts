@@ -55,8 +55,8 @@ export const getOffsetOf = (el: HTMLElement | null): Offset => {
     const { x, y } = el.getBoundingClientRect();
     return new Offset({ dx: x, dy: y });
   }
-  console.error("Element not found!");
-  return new Offset({ dx: 0, dy: 0 });
+  throw new Error("Element not found!");
+  // return new Offset({ dx: 0, dy: 0 });
 };
 
 // export const getMiddleStyles = (): CardCSSMap => ({

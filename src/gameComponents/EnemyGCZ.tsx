@@ -14,8 +14,8 @@ interface EnemyGCZProps {
 const EnemyGCZ = (props: EnemyGCZProps) => {
   const { GCZCards, enchantmentsRowCards, id, alignment, player } = props;
   const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
-  console.log("PLAYER " + player +  " GCZ")
-  console.log(enchantmentsRowCards)
+  // console.log("PLAYER " + player +  " GCZ")
+  // console.log(enchantmentsRowCards)
 
   const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, currSnapshot);
   return (

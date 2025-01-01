@@ -34,14 +34,14 @@ export const testCardRow = () => {
     },
   ];
   const cardRow = getCardGroupsObjs(row);
-  console.log(cardRow);
+  // console.log(cardRow);
 };
 
 const NewGCZ: React.FC<NewGCZProps> = ({ id, GCZCards, player }) => {
   const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector((state: RootState) => state.dragEventState);
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const { cardWidth, cardHeight } = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, currSnapshot);
-  console.log(GCZCards);
+  // console.log(GCZCards);
   const droppableId = JSON.stringify({ type: "place", id });
 
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;

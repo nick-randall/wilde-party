@@ -4,15 +4,18 @@ import { RootState } from "../redux/store";
 import { drawCardThunk } from "../redux/thunks";
 import "../css/grid.css";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { FC, forwardRef } from "react";
+import { RefMap } from "../animations/animationHelperFunctions";
 
 interface DeckProps {
   id: number;
   cards: GameCard[];
+  registerPlaceOffset: (el: HTMLElement | null, id: number)  => void;
   // zoneSize: { width: number; height: number };
 }
 
-export const Deck = (props: DeckProps) => {
-  const { id, cards } = props;
+export const Deck: FC<DeckProps> = (props, placeRefMap) => {
+  const { id, cards,registerPlaceOffset } = props;
   const dispatch = useDispatch();
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const dimensions = getCardStyleValuesFromPlaceAndPlayer("deck", null, currSnapshot);
@@ -33,7 +36,11 @@ export const Deck = (props: DeckProps) => {
     : {};
 
   return (
-    <div style={{ height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }} onClick={handleClick}>
+    <div
+      ref={el => registerPlaceOffset(el, id)}
+      style={{ height: dimensions.cardHeight, width: dimensions.cardWidth, position: "absolute", ...highlightStyles }}
+      onClick={handleClick}
+    >
       {cardsInReverseOrder.map((card, index) => (
         <Card key={card.id} id={card.id} index={index} imageName="back" />
       ))}

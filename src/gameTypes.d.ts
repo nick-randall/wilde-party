@@ -154,7 +154,6 @@ type GameSnapshot = {
   nonPlayerPlaces: NonPlayerPlaces;
   snapshotUpdateData?: SnapshotUpdateData;
   actionResultsMap: { [key: number]: CardActionResult[] };
-  createdAt: Date;
   // number, CardActionResult[]
 };
 
