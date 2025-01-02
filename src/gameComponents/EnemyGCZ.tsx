@@ -21,7 +21,7 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
   return (
     <div className={`grid-item ${alignment}`}>
       {GCZCards.map((card, index) => (
-        <div key={card.id} style={{ left: index * styles.left, position: "absolute" }}>
+        <div key={card.id} style={{ left: index * styles.left, position: "relative" }}>
           <Card id={card.id} index={index} imageName={card.imageName} />
         </div>
       ))}

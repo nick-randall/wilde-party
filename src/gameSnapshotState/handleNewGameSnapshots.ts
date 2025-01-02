@@ -5,6 +5,8 @@ import store from "../redux/store";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createDealCardsAnimation, DealCardsArgs } from "../animations/createAnimations";
 import { addNewSnapshots, resolveNewSnapshot, setActiveAnimation } from "./gameSnapshotSlice";
+import { off } from "process";
+import { locatePlace } from "../helperFunctions/locateFunctions";
 
 const removeExistingSnapshots = (snapshots: GameSnapshot[]): GameSnapshot[] => {
   const existingSnapshots = store.getState().gameSnapshotState.snapshots;
@@ -65,18 +67,24 @@ export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapsho
   if (!dealtCardsSnapshot.snapshotUpdateData) throw Error("No snapshot update data!");
   const { snapshotIndex, currSnapshot } = store.getState().gameSnapshotState;
   const { offsetMap } = store.getState().offsetMapState;
+  console.log(offsetMap);
+  for(let i = 0; i < Object.keys(offsetMap).length; i++) {
+    const id = Object.keys(offsetMap)[i];
+    const {placeType} = locatePlace(parseInt(id));
+    console.log(placeType);
+  }
 
-  // const dealCardsArgs: DealCardsArgs = {
-  //   cardIds: dealtCardsSnapshot.snapshotUpdateData.playedCardIds,
-  //   deckId: dealtCardsSnapshot.nonPlayerPlaces.deck.id,
-  //   handId: dealtCardsSnapshot.snapshotUpdateData.targetId,
-  //   oldSnapshot: currSnapshot,
-  //   newSnapshot: dealtCardsSnapshot,
-  //   placeRefMap: store.getState().gameSnapshotState.refMap,
-  // };
-  // const activeAnimation = createDealCardsAnimation(dealCardsArgs);
-  // yield call(resolveNewSnapshotFollowingAnimation, activeAnimation.totalDuration);
-  // yield put({ type: setActiveAnimation.type, payload: activeAnimation });
+  const dealCardsArgs: DealCardsArgs = {
+    cardIds: dealtCardsSnapshot.snapshotUpdateData.playedCardIds,
+    deckId: dealtCardsSnapshot.nonPlayerPlaces.deck.id,
+    handId: dealtCardsSnapshot.snapshotUpdateData.targetId,
+    oldSnapshot: currSnapshot,
+    newSnapshot: dealtCardsSnapshot,
+    offsetMap: offsetMap,
+  };
+  const activeAnimation = createDealCardsAnimation(dealCardsArgs);
+  yield call(resolveNewSnapshotFollowingAnimation, activeAnimation.totalDuration);
+  yield put({ type: setActiveAnimation.type, payload: activeAnimation });
 }
 
 export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): SagaIterator {}

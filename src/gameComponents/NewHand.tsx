@@ -8,8 +8,9 @@ import { NewHandCard } from "./NewHandCard";
 interface NewHandProps {
   id: number;
   handCards: GameCard[];
+  registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
-const NewHand: React.FC<NewHandProps> = ({ id, handCards }) => {
+const NewHand: React.FC<NewHandProps> = ({ id, handCards, registerPlaceOffset }) => {
   const [shouldSpread, setShouldSpread] = useState(false);
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const styles = getCardStyleValuesFromPlaceAndPlayer("hand", 0, currSnapshot);
@@ -29,7 +30,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, handCards }) => {
         <div {...p.droppableProps} ref={p.innerRef}>
           <div
             style={{ position: "relative"}}
-            // ref={el => refCallback(el, place.id)}
+            ref={el => registerPlaceOffset(el, id)}
           >
             {handCards.map(
               (card, index) => (

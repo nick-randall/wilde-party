@@ -1,16 +1,13 @@
 import { CSSProperties } from "react";
 import { useSelector } from "react-redux";
-import "./animations/animations.css";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";
-import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
 import { getCardStyleValues } from "../helperFunctions/getCardStyles";
 
 export interface EnemyHandCardProps {
   id: number;
   index: number;
   imageName: string;
-  numHandCards: number;
 }
 
 const EnemyHandCard = (props: EnemyHandCardProps) => {
@@ -44,10 +41,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
       : { opacity: 0 };
 
   return (
-    <TransitionHandler
-      index={index}
-      id={id}
-      render={(transitionStyles: CSSProperties) => (
+
         <img
           alt={imageName}
           src={"./images/back.jpg"}
@@ -55,12 +49,10 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
           draggable="false"
           style={{
             ...normalStyles,
-            ...transitionStyles,
             ...disappearingStyles,
           }}
         />
-      )}
-    />
+    
   );
 };
 export default EnemyHandCard;

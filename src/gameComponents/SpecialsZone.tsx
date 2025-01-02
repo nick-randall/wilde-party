@@ -1,5 +1,4 @@
-import R, { flatten, is } from "ramda";
-import { Draggable, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
@@ -23,12 +22,12 @@ type SpecialsColumnCards = {
 const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] => {
   const allSpecialsCardsTypes: GuestCardType[] = ["rumgroelerin", "saufnase", "schleckermaul", "taenzerin"];
   let startingIndex = 0;
-  return allSpecialsCardsTypes.map(type => {
-    const cards = specialsCards.filter(card => card.guestCardType === type);
+  return allSpecialsCardsTypes.map(cardType => {
+    const cards = specialsCards.filter(card => card.guestCardType === cardType);
     const column = {
       cards,
       startingIndex,
-      cardType: type,
+      cardType,
     };
     startingIndex += cards.length;
     return column;

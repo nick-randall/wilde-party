@@ -5,12 +5,12 @@ import { dimensionConstants, getCardStyleValuesFromPlaceAndPlayer } from "../hel
 interface EnemyHandProps {
   id: number;
   handCards: GameCard[];
-  playerZoneSize: { width: number; height: number };
   player: number;
+  registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
 const EnemyHand = (props: EnemyHandProps) => {
-  const { id, handCards, playerZoneSize, player } = props;
+  const { id, handCards, player, registerPlaceOffset } = props;
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, currSnapshot);
   const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
@@ -21,18 +21,18 @@ const EnemyHand = (props: EnemyHandProps) => {
   return (
     <div
       style={{
-        position: "absolute",
+        position: "relative",
         // display: "flex",
-        bottom: 30,
         // This causes whole card row to move left on spread
         //left: x - (spread / 2) * handCards.length,
         transition: "180ms",
         height: styles.cardHeight,
       }}
+      ref={el => registerPlaceOffset(el, id)}
     >
       {handCards.map((card, index) => (
 
-        <EnemyHandCard id={card.id} index={index} imageName={card.imageName} numHandCards={handCards.length} key={card.id} />
+        <EnemyHandCard id={card.id} index={index} imageName={card.imageName} key={card.id} />
       ))}
     </div>
   );

@@ -13,7 +13,9 @@ import {
   TableToMiddle,
   ToAppears,
 } from "./AnimationTimeline";
-import { getMiddleStyles } from "./getOffset";
+import { getMiddleStyles, Offset } from "./getOffset";
+import store from "../redux/store";
+import { of } from "ramda";
 
 export interface ActiveAnimation {
   animations: AnimationData[];
@@ -32,14 +34,15 @@ export interface HandToTableArgs {
 
 export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimation => {
   const { cardId, handId, targetPlaceId, oldSnapshot, newSnapshot, placeRefMap } = args;
-  const fromPlace = placeRefMap.current[handId];
-  const targetPlace = placeRefMap.current[targetPlaceId];
+  const fromPlaceOffset = store.getState().offsetMapState.offsetMap[handId];
+  // const targetPlace = placeRefMap.current[targetPlaceId];
+  const targetPlaceOffset = store.getState().offsetMapState.offsetMap[targetPlaceId];
   // assumption: the targetPlace will position its children at its
   // absolute top left, then apply any styles they have.
 
   const fromHandToMiddleEvents = [
     new HandToMiddle({
-      fromOffset: getOffsetOf(fromPlace),
+      fromOffset: new Offset(fromPlaceOffset),
       fromStyles: getCardCSS(cardId, oldSnapshot),
       toOffset: getMiddleOffset(),
       toStyles: getMiddleStyles(),
@@ -54,7 +57,7 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
     new ToAppears({}),
     new TableToDiscard({
       duration: 500,
-      toOffset: getOffsetOf(targetPlace),
+      toOffset: new Offset(targetPlaceOffset),
       toStyles: getCardCSS(cardId, newSnapshot), // NOTE NEW_SNAPSHOT!,
       fromOffset: getMiddleOffset(),
       fromStyles: getMiddleStyles(),
@@ -75,13 +78,21 @@ export interface DealCardsArgs {
   handId: number;
   oldSnapshot: GameSnapshot;
   newSnapshot: GameSnapshot;
-  placeRefMap: MutableRefObject<RefMap>;
+  offsetMap: { [key: number]: {dx: number; dy: number} };
 }
 
 export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation => {
-  const { cardIds, deckId, handId, oldSnapshot, newSnapshot, placeRefMap } = args;
-  const deck = placeRefMap.current[deckId];
-  const hand = placeRefMap.current[handId];
+  const { cardIds, deckId, handId, oldSnapshot, newSnapshot, offsetMap } = args;
+  const deckOffset = offsetMap[deckId];
+  if (!deckOffset) {
+    throw new Error("Offset not found for deck with id of " + deckId);
+  }
+  const handOffset = offsetMap[handId];
+  if (!handOffset) {
+    throw new Error("Offset not found for hand with id of " + handId);
+  }
+  // const deck = placeRefMap.current[deckId];
+  // const hand = placeRefMap.current[handId];
   // assumption: the hand will position its children at its
   // absolute top left, then apply any styles they have.
 
@@ -103,7 +114,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
 
     const deckToMiddle = [
       new TableToMiddle({
-        fromOffset: getOffsetOf(deck),
+        fromOffset: new Offset(deckOffset),
         fromStyles: getCardCSS(cardId, oldSnapshot),
         toOffset: getMiddleOffset(),
         toStyles: middleStylesWithZIndex,
@@ -119,7 +130,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
       new ToAppears({}),
       new MiddleToHand({
         duration: 500,
-        toOffset: getOffsetOf(hand),
+        toOffset: new Offset(handOffset),
         toStyles: handStylesWithZIndex, // NOTE NEW_SNAPSHOT!,
         fromOffset: getMiddleOffset(),
         fromStyles: middleStylesWithZIndex,
