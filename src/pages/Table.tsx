@@ -92,6 +92,17 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
         dispatch(appendOffsetMap({ [id]: offset }));
     };
 
+    const {activeAnimation} = useSelector((state: RootState) => state.gameSnapshotState)
+    // const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!
+
+    const animations = activeAnimation?.animations ?? [];
+    // If activeAnimation is undefined, always show the old Snapshot,
+    // otherwise there is a UI flash where the snapshot has updated but
+    // th animations haven't been applied yet
+    const useOldSnapshot = (id: number) => activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+    // Proxy animations' parent is the body, so they are not placed in a Place component
+    const proxyAnimations = activeAnimation?.animations.filter(ani => !ani.placeId) ?? [];
+
     return (
         <div>
             <DragDropContext

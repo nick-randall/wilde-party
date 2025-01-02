@@ -1,19 +1,18 @@
-import { forwardRef } from "react";
 import AnimationHandler from "../animations/AnimationHandler";
-import { RefMap } from "../animations/animationHelperFunctions";
 import { getFrontAndBackStyles, getInnerWrapperStyle, getOuterWrapperStyles } from "../helperFunctions/getCardStyles";
-
 export interface AnimatedCardProps {
   id: number;
   index: number;
-  image: string;
+  imageName: string;
   currAnimations: AnimationData[];
   gameSnapshot: GameSnapshot;
 }
 
-const AnimatedCard = forwardRef<RefMap, AnimatedCardProps>((props, cardsRef) => {
+const AnimatedCard : React.FC<AnimatedCardProps> = (props) => {
   
-  const { currAnimations, image, index, id, gameSnapshot } = props;
+  const { currAnimations, imageName, index, id, gameSnapshot } = props;
+  console.log("displaying animated card: " + imageName)
+
 
   const mainAnimation = currAnimations.find(ani => ani.track === "main");
   const opacityAnimation = currAnimations.find(ani => ani.track === "opacityAndShadow");
@@ -35,7 +34,7 @@ const AnimatedCard = forwardRef<RefMap, AnimatedCardProps>((props, cardsRef) => 
                     <div style={outerWrapperStyle} className={zIndexAnimationProps.className}>
                       <div style={innerWrapperStyle} className={mainAnimationProps.className}>
                         <img
-                          src={`./${image}`}
+                          src={`./images/${imageName}.jpg`}
                           className={opacityAnimationProps.className}
                           alt={`${id}`}
                           draggable={false}
@@ -58,5 +57,5 @@ const AnimatedCard = forwardRef<RefMap, AnimatedCardProps>((props, cardsRef) => 
       )}
     </AnimationHandler>
   );
-});
+};
 export default AnimatedCard;

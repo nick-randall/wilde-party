@@ -8,6 +8,7 @@ interface EnemyGCZProps {
   id: number;
   enchantmentsRowCards: GameCard[];
   GCZCards: GameCard[];
+  // currAnimations: AnimationData[];
   alignment: string;
 }
 

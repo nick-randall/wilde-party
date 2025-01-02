@@ -2,10 +2,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import EnemyHandCard from "./EnemyHandCard";
 import { dimensionConstants, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import AnimatedCard from "./AnimatedCard";
 interface EnemyHandProps {
   id: number;
   handCards: GameCard[];
   player: number;
+  // currAnimations: AnimationData[]
   registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
@@ -18,11 +20,12 @@ const EnemyHand = (props: EnemyHandProps) => {
   const transitionsUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
   const spread = styles.left;
 
+
   return (
     <div
       style={{
         position: "relative",
-        // display: "flex",
+        display: "flex",
         // This causes whole card row to move left on spread
         //left: x - (spread / 2) * handCards.length,
         transition: "180ms",
@@ -31,6 +34,8 @@ const EnemyHand = (props: EnemyHandProps) => {
       ref={el => registerPlaceOffset(el, id)}
     >
       {handCards.map((card, index) => (
+        // <div style={{backgroundColor: "red", height: styles.cardHeight, width: styles.cardWidth, outline: "1px black solid"}}></div>
+        // <AnimatedCard>
         <EnemyHandCard id={card.id} index={index} imageName={card.imageName} key={card.id} />
       ))}
     </div>
