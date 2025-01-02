@@ -6,10 +6,10 @@ import store, { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { connectWebsocket } from "./websocketActionCreators";
 import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
-import { setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
+import { setInitialSnapshot, setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
 import { on } from "events";
 import { createHandToTableAnimation } from "../animations/createAnimations";
-import { NewServerSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
+import { NewServerSnapshots, sanitiseNewSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
@@ -104,22 +104,19 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           }
         };
         const onPersonalMessageReceived = (payload: Message) => {
-          console.log("Received personal game message: ");
+          // console.log("Received personal game message: ");
           const message: GamePersonalMessage = JSON.parse(payload.body);
-          console.log(message);
-          console.log(message.type);
-          console.log(message.initialGameSnapshots);
-          if (message.type === "initialGameSnapshots") {
-            const { gameData, user } = store.getState().userGameState;
-            if (!message.initialGameSnapshots) throw new Error("No initial snapshots in personal message");
-            if (!gameData || !user) throw new Error("No game data or user in game state");
-            const payload : NewServerSnapshots = { snapshots: message.initialGameSnapshots, user, gameData, initial: true };
-            dispatch({
-              type: "HANDLE_NEW_SNAPSHOTS",
-              payload
-            });
-            // dispatch(handleNewGameSnapshots({ snapshots: message.initialGameSnapshots, user, gameData }));
-          } else if (message.type === "notInGameError") {
+          // console.log(message);
+          // console.log(message.type);
+          // console.log(message.initialGameSnapshots);
+          // if (message.type === "initialGameSnapshots") {
+          //   const { gameData, user } = store.getState().userGameState;
+          //   if (!message.initialGameSnapshots) throw new Error("No initial snapshots in personal message");
+          //   if (!gameData || !user) throw new Error("No game data or user in game state");
+          //   const modifiedSnapshots = sanitiseNewSnapshots(user, gameData, message.initialGameSnapshots)
+          //   dispatch(setInitialSnapshot(modifiedSnapshots[0]));
+          // } else 
+          if (message.type === "notInGameError") {
             gameSubscription.unsubscribe();
             dispatch(setNotInGameError(JSON.parse(payload.body)));
           }

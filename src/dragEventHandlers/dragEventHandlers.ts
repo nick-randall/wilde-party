@@ -1,5 +1,5 @@
 import { BeforeCapture, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locateCard } from "../helperFunctions/locateFunctions";
+import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 import store, { AppDispatch } from "../redux/store";
 import { addDraggedThunk } from "../redux/thunks";
 import { END_DRAG_CLEANUP,  SET_DRAGGED_HAND_CARD, SET_HIGHLIGHTS, START_REARRANGING, UPDATE_DRAGGED_OVER } from "../redux/dragEventSlice";
@@ -62,7 +62,7 @@ import { Middleware } from "@reduxjs/toolkit";
 
 export const dragEnd = (d: DropResult) => ({ type: "dragEnd", payload: d });
 
-const isHandCard = (sourceId: number, gameSnapshot: GameSnapshot) => locateCard(sourceId, gameSnapshot).placeType === "hand";
+const isHandCard = (sourceId: number, gameSnapshot: GameSnapshot) => locatePlace(sourceId, gameSnapshot).placeType === "hand";
 
 const cardHasChangedIndex = (d: DropResult) => d.destination && d.destination.index !== d.source.index;
 

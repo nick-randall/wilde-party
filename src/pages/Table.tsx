@@ -34,6 +34,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     const { activePlayers, currSnapshot: gameSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
+    console.log(gameSnapshot)
     const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
@@ -154,7 +155,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                         player={2}
                         id={gameSnapshot.players[2].places.guestCardZone.id}
                         enchantmentsRowCards={p03places.enchantmentsRow.cards}
-                        GCZCards={p02places.guestCardZone.cards}
+                        GCZCards={p03places.guestCardZone.cards}
                         alignment="top-right"
                     />
                     <div className="grid-item center-column align-start">

@@ -29,28 +29,37 @@ export const gameSnapshotSlice = createSlice({
   initialState,
   reducers: {
     setInitialSnapshot: (state, action: PayloadAction<GameSnapshot>) => {
-      state.currSnapshot = action.payload;
+      state.snapshotIndex = 0;
       state.snapshots.push(action.payload);
+      state.currSnapshot = state.snapshots[state.snapshotIndex];
     },
     addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
       const newSnapshots = action.payload;
       state.snapshots.push(...newSnapshots);
-      if(newSnapshots[0].index === 0) {
+      if(newSnapshots.length > 0 && newSnapshots[0].index === 0) {
         state.currSnapshot = newSnapshots[0];
       }
     },
-    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation>) => {
-      state.activeAnimation = action.payload;
+    setNewSnapshot : (state) => {
       state.newSnapshotIndex = state.snapshotIndex + 1;
       state.newSnapshot = state.snapshots[state.newSnapshotIndex];
-      console.log("setting active animation");
       console.log("current snapshot index is " + state.snapshotIndex);
       console.log("updated new snapshot index to " + state.newSnapshotIndex);
     },
+    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation>) => {
+      state.activeAnimation = action.payload;
+
+      console.log("setting active animation");
+
+    },
     resolveNewSnapshot: (state) => {
+      console.log("resolving snapshot")
       state.activeAnimation = undefined;
       state.snapshotIndex ++;
       state.currSnapshot = state.snapshots[state.snapshotIndex];
+      console.log("new index: " + state.snapshotIndex)
+      console.log("num snapshots: ")
+      console.log("curr snaphost: ", state.currSnapshot)
     },
     // handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData, user?: User}>) => {
     //   console.log("handling new game snapshots");
@@ -130,6 +139,6 @@ const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] 
   return result;
 };
 
-export const {setInitialSnapshot, addNewSnapshots, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

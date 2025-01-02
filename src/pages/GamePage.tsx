@@ -11,7 +11,7 @@ const Game: React.FC = () => {
 
   // Ensure that the initial snapshot is set in the gameSnapshotState
   const dispatch = useDispatch();
-  const { snapshots } = useSelector((state: RootState) => state.gameSnapshotState);
+  const { snapshots, currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   if (gameData?.initialSnapshot && snapshots.length === 0) {
     dispatch(setInitialSnapshot(gameData.initialSnapshot));
   }
@@ -20,7 +20,7 @@ const Game: React.FC = () => {
     <div className="background-tile">
       {error && <UserGameErrors />}
       {!error && (isLoading || !isUserGameDataRetrieved) && <Center>Loading...</Center>}
-      {user && gameData && snapshots.length > 0 && <Table gameData={gameData}  />}
+      {user && gameData && currSnapshot.index > -1 && <Table gameData={gameData}  />}
     </div>
   );
 };

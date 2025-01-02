@@ -466,7 +466,7 @@ export const initialGameSnapshot: GameSnapshot = {
 };
 
 export const emptyGameSnapshot: GameSnapshot = {
-  index: 0,
+  index: -1,
   actionResultsMap: {},
 
   current: {

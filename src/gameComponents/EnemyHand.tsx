@@ -31,7 +31,6 @@ const EnemyHand = (props: EnemyHandProps) => {
       ref={el => registerPlaceOffset(el, id)}
     >
       {handCards.map((card, index) => (
-
         <EnemyHandCard id={card.id} index={index} imageName={card.imageName} key={card.id} />
       ))}
     </div>
