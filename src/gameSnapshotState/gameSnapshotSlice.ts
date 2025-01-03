@@ -43,66 +43,15 @@ export const gameSnapshotSlice = createSlice({
     setNewSnapshot : (state) => {
       state.newSnapshotIndex = state.snapshotIndex + 1;
       state.newSnapshot = state.snapshots[state.newSnapshotIndex];
-      console.log("current snapshot index is " + state.snapshotIndex);
-      console.log("updated new snapshot index to " + state.newSnapshotIndex);
     },
-    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation>) => {
+    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation | undefined>) => {
       state.activeAnimation = action.payload;
-
-      console.log("setting active animation");
-
     },
     resolveNewSnapshot: (state) => {
-      console.log("resolving snapshot")
       state.activeAnimation = undefined;
       state.snapshotIndex ++;
       state.currSnapshot = state.snapshots[state.snapshotIndex];
-      console.log("new index: " + state.snapshotIndex)
-      console.log("num snapshots: ")
-      console.log("curr snaphost: ", state.currSnapshot)
     },
-    // handleNewGameSnapshots: (state, action: PayloadAction<{snapshots: GameSnapshot[], gameData?: GameData, user?: User}>) => {
-    //   console.log("handling new game snapshots");
-    //   console.log(action.payload);
-    //   const {snapshots, gameData, user} = action.payload;
-    //   const newSnapshots = snapshots.filter(snapshot => snapshot.index > state.snapshotIndex);
-      // newSnapshots.sort((a, b) => a.index - b.index);
-    //   if (newSnapshots.length === 0) return;
-    //   console.log(user)
-    //   if (!gameData || !user) return;
-    //   const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
-
-    //   state.snapshots.push(...modifiedSnapshots);
-    //   const startAnimatingChanges = () => {
-    //     if (state.newSnapshotIndex >= state.snapshots.length) return;
-    //     state.newSnapshotIndex++;
-
-    //     if (state.animationData.length > 0) {
-    //       // If there are still animations in progress, wait for them to finish
-    //       return;
-    //     } else {
-    //       // Create animations for the new snapshots
-    //       console.log("creating animations for snapshot " + state.newSnapshotIndex);
-    //       state.snapshotIndex = 5;
-    //       console.log(snapshots[state.snapshotIndex]);
-    //       state.currSnapshot = state.snapshots[state.snapshotIndex];
-    //       // setTimeout(startAnimatingChanges, 1000);
-    //     }
-    //   };
-      // startAnimatingChanges();
-      // const animationTemplates = createAnimationTemplates(gameSnapshot, newSnapshots[0], "server");
-
-      // // If no animations are necessary to show updated state, update game state and deal with the next newsnaphots...
-      // if (animationTemplates.length === 0) {
-      //   console.log("no animation templates");
-      //   replaceCurrentSnapshotWithNewSnapshot(newSnapshots[0]);
-      //   handleNewSnapshots(getState().newSnapshots);
-      //   return;
-      // }
-      // console.log(animationTemplates.length + " animation template groups");
-      // // Otherwise set up the animation process
-      // dispatch(setAnimationTemplates(animationTemplates));
-    // },
     setNotInGameError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
@@ -116,28 +65,6 @@ export const gameSnapshotSlice = createSlice({
     }
   },
 });
-
-const modifySnapshotsPlayerOrder = (user: User,  gameData: GameData, snapshots: GameSnapshot[]): GameSnapshot[] => {
-  const { id: userId } = user;
-  console.log(gameData)
-  return snapshots.map(snapshot => ({
-    ...snapshot,
-    players: modifyPlayerOrder(userId, snapshot.players),
-  }));
-};
-
-const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] => {
-  console.log("my user id is " + userId);
-  console.log("players are");
-  console.log(players);
-  const playerIndex = players.findIndex(player => player.userId === userId);
-  const playersCopy = [...players];
-  const numPlayersAfterUser = playersCopy.length - playerIndex;
-  const playersAfterUser = playersCopy.splice(playerIndex, numPlayersAfterUser);
-  const result = playersAfterUser.concat(playersCopy);
-
-  return result;
-};
 
 export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 

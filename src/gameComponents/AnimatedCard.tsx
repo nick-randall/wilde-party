@@ -11,8 +11,6 @@ export interface AnimatedCardProps {
 const AnimatedCard : React.FC<AnimatedCardProps> = (props) => {
   
   const { currAnimations, imageName, index, id, gameSnapshot } = props;
-  console.log("displaying animated card: " + imageName)
-
 
   const mainAnimation = currAnimations.find(ani => ani.track === "main");
   const opacityAnimation = currAnimations.find(ani => ani.track === "opacityAndShadow");
@@ -42,7 +40,7 @@ const AnimatedCard : React.FC<AnimatedCardProps> = (props) => {
                         />
                         <img
                           className={opacityAnimationProps.className}
-                          src="./back.jpg"
+                          src="./images/back.jpg"
                           alt=""
                           style={{ transform: `rotateY(180deg)`, ...frontAndBackStyles }}
                         />

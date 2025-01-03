@@ -34,7 +34,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     const { activePlayers, currSnapshot: gameSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
-    console.log(gameSnapshot)
+    console.log(gameSnapshot);
     const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
@@ -92,7 +92,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
         dispatch(appendOffsetMap({ [id]: offset }));
     };
 
-    const {activeAnimation} = useSelector((state: RootState) => state.gameSnapshotState)
+    const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
     // const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!
 
     const animations = activeAnimation?.animations ?? [];
@@ -101,7 +101,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     // th animations haven't been applied yet
     const useOldSnapshot = (id: number) => activeAnimation?.showPrevSnapshot.includes(id) ?? true;
     // Proxy animations' parent is the body, so they are not placed in a Place component
-    const proxyAnimations = activeAnimation?.animations.filter(ani => !ani.placeId) ?? [];
+    const proxyAnimations = activeAnimation?.animations.filter((ani) => !ani.placeId) ?? [];
 
     return (
         <div>
@@ -115,15 +115,15 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                     <PlayerAvatar player={gameSnapshot.players[1]} />
                     <div></div>
                     <PlayerAvatar player={gameSnapshot.players[2]} />
-                     <EnemyHand
+                    <EnemyHand
+                        player={1}
                         id={p02places.hand.id}
                         handCards={p02places.hand.cards}
-                        player={1}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <div></div>
                     <EnemyHand
-                        player={1}
+                        player={2}
                         id={p03places.hand.id}
                         handCards={p03places.hand.cards}
                         registerPlaceOffset={registerPlaceOffset}
@@ -134,7 +134,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                         alignment="bottom-left"
                         registerPlaceOffset={registerPlaceOffset}
                     />
-                   
+
                     <div className="grid-item center-gap-row">
                         <Deck
                             id={nonPlayerPlaces.deck.id}
@@ -159,7 +159,6 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                         GCZCards={p02places.guestCardZone.cards}
                         alignment="top-left"
                     />
-                    
 
                     <div></div>
                     <EnemyGCZ

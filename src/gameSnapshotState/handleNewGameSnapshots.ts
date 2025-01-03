@@ -27,7 +27,6 @@ const modifySnapshotsPlayerOrder = (
     snapshots: GameSnapshot[]
 ): GameSnapshot[] => {
     const { id: userId } = user;
-    console.log(gameData);
     return snapshots.map((snapshot) => ({
         ...snapshot,
         players: modifyPlayerOrder(userId, snapshot.players),
@@ -79,13 +78,14 @@ function* resolveNewSnapshotFollowingAnimation(duration: number) {
 }
 
 export function* continueHandlingSnapshots(): SagaIterator {
-    const { snapshotIndex, snapshots, currSnapshot } = store.getState().gameSnapshotState;
+    const { snapshotIndex, snapshots, currSnapshot, activeAnimation } = store.getState().gameSnapshotState;
     const remainingSnapshots = snapshots.length - snapshotIndex - 1;
-    console.log(" this many remaining snapshots: " + remainingSnapshots);
-    if (remainingSnapshots < 1) return;
+    if (remainingSnapshots < 1) {
+        yield put({ type: setActiveAnimation.type, payload: undefined });
+        return;
+    }
     yield put({ type: setNewSnapshot.type });
     const { newSnapshot } = store.getState().gameSnapshotState;
-    console.log(newSnapshot);
     const dealtCardsSnapshot = newSnapshot;
     if (!dealtCardsSnapshot?.snapshotUpdateData) throw Error("No snapshot update data!");
     const { offsetMap } = store.getState().offsetMapState;
@@ -98,14 +98,14 @@ export function* continueHandlingSnapshots(): SagaIterator {
         newSnapshot: dealtCardsSnapshot,
         offsetMap: offsetMap,
     };
-    const activeAnimation = createDealCardsAnimation(dealCardsArgs);
-    yield call(resolveNewSnapshotFollowingAnimation, activeAnimation.totalDuration);
-    yield put({ type: setActiveAnimation.type, payload: activeAnimation });
+    const newActiveAnimation = createDealCardsAnimation(dealCardsArgs);
+    yield put({ type: setActiveAnimation.type, payload: newActiveAnimation });
+    yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
+
 }
 
 export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
     const { snapshots, user, gameData } = action.payload;
-    console.log("snapshots at first " + snapshots.length);
     const sanitisedSnapshots = sanitiseNewSnapshots(user, gameData, snapshots);
     if (sanitisedSnapshots.length === 0) return;
     yield put({ type: addNewSnapshots.type, payload: sanitisedSnapshots });
