@@ -34,7 +34,6 @@ export const testCardRow = () => {
     },
   ];
   const cardRow = getCardGroupsObjs(row);
-  // console.log(cardRow);
 };
 
 const NewGCZ: React.FC<NewGCZProps> = ({ id, GCZCards, player }) => {
@@ -50,9 +49,8 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, GCZCards, player }) => {
   const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
   const cardRowShape =
     rearrangingData.placeId === id ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex) : getCardRowShapeOnDraggedOver(cardRow);
-  console.log(cardRow);
+
   const ghostCardGroup = cardRow.find(e => rearrangingData.draggedId === e.id);
-  console.log("ghostCardGroup", ghostCardGroup);
   const isHighlighted = highlights.includes(id);
 
   const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);

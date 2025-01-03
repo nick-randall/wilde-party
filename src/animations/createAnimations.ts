@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { RefMap, getMiddleOffset, getOffsetOf, getStylesOf } from "./animationHelperFunctions";
+import { RefMap, getMiddleOffset, getOffsetOf } from "./animationHelperFunctions";
 import { dimensionConstants, getCardCSS } from "../helperFunctions/getCardStyles";
 import {
   AnimationTrack,

@@ -169,7 +169,6 @@ export class MyAnimationTimeline {
         }
       }
     }
-    console.log(`longest duration in step ${longestDurationInStep}`);
 
     const updatedTracks = animationTracks.map(track => {
       const updatedSteps = track.steps.map<AnimationTrackStep>((step, i) => ({ ...step, duration: longestDurationInStep[i] }));

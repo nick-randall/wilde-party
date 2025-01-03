@@ -1,20 +1,4 @@
 import { Offset } from "./getOffset";
-
-export const getStylesOf = (card: HTMLElement | null): CardCSSMap => {
-  const attrs = ["z-index", "width", "height", "left", "top", "position", "transform", "transition", "box-shadow", "user-select", "transform-style"];
-  const map = {} as any;
-  if (!card) {
-    console.error("Card not found!");
-    return map;
-  }
-  for (const attrName of attrs) {
-    const a = attrName as any;
-    const attr = card.style[a];
-    map[a] = attr;
-  }
-  return map;
-};
-
 export interface CardCSSMap {
   "z-index": string;
   width: string;
@@ -28,16 +12,9 @@ export interface CardCSSMap {
   "box-shadow": string;
   "user-select": string;
   "transform-style": string;
+  "-moz-transform-style": string;
+  "-webkit-transform-style": string;
   "border-radius": string;
-}
-
-export function copyAttrs(target: HTMLElement, source: HTMLElement) {
-  const attrs = ["z-index", "width", "height", "left", "top", "position", "transform", "transition", "box-shadow", "user-select", "transform-style"];
-  for (const attrName of attrs) {
-    const a = attrName as any;
-    const attr = source.style[a];
-    target.style[a] = attr;
-  }
 }
 
 const middleCardWidth = 200;

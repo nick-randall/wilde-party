@@ -34,7 +34,6 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     const { activePlayers, currSnapshot: gameSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
-    console.log(gameSnapshot);
     const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
@@ -43,12 +42,6 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
             dispatch(connectWebsocket({ actionOnConnect: joinGame(gameData.id) }));
         }
     }, [dispatch, gameData.id, wsConnected, wsError, wsLoading]);
-
-    // useEffect(() => {
-    //   dispatch(joinGame(gameData.id));
-    // }, [dispatch, gameData.id]);
-
-    // const {gameSnapshot} = useSelector((state: RootState) => state.dragEventState);
 
     const { nonPlayerPlaces } = gameSnapshot;
     const p01places = gameSnapshot.players[0].places;

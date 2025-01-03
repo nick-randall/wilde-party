@@ -21,7 +21,6 @@ const EnemyHand = (props: EnemyHandProps) => {
     );
     const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
     const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-    console.log("activeAnimation ", activeAnimation);
     const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);

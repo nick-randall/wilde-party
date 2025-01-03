@@ -2,7 +2,6 @@ import { CSSProperties, useState } from "react";
 import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } from "react-beautiful-dnd";
 import {  useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import "../animations/animations.css";
 import { CardInspector } from "../renderPropsComponents/CardInspector";
 import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
 import { get } from "http";

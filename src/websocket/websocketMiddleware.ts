@@ -1,15 +1,12 @@
 import { CompatClient, Message, Stomp, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-import { setLoadingWs, setWsError, setConnectedToWs, setDisconnectedFromWs } from "./websocketSlice";
+import { setLoadingWs, setWsError, setConnectedToWs } from "./websocketSlice";
 import store, { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
-import { connectWebsocket } from "./websocketActionCreators";
 import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
-import { setInitialSnapshot, setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
-import { on } from "events";
-import { createHandToTableAnimation } from "../animations/createAnimations";
-import { NewServerSnapshots, sanitiseNewSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
+import { setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
+import { NewServerSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
   let stompClient: CompatClient;
@@ -27,7 +24,6 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       dispatch(setWsError(" Not connected to websocket"));
       return;
     }
-    console.log(action.type);
     switch (action.type) {
       case "CONNECT_WS":
         const { actionOnConnect } = action.payload;
@@ -67,7 +63,6 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           }
         };
         const onChatRoomDataUpdate = (payload: Message) => {
-          console.log("Received personal message: ");
           dispatch(handleChatRoomDataUpdate(JSON.parse(payload.body)));
         };
         // Subscribe to personal messages
@@ -132,9 +127,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
 
       case "INVITE_USER_TO_GAME": {
         const { inviteeId } = action.payload;
-        console.log("sending invite to user: " + inviteeId);
         const message: OutgoingInvitationMessage = { type: "invite", inviteeId };
-        console.log(JSON.stringify(message));
         stompClient.send("/app/invitations", {}, JSON.stringify(message));
 
         // stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: inviteeId, type: "invite" }));
@@ -142,9 +135,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
       }
       case "RESPOND_TO_INVITATION": {
         const { invitationId, accept } = action.payload;
-        console.log("responding accept: " + accept + "  to invitation: " + invitationId);
         const message: OutgoingInvitationMessage = { type: accept ? "accept" : "decline", invitationId };
-        console.log(JSON.stringify(message));
         stompClient.send("/app/invitations", {}, JSON.stringify(message));
 
         // stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({ content: inviteeId, type: "invite" }));
