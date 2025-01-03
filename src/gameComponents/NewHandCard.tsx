@@ -74,7 +74,7 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({ id, index, imageName, 
       {d => (
         <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
           <img
-            src={`./${cardIsFaceup ? `./images/${imageName}.jpg` : "back.jpg"}`}
+            src={`./${cardIsFaceup ? `./images/${imageName}.jpg` : "./images/back.jpg"}`}
             alt="id"
             draggable={false}
             style={{ ...styles, left }} // TODO change cardHeight name to height

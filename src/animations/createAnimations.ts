@@ -114,12 +114,12 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
 
     const deckToMiddle = [
       new TableToMiddle({
+        duration: 500,
         fromOffset: new Offset(deckOffset),
         fromStyles: getCardCSS(cardId, oldSnapshot),
         toOffset: getMiddleOffset(),
         toStyles: middleStylesWithZIndex,
         zeroOffset: "fromOffset",
-        duration: 500,
       }),
       new FromDisappears({ visibility: "disappearing" }),
       new NothingHappens(),
@@ -137,6 +137,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
         zeroOffset: "toOffset",
       }),
     ];
+
     const handToMiddleTrack = new AnimationTrack({ cardId, steps: deckToMiddle, homePlaceId: deckId }); //, naturalOffset: getOffsetOf(cardId), naturalDimensions: getDimensions(1, "GCZ")
     const middleToTableTrack = new AnimationTrack({ cardId, steps: middleToHand, homePlaceId: handId }); //  naturalOffset: getOffsetOf(cardId),  naturalDimensions: getDimensions(1, "GCZ"),
 

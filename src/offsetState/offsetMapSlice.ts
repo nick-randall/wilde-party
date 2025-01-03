@@ -1,7 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface OffsetMap {
+  [key: string]: { dx: number; dy: number };
+}
+
+
+
 
 interface OffsetMapState {
-  offsetMap: { [key: string]: { dx: number; dy: number } };
+  offsetMap: OffsetMap;
 }
 
 const initialState: OffsetMapState = {
@@ -12,7 +19,7 @@ const offsetSlice = createSlice({
   name: "offsetMap",
   initialState,
   reducers: {
-    appendOffsetMap: (state, action) => {
+    appendOffsetMap: (state, action: PayloadAction<OffsetMap>) => {
       state.offsetMap = { ...state.offsetMap, ...action.payload };
     },
   },
