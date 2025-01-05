@@ -13,6 +13,7 @@ import { getEnchantableNeighbours } from "../helperFunctions/canEnchantNeighbour
 
 interface NewGCZProps {
     id: number;
+    gameSnapshot: GameSnapshot;
     GCZCards: GameCard[];
     player: number;
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
@@ -42,7 +43,7 @@ export const testCardRow = () => {
     const cardRow = getCardGroupsObjs(row);
 };
 
-const NewGCZ: React.FC<NewGCZProps> = ({ id, GCZCards, player, registerPlaceOffset }) => {
+const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset }) => {
     const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
         (state: RootState) => state.dragEventState
     );
@@ -57,7 +58,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, GCZCards, player, registerPlaceOffs
 
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
-
+    const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
     const cardRowShape =
         rearrangingData.placeId === id

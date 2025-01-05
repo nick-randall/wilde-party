@@ -8,21 +8,16 @@ import {
 import AnimatedCard from "./AnimatedCard";
 interface EnemyHandProps {
     id: number;
-    // handCards: GameCard[];
+    gameSnapshot: GameSnapshot;
     player: number;
     // currAnimations: AnimationData[]
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
 const EnemyHand = (props: EnemyHandProps) => {
-    const { id, player, registerPlaceOffset } = props;
-    const { currSnapshot, newSnapshot } = useSelector(
-        (state: RootState) => state.gameSnapshotState
-    );
+    const { id, player, gameSnapshot, registerPlaceOffset } = props;
     const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
 
-    const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-    const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
     const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, gameSnapshot);

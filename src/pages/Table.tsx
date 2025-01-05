@@ -35,19 +35,14 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     console.log(gameData);
     const dispatch = useDispatch();
     const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
-    const { activePlayers, currSnapshot: gameSnapshot } = useSelector(
-        (state: RootState) => state.gameSnapshotState
-    );
+
     const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
-    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
 
     useEffect(() => {
         if (!wsConnected && !wsLoading && !wsError) {
             dispatch(connectWebsocket({ actionOnConnect: joinGame(gameData.id) }));
         }
     }, [dispatch, gameData.id, wsConnected, wsError, wsLoading]);
-
-    const { nonPlayerPlaces } = gameSnapshot;
 
     const testUpdate = () => {
         const me = currSnapshot.players[0];
@@ -86,20 +81,22 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
         dispatch(appendOffsetMap({ [id]: offset }));
     };
 
-    const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { currSnapshot, newSnapshot, activeAnimation } = useSelector(
+        (state: RootState) => state.gameSnapshotState
+    );
     const { myIndex } = useSelector((state: RootState) => state.userGameState);
-    // const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!
 
-    const animations = activeAnimation?.animations ?? [];
     // If activeAnimation is undefined, always show the old Snapshot,
     // otherwise there is a UI flash where the snapshot has updated but
     // th animations haven't been applied yet
-    const useOldSnapshot = (id: number) => activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+    const whichSnapshot = (id: number) => {
+        const showPrevSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+        return showPrevSnapshot ? currSnapshot : newSnapshot!;
+    };
     // Proxy animations' parent is the body, so they are not placed in a Place component
     const proxyAnimations = activeAnimation?.animations.filter((ani) => !ani.placeId) ?? [];
 
     const players = gameData.players.map((p) => p.id);
-
 
     const shiftRight = (myIndex: number, mover: number, group: number[]) => {
         const moverIndex = group.indexOf(mover);
@@ -111,9 +108,10 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const playerOne = shiftRight(myIndex, players[1], players);
     const playerTwo = shiftRight(myIndex, players[2], players);
 
-    const p0places = gameSnapshot.players[playerZero].places;
-    const p1places = gameSnapshot.players[playerOne].places;
-    const p2places = gameSnapshot.players[playerTwo].places;
+    const nonPlayerPlaces = currSnapshot.nonPlayerPlaces;
+    const p0 = currSnapshot.players[playerZero];
+    const p1 = currSnapshot.players[playerOne];
+    const p2 = currSnapshot.players[playerTwo];
 
     return (
         <div>
@@ -124,23 +122,26 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                 onBeforeCapture={onBeforeCapture}
             >
                 <div className="table-grid background-tile">
-                    <PlayerAvatar player={gameSnapshot.players[playerOne]} />
+                    <PlayerAvatar player={p1} />
                     <div></div>
-                    <PlayerAvatar player={gameSnapshot.players[playerTwo]} />
+                    <PlayerAvatar player={p2} />
                     <EnemyHand
+                        id={p1.places.hand.id}
+                        gameSnapshot={whichSnapshot(p1.places.hand.id)}
                         player={playerOne}
-                        id={p1places.hand.id}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <div></div>
                     <EnemyHand
+                        id={p2.places.hand.id}
                         player={playerTwo}
-                        id={p2places.hand.id}
+                        gameSnapshot={whichSnapshot(p2.places.hand.id)}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <SpecialsZone
+                        id={p1.places.specialsZone.id}
                         player={playerOne}
-                        specialsZoneData={gameSnapshot.players[playerOne].places.specialsZone}
+                        gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
                         alignment="bottom-left"
                         registerPlaceOffset={registerPlaceOffset}
                     />
@@ -148,7 +149,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     <div className="grid-item center-gap-row">
                         <Deck
                             id={nonPlayerPlaces.deck.id}
-                            cards={nonPlayerPlaces.deck.cards}
+                            gameSnapshot={whichSnapshot(nonPlayerPlaces.deck.id)}
                             registerPlaceOffset={registerPlaceOffset}
                         />
                         <DiscardPile
@@ -157,22 +158,25 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         />
                     </div>
                     <SpecialsZone
-                        player={2}
-                        specialsZoneData={gameSnapshot.players[playerTwo].places.specialsZone}
+                        id={p2.places.specialsZone.id}
+                        player={playerTwo}
+                        gameSnapshot={whichSnapshot(p2.places.specialsZone.id)}
                         alignment="bottom-right"
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <EnemyGCZ
+                        id={p1.places.guestCardZone.id}
+                        gameSnapshot={whichSnapshot(p1.places.guestCardZone.id)}
                         player={playerOne}
-                        id={gameSnapshot.players[playerOne].places.guestCardZone.id}
                         registerPlaceOffset={registerPlaceOffset}
                         alignment="top-left"
                     />
 
                     <div></div>
                     <EnemyGCZ
+                        id={p2.places.guestCardZone.id}
+                        gameSnapshot={whichSnapshot(p2.places.guestCardZone.id)}
                         player={playerTwo}
-                        id={gameSnapshot.players[playerTwo].places.guestCardZone.id}
                         registerPlaceOffset={registerPlaceOffset}
                         alignment="top-right"
                     />
@@ -180,25 +184,27 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         <button onClick={testUpdate}></button>
                         <SpecialsZone
                             player={playerZero}
-                            specialsZoneData={gameSnapshot.players[playerZero].places.specialsZone}
+                            id={p0.places.specialsZone.id}
+                            gameSnapshot={whichSnapshot(p0.places.specialsZone.id)}
                             alignment=""
                             registerPlaceOffset={registerPlaceOffset}
                         />
                         <NewGCZ
+                            id={p0.places.guestCardZone.id}
+                            gameSnapshot={whichSnapshot(p0.places.guestCardZone.id)}
                             player={playerZero}
-                            id={p0places.guestCardZone.id}
-                            GCZCards={p0places.guestCardZone.cards}
+                            GCZCards={p0.places.guestCardZone.cards}
                             registerPlaceOffset={registerPlaceOffset}
                         />
                     </div>
                     <NewHand
-                        id={p0places.hand.id}
+                        id={p0.places.hand.id}
                         player={playerZero}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <UWZ
                         player={playerZero}
-                        id={p0places.unwantedsZone.id}
+                        id={p0.places.unwantedsZone.id}
                         alignment="center-right"
                     />
                 </div>

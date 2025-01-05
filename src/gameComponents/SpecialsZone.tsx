@@ -7,7 +7,8 @@ import "../css/global.css";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 
 interface SpecialsZoneProps {
-  specialsZoneData: GamePlace;
+  id: number;
+  gameSnapshot: GameSnapshot;
   alignment: string;
   player: number
   registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
@@ -34,7 +35,8 @@ const groupSpecialsColumns = (specialsCards: GameCard[]): SpecialsColumnCards[] 
   });
 };
 
-export const SpecialsZone: React.FC<SpecialsZoneProps> = ({ specialsZoneData:{id, cards}, alignment, player, registerPlaceOffset }) => {
+export const SpecialsZone: React.FC<SpecialsZoneProps> = ({id, gameSnapshot, alignment, player, registerPlaceOffset }) => {
+  const cards = gameSnapshot.players[player].places.specialsZone.cards;
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
   const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);

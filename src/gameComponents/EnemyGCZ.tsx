@@ -7,6 +7,7 @@ import AnimatedCard from "./AnimatedCard";
 interface EnemyGCZProps {
     player: number;
     id: number;
+    gameSnapshot: GameSnapshot;
     // GCZCards: GameCard[];
     // currAnimations: AnimationData[];
     alignment: string;
@@ -14,12 +15,11 @@ interface EnemyGCZProps {
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-    const { id, alignment, player, registerPlaceOffset } = props;
-    const { currSnapshot, newSnapshot, activeAnimation } = useSelector(
+    const { id, gameSnapshot , alignment, player, registerPlaceOffset } = props;
+    const {  activeAnimation } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
-    const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-    const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
+
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
 
