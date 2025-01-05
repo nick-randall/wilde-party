@@ -5,7 +5,7 @@ import { UserGameState, whoami } from "./userSlice";
 
 const useUserGameData = (): UserGameState => {
   const dispatch = useDispatch();
-  const { isUserGameDataRetrieved, user, isLoading, error, gameData } = useSelector((state: RootState) => state.userGameState);
+  const { isUserGameDataRetrieved, user, isLoading, error, gameData, myIndex } = useSelector((state: RootState) => state.userGameState);
   useEffect(() => {
     if (isLoading || error || isUserGameDataRetrieved) return;
     setTimeout(() => {
@@ -14,7 +14,7 @@ const useUserGameData = (): UserGameState => {
     
   }, [dispatch, user, isUserGameDataRetrieved, isLoading, error]);
 
-  return { isUserGameDataRetrieved, isLoading, error, user, gameData };
+  return { isUserGameDataRetrieved, isLoading, error, user, gameData, myIndex };
 };
 
 export default useUserGameData;

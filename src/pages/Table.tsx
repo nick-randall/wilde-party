@@ -23,12 +23,16 @@ import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/
 import { locatePlace } from "../helperFunctions/locateFunctions";
 import { appendOffsetMap } from "../offsetState/offsetMapSlice";
 import EnemyHand from "../gameComponents/EnemyHand";
+import { platform } from "os";
 
 interface TableProps {
     gameData: GameData;
+    user: User;
 }
 
-export const Table: React.FC<TableProps> = ({ gameData }) => {
+export const Table: React.FC<TableProps> = ({ gameData, user }) => {
+    console.log(user);
+    console.log(gameData);
     const dispatch = useDispatch();
     const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
     const { activePlayers, currSnapshot: gameSnapshot } = useSelector(
@@ -44,9 +48,6 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     }, [dispatch, gameData.id, wsConnected, wsError, wsLoading]);
 
     const { nonPlayerPlaces } = gameSnapshot;
-    const p01places = gameSnapshot.players[0].places;
-    const p02places = gameSnapshot.players[1].places;
-    const p03places = gameSnapshot.players[2].places;
 
     const testUpdate = () => {
         const me = currSnapshot.players[0];
@@ -86,6 +87,7 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     };
 
     const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { myIndex } = useSelector((state: RootState) => state.userGameState);
     // const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!
 
     const animations = activeAnimation?.animations ?? [];
@@ -96,6 +98,23 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
     // Proxy animations' parent is the body, so they are not placed in a Place component
     const proxyAnimations = activeAnimation?.animations.filter((ani) => !ani.placeId) ?? [];
 
+    const players = gameData.players.map((p) => p.id);
+
+
+    const shiftRight = (myIndex: number, mover: number, group: number[]) => {
+        const moverIndex = group.indexOf(mover);
+        const initialMove = moverIndex + myIndex;
+        return initialMove % group.length;
+    };
+
+    const playerZero = shiftRight(myIndex, players[0], players);
+    const playerOne = shiftRight(myIndex, players[1], players);
+    const playerTwo = shiftRight(myIndex, players[2], players);
+
+    const p0places = gameSnapshot.players[playerZero].places;
+    const p1places = gameSnapshot.players[playerOne].places;
+    const p2places = gameSnapshot.players[playerTwo].places;
+
     return (
         <div>
             <DragDropContext
@@ -105,25 +124,23 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                 onBeforeCapture={onBeforeCapture}
             >
                 <div className="table-grid background-tile">
-                    <PlayerAvatar player={gameSnapshot.players[1]} />
+                    <PlayerAvatar player={gameSnapshot.players[playerOne]} />
                     <div></div>
-                    <PlayerAvatar player={gameSnapshot.players[2]} />
+                    <PlayerAvatar player={gameSnapshot.players[playerTwo]} />
                     <EnemyHand
-                        player={1}
-                        id={p02places.hand.id}
-                        handCards={p02places.hand.cards}
+                        player={playerOne}
+                        id={p1places.hand.id}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <div></div>
                     <EnemyHand
-                        player={2}
-                        id={p03places.hand.id}
-                        handCards={p03places.hand.cards}
+                        player={playerTwo}
+                        id={p2places.hand.id}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <SpecialsZone
-                        player={1}
-                        specialsZoneData={gameSnapshot.players[1].places.specialsZone}
+                        player={playerOne}
+                        specialsZoneData={gameSnapshot.players[playerOne].places.specialsZone}
                         alignment="bottom-left"
                         registerPlaceOffset={registerPlaceOffset}
                     />
@@ -141,49 +158,47 @@ export const Table: React.FC<TableProps> = ({ gameData }) => {
                     </div>
                     <SpecialsZone
                         player={2}
-                        specialsZoneData={gameSnapshot.players[2].places.specialsZone}
+                        specialsZoneData={gameSnapshot.players[playerTwo].places.specialsZone}
                         alignment="bottom-right"
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <EnemyGCZ
-                        player={1}
-                        id={gameSnapshot.players[1].places.guestCardZone.id}
-                        enchantmentsRowCards={p02places.enchantmentsRow.cards}
-                        GCZCards={p02places.guestCardZone.cards}
+                        player={playerOne}
+                        id={gameSnapshot.players[playerOne].places.guestCardZone.id}
+                        registerPlaceOffset={registerPlaceOffset}
                         alignment="top-left"
                     />
 
                     <div></div>
                     <EnemyGCZ
-                        player={2}
-                        id={gameSnapshot.players[2].places.guestCardZone.id}
-                        enchantmentsRowCards={p03places.enchantmentsRow.cards}
-                        GCZCards={p03places.guestCardZone.cards}
+                        player={playerTwo}
+                        id={gameSnapshot.players[playerTwo].places.guestCardZone.id}
+                        registerPlaceOffset={registerPlaceOffset}
                         alignment="top-right"
                     />
                     <div className="grid-item center-column align-start">
                         <button onClick={testUpdate}></button>
                         <SpecialsZone
-                            player={0}
-                            specialsZoneData={gameSnapshot.players[0].places.specialsZone}
+                            player={playerZero}
+                            specialsZoneData={gameSnapshot.players[playerZero].places.specialsZone}
                             alignment=""
                             registerPlaceOffset={registerPlaceOffset}
                         />
                         <NewGCZ
-                            player={0}
-                            id={p01places.guestCardZone.id}
-                            GCZCards={p01places.guestCardZone.cards}
+                            player={playerZero}
+                            id={p0places.guestCardZone.id}
+                            GCZCards={p0places.guestCardZone.cards}
+                            registerPlaceOffset={registerPlaceOffset}
                         />
                     </div>
                     <NewHand
-                        id={p01places.hand.id}
-                        handCards={p01places.hand.cards}
+                        id={p0places.hand.id}
+                        player={playerZero}
                         registerPlaceOffset={registerPlaceOffset}
                     />
                     <UWZ
-                        player={0}
-                        id={p01places.unwantedsZone.id}
-                        unwantedCards={p01places.unwantedsZone.cards}
+                        player={playerZero}
+                        id={p0places.unwantedsZone.id}
                         alignment="center-right"
                     />
                 </div>

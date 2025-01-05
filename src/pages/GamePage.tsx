@@ -5,6 +5,7 @@ import { Center } from "../components/Center";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setInitialSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
+import { setMyIndex } from "../user/userSlice";
 
 const Game: React.FC = () => {
   const { isUserGameDataRetrieved, isLoading, error, user, gameData } = useUserGameData();
@@ -12,15 +13,19 @@ const Game: React.FC = () => {
   // Ensure that the initial snapshot is set in the gameSnapshotState
   const dispatch = useDispatch();
   const { snapshots, currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-  if (gameData?.initialSnapshot && snapshots.length === 0) {
+  if (gameData?.initialSnapshot && user && snapshots.length === 0) {
+    const myIndex = gameData.players.findIndex((p) => p.id === user.id);
+    dispatch(setMyIndex(myIndex));
     dispatch(setInitialSnapshot(gameData.initialSnapshot));
   }
+
+
   
   return (
     <div className="background-tile">
       {error && <UserGameErrors />}
       {!error && (isLoading || !isUserGameDataRetrieved) && <Center>Loading...</Center>}
-      {user && gameData && currSnapshot.index > -1 && <Table gameData={gameData}  />}
+      {user && gameData && currSnapshot.index > -1 && <Table gameData={gameData} user={user}  />}
     </div>
   );
 };

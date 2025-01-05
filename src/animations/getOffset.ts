@@ -32,6 +32,8 @@ export const getMiddleStyles = (): CardCSSMap => ({
   "box-shadow": dimensionConstants.MIDDLE_CARD_SHADOW,
   "user-select": "",
   "transform-style": "",
+  "-webkit-transform-style": "",
+  "-moz-transform-style": "",
   scale: "",
   "border-radius": `${dimensionConstants.CARD_BORDER_RADIUS}`
 });

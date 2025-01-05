@@ -7,17 +7,17 @@ import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCard
 
 interface UWZProps {
   id: number;
-  unwantedCards: GameCard[];
   alignment: string;
   player: number;
 }
 
 export const UWZ = (props: UWZProps) => {
-  const { id, unwantedCards, alignment, player } = props;
+  const { id, alignment, player } = props;
   const droppableData: DroppableData = { type: "place", id };
   const droppableId = JSON.stringify(droppableData);
 
   const {draggedHandCard, draggedOver, highlights, rearrangingData} = useSelector((state: RootState) => state.dragEventState);
+  const {activeAnimation, currSnapshot, newSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
 
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
@@ -27,9 +27,16 @@ export const UWZ = (props: UWZProps) => {
   const rearranging = useSelector((state: RootState) => state.dragEventState.rearrangingData.placeId === id);
 
   const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
-  const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);  
-  const dimensions = getCardStyleValuesFromPlaceAndPlayer("unwantedsZone", player, currSnapshot);
+  const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+  const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
+  const animations = activeAnimation?.animations ?? [];
+  const animationCardIds = animations.map((a) => a.cardId);
+  const unwantedCards = gameSnapshot.players[player].places.unwantedsZone.cards;
+  const dimensions = getCardStyleValuesFromPlaceAndPlayer("unwantedsZone", player, gameSnapshot);
   const { cardWidth, cardHeight, top } = dimensions;
+
+
+
   return (
     <div style={{ transition:"left 180ms" }} className={`grid-item ${alignment}`}>
       {unwantedCards.map((card, index) => (

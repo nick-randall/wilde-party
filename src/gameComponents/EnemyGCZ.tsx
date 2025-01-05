@@ -2,39 +2,59 @@ import { useSelector } from "react-redux";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import Card from "./Card";
 import { RootState } from "../redux/store";
+import AnimatedCard from "./AnimatedCard";
 
 interface EnemyGCZProps {
-  player: number;
-  id: number;
-  enchantmentsRowCards: GameCard[];
-  GCZCards: GameCard[];
-  // currAnimations: AnimationData[];
-  alignment: string;
+    player: number;
+    id: number;
+    // GCZCards: GameCard[];
+    // currAnimations: AnimationData[];
+    alignment: string;
+    registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-  const { GCZCards, enchantmentsRowCards, id, alignment, player } = props;
-  const {currSnapshot}  = useSelector((state: RootState) => state.gameSnapshotState);
-  // console.log("PLAYER " + player +  " GCZ")
-  // console.log(enchantmentsRowCards)
+    const { id, alignment, player, registerPlaceOffset } = props;
+    const { currSnapshot, newSnapshot, activeAnimation } = useSelector(
+        (state: RootState) => state.gameSnapshotState
+    );
+    const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+    const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
+    const animations = activeAnimation?.animations ?? [];
+    const animationCardIds = animations.map((a) => a.cardId);
 
-  const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, currSnapshot);
-  return (
-    <div className={`grid-item ${alignment}`}>
-      {GCZCards.map((card, index) => (
-        <div key={card.id} style={{ left: index * styles.left, position: "relative" }}>
-          <Card id={card.id} index={index} imageName={card.imageName} />
-        </div>
-      ))}
-      {/* <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
+    const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
+
+    const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, gameSnapshot);
+    return (
+        <div className={`grid-item ${alignment}`} ref={(el) => registerPlaceOffset(el, id)}>
+            {GCZCards.map((card, index) =>
+                !animationCardIds.includes(card.id) ? (
+                    <div key={card.id} style={{ left: index * styles.left, position: "relative" }}>
+                        <Card id={card.id} index={index} imageName={card.imageName} />
+                    </div>
+                ) : (
+                    <AnimatedCard
+                        key={card.id}
+                        id={card.id}
+                        currAnimations={animations.filter(
+                            (a) => a.cardId === card.id && a.placeId === id
+                        )}
+                        imageName={card.imageName}
+                        index={index}
+                        gameSnapshot={gameSnapshot}
+                    />
+                )
+            )}
+            {/* <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
         {enchantmentsRowCards.map(card => (
           <div key={card.id} style={{ left: card.index * styles.left, position: "absolute" }}>
             <Card id={card.id} index={card.index} imageName={card.imageName} />
           </div>
         ))}
       </div> */}
-    </div>
-  );
+        </div>
+    );
 };
 
 export default EnemyGCZ;

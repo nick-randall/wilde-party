@@ -11,10 +11,10 @@ import AnimatedCard from "./AnimatedCard";
 
 interface NewHandProps {
     id: number;
-    handCards: GameCard[];
+    player: number;
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
-const NewHand: React.FC<NewHandProps> = ({ id, handCards, registerPlaceOffset }) => {
+const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) => {
     const [shouldSpread, setShouldSpread] = useState(false);
     const { activeAnimation, currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
@@ -26,7 +26,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, handCards, registerPlaceOffset })
         (state: RootState) => state.dragEventState.transitionData.length > 0
     );
     const enemysTurn = useSelector(
-        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== 0
+        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== player
     );
     const droppableId = JSON.stringify({ type: "place", id });
 
@@ -34,10 +34,10 @@ const NewHand: React.FC<NewHandProps> = ({ id, handCards, registerPlaceOffset })
     const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
-    const styles = getCardStyleValuesFromPlaceAndPlayer("hand", 0, currSnapshot);
+    const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, currSnapshot);
     const { left: cardLeftSpread } = styles;
     const [spread, setSpread] = useState(cardLeftSpread);
-    const cards = gameSnapshot.players[0].places.hand.cards;
+    const cards = gameSnapshot.players[player].places.hand.cards;
 
     const [hover, setHover] = useState(false);
 
@@ -55,7 +55,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, handCards, registerPlaceOffset })
                                     index={index}
                                     hover={hover}
                                     setHover={setHover}
-                                    numHandCards={handCards.length}
+                                    numHandCards={cards.length}
                                 />
                             ) : (
                                 <AnimatedCard

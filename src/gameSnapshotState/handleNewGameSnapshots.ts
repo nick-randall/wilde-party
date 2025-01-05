@@ -51,8 +51,8 @@ export const sanitiseNewSnapshots = (
     snapshots.sort((a, b) => a.index - b.index);
 
     const newSnapshots = removeExistingSnapshots(snapshots);
-    const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
-    return modifiedSnapshots;
+    // const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
+    return newSnapshots;
 };
 
 export interface NewServerSnapshots {
