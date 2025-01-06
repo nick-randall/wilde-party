@@ -402,4 +402,7 @@ export class HandToMiddle extends AnimationTrackStep {
   }
 }
 
+export class HandToTable extends AnimationTrackStep {
+}
+
 export const animate = (cardId: number, newSnapshot: GameSnapshot) => {};

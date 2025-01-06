@@ -5,6 +5,7 @@ import {
   AnimationTrack,
   FromDisappears,
   HandToMiddle,
+  HandToTable,
   MiddleToHand,
   MiddleToTable,
   MyAnimationTimeline,
@@ -91,8 +92,6 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
   if (!handOffset) {
     throw new Error("Offset not found for hand with id of " + handId);
   }
-  // const deck = placeRefMap.current[deckId];
-  // const hand = placeRefMap.current[handId];
   // assumption: the hand will position its children at its
   // absolute top left, then apply any styles they have.
 
@@ -153,6 +152,58 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
   }
   return { animations, totalDuration: durationOfAllAnimations, showPrevSnapshot: [deckId] };
 };
+
+export const createDealEnemysCardAnimation = (args: DealCardsArgs): ActiveAnimation => { 
+  const { cardIds, deckId, handId, oldSnapshot, newSnapshot, offsetMap } = args;
+  const deckOffset = offsetMap[deckId];
+  if (!deckOffset) {
+    throw new Error("Offset not found for deck with id of " + deckId);
+  }
+  const handOffset = offsetMap[handId];
+  if (!handOffset) {
+    throw new Error("Offset not found for hand with id of " + handId);
+  }
+  const animations: AnimationData[] = [];
+  let durationOfAllAnimations = 0;
+  // cardIds.reverse()
+
+  for (let i = 0; i < cardIds.length; i++) {
+    const cardId = cardIds[i];
+
+    const toStylesWithZindex = getCardCSS(cardId, newSnapshot);
+    const middleZIndex = dimensionConstants.ANIMATED_CARDS_Z_INDEX
+    // Set the zIndex to increase with each iteration so that later cards are above earlier cards
+    toStylesWithZindex["z-index"] = `${middleZIndex + 5 + i}`;
+    // const handStylesWithZIndex = getCardCSS(cardId, newSnapshot);
+    // Set the zIndex to lower than cards leaving deck but all at the same so they naturally
+    // fall where they should
+    // handStylesWithZIndex["z-index"] = `${middleZIndex}`;
+
+    const deckToHand = [
+      new HandToTable({
+        duration: 300,
+        fromOffset: new Offset(deckOffset),
+        fromStyles: getCardCSS(cardId, oldSnapshot),
+        toOffset: new Offset(handOffset),
+        toStyles: toStylesWithZindex,
+        zeroOffset: "toOffset",
+      }),
+    ];
+
+    const handToMiddleTrack = new AnimationTrack({ cardId, steps: deckToHand, homePlaceId: handId }); //, naturalOffset: getOffsetOf(cardId), naturalDimensions: getDimensions(1, "GCZ")
+
+    const delay = i * dimensionConstants.DELAY_BETWEEN_DEALT_CARDS;
+
+    const { animationData, totalDuration } = new MyAnimationTimeline({
+      animationTracks: [handToMiddleTrack],
+      startDelay: delay,
+      showPrevSnapshot: [handId],
+    });
+    animations.push(...animationData);
+    durationOfAllAnimations = totalDuration;
+  }
+  return { animations, totalDuration: durationOfAllAnimations, showPrevSnapshot: [deckId] };
+}
 
 export interface DestroyArgs {
   handCardId: number;

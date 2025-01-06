@@ -52,6 +52,7 @@ type SnapshotUpdateType =
   | "rearrangingHand"
   | "rearrangingTablePlace"
   | "drawingWildeParty"
+  | "dealingStartingGuest"
   | ActionType;
 
 type LegalTargetType = "player" | "place" | "card";

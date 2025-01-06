@@ -63,7 +63,6 @@ const EnemyHand = (props: EnemyHandProps) => {
                     />
                 )
             )}
-            <p style={{fontSize: 40}}>{id}</p>
         </div>
     );
 };

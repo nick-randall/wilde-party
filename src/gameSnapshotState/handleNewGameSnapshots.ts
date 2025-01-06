@@ -13,6 +13,7 @@ import {
 import { off } from "process";
 import { locatePlace } from "../helperFunctions/locateFunctions";
 import { pipe } from "ramda";
+import { selectAnimation } from "../animations/selectAnimation";
 
 const removeExistingSnapshots = (snapshots: GameSnapshot[]): GameSnapshot[] => {
     const existingSnapshots = store.getState().gameSnapshotState.snapshots;
@@ -86,19 +87,9 @@ export function* continueHandlingSnapshots(): SagaIterator {
     }
     yield put({ type: setNewSnapshot.type });
     const { newSnapshot } = store.getState().gameSnapshotState;
-    const dealtCardsSnapshot = newSnapshot;
-    if (!dealtCardsSnapshot?.snapshotUpdateData) throw Error("No snapshot update data!");
-    const { offsetMap } = store.getState().offsetMapState;
-
-    const dealCardsArgs: DealCardsArgs = {
-        cardIds: dealtCardsSnapshot.snapshotUpdateData.playedCardIds,
-        deckId: dealtCardsSnapshot.nonPlayerPlaces.deck.id,
-        handId: dealtCardsSnapshot.snapshotUpdateData.targetId,
-        oldSnapshot: currSnapshot,
-        newSnapshot: dealtCardsSnapshot,
-        offsetMap: offsetMap,
-    };
-    const newActiveAnimation = createDealCardsAnimation(dealCardsArgs);
+    if(!newSnapshot) throw Error("No new snapshot!");
+    const newActiveAnimation = selectAnimation(currSnapshot, newSnapshot);
+    if(!newActiveAnimation) throw Error("No active animation!");
     yield put({ type: setActiveAnimation.type, payload: newActiveAnimation });
     yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
 
