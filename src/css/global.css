@@ -10,7 +10,7 @@ div {
   font-family: wilde-party-font;
   font-size: 20px;
   color: white;
-  text-align: center;
+  /* text-align: center; */
   text-shadow: 2px 2px 4px black;
   box-sizing: border-box;
 }
