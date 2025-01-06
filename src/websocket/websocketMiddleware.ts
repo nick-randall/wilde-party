@@ -44,6 +44,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
           dispatch(setConnectedToWs());
           dispatch(actionOnConnect);
         };
+        stompClient.debug = () => {};
         stompClient.activate();
 
         break;

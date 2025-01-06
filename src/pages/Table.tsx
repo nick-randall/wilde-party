@@ -31,8 +31,6 @@ interface TableProps {
 }
 
 export const Table: React.FC<TableProps> = ({ gameData, user }) => {
-    console.log(user);
-    console.log(gameData);
     const dispatch = useDispatch();
     const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
 
@@ -193,7 +191,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                             id={p0.places.guestCardZone.id}
                             gameSnapshot={whichSnapshot(p0.places.guestCardZone.id)}
                             player={playerZero}
-                            GCZCards={p0.places.guestCardZone.cards}
                             registerPlaceOffset={registerPlaceOffset}
                         />
                     </div>
