@@ -191,7 +191,7 @@ interface IntermediateStepData {
   visibility: Visibility;
 }
 
-class AnimationTrackStep {
+export class AnimationTrackStep {
   duration?: number;
   isProxy?: boolean;
   fromOffset?: Offset;

@@ -113,6 +113,36 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
 
     return (
         <div>
+            <div
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    height: "40%",
+                    width: "100%",
+                    backgroundColor: "red",
+                    opacity: 0.2,
+                }}
+            ></div>
+            <div
+            style={{
+              position: "absolute",
+              left: 0,
+              height: "60%",
+              width: "50%",
+              backgroundColor: "green",
+              opacity: 0.2,
+          }}
+            ></div>
+            <div
+            style={{
+              position: "absolute",
+              right: 0,
+              height: "60%",
+              width: "50%",
+              backgroundColor: "blue",
+              opacity: 0.2,
+          }}
+            ></div>
             <DragDropContext
                 onDragStart={onDragStart}
                 onDragUpdate={onDragUpdate}
