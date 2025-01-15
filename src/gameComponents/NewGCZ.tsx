@@ -61,7 +61,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
     const {  activeAnimation } = useSelector(
-      (state: RootState) => state.gameSnapshotState
+      (state: RootState) => state.animationState
   );
 
   const animations = activeAnimation?.animations ?? [];

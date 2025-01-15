@@ -38,9 +38,10 @@ const Hand = forwardRef<RefMap, HandProps>((props, refMap) => {
     );
     const droppableId = JSON.stringify({ type: "place", id });
 
-    const { activeAnimation, newSnapshot, snapshots } = useSelector(
+    const { newSnapshot, snapshots } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
+    const activeAnimation = useSelector((state: RootState) => state.animationState.activeAnimation);
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations
         .filter((ani) => ani.placeId === id)

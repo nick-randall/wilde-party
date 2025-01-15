@@ -16,7 +16,7 @@ interface EnemyHandProps {
 
 const EnemyHand = (props: EnemyHandProps) => {
     const { id, player, gameSnapshot, registerPlaceOffset } = props;
-    const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);

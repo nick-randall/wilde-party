@@ -35,9 +35,9 @@ export interface HandToTableArgs {
 
 export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimation => {
   const { cardId, handId, targetPlaceId, oldSnapshot, newSnapshot, placeRefMap } = args;
-  const fromPlaceOffset = store.getState().offsetMapState.offsetMap[handId];
+  const fromPlaceOffset = store.getState().animationState.offsetMap[handId];
   // const targetPlace = placeRefMap.current[targetPlaceId];
-  const targetPlaceOffset = store.getState().offsetMapState.offsetMap[targetPlaceId];
+  const targetPlaceOffset = store.getState().animationState.offsetMap[targetPlaceId];
   // assumption: the targetPlace will position its children at its
   // absolute top left, then apply any styles they have.
 

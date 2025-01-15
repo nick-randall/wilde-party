@@ -11,7 +11,7 @@ export const selectAnimation = (
     oldSnapshot: GameSnapshot,
     newSnapshot: GameSnapshot
 ): ActiveAnimation | undefined => {
-    const { offsetMap } = store.getState().offsetMapState;
+    const { offsetMap } = store.getState().animationState;
     const { snapshotUpdateData } = newSnapshot;
     if (!snapshotUpdateData) throw Error("No snapshot update data!");
     const { type, targetId, playedCardIds, secondaryCardId } = snapshotUpdateData;
@@ -35,7 +35,7 @@ export const selectAnimation = (
 };
 const dealCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
     const { snapshotUpdateData } = newSnapshot;
-    const { offsetMap } = store.getState().offsetMapState;
+    const { offsetMap } = store.getState().animationState;
 
     if (!snapshotUpdateData) throw Error("No snapshot update data!");
     const dealCardsArgs: DealCardsArgs = {
@@ -51,7 +51,7 @@ const dealCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot)
 
 const dealEnemyCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
     const { snapshotUpdateData } = newSnapshot;
-    const { offsetMap } = store.getState().offsetMapState;
+    const { offsetMap } = store.getState().animationState;
 
     if (!snapshotUpdateData) throw Error("No snapshot update data!");
     const dealCardsArgs: DealCardsArgs = {

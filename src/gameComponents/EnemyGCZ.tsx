@@ -15,10 +15,8 @@ interface EnemyGCZProps {
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-    const { id, gameSnapshot , alignment, player, registerPlaceOffset } = props;
-    const {  activeAnimation } = useSelector(
-        (state: RootState) => state.gameSnapshotState
-    );
+    const { id, gameSnapshot, alignment, player, registerPlaceOffset } = props;
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);

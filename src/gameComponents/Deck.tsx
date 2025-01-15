@@ -24,7 +24,7 @@ export const Deck: FC<DeckProps> = (props) => {
     const dispatch = useDispatch();
     const dimensions = getCardStyleValuesFromPlaceAndPlayer("deck", null, gameSnapshot);
 
-    const { activeAnimation } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
     const cards = gameSnapshot.nonPlayerPlaces.deck.cards;
     const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
 

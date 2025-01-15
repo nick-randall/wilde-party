@@ -4,12 +4,8 @@ import { SagaIterator } from "redux-saga";
 import store from "../redux/store";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createDealCardsAnimation, DealCardsArgs } from "../animations/createAnimations";
-import {
-    addNewSnapshots,
-    resolveNewSnapshot,
-    setActiveAnimation,
-    setNewSnapshot,
-} from "./gameSnapshotSlice";
+import { addNewSnapshots, resolveNewSnapshot, setNewSnapshot } from "./gameSnapshotSlice";
+import { setActiveAnimation } from "../animationState/animationState";
 import { off } from "process";
 import { locatePlace } from "../helperFunctions/locateFunctions";
 import { pipe } from "ramda";
@@ -68,6 +64,7 @@ const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 function* resolveNewSnapshotFollowingAnimation(duration: number) {
     yield call(delay, duration);
     yield put({ type: resolveNewSnapshot.type });
+    yield put({ type: setActiveAnimation.type, payload: undefined });
     // const { snapshotIndex, snapshots } = store.getState().gameSnapshotState;
     // console.log("Resolved snapshot. curr index now: " + snapshotIndex);
     // const remainingSnapshots = snapshots.length - snapshotIndex;
@@ -79,7 +76,9 @@ function* resolveNewSnapshotFollowingAnimation(duration: number) {
 }
 
 export function* continueHandlingSnapshots(): SagaIterator {
-    const { snapshotIndex, snapshots, currSnapshot, activeAnimation } = store.getState().gameSnapshotState;
+    const { snapshotIndex, snapshots, currSnapshot } =
+        store.getState().gameSnapshotState;
+    const { activeAnimation } = store.getState().animationState;
     const remainingSnapshots = snapshots.length - snapshotIndex - 1;
     if (remainingSnapshots < 1) {
         yield put({ type: setActiveAnimation.type, payload: undefined });
@@ -87,12 +86,11 @@ export function* continueHandlingSnapshots(): SagaIterator {
     }
     yield put({ type: setNewSnapshot.type });
     const { newSnapshot } = store.getState().gameSnapshotState;
-    if(!newSnapshot) throw Error("No new snapshot!");
+    if (!newSnapshot) throw Error("No new snapshot!");
     const newActiveAnimation = selectAnimation(currSnapshot, newSnapshot);
-    if(!newActiveAnimation) throw Error("No active animation!");
+    if (!newActiveAnimation) throw Error("No active animation!");
     yield put({ type: setActiveAnimation.type, payload: newActiveAnimation });
     yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
-
 }
 
 export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {

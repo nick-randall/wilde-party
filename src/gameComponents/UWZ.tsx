@@ -17,8 +17,8 @@ export const UWZ = (props: UWZProps) => {
   const droppableId = JSON.stringify(droppableData);
 
   const {draggedHandCard, draggedOver, highlights, rearrangingData} = useSelector((state: RootState) => state.dragEventState);
-  const {activeAnimation, currSnapshot, newSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
-
+  const { currSnapshot, newSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
+  const { activeAnimation } = useSelector((state: RootState) => state.animationState);
   const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { emptyGameSnapshot } from "../initialCards";
-import { ActiveAnimation } from "../animations/createAnimations";
 
 
 export type GameState = {
@@ -8,7 +7,6 @@ export type GameState = {
   newSnapshotIndex: number;
   error: string;
   activePlayers: User[];
-  activeAnimation?: ActiveAnimation;
   currSnapshot: GameSnapshot;
   newSnapshot?: GameSnapshot; 
   snapshots: GameSnapshot[];
@@ -19,7 +17,6 @@ const initialState: GameState = {
   newSnapshotIndex: 0,
   currSnapshot: emptyGameSnapshot,
   snapshots: [],
-  activeAnimation: undefined,
   error: "",
   activePlayers: [],
 };
@@ -44,11 +41,9 @@ export const gameSnapshotSlice = createSlice({
       state.newSnapshotIndex = state.snapshotIndex + 1;
       state.newSnapshot = state.snapshots[state.newSnapshotIndex];
     },
-    setActiveAnimation : (state, action: PayloadAction<ActiveAnimation | undefined>) => {
-      state.activeAnimation = action.payload;
-    },
+
     resolveNewSnapshot: (state) => {
-      state.activeAnimation = undefined;
+      // state.activeAnimation = undefined;
       state.snapshotIndex ++;
       state.currSnapshot = state.snapshots[state.snapshotIndex];
     },
@@ -66,6 +61,6 @@ export const gameSnapshotSlice = createSlice({
   },
 });
 
-export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, setActiveAnimation, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;

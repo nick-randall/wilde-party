@@ -16,9 +16,10 @@ interface NewHandProps {
 }
 const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) => {
     const [shouldSpread, setShouldSpread] = useState(false);
-    const { activeAnimation, currSnapshot, newSnapshot } = useSelector(
+    const { currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
     const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
     const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);

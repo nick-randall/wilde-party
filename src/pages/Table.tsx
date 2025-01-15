@@ -21,7 +21,7 @@ import NewGCZ from "../gameComponents/NewGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locatePlace } from "../helperFunctions/locateFunctions";
-import { appendOffsetMap } from "../offsetState/offsetMapSlice";
+import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
 import { platform } from "os";
 
@@ -34,7 +34,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const dispatch = useDispatch();
     const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
 
-    const { offsetMap } = useSelector((state: RootState) => state.offsetMapState);
+    const { offsetMap } = useSelector((state: RootState) => state.animationState);
 
     useEffect(() => {
         if (!wsConnected && !wsLoading && !wsError) {
@@ -79,9 +79,10 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
         dispatch(appendOffsetMap({ [id]: offset }));
     };
 
-    const { currSnapshot, newSnapshot, activeAnimation } = useSelector(
+    const { currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
     const { myIndex } = useSelector((state: RootState) => state.userGameState);
 
     // If activeAnimation is undefined, always show the old Snapshot,
@@ -124,24 +125,24 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                 }}
             ></div>
             <div
-            style={{
-              position: "absolute",
-              left: 0,
-              height: "60%",
-              width: "50%",
-              backgroundColor: "green",
-              opacity: 0.2,
-          }}
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    height: "60%",
+                    width: "50%",
+                    backgroundColor: "green",
+                    opacity: 0.2,
+                }}
             ></div>
             <div
-            style={{
-              position: "absolute",
-              right: 0,
-              height: "60%",
-              width: "50%",
-              backgroundColor: "blue",
-              opacity: 0.2,
-          }}
+                style={{
+                    position: "absolute",
+                    right: 0,
+                    height: "60%",
+                    width: "50%",
+                    backgroundColor: "blue",
+                    opacity: 0.2,
+                }}
             ></div>
             <DragDropContext
                 onDragStart={onDragStart}
