@@ -40,6 +40,12 @@ export const addUser = createAsyncThunk("user/addUser", async (username: string)
     return resp.data;
 });
 
+export const justCreateDemoGame = createAsyncThunk("user/createDemoGame", async () => {
+  console.log("creating demo game");
+  const res = await axios.post("/just-create-game");
+  return res.data;
+})
+
 const userSlice = createSlice({
     name: "userGameState",
     initialState,
@@ -96,6 +102,20 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.error = "Error logging out";
         });
+
+        builder.addCase(justCreateDemoGame.pending, (state) => {
+          state.isLoading = true;
+          state.error = "";
+          console.log("pending just create game");
+        })
+        builder.addCase(justCreateDemoGame.rejected, (state) => {
+          state.error = "Error creating demo game."
+        });
+        builder.addCase(justCreateDemoGame.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.user = action.payload.user;
+          state.gameData = action.payload.gameData;
+        })
     },
 });
 

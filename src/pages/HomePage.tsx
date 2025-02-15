@@ -1,7 +1,7 @@
 import "../css/global.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser, logout } from "../user/userSlice";
+import { addUser, justCreateDemoGame, logout } from "../user/userSlice";
 import useUserGameData from "../user/useUserGameData";
 import LargeButton from "../components/LargeButton";
 import TextInput from "../components/TextInput";
@@ -70,15 +70,20 @@ const EnterName = () => {
     handleClick();
   };
   const dispatch = useDispatch();
+
   return (
-    <form onSubmit={handleSubmit}>
-      Enter your name:
-      <div style={{ height: "20px" }} />
-      <TextInput name="username" value={newUserName} onChange={handleChange} />
-      <div style={{ height: "10px" }} />
-      <SmallButton onClick={handleClick} text="OK" />
-      {error && <div className="error-text">{error}</div>}
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        Enter your name:
+        <div style={{ height: "20px" }} />
+        <TextInput name="username" value={newUserName} onChange={handleChange} />
+        <div style={{ height: "10px" }} />
+        <SmallButton onClick={handleClick} text="OK" />
+        {error && <div className="error-text">{error}</div>}
+      </form>
+      <SmallButton onClick={() => dispatch(justCreateDemoGame())} text="Create Demo Game" />
+  </>
+
   );
 };
 
