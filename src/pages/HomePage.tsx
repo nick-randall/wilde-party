@@ -1,7 +1,7 @@
 import "../css/global.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addUser, justCreateDemoGame, logout } from "../user/userSlice";
+import { addUser, endGame, justCreateDemoGame, logout } from "../user/userSlice";
 import useUserGameData from "../user/useUserGameData";
 import LargeButton from "../components/LargeButton";
 import TextInput from "../components/TextInput";
@@ -38,11 +38,13 @@ const ErrorMessage = (props: { error: string }) => {
 const Loading = () => <div>Loading...</div>;
 
 const UserGreetings = (props: { user: User }) => {
+  const dispatch = useDispatch();
   return (
     <div style={{ color: "black", textShadow: "none" }}>
       Welcome, {props.user.name}!
       <div style={{ height: "20px" }} />
       <LargeButton link={`/chat`} text="Start Game" />
+      <SmallButton onClick={() => dispatch(justCreateDemoGame())} text="Create Demo Game" />
     </div>
   );
 };
@@ -88,13 +90,14 @@ const EnterName = () => {
 };
 
 const ReturnToGame: React.FC = () => {
+  const dispatch = useDispatch();
   return (
     <div>
       You already have an active game!
       <div style={{ height: "20px" }} />
       <LargeButton link={"/game"} text="Return to game" />
       <div style={{ height: "10px" }} />
-      <SmallButton text="End game" />
+      <SmallButton text="End game" onClick={() => dispatch(endGame())}/>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { create } from "domain";
 import { set } from "ramda";
 
 export type UserGameState = {
@@ -34,25 +35,30 @@ export const logout = createAsyncThunk("userGameState/logout", async () => {
 });
 
 export const addUser = createAsyncThunk("user/addUser", async (username: string) => {
-    console.log("adding user");
     const addUserRequest = { username: username };
     const resp = await axios.post("/addUser", addUserRequest);
     return resp.data;
 });
 
+export const endGame = createAsyncThunk("user/endGame", async () => {
+    console.log("ending game");
+    const resp = await axios.post("/end-game");
+    return resp.data;
+});
+
 export const justCreateDemoGame = createAsyncThunk("user/createDemoGame", async () => {
-  console.log("creating demo game");
-  const res = await axios.post("/just-create-game");
-  return res.data;
-})
+    console.log("creating demo game");
+    const res = await axios.post("/just-create-game");
+    return res.data;
+});
 
 const userSlice = createSlice({
     name: "userGameState",
     initialState,
     reducers: {
-      setMyIndex: (state, action) => {
-        state.myIndex = action.payload;
-      }
+        setMyIndex: (state, action) => {
+            state.myIndex = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(whoami.pending, (state) => {
@@ -103,19 +109,34 @@ const userSlice = createSlice({
             state.error = "Error logging out";
         });
 
-        builder.addCase(justCreateDemoGame.pending, (state) => {
-          state.isLoading = true;
-          state.error = "";
-          console.log("pending just create game");
+        builder.addCase(endGame.pending, (state) => {
+            state.isLoading = true;
+            state.error = "";
+        });
+        builder.addCase(endGame.rejected, (state) => {
+          state.error = "Error ending game";
+          state.isLoading = false;
         })
+        builder.addCase(endGame.fulfilled, (state) => {
+          console.log("success deleting game");
+          state.isLoading = false;
+          state.gameData = undefined;
+        });
+
+        builder.addCase(justCreateDemoGame.pending, (state) => {
+            state.isLoading = true;
+            state.error = "";
+            console.log("pending just create game");
+        });
         builder.addCase(justCreateDemoGame.rejected, (state) => {
-          state.error = "Error creating demo game."
+            state.error = "Error creating demo game.";
+            state.isLoading = false;
         });
         builder.addCase(justCreateDemoGame.fulfilled, (state, action) => {
-          state.isLoading = false;
-          state.user = action.payload.user;
-          state.gameData = action.payload.gameData;
-        })
+            state.isLoading = false;
+            state.user = action.payload.user;
+            state.gameData = action.payload.gameData;
+        });
     },
 });
 
