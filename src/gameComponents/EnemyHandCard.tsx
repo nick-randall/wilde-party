@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import locatePlayer from "../helperFunctions/locateFunctions/locatePlayer";
 import { RootState } from "../redux/store";
 import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 
 export interface EnemyHandCardProps {
   id: number;
@@ -32,7 +33,7 @@ const EnemyHandCard = (props: EnemyHandCardProps) => {
   };
   const cardPlayer = locatePlayer(id);
   const ownerIsCurrentPlayer = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current.player === cardPlayer);
-  const currentPhaseIsDeal = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current.phase === "dealPhase");
+  const currPhase = useSelector(getUserPhase);
   // const disappearingStyles =
   //   ownerIsCurrentPlayer || currentPhaseIsDeal
   //     ? {

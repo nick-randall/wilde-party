@@ -3,7 +3,6 @@ import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import GhostCard from "./GhostCard";
 import { CardInspector } from "../renderPropsComponents/CardInspector";
-import TransitionHandler from "../renderPropsComponents/TransitionHandler";
 import { RootState } from "../redux/store";
 import { getSettings } from "../gameSettings/uiSettings";
 import { getCardStyleValues } from "../helperFunctions/getCardStyles";
@@ -71,10 +70,10 @@ const Card = (props: CardProps) => {
               dimensions={getCardStyleValues(id, gameSnapshot)}
               cardRotation={messinessRotation}
               render={(cardRef, handleClick, handleMouseLeave, inspectingStyles) => (
-                <TransitionHandler
-                  index={index}
-                  id={id}
-                  render={(transitionStyles: CSSProperties) => (
+                // <TransitionHandler
+                //   index={index}
+                //   id={id}
+                //   render={(transitionStyles: CSSProperties) => (
                     <div ref={cardRef}>
                       <img
                         ref={provided.innerRef}
@@ -91,14 +90,14 @@ const Card = (props: CardProps) => {
                           transition: "box-shadow 180ms",
                           ...normalStyles,
                           ...inspectingStyles,
-                          ...transitionStyles,
+                          // ...transitionStyles,
                         }}
                       />
                     </div>
                   )}
                 />
-              )}
-            />
+              {/* )}
+            /> */}
             {ghostCard ? (
               <GhostCard
                 cardId={ghostCard.id}

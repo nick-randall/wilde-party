@@ -80,6 +80,8 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
         const { gameId } = action.payload;
 
         const onIncomingGameBroadcast = (message: Message) => {
+          const parsed = JSON.parse(message.body);
+          console.log(parsed.newSnapshots)
           const gameMessage: IncomingGameMessage = JSON.parse(message.body);
           console.log(gameMessage);
           if (gameMessage.type === "join") {
@@ -90,6 +92,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
 
             const { gameData, user } = store.getState().userGameState;
             if (!gameData || !user) throw new Error("No game data or user in game state");
+            console.log("ns",gameMessage.newSnapshots)
             const payload : NewServerSnapshots = { snapshots: gameMessage.newSnapshots, user, gameData, initial: false };
             dispatch({
               type: "HANDLE_NEW_SNAPSHOTS",

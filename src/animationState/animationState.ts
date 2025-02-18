@@ -5,9 +5,6 @@ interface OffsetMap {
   [key: string]: { dx: number; dy: number };
 }
 
-
-
-
 interface AnimationSliceState {
   offsetMap: OffsetMap;
   activeAnimation?: ActiveAnimation;
@@ -29,6 +26,7 @@ const animationSlice = createSlice({
     },
     setActiveAnimation : (state, action: PayloadAction<ActiveAnimation | undefined>) => {
       state.activeAnimation = action.payload;
+      console.log("activeAnimation set to: ", action.payload);
     },
   },
 });

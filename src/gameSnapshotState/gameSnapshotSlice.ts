@@ -35,6 +35,7 @@ export const gameSnapshotSlice = createSlice({
       state.snapshots.push(...newSnapshots);
       if(newSnapshots.length > 0 && newSnapshots[0].index === 0) {
         state.currSnapshot = newSnapshots[0];
+       
       }
     },
     setNewSnapshot : (state) => {

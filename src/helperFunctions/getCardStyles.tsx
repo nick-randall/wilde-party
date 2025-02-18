@@ -120,6 +120,7 @@ export const dimensionConstants = {
     HAND_CARD_SHADOW: "10px 10px 10px black",
     TABLE_CARD_SHADOW: "2px 2px 2px black",
     DELAY_BETWEEN_DEALT_CARDS: 600,
+    DELAY_BETWEEN_DEALT_ENEMY_CARDS: 200,
     HAND_TO_TABLE_SCALE_FACTOR: 1.5,
 };
 

@@ -3,9 +3,9 @@ import { Draggable, DraggableProvidedDraggableProps, DraggableStateSnapshot } fr
 import {  useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { CardInspector } from "../renderPropsComponents/CardInspector";
-import { TransitionHandler } from "../renderPropsComponents/TransitionHandler";
 import { get } from "http";
 import { dimensionConstants, getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 
 export interface HandCardProps {
   id: number;
@@ -27,11 +27,11 @@ const HandCard = (props: HandCardProps) => {
   const {draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver} = useSelector((state: RootState) => state.dragEventState);
   const isDraggedOverAnyPlace = draggedOver !== undefined;
 
-  const transitionUnderway = useSelector((state: RootState) => state.dragEventState.transitionData.length > 0);
+  const currAnimation = useSelector((state: RootState) => state.animationState.activeAnimation);
+  const { player } = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current);
+  const phase = useSelector(getUserPhase);
 
-  const { player, phase } = useSelector((state: RootState) => state.gameSnapshotState.currSnapshot.current);
-
-  const canPlay = true// player === 0 && phase === "playPhase" && !transitionUnderway;
+  const canPlay = phase !== "notMyTurn" &&  !currAnimation// player === 0 && phase === "playPhase" && !transitionUnderway;
 
   const [shortHover, setShortHover] = useState(false);
 
@@ -113,10 +113,7 @@ const HandCard = (props: HandCardProps) => {
               dimensions={styles}
               cardRotation={rotate}
               render={(cardRef, handleClick, handleMouseLeave, inspectedStyles) => (
-                <TransitionHandler
-                  index={index}
-                  id={id}
-                  render={(transitionStyles: CSSProperties) => (
+              
                     <img
                       alt={imageName}
                       src={`./images/${imageName}.jpg`}
@@ -129,14 +126,12 @@ const HandCard = (props: HandCardProps) => {
                         ...normalStyles,
                         ...inspectedStyles,
                         ...dragStyles(isDragging),
-                        ...transitionStyles,
                         ...droppingStyles(snapshot, provided.draggableProps),
                       }}
                     />
                   )}
                 />
-              )}
-            />
+       
           </div>
         </div>
       )}

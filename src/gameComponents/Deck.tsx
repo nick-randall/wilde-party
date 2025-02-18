@@ -6,6 +6,7 @@ import "../css/grid.css";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import { FC } from "react";
 import AnimatedCard from "./AnimatedCard";
+import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 
 interface DeckProps {
     id: number;
@@ -17,7 +18,8 @@ interface DeckProps {
 export const Deck: FC<DeckProps> = (props) => {
     const { id, gameSnapshot, registerPlaceOffset } = props;
 
-    const { player, draws, phase } = gameSnapshot.current /// ???
+    const { player, draws } = gameSnapshot.current /// ???
+    const phase = useSelector(getUserPhase)
     const handleClick = () => {
         if (canDraw) dispatch(drawCardThunk(0));
     };
@@ -26,7 +28,7 @@ export const Deck: FC<DeckProps> = (props) => {
 
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
     const cards = gameSnapshot.nonPlayerPlaces.deck.cards;
-    const canDraw = player === 0 && phase === "drawPhase" && draws > 0 && cards.length > 0;
+    const canDraw = player === 0 && phase === "drawing" && draws > 0 && cards.length > 0;
 
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);

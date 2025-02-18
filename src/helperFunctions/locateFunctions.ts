@@ -182,6 +182,7 @@ export const getCard = (cardId: number, gameSnapshot: GameSnapshot): GameCard =>
   const card: GameCard = {
     id: 123123,
     name: "bffs1",
+    actionType: "enchantWithBff",
     pointValue: 1,
     imageName: "bffs1.jpg",
     cardType: "bff",

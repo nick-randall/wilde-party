@@ -50,6 +50,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({ cardGroup, cardGroupIndex, 
           <Droppable droppableId={droppableId}>
             {d => (
               <div
+              id="container-size-of-left"
                 // Container only the size of left ie. able to be smaller
                 // than the size of the cardGroups and allows overlapping cardGroups.
                 // It represents the matrix of draggable elements
@@ -62,6 +63,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({ cardGroup, cardGroupIndex, 
                 }}
               >
                 <div
+                id="relative-container-for-cardgroup"
                   // This relative container allows the cards to be positioned absolutely within the CardGroup
                   style={{ position: "relative" }}
                   {...d.droppableProps}

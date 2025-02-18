@@ -44,6 +44,7 @@ const UserGreetings = (props: { user: User }) => {
       Welcome, {props.user.name}!
       <div style={{ height: "20px" }} />
       <LargeButton link={`/chat`} text="Start Game" />
+      <div style={{ height: "20px" }} />
       <SmallButton onClick={() => dispatch(justCreateDemoGame())} text="Create Demo Game" />
     </div>
   );

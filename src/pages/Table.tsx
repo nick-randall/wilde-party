@@ -23,7 +23,7 @@ import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/
 import { locatePlace } from "../helperFunctions/locateFunctions";
 import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
-import { platform } from "os";
+import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 
 interface TableProps {
     gameData: GameData;
@@ -35,6 +35,9 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const { wsConnected, wsLoading, wsError } = useSelector((state: RootState) => state.websocket);
 
     const { offsetMap } = useSelector((state: RootState) => state.animationState);
+
+    const phase = useSelector(getUserPhase)
+    console.log(phase)
 
     useEffect(() => {
         if (!wsConnected && !wsLoading && !wsError) {
@@ -210,7 +213,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         alignment="top-right"
                     />
                     <div className="grid-item center-column align-start">
-                        <button onClick={testUpdate}></button>
+                        {/* <button onClick={testUpdate}></button> */}
                         <SpecialsZone
                             player={playerZero}
                             id={p0.places.specialsZone.id}

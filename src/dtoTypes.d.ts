@@ -8,7 +8,7 @@ type SnapshotUpdateData = {
 type CardActionResult = {
   targetId: number;
   isLegalTarget: boolean;
-  resultingGameSnapshot: GameSnapshot;
+  snapshotUpdateData: SnapshotUpdateData;
   targetType: LegalTargetType;
   actionType: ActionType;
 };

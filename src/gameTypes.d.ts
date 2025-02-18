@@ -12,15 +12,15 @@ type CardGroup = GameCard[];
 // };
 
 type CardDimensions = {
-  cardHeight: number;
-  cardWidth: number;
-  left: number;
-  top: number;
-  rotate: Rotate;
-  rotateY: number;
-  scale: number;
-  zIndex: number;
-  boxShadow: string;
+    cardHeight: number;
+    cardWidth: number;
+    left: number;
+    top: number;
+    rotate: Rotate;
+    rotateY: number;
+    scale: number;
+    zIndex: number;
+    boxShadow: string;
 };
 
 // type AllDimensions = {
@@ -45,34 +45,45 @@ type CardDimensions = {
 // };
 
 type SnapshotUpdateType =
-  | "emptySnapshot"
-  | "initialSnapshot"
-  | "dealingInitialCards"
-  | "dealingCards"
-  | "rearrangingHand"
-  | "rearrangingTablePlace"
-  | "drawingWildeParty"
-  | "dealingStartingGuest"
-  | ActionType;
+    | "emptySnapshot"
+    | "initialSnapshot"
+    | "dealingInitialCards"
+    | "dealingCards"
+    | "rearrangingHand"
+    | "rearrangingTablePlace"
+    | "drawingWildeParty"
+    | "dealingStartingGuest"
+    | ActionType;
 
 type LegalTargetType = "player" | "place" | "card";
 
 type GameCard = {
-  id: number;
-  name: string;
-  imageName: string;
-  cardType: CardType;
-  pointValue: number;
-  guestCardType?: GuestCardType;
-  specialsCardType?: GuestCardType;
-  blitzAction?: BlitzActionType;
-  numGuestPlaces?: number;
-  action: CardAction;
+    id: number;
+    name: string;
+    imageName: string;
+    cardType: CardType;
+    actionType: CardActionType;
+    pointValue: number;
+    guestCardType?: GuestCardType;
+    specialsCardType?: GuestCardType;
+    blitzAction?: BlitzActionType;
+    numGuestPlaces?: number;
+    action: CardAction;
 };
 
 type PlaceActionType = "addDragged" | "rearrange";
 
-type CardActionType = "destroy" | "steal" | "enchantWithBff" | "enchant" | "swap";
+type CardActionType =
+    | "addDragged"
+    | "enchantWithBff"
+    | "enchant"
+    | "destroy"
+    | "steal"
+    | "swap"
+    | "enchantPlayer"
+    | "sorceryOnPlayer"
+    | "interrupt"
+    | "none";
 
 type PlayerActionType = "protectSelf";
 
@@ -85,84 +96,103 @@ type CardHighlightType = "card" | "place" | "player" | "";
 type TargetPlayerType = "enemy" | "self";
 
 type CardAction = {
-  actionType: ActionType;
-  highlightType: CardHighlightType;
-  targetPlayerType: TargetPlayerType;
-  cardHighlightType?: CardType;
-  placeHighlightType?: PlaceType;
+    actionType: ActionType;
+    highlightType: CardHighlightType;
+    targetPlayerType: TargetPlayerType;
+    cardHighlightType?: CardType;
+    placeHighlightType?: PlaceType;
 };
 
 type LocationData = { droppableId: number; index: number };
 
-type CardType = "guest" | "unwanted" | "instant" | "interrupt" | "bff" | "zwilling" | "fillCard" | "ghostCard" | "special";
+type CardType =
+    | "guest"
+    | "unwanted"
+    | "instant"
+    | "interrupt"
+    | "bff"
+    | "zwilling"
+    | "fillCard"
+    | "ghostCard"
+    | "special";
 
 type GuestCardType = "saufnase" | "taenzerin" | "schleckermaul" | "rumgroelerin" | "";
 
 type GhostCard = {
-  index: number;
-  player: number;
-  place: PlaceType;
+    index: number;
+    player: number;
+    place: PlaceType;
 };
 
-type PlaceType = "guestCardZone" | "unwantedsZone" | "specialsZone" | "hand" | "deck" | "discardPile" | "enchantmentsRow";
+type PlaceType =
+    | "guestCardZone"
+    | "unwantedsZone"
+    | "specialsZone"
+    | "hand"
+    | "deck"
+    | "discardPile"
+    | "enchantmentsRow";
 
 // DB prototype
 type Place = {
-  id: number;
-  maxNumCards: number;
-  acceptedCardType: CardType;
-  player: number;
+    id: number;
+    maxNumCards: number;
+    acceptedCardType: CardType;
+    player: number;
 };
 // Game object
 type GamePlace = {
-  id: number;
-  placeType: PlaceType;
-  playerId?: number;
-  cards: GameCard[];
-  acceptedCardType?: CardType;
+    id: number;
+    placeType: PlaceType;
+    playerId?: number;
+    cards: GameCard[];
+    acceptedCardType?: CardType;
 };
 
 type GamePlayer = {
-  id: number;
-  userId: number;
-  name: string;
-  places: PlayerPlaces;
-  glitzaglitza: boolean;
-  skipNextTurn: boolean;
+    id: number;
+    userId: number;
+    name: string;
+    places: PlayerPlaces;
+    glitzaglitza: boolean;
+    skipNextTurn: boolean;
 };
 type Phase = "dealPhase" | "playPhase" | "drawPhase" | "rollPhase" | "counterPhase";
 
+type PlayerPhase = "dealing" | "playing" | "drawing" | "rolling" | "countering" | "notMyTurn";
+
 type PlayerPlaces = {
-  [type: string]: GamePlace;
+    [type: string]: GamePlace;
 };
 
 type NonPlayerPlaces = {
-  [type: string]: GamePlace;
+    [type: string]: GamePlace;
 };
 
 type Current = {
-  player: number;
-  phase: Phase;
-  plays: number;
-  draws: number;
-  rolls: number;
+    player: number;
+    // phase: Phase;
+    plays: number;
+    draws: number;
+    rolls: number;
+    counteringPlayer: number;
 };
 
 type GameSnapshot = {
-  index: number;
-  current: Current;
-  players: GamePlayer[];
-  nonPlayerPlaces: NonPlayerPlaces;
-  snapshotUpdateData?: SnapshotUpdateData;
-  actionResultsMap: { [key: number]: CardActionResult[] };
-  // number, CardActionResult[]
+    index: number;
+    current: Current;
+    players: GamePlayer[];
+    nonPlayerPlaces: NonPlayerPlaces;
+    snapshotUpdateData?: SnapshotUpdateData;
+    actionResultsMap: { [key: number]: CardActionResult[] };
+    // number, CardActionResult[]
 };
 
 type CardTransitionData = {
-  origin: TopLeftCoordinates;
-  wait: number; // if transition is not first in the queue
-  duration: number;
-  animation: AnimationData;
+    origin: TopLeftCoordinates;
+    wait: number; // if transition is not first in the queue
+    duration: number;
+    animation: AnimationData;
 };
 
 // type LocationData = {
@@ -170,26 +200,26 @@ type CardTransitionData = {
 // }
 
 type TransitionData = {
-  cardId: number;
-  originDelta: TopLeftCoordinates;
-  wait: number; // if transition is not first in the queue
-  duration: number;
-  curve: string;
-  originDimensions: AllDimensions;
-  cardInitialrotation: number;
-  startAnimationDuration: number;
-  startAnimation: string;
+    cardId: number;
+    originDelta: TopLeftCoordinates;
+    wait: number; // if transition is not first in the queue
+    duration: number;
+    curve: string;
+    originDimensions: AllDimensions;
+    cardInitialrotation: number;
+    startAnimationDuration: number;
+    startAnimation: string;
 };
 
 type TransitionDataEvents = {
-  card: GameCard;
-  origin: TopLeftCoordinates;
-  animation: AnimationData;
-  duration: number;
+    card: GameCard;
+    origin: TopLeftCoordinates;
+    animation: AnimationData;
+    duration: number;
 }[];
 
 type Refs = {
-  [id: number]: HTMLElement;
+    [id: number]: HTMLElement;
 };
 
 type Hover = "shortHover" | "longHover" | "none";

@@ -76,8 +76,7 @@ function* resolveNewSnapshotFollowingAnimation(duration: number) {
 }
 
 export function* continueHandlingSnapshots(): SagaIterator {
-    const { snapshotIndex, snapshots, currSnapshot } =
-        store.getState().gameSnapshotState;
+    const { snapshotIndex, snapshots, currSnapshot } = store.getState().gameSnapshotState;
     const { activeAnimation } = store.getState().animationState;
     const remainingSnapshots = snapshots.length - snapshotIndex - 1;
     if (remainingSnapshots < 1) {
@@ -107,10 +106,17 @@ export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapsho
     yield call(continueHandlingSnapshots);
 }
 
-export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): SagaIterator {}
+export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): SagaIterator {
+    const newSnapshot = action.payload;
+    yield put({ type: addNewSnapshots.type, payload: [newSnapshot] });
+    // handle animations
+
+    yield put({ type: resolveNewSnapshot.type });
+}
 
 export function* watchNewSnapshots() {
     yield takeEvery("HANDLE_NEW_SNAPSHOTS", handleNewServerSnapshots);
+    yield takeEvery("HANDLE_NEW_CLIENT_SNAPSHOT", handleNewClientSnapshot);
 }
 
 export default function* rootSaga() {

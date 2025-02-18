@@ -145,10 +145,10 @@ export default class SnapshotUpdater {
   public getNewSnapshot() {
     return this.newSnapshot;
   }
-  public setPhase(phase: Phase) {
-    this.newSnapshot = {
-      ...this.newSnapshot,
-      current: { ...this.newSnapshot.current, phase },
-    };
-  }
+  // public setPhase(phase: Phase) {
+  //   this.newSnapshot = {
+  //     ...this.newSnapshot,
+  //     current: { ...this.newSnapshot.current, phase },
+  //   };
+  // }
 }

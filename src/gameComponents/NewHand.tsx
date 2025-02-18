@@ -23,9 +23,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
 
     const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
     const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
-    const transitionsUnderway = useSelector(
-        (state: RootState) => state.dragEventState.transitionData.length > 0
-    );
+
     const enemysTurn = useSelector(
         (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== player
     );

@@ -30,9 +30,9 @@ const Hand = forwardRef<RefMap, HandProps>((props, refMap) => {
     const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
     const [spread, setSpread] = useState(cardLeftSpread);
     const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
-    const transitionsUnderway = useSelector(
-        (state: RootState) => state.dragEventState.transitionData.length > 0
-    );
+    // const transitionsUnderway = useSelector(
+    //     (state: RootState) => state.dragEventState.transitionData.length > 0
+    // );
     const enemysTurn = useSelector(
         (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== 0
     );
@@ -51,21 +51,21 @@ const Hand = forwardRef<RefMap, HandProps>((props, refMap) => {
             ? newSnapshot
             : currSnapshot;
 
-    useEffect(() => {
-        if (shouldSpread) {
-            if (!transitionsUnderway && !handCardDragged && !enemysTurn)
-                setSpread(maxCardLeftSpread);
-        } else {
-            setSpread(cardLeftSpread);
-        }
-    }, [
-        transitionsUnderway,
-        shouldSpread,
-        handCardDragged,
-        maxCardLeftSpread,
-        cardLeftSpread,
-        enemysTurn,
-    ]);
+    // useEffect(() => {
+    //     if (shouldSpread) {
+    //         if (!transitionsUnderway && !handCardDragged && !enemysTurn)
+    //             setSpread(maxCardLeftSpread);
+    //     } else {
+    //         setSpread(cardLeftSpread);
+    //     }
+    // }, [
+    //     transitionsUnderway,
+    //     shouldSpread,
+    //     handCardDragged,
+    //     maxCardLeftSpread,
+    //     cardLeftSpread,
+    //     enemysTurn,
+    // ]);
 
     return (
         <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={true}>

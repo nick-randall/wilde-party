@@ -23,9 +23,6 @@ const EnemyHand = (props: EnemyHandProps) => {
     const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, gameSnapshot);
     const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
     const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
-    const transitionsUnderway = useSelector(
-        (state: RootState) => state.dragEventState.transitionData.length > 0
-    );
     const spread = styles.left;
 
     const cards = gameSnapshot.players[player].places.hand.cards;

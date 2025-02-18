@@ -181,7 +181,7 @@ export const createDealEnemysCardAnimation = (args: DealCardsArgs): ActiveAnimat
 
     const deckToHand = [
       new HandToTable({
-        duration: 300,
+        duration: dimensionConstants.DELAY_BETWEEN_DEALT_ENEMY_CARDS,
         fromOffset: new Offset(deckOffset),
         fromStyles: getCardCSS(cardId, oldSnapshot),
         toOffset: new Offset(handOffset),
@@ -192,7 +192,7 @@ export const createDealEnemysCardAnimation = (args: DealCardsArgs): ActiveAnimat
 
     const handToMiddleTrack = new AnimationTrack({ cardId, steps: deckToHand, homePlaceId: handId }); //, naturalOffset: getOffsetOf(cardId), naturalDimensions: getDimensions(1, "GCZ")
 
-    const delay = i * dimensionConstants.DELAY_BETWEEN_DEALT_CARDS;
+    const delay = i * dimensionConstants.DELAY_BETWEEN_DEALT_ENEMY_CARDS;
 
     const { animationData, totalDuration } = new MyAnimationTimeline({
       animationTracks: [handToMiddleTrack],

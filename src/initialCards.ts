@@ -2,7 +2,7 @@
 const myGCZCards: GameCard[] = [
   {
     id: 3000,
-    name: "saufnase1",
+    name: "saufnase1",actionType: "addDragged",
 
     imageName: "saufnase0",
     cardType: "guest",
@@ -13,7 +13,7 @@ const myGCZCards: GameCard[] = [
 
   {
     id: 3000,
-    name: "saufnase6",
+    name: "saufnase6",actionType: "addDragged",
 
     imageName: "saufnase2",
     cardType: "guest",
@@ -26,7 +26,7 @@ const myGCZCards: GameCard[] = [
 export const myHandCards: GameCard[] = [
   {
     id: 3000,
-    name: "bffs5",
+    name: "bffs5",actionType: "addDragged",
 
     pointValue: 1,
     imageName: "bffs",
@@ -35,7 +35,7 @@ export const myHandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "musikfuersichalleinebeansprucherin",
+    name: "musikfuersichalleinebeansprucherin",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "musikfuersichalleinebeansprucherin",
@@ -57,7 +57,7 @@ export const myHandCards: GameCard[] = [
 
   {
     id: 3000,
-    name: "zwilling2",
+    name: "zwilling2",actionType: "enchant",
 
     pointValue: 1,
     imageName: "zwilling",
@@ -67,7 +67,7 @@ export const myHandCards: GameCard[] = [
 
   {
     id: 3000,
-    name: "barkeeperin",
+    name: "barkeeperin",actionType: "addDragged",
 
     pointValue: 1,
     imageName: "barkeeperin",
@@ -77,7 +77,7 @@ export const myHandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "zwilling2",
+    name: "zwilling2",actionType: "enchant",
 
     pointValue: 1,
     imageName: "zwilling",
@@ -86,7 +86,7 @@ export const myHandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "rumgroelerin2",
+    name: "rumgroelerin2",actionType: "addDragged",
 
     imageName: "rumgroelerin2", //TODO change
     pointValue: 1,
@@ -96,7 +96,7 @@ export const myHandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "quasselstrippe1",
+    name: "quasselstrippe1",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "quasselstrippe",
@@ -109,7 +109,7 @@ export const myEnchantmentsRowCards: GameCard[] = [];
 const mySpecialsZoneCards: GameCard[] = [
   {
     id: 3000,
-    name: "nebelmaschine",
+    name: "nebelmaschine",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "nebelmaschine",
@@ -119,7 +119,7 @@ const mySpecialsZoneCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "playlist",
+    name: "playlist",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "playlist",
@@ -130,7 +130,7 @@ const mySpecialsZoneCards: GameCard[] = [
 
   {
     id: 3000,
-    name: "prost",
+    name: "prost",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "prost",
@@ -145,7 +145,7 @@ const myUWZCards: GameCard[] = [];
 const player1HandCards: GameCard[] = [
   {
     id: 3000,
-    name: "rumgroelerin0",
+    name: "rumgroelerin0",actionType: "addDragged",
 
     imageName: "rumgroelerin0", //TODO change
     pointValue: 1,
@@ -155,7 +155,7 @@ const player1HandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "taenzerin2",
+    name: "taenzerin2",actionType: "addDragged",
 
     imageName: "taenzerin2", //TODO change
     cardType: "guest",
@@ -165,7 +165,7 @@ const player1HandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "schleckermaul2",
+    name: "schleckermaul2",actionType: "addDragged",
 
     imageName: "schleckermaul2", //TODO change
     pointValue: 1,
@@ -175,7 +175,7 @@ const player1HandCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "schleckermaul",
+    name: "schleckermaul",actionType: "addDragged",
 
     imageName: "schleckermaul3", //TODO change
     pointValue: 1,
@@ -188,7 +188,7 @@ const player1HandCards: GameCard[] = [
 const player1GCZCards: GameCard[] = [
   {
     id: 3000,
-    name: "rumgroelerin4",
+    name: "rumgroelerin4",actionType: "addDragged",
 
     imageName: "rumgroelerin4",
     pointValue: 1,
@@ -201,7 +201,7 @@ const player1GCZCards: GameCard[] = [
 const deckCards: GameCard[] = [
   {
     id: 3000,
-    name: "megaphon",
+    name: "megaphon",actionType: "addDragged",
 
     pointValue: 0,
     imageName: "megaphon",
@@ -211,7 +211,7 @@ const deckCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "rumgroelerin3",
+    name: "rumgroelerin3",actionType: "addDragged",
 
     imageName: "rumgroelerin3",
     pointValue: 1,
@@ -221,7 +221,7 @@ const deckCards: GameCard[] = [
   },
   {
     id: 3000,
-    name: "schleckermaul4",
+    name: "schleckermaul4",actionType: "addDragged",
 
     imageName: "schleckermaul4",
     cardType: "guest",
@@ -233,7 +233,7 @@ const deckCards: GameCard[] = [
 const discardPileCards: GameCard[] = [
   {
     id: 3000,
-    name: "discokugel",
+    name: "discokugel",actionType: "addDragged",
 
     imageName: "discokugel", //TODO change
     cardType: "special",
@@ -301,10 +301,10 @@ export const initialGameSnapshot: GameSnapshot = {
 
   current: {
     player: 0,
-    phase: "dealPhase",
     draws: 1,
     plays: 1,
     rolls: 1,
+    counteringPlayer: -1,
   },
   players: [
     {
@@ -471,10 +471,10 @@ export const emptyGameSnapshot: GameSnapshot = {
 
   current: {
     player: 0,
-    phase: "dealPhase",
     draws: 1,
     plays: 1,
     rolls: 1,
+    counteringPlayer: -1,
   },
   players: [
     {
