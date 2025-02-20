@@ -59,7 +59,12 @@ export interface NewServerSnapshots {
     initial: boolean;
 }
 
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+let timer: NodeJS.Timer;
+
+const delay = (ms: number) =>
+    new Promise((res) => {
+        timer = setTimeout(res, ms);
+    });
 
 function* resolveNewSnapshotFollowingAnimation(duration: number) {
     yield call(delay, duration);
@@ -117,8 +122,11 @@ export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): S
 export function* watchNewSnapshots() {
     yield takeEvery("HANDLE_NEW_SNAPSHOTS", handleNewServerSnapshots);
     yield takeEvery("HANDLE_NEW_CLIENT_SNAPSHOT", handleNewClientSnapshot);
+    yield takeEvery("CANCEL_ANIMATION_TIMER", () => clearTimeout(timer));
 }
 
 export default function* rootSaga() {
     yield all([watchNewSnapshots()]);
 }
+
+

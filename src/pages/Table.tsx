@@ -24,6 +24,7 @@ import { locatePlace } from "../helperFunctions/locateFunctions";
 import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
 import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
+import { skipToEndOfAnimations } from "../animationState/skipAnimations";
 
 interface TableProps {
     gameData: GameData;
@@ -36,8 +37,8 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
 
     const { offsetMap } = useSelector((state: RootState) => state.animationState);
 
-    const phase = useSelector(getUserPhase)
-    console.log(phase)
+    const phase = useSelector(getUserPhase);
+    console.log(phase);
 
     useEffect(() => {
         if (!wsConnected && !wsLoading && !wsError) {
@@ -117,6 +118,12 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
 
     return (
         <div>
+            <img
+                src="./icons/fast-forward.png"
+                alt=""
+                style={{ position: "absolute", left: "50vw", height: 50, cursor: "pointer", zIndex: 99 }}
+                onClick={() => dispatch(skipToEndOfAnimations())}
+            />
             <div
                 style={{
                     position: "absolute",
@@ -147,6 +154,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     opacity: 0.2,
                 }}
             ></div>
+
             <DragDropContext
                 onDragStart={onDragStart}
                 onDragUpdate={onDragUpdate}

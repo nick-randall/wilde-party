@@ -42,6 +42,10 @@ export const gameSnapshotSlice = createSlice({
       state.newSnapshotIndex = state.snapshotIndex + 1;
       state.newSnapshot = state.snapshots[state.newSnapshotIndex];
     },
+    setSnapshotIndex: (state, action: PayloadAction<number>) => {
+      state.snapshotIndex = action.payload;
+      state.currSnapshot = state.snapshots[state.snapshotIndex];
+    },
 
     resolveNewSnapshot: (state) => {
       // state.activeAnimation = undefined;
@@ -62,6 +66,6 @@ export const gameSnapshotSlice = createSlice({
   },
 });
 
-export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
+export const {setInitialSnapshot, addNewSnapshots, setNewSnapshot, setSnapshotIndex, resolveNewSnapshot, updateActivePlayers, setNotInGameError, testUpdateSnapshot } = gameSnapshotSlice.actions;
 
 export default gameSnapshotSlice.reducer;
