@@ -156,6 +156,7 @@ export const dragEventSlice = createSlice({
                     /// TODO not sure why we set it to 0 here
                     state.draggedOver = { type, id, index: 0 };
                 }
+                state.draggedOver = data;
             } else if (type === "player") {
                 console.log(`Dragged over player ${id}`);
                 state.draggedOver = data;

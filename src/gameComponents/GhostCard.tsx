@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import { getCardStyleValues, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
 
 interface GhostCardProps {
@@ -15,9 +15,10 @@ interface GhostCardProps {
 export const GhostCard = (props: GhostCardProps) => {
   const { rotation, imageName, index, offsetLeft, offsetTop, zIndex, cardId } = props;
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+  const {draggedOver} = useSelector((state: RootState) => state.dragEventState);
   const { left, cardWidth } = getCardStyleValues(cardId, currSnapshot);
+  // const {left, cardWidth} = getCardStyleValuesFromPlaceAndPlayer(draggedOver.)
   const id = "ghostCard" + imageName;
-  console.log("GhostCard");
 
   return (
     <img
@@ -29,7 +30,7 @@ export const GhostCard = (props: GhostCardProps) => {
         opacity: 0.7,
         width: cardWidth,
         border: "thin solid",
-        left: left,// index * left + (offsetLeft || 0),
+        left: index * left + (offsetLeft || 0),
         top: offsetTop || 0,
         rotate: rotation + "deg" || "0deg",
         position: "absolute",

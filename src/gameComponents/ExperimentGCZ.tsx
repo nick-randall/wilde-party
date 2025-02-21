@@ -12,6 +12,7 @@ import NewCardGroup from "./NewCardGroup";
 import { getEnchantableNeighbours } from "../helperFunctions/canEnchantNeighbour";
 import AnimatedCard from "./AnimatedCard";
 import "../css/global.css";
+import GhostCard from "./GhostCard";
 
 interface NewGCZProps {
     id: number;
@@ -75,22 +76,32 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const animationCardIds = animations.map((a) => a.cardId);
 
     return (
-        <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
-            {(drop) => (
-                <div ref={(el) => registerPlaceOffset(el, id)}>
+        <div ref={(el) => registerPlaceOffset(el, id)} style={{position:"relative"}}>
+            <Droppable
+                droppableId={droppableId}
+                direction="horizontal"
+                isDropDisabled={!allowDropping}
+            >
+                {(drop) => (
                     <div
                         className={`pl0GCZ ${isHighlighted ? "highlighted" : ""}`}
                         ref={drop.innerRef}
                         {...drop.droppableProps}
                         style={{
+                            transition: "300ms",
                             height: cardHeight,
                             // width: 300,
-                            width: cardWidth * GCZCards.length,
+                            width:
+                                cardWidth * GCZCards.length +
+                                (draggedOver?.id === id ? cardWidth : 0),
                             display: "flex",
                         }}
                     >
                         {GCZCards.map((card, index) => {
-                            const draggableData: DraggableData = { id: card.id, type: "cardGroup" };
+                            const draggableData: DraggableData = {
+                                id: card.id,
+                                type: "cardGroup",
+                            };
                             const draggableId = JSON.stringify(draggableData);
 
                             return !animationCardIds.includes(card.id) ? (
@@ -108,7 +119,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                                                 height: cardHeight,
                                                 width: cardWidth,
                                                 zIndex: 99,
-                                                ...d.draggableProps.style
+                                                ...d.draggableProps.style,
                                             }}
                                         />
                                     )}
@@ -128,9 +139,28 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         })}
                         {drop.placeholder}
                     </div>
-                </div>
-            )}
-        </Droppable>
+                )}
+            </Droppable>
+
+            {/* <div
+                style={{
+                    top: 0,
+                    left: 0,
+                    position: "absolute",
+                    height: cardHeight,
+                    width: GCZCards.length * (cardWidth + 1),
+                }}
+            > */}
+                {ghostCard && draggedHandCard && (
+                    <GhostCard
+                        cardId={draggedHandCard.id}
+                        index={draggedOver?.index ?? 0}
+                        imageName={draggedHandCard.imageName}
+                        zIndex={0}
+                    />
+                )}
+            </div>
+        // </div>
     );
 };
 
