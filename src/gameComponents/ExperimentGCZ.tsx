@@ -71,23 +71,29 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     console.log(GCZCards.map((c) => c.imageName));
 
     const allowDropping = isHighlighted || rearranging;
+    const animations = activeAnimation?.animations ?? [];
+    const animationCardIds = animations.map((a) => a.cardId);
+
     return (
         <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
             {(drop) => (
-                <div
-                    ref={drop.innerRef}
-                    {...drop.droppableProps}
-                    style={{
-                        height: cardHeight,
-                        width: cardWidth * GCZCards.length,
-                    }}
-                >
-                    <div ref={(el) => registerPlaceOffset(el, id)}>
+                <div ref={(el) => registerPlaceOffset(el, id)}>
+                    <div
+                        className={`pl0GCZ ${isHighlighted ? "highlighted" : ""}`}
+                        ref={drop.innerRef}
+                        {...drop.droppableProps}
+                        style={{
+                            height: cardHeight,
+                            // width: 300,
+                            width: cardWidth * GCZCards.length,
+                            display: "flex",
+                        }}
+                    >
                         {GCZCards.map((card, index) => {
                             const draggableData: DraggableData = { id: card.id, type: "cardGroup" };
                             const draggableId = JSON.stringify(draggableData);
 
-                            return (
+                            return !animationCardIds.includes(card.id) ? (
                                 <Draggable draggableId={draggableId} index={index}>
                                     {(d) => (
                                         <div
@@ -97,10 +103,10 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                                         >
                                             <img
                                                 src={`./images/${card.imageName}.jpg`}
-                                                alt="id"
-                                                draggable={false}
+                                                alt={card.imageName}
+                                                draggable="false"
                                                 style={{
-                                                    position: "absolute",
+                                                    // position: "absolute",
                                                     height: cardHeight,
                                                     width: cardWidth,
                                                     zIndex: 99,
@@ -109,6 +115,17 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                                         </div>
                                     )}
                                 </Draggable>
+                            ) : (
+                                <AnimatedCard
+                                    key={card.id}
+                                    id={card.id}
+                                    currAnimations={animations.filter(
+                                        (a) => a.cardId === card.id && a.placeId === id
+                                    )}
+                                    imageName={card.imageName}
+                                    index={index}
+                                    gameSnapshot={gameSnapshot}
+                                />
                             );
                         })}
                         {drop.placeholder}
