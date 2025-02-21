@@ -96,23 +96,21 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                             return !animationCardIds.includes(card.id) ? (
                                 <Draggable draggableId={draggableId} index={index}>
                                     {(d) => (
-                                        <div
+                                        <img
                                             {...d.draggableProps}
                                             ref={d.innerRef}
                                             {...d.dragHandleProps}
-                                        >
-                                            <img
-                                                src={`./images/${card.imageName}.jpg`}
-                                                alt={card.imageName}
-                                                draggable="false"
-                                                style={{
-                                                    // position: "absolute",
-                                                    height: cardHeight,
-                                                    width: cardWidth,
-                                                    zIndex: 99,
-                                                }}
-                                            />
-                                        </div>
+                                            src={`./images/${card.imageName}.jpg`}
+                                            alt={card.imageName}
+                                            draggable="false"
+                                            style={{
+                                                // position: "absolute",
+                                                height: cardHeight,
+                                                width: cardWidth,
+                                                zIndex: 99,
+                                                ...d.draggableProps.style
+                                            }}
+                                        />
                                     )}
                                 </Draggable>
                             ) : (

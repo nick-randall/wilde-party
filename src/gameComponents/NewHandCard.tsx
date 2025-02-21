@@ -10,6 +10,8 @@ import {
     Draggable,
     DraggableProvidedDraggableProps,
     DraggableStateSnapshot,
+    DraggingStyle,
+    NotDraggingStyle,
 } from "react-beautiful-dnd";
 import { CSSProperties } from "react";
 
@@ -46,51 +48,58 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
     const { draggedHandCard, BFFdraggedOverSide, highlightType, draggedOver } = useSelector(
         (state: RootState) => state.dragEventState
     );
-    // const isDraggedOverAnyPlace = draggedOver !== undefined;
-    // const droppingStyles = (snapshot: DraggableStateSnapshot, style: DraggableProvidedDraggableProps) => {
-    //   if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
-    //     return style;
-    //   }
-    //   if (snapshot.dropAnimation) {
-    //     const { curve, duration, moveTo } = snapshot.dropAnimation;
-    //     let x = moveTo.x;
-    //     let y = moveTo.y;
-    //     console.log(moveTo);
-    //     if (highlightType === "card") {
-    //       if (draggedHandCard && draggedHandCard.cardType === "bff") {
-    //         x = BFFdraggedOverSide === "left" ? -60 : 40;
-    //       } else x = -15;
-    //       y = 60;
-    //     } else if (draggedHandCard && (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")) {
-    //       x = -15;
-    //       y = -15;
-    //     } else {
-    //       // x = cardWidth - 175;
-    //       // y = cardHeight - 195;
-    //     }
+    const isDraggedOverAnyPlace = draggedOver !== undefined;
+    const droppingStyles = (
+        snapshot: DraggableStateSnapshot,
+        style: DraggableProvidedDraggableProps
+    ) => {
+        if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
+            return style;
+        }
+        if (snapshot.dropAnimation) {
+            const { curve, duration, moveTo } = snapshot.dropAnimation;
+            let x = moveTo.x;
+            let y = moveTo.y;
+            console.log(moveTo);
+            if (highlightType === "card") {
+                if (draggedHandCard && draggedHandCard.cardType === "bff") {
+                    x = BFFdraggedOverSide === "left" ? -60 : 40;
+                } else x = -15;
+                y = 60;
+            } else if (
+                draggedHandCard &&
+                (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")
+            ) {
+                x = -15;
+                y = -15;
+            } else {
+                // x = cardWidth - 175;
+                // y = cardHeight - 195;
+            }
 
-    //     const translate = `translate(${x}px, ${y}px)`;
-    //     const scale = `scale(${dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
-    //     return {
-    //       ...style,
-    //       transform: `${translate} ${scale}`,
-    //       transition: `all ${curve} ${duration + 0.5}s`,
-    //     };
-    //   }
-    // };
+            const translate = `translate(${x}px, ${y}px)`;
+            const scale = `scale(${dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
+            return {
+                ...style,
+                transform: `${translate} ${scale}`,
+                transition: `all ${curve} ${duration + 0.5}s`,
+            };
+        }
+    };
 
-    const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
-        isDragging
-            ? {
-                  transform: `rotate(0deg)`,
-                  // This width causes cards to move aside and make room in other droppables.
-                  // When not dragging it tucks cards together
-
-                  // height: 168,
-                  // width: 105,
-                  // left: 125 * (index - (numHandCards / 2 - 0.5))
-              }
-            : {};
+    // const dragStyles = (isDragging: boolean | undefined, draggableStyles: DraggingStyle | NotDraggingStyle | undefined): CSSProperties =>
+    //     isDragging
+    //         ? {
+    //             transform: draggableStyles?.transform,
+    //               // transform: `rotate(0deg)`,
+    //               // This width causes cards to move aside and make room in other droppables.
+    //               // When not dragging it tucks cards together
+    //               position: "absolute",
+    //               height: 168,
+    //               width: 105,
+    //               // left: 125 * (index - (numHandCards / 2 - 0.5))
+    //           }
+    //         : {};
 
     const leftSpreadFactor = hover || draggedHandCard?.id === id ? 3 : 1;
     const leftSpreadCorrection =
@@ -108,20 +117,44 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
 
     return (
         <Draggable draggableId={draggableId} index={index}>
-            {(d) => (
-                <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
+            {(d, snapshot) => {
+                const draggingStyle = d.draggableProps?.style;
+
+                const transform = isDragging
+                    ? d.draggableProps?.style?.transform
+                    : styles.transform;
+                const transition = isDragging
+                    ? d.draggableProps?.style?.transition
+                    : styles.transition;
+                let zIndex;
+                if (draggingStyle && "zIndex" in draggingStyle)
+                    zIndex = isDragging ? draggingStyle.zIndex : styles.zIndex;
+                return (
                     <img
                         src={`./${
                             cardIsFaceup ? `./images/${imageName}.jpg` : "./images/back.jpg"
                         }`}
                         alt="id"
                         draggable={false}
-                        style={{ ...styles, left, ...dragStyles(isDragging) }} // TODO change cardHeight name to height
                         onMouseEnter={() => setHover(true)}
                         onMouseLeave={() => setHover(false)}
+                        ref={d.innerRef}
+                        {...d.dragHandleProps}
+                        {...d.draggableProps}
+                        style={{
+                            ...d.draggableProps.style,
+                            ...styles,
+                            left,
+                            ...droppingStyles(snapshot, d.draggableProps),
+                            // position: "absolute",
+                            // ...dragStyles(isDragging, d.draggableProps.style),
+                            transform,
+                            transition,
+                            zIndex,
+                        }} // TODO change cardHeight name to height
                     />
-                </div>
-            )}
+                );
+            }}
         </Draggable>
     );
 };
