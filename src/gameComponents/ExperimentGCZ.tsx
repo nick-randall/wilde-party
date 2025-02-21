@@ -57,7 +57,15 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         gameSnapshot
     );
     // console.log(GCZCards);
-    const droppableId = JSON.stringify({ type: "place", id });
+    const myIndex = useSelector((state: RootState)=> state.userGameState.myIndex);
+
+    const droppableData: DroppableData = {
+        type: "place",
+        id,
+        placeType: "guestCardZone",
+        player: myIndex,
+    };
+    const droppableId = JSON.stringify(droppableData);
 
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
@@ -76,7 +84,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const animationCardIds = animations.map((a) => a.cardId);
 
     return (
-        <div ref={(el) => registerPlaceOffset(el, id)} style={{position:"relative"}}>
+        <div ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
             <Droppable
                 droppableId={droppableId}
                 direction="horizontal"
@@ -98,11 +106,11 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         }}
                     >
                         {GCZCards.map((card, index) => {
-                            const draggableData: DraggableData = {
+                            const DroppableData: DroppableData = {
                                 id: card.id,
                                 type: "cardGroup",
                             };
-                            const draggableId = JSON.stringify(draggableData);
+                            const draggableId = JSON.stringify(DroppableData);
 
                             return !animationCardIds.includes(card.id) ? (
                                 <Draggable draggableId={draggableId} index={index}>
@@ -151,15 +159,15 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                     width: GCZCards.length * (cardWidth + 1),
                 }}
             > */}
-                {ghostCard && draggedHandCard && (
-                    <GhostCard
-                        cardId={draggedHandCard.id}
-                        index={draggedOver?.index ?? 0}
-                        imageName={draggedHandCard.imageName}
-                        zIndex={0}
-                    />
-                )}
-            </div>
+            {ghostCard && draggedHandCard && (
+                <GhostCard
+                    cardId={draggedHandCard.id}
+                    index={draggedOver?.index ?? 0}
+                    imageName={draggedHandCard.imageName}
+                    zIndex={0}
+                />
+            )}
+        </div>
         // </div>
     );
 };

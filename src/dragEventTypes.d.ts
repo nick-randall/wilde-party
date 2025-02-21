@@ -10,7 +10,7 @@ type SimpleRearrangingData = {
 //   index: number
 // }
 ///TODO just use
-type DraggedOverData = {
+type DraggedOverData = { // LEGACY
   type: DroppableEntityType,
   id: number,
   index: number,
@@ -24,8 +24,9 @@ type UpdateDragData = {
 type DroppableData = {
   type: DroppableEntityType,
   id: number,
-  // placeType?: string,
-  // playerIndex?: number,
+  index?: number,
+  placeType?: PlaceType,
+  player?: number,
   calculatedIndex?: number // use this as destination index instead if not undefined 
   enchantableNeighbours?: EnchantableNeighbour[]
 }
@@ -36,7 +37,16 @@ type DraggableData = {
   // legalActions: ActionData[],
   // actionType: ActionType;
   numCards?: number,
+
 }
+
+// type DroppableData = {
+//   id: number, // If type == "cardGroup", use first id in card group as id
+//   type: DraggableEntityType,
+//   // legalActions: ActionData[],
+//   // actionType: ActionType;
+//   numCards?: number,
+// }
 
 type ActionData = {
   resultingGameSnapshot?: GameSnapshot;
@@ -45,7 +55,7 @@ type ActionData = {
 
 type DraggableEntityType = "card" | "handCard" | "cardGroup";
 
-type DroppableEntityType = "player" | "place" | "cardGroup" | "card";
+type DroppableEntityType = "player" | "place" | "cardGroup" | "card" | "handCard";
 
 type CardGroupObj = {
   id: number;

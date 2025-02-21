@@ -27,7 +27,10 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     const enemysTurn = useSelector(
         (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== player
     );
-    const droppableId = JSON.stringify({ type: "place", id });
+    const myIndex = useSelector((state: RootState)=> state.userGameState.myIndex);
+
+    const droppableData: DroppableData ={ type: "place", id, placeType: "hand", player: myIndex }
+    const droppableId = JSON.stringify(droppableData);
 
     const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
     const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;

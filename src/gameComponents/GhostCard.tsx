@@ -16,8 +16,11 @@ export const GhostCard = (props: GhostCardProps) => {
   const { rotation, imageName, index, offsetLeft, offsetTop, zIndex, cardId } = props;
   const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
   const {draggedOver} = useSelector((state: RootState) => state.dragEventState);
-  const { left, cardWidth } = getCardStyleValues(cardId, currSnapshot);
-  // const {left, cardWidth} = getCardStyleValuesFromPlaceAndPlayer(draggedOver.)
+  // const { left, cardWidth } = getCardStyleValues(cardId, currSnapshot);
+  if(!draggedOver || !draggedOver.placeType || draggedOver.player === undefined) return null;
+  console.log("index", draggedOver.index)
+  const {left, cardWidth} = getCardStyleValuesFromPlaceAndPlayer(draggedOver.placeType, draggedOver.player, currSnapshot)
+  console.log("left", left)
   const id = "ghostCard" + imageName;
 
   return (
@@ -30,7 +33,7 @@ export const GhostCard = (props: GhostCardProps) => {
         opacity: 0.7,
         width: cardWidth,
         border: "thin solid",
-        left: index * left + (offsetLeft || 0),
+        left: index* cardWidth, //index * left + (offsetLeft || 0),
         top: offsetTop || 0,
         rotate: rotation + "deg" || "0deg",
         position: "absolute",

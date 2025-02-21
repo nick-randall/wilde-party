@@ -46,7 +46,7 @@ function GCZ(props: GCZProps) {
 
   const droppableId = JSON.stringify({ type: "place", id });
 
-  const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
+  const ghostCardIndex = draggedOver?.id === id ? (draggedOver.index || 0) : rearrangingData.sourceIndex;
   const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
   const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);

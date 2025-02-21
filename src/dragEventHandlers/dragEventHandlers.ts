@@ -18,7 +18,7 @@ import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpda
 //     switch (action.type) {
 //       case "dragStart": {
 //         const { source, draggableId } = action.payload;
-//         const draggableData: DraggableData = JSON.parse(draggableId);
+//         const DroppableData: DroppableData = JSON.parse(draggableId);
 //         const droppableData: DroppableData = JSON.parse(source.droppableId);
 //         const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
 //         if (isHandCard(droppableData.id, gameSnapshot)) {
@@ -28,7 +28,7 @@ import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpda
 //             START_REARRANGING({
 //               placeId: droppableData.id,
 //               sourceIndex: source.index,
-//               draggedId: draggableData.id,
+//               draggedId: DroppableData.id,
 //             })
 //           );
 //         }
@@ -141,12 +141,12 @@ export const onDragStart = ({
 };
 
 export const onDragUpdate = (dragUpdate: DragUpdate) => {
-    let draggedOverData: DraggedOverData | undefined;
+    let draggedOverData: DroppableData | undefined;
     if (dragUpdate.destination) {
         const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
-        const { id, type, calculatedIndex, enchantableNeighbours } = droppableData;
+        const { id, type, calculatedIndex, enchantableNeighbours, placeType, player } = droppableData;
         const index = calculatedIndex ?? dragUpdate.destination.index;
-        draggedOverData = { type, id, index, enchantableNeighbours };
+        draggedOverData = { type, id, index, enchantableNeighbours, placeType, player };
     } else {
         draggedOverData = undefined;
     }

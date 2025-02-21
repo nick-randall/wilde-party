@@ -6,7 +6,7 @@ import useUserGameData from "../user/useUserGameData";
 import LargeButton from "../components/LargeButton";
 import TextInput from "../components/TextInput";
 import SmallButton from "../components/SmallButton";
-import { testCardRow } from "../gameComponents/NewGCZ";
+import { testCardRow } from "../gameComponents/ExperimentGCZ";
 
 const HomePage: React.FC = () => {
   testCardRow()

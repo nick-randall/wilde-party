@@ -17,7 +17,7 @@ import UWZ from "../gameComponents/UWZ";
 import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
 import NewHand from "../gameComponents/NewHand";
-import NewGCZ from "../gameComponents/NewGCZ";
+import NewGCZ from "../gameComponents/ExperimentGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locatePlace } from "../helperFunctions/locateFunctions";
@@ -121,7 +121,15 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
             <img
                 src="./icons/fast-forward.png"
                 alt=""
-                style={{ position: "absolute", left: "50vw", height: 50, cursor: "pointer", zIndex: 99 }}
+                style={{
+                    position: "absolute",
+                    left: "50vw",
+                    height: 50,
+                    cursor: "pointer",
+                    transition: "300ms",
+                    zIndex: 99,
+                    opacity: activeAnimation ? 1 :0,
+                }}
                 onClick={() => dispatch(skipToEndOfAnimations())}
             />
             <div

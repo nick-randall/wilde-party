@@ -13,7 +13,7 @@ export interface DragEventState {
     // gameSnapshot: GameSnapshot;
     screenSize: { width: number; height: number };
     // transitionData: TransitionData[];
-    draggedOver?: DraggedOverData;
+    draggedOver?: DroppableData;
     BFFdraggedOverSide?: string;
     rearrangingData: SimpleRearrangingData;
     draggedHandCard?: GameCard;
@@ -42,11 +42,11 @@ export interface DragEventState {
     // gameSnapshot: GameSnapshot;
     screenSize: { width: number; height: number };
     // transitionData: TransitionData[];
-    draggedOver?: DraggedOverData;
+    draggedOver?: DroppableData;
     BFFdraggedOverSide?: string;
     rearrangingData: SimpleRearrangingData;
     draggedHandCard?: GameCard;
-    draggableData?: DraggableData;
+    droppableData?: DroppableData;
     highlights: number[];
     highlightType: string;
 }
@@ -56,7 +56,7 @@ const initialState: DragEventState = {
     screenSize: getScreenSize(),
     draggedOver: undefined,
     BFFdraggedOverSide: undefined,
-    draggableData: undefined,
+    droppableData: undefined,
     // transitionData: [],
     rearrangingData: { placeId: -1, draggedId: -1, sourceIndex: -1 },
     draggedHandCard: undefined,
@@ -96,9 +96,9 @@ export const dragEventSlice = createSlice({
                 (e) => e.id === id
             );
         },
-        SET_DRAGGABLE_DATA: (state, action: PayloadAction<DraggableData>) => {
+        SET_DRAGGABLE_DATA: (state, action: PayloadAction<DroppableData>) => {
           console.log(action.payload)
-            state.draggableData = action.payload;
+            state.droppableData = action.payload;
         },
         START_REARRANGING: (state, action: PayloadAction<SimpleRearrangingData>) => {
             console.log(action.payload);
@@ -124,7 +124,7 @@ export const dragEventSlice = createSlice({
         UPDATE_DRAGGED_OVER: (
             state,
             action: PayloadAction<{
-                draggedOverData: DraggedOverData | undefined;
+                draggedOverData: DroppableData | undefined;
                 gameSnapshot: GameSnapshot;
             }>
         ) => {
@@ -135,7 +135,7 @@ export const dragEventSlice = createSlice({
                 state.draggedOver = undefined;
                 return;
             }
-            const data = draggedOverData as DraggedOverData;
+            const data = draggedOverData as DroppableData;
             const { id, index, type } = data;
             if (type === "place") {
                 const placeName = locatePlace(id, gameSnapshot).placeType;
@@ -185,7 +185,7 @@ export const dragEventSlice = createSlice({
             return {
                 ...state,
                 draggedHandCard: undefined,
-                draggableData: undefined,
+                DroppableData: undefined,
                 highlights: [],
                 highlightType: "",
                 draggedOver: undefined,

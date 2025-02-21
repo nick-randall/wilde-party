@@ -60,7 +60,6 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
             const { curve, duration, moveTo } = snapshot.dropAnimation;
             let x = moveTo.x;
             let y = moveTo.y;
-            console.log(moveTo);
             if (highlightType === "card") {
                 if (draggedHandCard && draggedHandCard.cardType === "bff") {
                     x = BFFdraggedOverSide === "left" ? -60 : 40;
@@ -77,10 +76,14 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
                 // y = cardHeight - 195;
             }
 
-            const translate = `translate(${x}px, ${y}px)`;
-            const scale = `scale(${dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
+            const translate = `translate(${x - 10}px, ${y-14}px)`;
+            // const scale = `scale(${1 / dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
+            const scale = `scale(0.83)`;
+            // const scale = `scale(1)`
+
             return {
                 ...style,
+                boxShadow: "",
                 transform: `${translate} ${scale}`,
                 transition: `all ${curve} ${duration + 0.5}s`,
             };
@@ -126,11 +129,18 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
                 const transition = isDragging
                     ? d.draggableProps?.style?.transition
                     : styles.transition;
-                let zIndex;
-                if (draggingStyle && "zIndex" in draggingStyle)
+
+                let zIndex,
+                    width = styles.width,
+                    height = styles.height;
+                if (draggingStyle && "zIndex" in draggingStyle) {
                     zIndex = isDragging ? draggingStyle.zIndex : styles.zIndex;
+                    // height = dimensionConstants.TABLE_CARD_HEIGHTS.self
+                    // width = height / dimensionConstants.HEIGHT_TO_WIDTH_RATIO
+                }
                 return (
                     <img
+                        key={id}
                         src={`./${
                             cardIsFaceup ? `./images/${imageName}.jpg` : "./images/back.jpg"
                         }`}
@@ -145,12 +155,12 @@ export const NewHandCard: React.FC<NewHandCardProps> = ({
                             ...d.draggableProps.style,
                             ...styles,
                             left,
-                            ...droppingStyles(snapshot, d.draggableProps),
                             // position: "absolute",
                             // ...dragStyles(isDragging, d.draggableProps.style),
                             transform,
                             transition,
                             zIndex,
+                            ...droppingStyles(snapshot, d.draggableProps),
                         }} // TODO change cardHeight name to height
                     />
                 );
