@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
 import {
@@ -8,6 +8,7 @@ import {
 import { RootState } from "../redux/store";
 import { NewHandCard } from "./NewHandCard";
 import AnimatedCard from "./AnimatedCard";
+import ExperimentHandCard from "./ExperimentHandCard";
 
 interface NewHandProps {
     id: number;
@@ -19,6 +20,14 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     const { currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
+
+    // useEffect(() => {
+    //   if (shouldSpread) {
+    //     if (!transitionsUnderway && !handCardDragged && !enemysTurn) setSpread(maxCardLeftSpread);
+    //   } else {
+    //     setSpread(cardLeftSpread);
+    //   }
+    // }, [transitionsUnderway, shouldSpread, handCardDragged, maxCardLeftSpread, cardLeftSpread, enemysTurn]);
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
     const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
@@ -27,9 +36,9 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     const enemysTurn = useSelector(
         (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== player
     );
-    const myIndex = useSelector((state: RootState)=> state.userGameState.myIndex);
+    const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
 
-    const droppableData: DroppableData ={ type: "place", id, placeType: "hand", player: myIndex }
+    const droppableData: DroppableData = { type: "place", id, placeType: "hand", player: myIndex };
     const droppableId = JSON.stringify(droppableData);
 
     const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
@@ -46,20 +55,57 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     return (
         <Droppable droppableId={droppableId} isDropDisabled={true}>
             {(p) => (
-                <div {...p.droppableProps} ref={p.innerRef}>
-                    <div style={{ position: "relative" }} ref={(el) => registerPlaceOffset(el, id)}>
+                <div {...p.droppableProps} ref={p.innerRef} style={{height: styles.cardHeight, position:"relative"}}>
+                    <div style={{ position: "absolute", display:"flex", height: styles.cardHeight }} ref={(el) => registerPlaceOffset(el, id)}>
                         {cards.map((card, index) =>
                             !animationCardIds.includes(card.id) ? (
-                                <NewHandCard
-                                    key={card.id}
-                                    id={card.id}
-                                    imageName={card.imageName}
-                                    index={index}
-                                    hover={hover}
-                                    setHover={setHover}
-                                    numHandCards={cards.length}
-                                />
+                                <div
+                                    // This is a container div for one card and two spacers
+                                    style={{
+                                        height: styles.cardHeight,
+                                        display: "flex",
+                                        position: "relative",
+                                    }}
+                                >
+                                    <div
+                                        // This is a card spacer div, responsible for growing and pushing the hand cards apart.
+                                        style={{
+                                            width: 80 / 2,
+                                            transition: "all 180ms",
+                                            height: styles.cardHeight,
+                                            // border:"thin green solid",
+                                            // zIndex: 100
+                                        }}
+                                    />
+                                    <ExperimentHandCard
+                                        id={card.id}
+                                        index={index}
+                                        image={card.imageName}
+                                        numHandCards={cards.length}
+                                        key={card.id}
+                                    />
+
+                                    <div
+                                        // This is a card spacer div, responsible for growing and pushing the hand cards apart.
+                                        style={{
+                                            width: 80 / 2,
+                                            transition: "all 180ms",
+                                            height: styles.cardHeight,
+                                            // border:"thin red solid",
+                                            // zIndex: 100
+                                        }}
+                                    />
+                                </div>
                             ) : (
+                                // <NewHandCard
+                                //     key={card.id}
+                                //     id={card.id}
+                                //     imageName={card.imageName}
+                                //     index={index}
+                                //     hover={hover}
+                                //     setHover={setHover}
+                                //     numHandCards={cards.length}
+                                // />
                                 <AnimatedCard
                                     key={card.id}
                                     id={card.id}
