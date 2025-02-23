@@ -3,6 +3,7 @@ import { RefMap, getMiddleOffset, getOffsetOf } from "./animationHelperFunctions
 import { dimensionConstants, getCardCSS } from "../helperFunctions/getCardStyles";
 import {
   AnimationTrack,
+  AnimationTrackStep,
   FromDisappears,
   HandToMiddle,
   HandToTable,
@@ -16,7 +17,7 @@ import {
 } from "./AnimationTimeline";
 import { getMiddleStyles, Offset } from "./getOffset";
 import store from "../redux/store";
-import { of } from "ramda";
+import { getCard, locateCard } from "../helperFunctions/locateFunctions";
 
 export interface ActiveAnimation {
   animations: AnimationData[];
@@ -84,6 +85,8 @@ export interface DealCardsArgs {
 
 export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation => {
   const { cardIds, deckId, handId, oldSnapshot, newSnapshot, offsetMap } = args;
+  const imageName = getCard(cardIds[0], oldSnapshot).imageName;
+  const isStartGast = imageName.includes("startgast");
   const deckOffset = offsetMap[deckId];
   if (!deckOffset) {
     throw new Error("Offset not found for deck with id of " + deckId);
@@ -109,7 +112,10 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
     const handStylesWithZIndex = getCardCSS(cardId, newSnapshot);
     // Set the zIndex to lower than cards leaving deck but all at the same so they naturally
     // fall where they should
+    const leftNum = parseInt(handStylesWithZIndex["left"].replace("px", ""))
     handStylesWithZIndex["z-index"] = `${middleZIndex}`;
+    // This amount is for card spread amount
+    handStylesWithZIndex["left"] = `${leftNum + 37 * i}px` // handCardSpread
 
     const deckToMiddle = [
       new TableToMiddle({
@@ -121,6 +127,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
         zeroOffset: "fromOffset",
       }),
       new FromDisappears({ visibility: "disappearing" }),
+      new NothingHappens(),
       new NothingHappens(),
     ];
 
@@ -135,6 +142,10 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
         fromStyles: middleStylesWithZIndex,
         zeroOffset: "toOffset",
       }),
+      // This is for ensuring that handCards don't move back to their incorrect resting place
+      // Before the final handCard is dealt.
+      new AnimationTrackStep({duration: isStartGast ? 0 :  (7 - i) * 520}), 
+
     ];
 
     const handToMiddleTrack = new AnimationTrack({ cardId, steps: deckToMiddle, homePlaceId: deckId }); //, naturalOffset: getOffsetOf(cardId), naturalDimensions: getDimensions(1, "GCZ")
@@ -149,6 +160,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
     });
     animations.push(...animationData);
     durationOfAllAnimations = totalDuration;
+    if(!isStartGast) durationOfAllAnimations -=600 // End before other animations end and return to their incorrect places
   }
   return { animations, totalDuration: durationOfAllAnimations, showPrevSnapshot: [deckId] };
 };

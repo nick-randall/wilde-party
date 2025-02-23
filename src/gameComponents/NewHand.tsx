@@ -55,7 +55,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     return (
         <Droppable droppableId={droppableId} isDropDisabled={true}>
             {(p) => (
-                <div {...p.droppableProps} ref={p.innerRef} style={{height: styles.cardHeight, position:"relative"}}>
+                <div {...p.droppableProps} ref={p.innerRef} style={{height: styles.cardHeight}}>
                     <div style={{ position: "absolute", display:"flex", height: styles.cardHeight }} ref={(el) => registerPlaceOffset(el, id)}>
                         {cards.map((card, index) =>
                             !animationCardIds.includes(card.id) ? (
@@ -67,7 +67,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         position: "relative",
                                     }}
                                 >
-                                    <div
+                                    {/* <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
                                             width: 80 / 2,
@@ -76,7 +76,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                             // border:"thin green solid",
                                             // zIndex: 100
                                         }}
-                                    />
+                                    /> */}
                                     <ExperimentHandCard
                                         id={card.id}
                                         index={index}
@@ -88,7 +88,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: 80 / 2,
+                                            width: 72,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
                                             // border:"thin red solid",

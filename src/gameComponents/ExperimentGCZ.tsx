@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { dimensionConstants, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
     getCardRowShapeOnDraggedOver,
@@ -77,7 +77,6 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const rearranging = useSelector(
         (state: RootState) => state.dragEventState.rearrangingData.placeId === id
     );
-    console.log(GCZCards.map((c) => c.imageName));
 
     const allowDropping = isHighlighted || rearranging;
     const animations = activeAnimation?.animations ?? [];
@@ -97,8 +96,8 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         {...drop.droppableProps}
                         style={{
                             transition: "300ms",
+                            margin: 0,
                             height: cardHeight,
-                            // width: 300,
                             width:
                                 cardWidth * GCZCards.length +
                                 (draggedOver?.id === id ? cardWidth : 0),
@@ -128,6 +127,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                                                 width: cardWidth,
                                                 zIndex: 99,
                                                 ...d.draggableProps.style,
+                                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS
                                             }}
                                         />
                                     )}
@@ -149,16 +149,6 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                     </div>
                 )}
             </Droppable>
-
-            {/* <div
-                style={{
-                    top: 0,
-                    left: 0,
-                    position: "absolute",
-                    height: cardHeight,
-                    width: GCZCards.length * (cardWidth + 1),
-                }}
-            > */}
             {ghostCard && draggedHandCard && (
                 <GhostCard
                     cardId={draggedHandCard.id}
@@ -168,7 +158,6 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                 />
             )}
         </div>
-        // </div>
     );
 };
 
