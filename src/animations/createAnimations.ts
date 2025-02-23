@@ -143,7 +143,8 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
         zeroOffset: "toOffset",
       }),
       // This is for ensuring that handCards don't move back to their incorrect resting place
-      // Before the final handCard is dealt.
+      // Before the final handCard is dealt -- extend each animation's end duration
+      // So they do not end before the final animation is over.
       new AnimationTrackStep({duration: isStartGast ? 0 :  (7 - i) * 520}), 
 
     ];
@@ -160,7 +161,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
     });
     animations.push(...animationData);
     durationOfAllAnimations = totalDuration;
-    if(!isStartGast) durationOfAllAnimations -=600 // End before other animations end and return to their incorrect places
+    if(!isStartGast) durationOfAllAnimations -=700 // End before other animations end and return to their incorrect places
   }
   return { animations, totalDuration: durationOfAllAnimations, showPrevSnapshot: [deckId] };
 };

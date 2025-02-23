@@ -117,35 +117,43 @@ const HandCard = (props: HandCardProps) => {
     const tableCardWidth = tableCardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
 
     return (
-      <Draggable draggableId={draggableId} index={index} key={draggableId} isDragDisabled={!canPlay}>
-        {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-            <div
-              // The width of this element determines how far cards
-              // move aside and make room in other droppables.
-              // When not dragging it has a width of 0, which
-              // tucks hand cards together
-              style={{ width: isDragging ? tableCardWidth : 0, position: "relative" }}
-            >
-            
-                      <img
-                        alt={image}
-                        src={`./images/${image}.jpg`}
-                        draggable="false"
-                        // ref={cardRef}
-                        onMouseEnter={()=>setShortHover(true)}
-                        onMouseLeave={() => setShortHover(false)}
-                        id={id.toString()}
-                        style={{
-                          ...normalStyles,
-                          ...dragStyles(isDragging),
-                          // ...droppingStyles(snapshot, provided.draggableProps),
-                        }}
-                      />
-            </div>
-          </div>
-        )}
-      </Draggable>
+        <Draggable
+            draggableId={draggableId}
+            index={index}
+            key={draggableId}
+            isDragDisabled={!canPlay}
+        >
+            {(provided, snapshot) => (
+                <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                >
+                    <div
+                        // The width of this element determines how far cards
+                        // move aside and make room in other droppables.
+                        // When not dragging it has a width of 0, which
+                        // tucks hand cards together
+                        style={{ width: isDragging ? tableCardWidth : 0 }}
+                    >
+                        <img
+                            alt={image}
+                            src={`./images/${image}.jpg`}
+                            draggable="false"
+                            // ref={cardRef}
+                            onMouseEnter={() => setShortHover(true)}
+                            onMouseLeave={() => setShortHover(false)}
+                            id={id.toString()}
+                            style={{
+                                ...normalStyles,
+                                ...dragStyles(isDragging),
+                                // ...droppingStyles(snapshot, provided.draggableProps),
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
+        </Draggable>
     );
-  };
+};
 export default HandCard;

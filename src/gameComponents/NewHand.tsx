@@ -55,8 +55,16 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     return (
         <Droppable droppableId={droppableId} isDropDisabled={true}>
             {(p) => (
-                <div {...p.droppableProps} ref={p.innerRef} style={{height: styles.cardHeight}}>
-                    <div style={{ position: "absolute", display:"flex", height: styles.cardHeight }} ref={(el) => registerPlaceOffset(el, id)}>
+                <div
+                    {...p.droppableProps}
+                    ref={p.innerRef}
+                    // Must be 0 to prevent cards next to dragged card jumping down. 
+                    style={{ width: 0 }}
+                >
+                    <div
+                        style={{ position: "absolute", display: "flex", height: styles.cardHeight }}
+                        ref={(el) => registerPlaceOffset(el, id)}
+                    >
                         {cards.map((card, index) =>
                             !animationCardIds.includes(card.id) ? (
                                 <div
