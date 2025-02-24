@@ -58,7 +58,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                 <div
                     {...p.droppableProps}
                     ref={p.innerRef}
-                    // Must be 0 to prevent cards next to dragged card jumping down. 
+                    // Must be 0 to prevent cards next to dragged card jumping down.
                     style={{ width: 0 }}
                 >
                     <div
@@ -73,30 +73,46 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         height: styles.cardHeight,
                                         display: "flex",
                                         position: "relative",
+                                        left: shouldSpread
+                                            ? (cards.length *
+                                                  -dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD) /
+                                              2
+                                            : 0
+                                          //   (cards.length *
+                                          //     dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD) /
+                                          // 2
+                                          ,
+                                        transition: "180ms",
                                     }}
                                 >
-                                    {/* <div
+                                    <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: 80 / 2,
+                                            width: shouldSpread
+                                                ? dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
+                                                : dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
-                                            // border:"thin green solid",
+                                            // border:"thin red solid",
                                             // zIndex: 100
                                         }}
-                                    /> */}
+                                    />
                                     <ExperimentHandCard
                                         id={card.id}
                                         index={index}
                                         image={card.imageName}
                                         numHandCards={cards.length}
                                         key={card.id}
+                                        onEnter={() => setShouldSpread(true)}
+                                        onLeave={() => setShouldSpread(false)}
                                     />
 
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: 72,
+                                            width: shouldSpread
+                                                ? dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
+                                                : dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
                                             // border:"thin red solid",

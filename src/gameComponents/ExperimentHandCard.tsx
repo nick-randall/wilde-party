@@ -20,10 +20,12 @@ export interface HandCardProps {
     index: number;
     image: string;
     numHandCards: number;
+    onEnter: () => void;
+    onLeave: () => void;
 }
 
 const HandCard = (props: HandCardProps) => {
-    const { id, index, image } = props;
+    const { id, index, image, onEnter, onLeave } = props;
 
     const isDragging = useSelector(
         (state: RootState) =>
@@ -141,8 +143,10 @@ const HandCard = (props: HandCardProps) => {
                             src={`./images/${image}.jpg`}
                             draggable="false"
                             // ref={cardRef}
-                            onMouseEnter={() => setShortHover(true)}
-                            onMouseLeave={() => setShortHover(false)}
+                            onMouseEnter={onEnter}
+                            onMouseLeave={onLeave}
+                            // onMouseEnter={() => setShortHover(true)}
+                            // onMouseLeave={() => setShortHover(false)}
                             id={id.toString()}
                             style={{
                                 ...normalStyles,
