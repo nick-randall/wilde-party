@@ -67,6 +67,7 @@ const HandCard = (props: HandCardProps) => {
         width: cardWidth,
         height: cardHeight,
         top: index * top,
+        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
         left: 0, // 30 * index,
         position: "absolute",
         transform: `rotate(${rotate}deg) scale(${shortHover ? 1.1 : 1})`,
@@ -104,7 +105,7 @@ const HandCard = (props: HandCardProps) => {
             //     }
 
             const translate = `translate(${pushLeftWhileDragging}px, ${0}px)`;
-            const scale = `scale(${0.88})`;
+            const scale = `scale(${0.83})`;
             // const scale = `scale(1)`;
             return {
                 ...style,

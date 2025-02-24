@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { RefMap, getMiddleOffset, getOffsetOf } from "./animationHelperFunctions";
+import { RefMap, getMiddleOffset, getOffsetOf, getPlayerHandOffset } from "./animationHelperFunctions";
 import { dimensionConstants, getCardCSS } from "../helperFunctions/getCardStyles";
 import {
   AnimationTrack,
@@ -115,7 +115,8 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
     const leftNum = parseInt(handStylesWithZIndex["left"].replace("px", ""))
     handStylesWithZIndex["z-index"] = `${middleZIndex}`;
     // This amount is for card spread amount
-    handStylesWithZIndex["left"] = `${leftNum + dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * i}px` // handCardSpread
+    const playerHandOffset = isStartGast ? 0 : getPlayerHandOffset(cardIds.length);
+    handStylesWithZIndex["left"] = `${leftNum + dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * i - playerHandOffset}px` // handCardSpread
 
     const deckToMiddle = [
       new TableToMiddle({

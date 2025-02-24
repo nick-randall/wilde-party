@@ -6,9 +6,9 @@ import {
     getCardStyleValuesFromPlaceAndPlayer,
 } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
-import { NewHandCard } from "./NewHandCard";
 import AnimatedCard from "./AnimatedCard";
 import ExperimentHandCard from "./ExperimentHandCard";
+import { getPlayerHandOffset } from "../animations/animationHelperFunctions";
 
 interface NewHandProps {
     id: number;
@@ -16,27 +16,20 @@ interface NewHandProps {
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) => {
-    const [shouldSpread, setShouldSpread] = useState(false);
     const { currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
 
-    // useEffect(() => {
-    //   if (shouldSpread) {
-    //     if (!transitionsUnderway && !handCardDragged && !enemysTurn) setSpread(maxCardLeftSpread);
-    //   } else {
-    //     setSpread(cardLeftSpread);
-    //   }
-    // }, [transitionsUnderway, shouldSpread, handCardDragged, maxCardLeftSpread, cardLeftSpread, enemysTurn]);
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
-    const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
+    const { MAX_HAND_CARD_LEFT_SPREAD, MIN_HAND_CARD_LEFT_SPREAD } = dimensionConstants;
     const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
 
-    const enemysTurn = useSelector(
-        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== player
-    );
     const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
+
+    const enemysTurn = useSelector(
+        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== myIndex
+    );
 
     const droppableData: DroppableData = { type: "place", id, placeType: "hand", player: myIndex };
     const droppableId = JSON.stringify(droppableData);
@@ -46,9 +39,35 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
     const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, currSnapshot);
-    const { left: cardLeftSpread } = styles;
-    const [spread, setSpread] = useState(cardLeftSpread);
+    // const { left: cardLeftSpread } = styles;
+    const [shouldSpread, setShouldSpread] = useState(false);
+    const [spread, setSpread] = useState(MIN_HAND_CARD_LEFT_SPREAD);
     const cards = gameSnapshot.players[player].places.hand.cards;
+
+    const [spreadOffset, setSpreadOffset] = useState(
+        (cards.length * dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD) / 2
+    );
+    useEffect(() => {
+        if (shouldSpread) {
+            if (!activeAnimation && !handCardDragged && !enemysTurn) {
+                setSpread(MAX_HAND_CARD_LEFT_SPREAD);
+                setSpreadOffset((cards.length * -dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD) / 2);
+            }
+        } else {
+            setSpread(MIN_HAND_CARD_LEFT_SPREAD);
+            const handOffset = getPlayerHandOffset(cards.length)
+            setSpreadOffset(-handOffset);
+        }
+    }, [
+        activeAnimation,
+        shouldSpread,
+        handCardDragged,
+        enemysTurn,
+        MAX_HAND_CARD_LEFT_SPREAD,
+        MIN_HAND_CARD_LEFT_SPREAD,
+        cards.length,
+    ]);
+    console.log("s o",spreadOffset)
 
     const [hover, setHover] = useState(false);
 
@@ -78,14 +97,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         height: styles.cardHeight,
                                         position: "relative",
                                         display: "flex",
-                                        left: shouldSpread
-                                            ? (cards.length *
-                                                  -dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD) /
-                                              2
-                                            : 0,
-                                        //   (cards.length *
-                                        //     dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD) /
-                                        // 2
+                                        left: spreadOffset,
                                         transition: "180ms",
                                     }}
                                     onMouseEnter={() => setShouldSpread(true)}
@@ -94,13 +106,9 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: shouldSpread
-                                                ? dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
-                                                : dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD,
+                                            width: spread,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
-                                            // border:"thin red solid",
-                                            // zIndex: 100
                                         }}
                                     />
                                     <ExperimentHandCard
@@ -109,20 +117,14 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         image={card.imageName}
                                         numHandCards={cards.length}
                                         key={card.id}
-                                        // onEnter={() => setShouldSpread(true)}
-                                        // onLeave={() => setShouldSpread(false)}
                                     />
 
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: shouldSpread
-                                                ? dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD
-                                                : dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD,
+                                            width: spread,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
-                                            // border:"thin red solid",
-                                            // zIndex: 100
                                         }}
                                     />
                                 </div>

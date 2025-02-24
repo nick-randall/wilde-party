@@ -1,39 +1,43 @@
+import { dimensionConstants } from "../helperFunctions/getCardStyles";
 import { Offset } from "./getOffset";
 export interface CardCSSMap {
-  "z-index": string;
-  width: string;
-  height: string;
-  left: string;
-  top: string;
-  position: "absolute";
-  transform: string;
-  transition: string;
-  scale: string;
-  "box-shadow": string;
-  "user-select": string;
-  "transform-style": string;
-  "-moz-transform-style": string;
-  "-webkit-transform-style": string;
-  "border-radius": string;
+    "z-index": string;
+    width: string;
+    height: string;
+    left: string;
+    top: string;
+    position: "absolute";
+    transform: string;
+    transition: string;
+    scale: string;
+    "box-shadow": string;
+    "user-select": string;
+    "transform-style": string;
+    "-moz-transform-style": string;
+    "-webkit-transform-style": string;
+    "border-radius": string;
 }
 
 const middleCardWidth = 200;
 const middleCardHeight = 1.5416238438 * middleCardWidth;
 
 export const getMiddleOffset = (): Offset => {
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
 
-  return new Offset({ dx: screenWidth / 2 - middleCardWidth / 2, dy: screenHeight / 2 - middleCardHeight / 2 });
+    return new Offset({
+        dx: screenWidth / 2 - middleCardWidth / 2,
+        dy: screenHeight / 2 - middleCardHeight / 2,
+    });
 };
 
 export const getOffsetOf = (el: HTMLElement | null): Offset => {
-  if (el) {
-    const { x, y } = el.getBoundingClientRect();
-    return new Offset({ dx: x, dy: y });
-  }
-  throw new Error("Element not found!");
-  // return new Offset({ dx: 0, dy: 0 });
+    if (el) {
+        const { x, y } = el.getBoundingClientRect();
+        return new Offset({ dx: x, dy: y });
+    }
+    throw new Error("Element not found!");
+    // return new Offset({ dx: 0, dy: 0 });
 };
 
 // export const getMiddleStyles = (): CardCSSMap => ({
@@ -53,5 +57,11 @@ export const getOffsetOf = (el: HTMLElement | null): Offset => {
 // });
 
 export interface RefMap {
-  [key: number]: HTMLElement | null;
+    [key: number]: HTMLElement | null;
 }
+
+export const getPlayerHandOffset = (numCards: number) => {
+    const halfOffset = numCards / 2;
+    const offset = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * halfOffset;
+    return offset;
+};
