@@ -117,7 +117,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const p2 = currSnapshot.players[playerTwo];
 
     return (
-        <div>
+        <div style={{width: "100vw"}}>
             <img
                 src="./icons/fast-forward.png"
                 alt=""

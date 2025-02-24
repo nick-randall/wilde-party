@@ -62,7 +62,12 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                     style={{ width: 0 }}
                 >
                     <div
-                        style={{ position: "absolute", display: "flex", height: styles.cardHeight }}
+                        style={{
+                            position: "absolute",
+                            display: "flex",
+                            height: styles.cardHeight,
+                            width: "100%",
+                        }}
                         ref={(el) => registerPlaceOffset(el, id)}
                     >
                         {cards.map((card, index) =>
@@ -71,19 +76,20 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                     // This is a container div for one card and two spacers
                                     style={{
                                         height: styles.cardHeight,
-                                        display: "flex",
                                         position: "relative",
+                                        display: "flex",
                                         left: shouldSpread
                                             ? (cards.length *
                                                   -dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD) /
                                               2
-                                            : 0
-                                          //   (cards.length *
-                                          //     dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD) /
-                                          // 2
-                                          ,
+                                            : 0,
+                                        //   (cards.length *
+                                        //     dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD) /
+                                        // 2
                                         transition: "180ms",
                                     }}
+                                    onMouseEnter={() => setShouldSpread(true)}
+                                    onMouseLeave={() => setShouldSpread(false)}
                                 >
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
@@ -103,8 +109,8 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         image={card.imageName}
                                         numHandCards={cards.length}
                                         key={card.id}
-                                        onEnter={() => setShouldSpread(true)}
-                                        onLeave={() => setShouldSpread(false)}
+                                        // onEnter={() => setShouldSpread(true)}
+                                        // onLeave={() => setShouldSpread(false)}
                                     />
 
                                     <div

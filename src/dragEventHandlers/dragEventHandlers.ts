@@ -107,13 +107,18 @@ const cardDroppedElswhere = (d: DropResult) => d.destination;
 const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(d);
 
 ///
-export const onBeforeCapture = (source: BeforeCapture) =>
+export const onBeforeCapture = (source: BeforeCapture) => {
+  // This prevents scrolling off the screen and the screen draggin along
+  // with it.
+    const body = document.getElementsByTagName("body")
+    body[0].style.position = "fixed"
     store.dispatch(
         SET_DRAGGED_HAND_CARD({
             gameSnapshot: store.getState().gameSnapshotState.currSnapshot,
             draggedCardId: source.draggableId,
         })
     );
+};
 
 export const onDragStart = ({
     source,
@@ -144,7 +149,8 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
     let draggedOverData: DroppableData | undefined;
     if (dragUpdate.destination) {
         const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
-        const { id, type, calculatedIndex, enchantableNeighbours, placeType, player } = droppableData;
+        const { id, type, calculatedIndex, enchantableNeighbours, placeType, player } =
+            droppableData;
         const index = calculatedIndex ?? dragUpdate.destination.index;
         draggedOverData = { type, id, index, enchantableNeighbours, placeType, player };
     } else {
@@ -159,6 +165,8 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
 };
 
 export const onDragEnd = (d: DropResult) => {
+   const body = document.getElementsByTagName("body")
+    body[0].style.position = "initial"
     const { source, destination } = d;
 
     if (destination) {
@@ -196,8 +204,8 @@ export const onDragEnd = (d: DropResult) => {
             },
         });
         snapshotUpdater.begin();
-        const updatedSnapshot = snapshotUpdater.getNewSnapshot();        
-        store.dispatch({type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot});
+        const updatedSnapshot = snapshotUpdater.getNewSnapshot();
+        store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
         // if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
     }
     store.dispatch(END_DRAG_CLEANUP());

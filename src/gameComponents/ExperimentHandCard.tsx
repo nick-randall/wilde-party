@@ -20,12 +20,12 @@ export interface HandCardProps {
     index: number;
     image: string;
     numHandCards: number;
-    onEnter: () => void;
-    onLeave: () => void;
+    // onEnter: () => void;
+    // onLeave: () => void;
 }
 
 const HandCard = (props: HandCardProps) => {
-    const { id, index, image, onEnter, onLeave } = props;
+    const { id, index, image } = props;
 
     const isDragging = useSelector(
         (state: RootState) =>
@@ -46,6 +46,7 @@ const HandCard = (props: HandCardProps) => {
     const canPlay = phase === "playing" || phase === "drawing";
 
     const [shortHover, setShortHover] = useState(false);
+    const pushLeftWhileDragging = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * 3;
 
     const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
         isDragging
@@ -57,6 +58,7 @@ const HandCard = (props: HandCardProps) => {
                   // height: 168,
                   // width: 105,
                   //left: 125 * (index - (numHandCards / 2 - 0.5))
+                  left: -pushLeftWhileDragging,
               }
             : {};
     const normalStyles: CSSProperties = {
@@ -73,42 +75,45 @@ const HandCard = (props: HandCardProps) => {
         boxShadow: "10px 10px 10px black",
     };
 
-    // const droppingStyles = (
-    //     snapshot: DraggableStateSnapshot,
-    //     style: DraggableProvidedDraggableProps
-    // ) => {
-    //     if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
-    //         return style;
-    //     }
-    //     if (snapshot.dropAnimation) {
-    //         const { curve, duration, moveTo } = snapshot.dropAnimation;
-    //         let x = moveTo.x;
-    //         let y = moveTo.y;
-    //         if (highlightType === "card") {
-    //             if (draggedHandCard && draggedHandCard.cardType === "bff") {
-    //                 x = BFFDraggedOverSide === "left" ? -60 : 40;
-    //             } else x = -15;
-    //             y = 60;
-    //         } else if (
-    //             draggedHandCard &&
-    //             (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")
-    //         ) {
-    //             x = -15;
-    //             y = -15;
-    //         } else {
-    //             x = cardWidth - 175;
-    //             y = cardHeight - 195;
-    //         }
+    const droppingStyles = (
+        snapshot: DraggableStateSnapshot,
+        style: DraggableProvidedDraggableProps
+    ) => {
+        if (!snapshot.isDropAnimating || !isDraggedOverAnyPlace) {
+            return style;
+        }
 
-    //         const translate = `translate(${x}px, ${y}px)`;
-    //         const scale = `scale(${dimensionConstants.HAND_TO_TABLE_SCALE_FACTOR})`;
-    //         return {
-    //             ...style,
-    //             transform: `${translate} ${scale}`,
-    //             transition: `all ${curve} ${duration + 0.5}s`,
-    //         };
-    //     }
-    // };
+        if (snapshot.dropAnimation) {
+            const { curve, duration, moveTo } = snapshot.dropAnimation;
+            let x = moveTo.x;
+            let y = moveTo.y;
+            //     if (highlightType === "card") {
+            //         if (draggedHandCard && draggedHandCard.cardType === "bff") {
+            //             x = BFFDraggedOverSide === "left" ? -60 : 40;
+            //         } else x = -15;
+            //         y = 60;
+            //     } else if (
+            //         draggedHandCard &&
+            //         (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")
+            //     ) {
+            //         x = -15;
+            //         y = -15;
+            //     } else {
+            //         x = cardWidth - 175;
+            //         y = cardHeight - 195;
+            //     }
+
+            const translate = `translate(${pushLeftWhileDragging}px, ${0}px)`;
+            const scale = `scale(${0.88})`;
+            // const scale = `scale(1)`;
+            return {
+                ...style,
+                transformOrigin: "top left",
+                transform: `${translate} ${scale}`,
+                transition: `all ${curve} ${duration + 0.5}s`,
+            };
+        }
+    };
 
     const endShortAndLongHover = (handleMouseLeave: Function) => {
         handleMouseLeave();
@@ -143,15 +148,15 @@ const HandCard = (props: HandCardProps) => {
                             src={`./images/${image}.jpg`}
                             draggable="false"
                             // ref={cardRef}
-                            onMouseEnter={onEnter}
-                            onMouseLeave={onLeave}
+                            // onMouseEnter={onEnter}
+                            // onMouseLeave={onLeave}
                             // onMouseEnter={() => setShortHover(true)}
                             // onMouseLeave={() => setShortHover(false)}
                             id={id.toString()}
                             style={{
                                 ...normalStyles,
                                 ...dragStyles(isDragging),
-                                // ...droppingStyles(snapshot, provided.draggableProps),
+                                ...droppingStyles(snapshot, provided.draggableProps),
                             }}
                         />
                     </div>
