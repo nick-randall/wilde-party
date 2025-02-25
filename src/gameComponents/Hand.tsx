@@ -1,150 +1,151 @@
-import { forwardRef, useEffect, useState } from "react";
-import HandCard from "./HandCard";
+import { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import {
     dimensionConstants,
     getCardStyleValuesFromPlaceAndPlayer,
 } from "../helperFunctions/getCardStyles";
-import { RefMap } from "../animations/animationHelperFunctions";
+import { RootState } from "../redux/store";
 import AnimatedCard from "./AnimatedCard";
-interface HandProps {
+import HandCard from "./HandCard";
+import { getPlayerHandOffset } from "../animations/animationHelperFunctions";
+
+interface NewHandProps {
     id: number;
-    handCards: GameCard[];
+    player: number;
+    registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
-
-const Hand = forwardRef<RefMap, HandProps>((props, refMap) => {
-    const refCallback = (el: HTMLElement | null, id: number) => {
-        if (!refMap) return;
-        if (typeof refMap == "function") return;
-        if (!refMap.current) return;
-        if (el === null) return;
-        refMap.current[id] = el;
-    };
-    const { id, handCards } = props;
-    const [shouldSpread, setShouldSpread] = useState(false);
-    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const styles = getCardStyleValuesFromPlaceAndPlayer("hand", 0, currSnapshot);
-    const { left: cardLeftSpread } = styles;
-    const maxCardLeftSpread = dimensionConstants.MAX_HAND_CARD_LEFT_SPREAD;
-    const [spread, setSpread] = useState(cardLeftSpread);
-    const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
-    // const transitionsUnderway = useSelector(
-    //     (state: RootState) => state.dragEventState.transitionData.length > 0
-    // );
-    const enemysTurn = useSelector(
-        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== 0
-    );
-    const droppableId = JSON.stringify({ type: "place", id });
-
-    const { newSnapshot, snapshots } = useSelector(
+const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) => {
+    const { currSnapshot, newSnapshot } = useSelector(
         (state: RootState) => state.gameSnapshotState
     );
-    const activeAnimation = useSelector((state: RootState) => state.animationState.activeAnimation);
-    const animations = activeAnimation?.animations ?? [];
-    const animationCardIds = animations
-        .filter((ani) => ani.placeId === id)
-        .map((ani) => ani.cardId);
-    const snapshot =
-        !activeAnimation?.showPrevSnapshot && newSnapshot !== undefined
-            ? newSnapshot
-            : currSnapshot;
 
-    // useEffect(() => {
-    //     if (shouldSpread) {
-    //         if (!transitionsUnderway && !handCardDragged && !enemysTurn)
-    //             setSpread(maxCardLeftSpread);
-    //     } else {
-    //         setSpread(cardLeftSpread);
-    //     }
-    // }, [
-    //     transitionsUnderway,
-    //     shouldSpread,
-    //     handCardDragged,
-    //     maxCardLeftSpread,
-    //     cardLeftSpread,
-    //     enemysTurn,
-    // ]);
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
+
+    const { MAX_HAND_CARD_LEFT_SPREAD, MIN_HAND_CARD_LEFT_SPREAD } = dimensionConstants;
+    const handCardDragged = useSelector((state: RootState) => state.dragEventState.draggedHandCard);
+
+    const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
+
+    const enemysTurn = useSelector(
+        (state: RootState) => state.gameSnapshotState.currSnapshot.current.player !== myIndex
+    );
+
+    const droppableData: DroppableData = { type: "place", id, placeType: "hand", player: myIndex };
+    const droppableId = JSON.stringify(droppableData);
+
+    const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
+    const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
+    const animations = activeAnimation?.animations ?? [];
+    const animationCardIds = animations.map((a) => a.cardId);
+    const styles = getCardStyleValuesFromPlaceAndPlayer("hand", player, currSnapshot);
+    // const { left: cardLeftSpread } = styles;
+    const [shouldSpread, setShouldSpread] = useState(false);
+    const [spread, setSpread] = useState(MIN_HAND_CARD_LEFT_SPREAD);
+    const cards = gameSnapshot.players[player].places.hand.cards;
+
+    const [spreadOffset, setSpreadOffset] = useState(
+        (cards.length * MIN_HAND_CARD_LEFT_SPREAD) / 2
+    );
+    useEffect(() => {
+        if (shouldSpread) {
+            if (!activeAnimation && !handCardDragged && !enemysTurn) {
+                setSpread(MAX_HAND_CARD_LEFT_SPREAD);
+                setSpreadOffset((cards.length * -MAX_HAND_CARD_LEFT_SPREAD) / 2);
+            }
+        } else {
+            setSpread(MIN_HAND_CARD_LEFT_SPREAD);
+            const handOffset = getPlayerHandOffset(cards.length);
+            setSpreadOffset(handOffset);
+        }
+    }, [
+        activeAnimation,
+        shouldSpread,
+        handCardDragged,
+        enemysTurn,
+        MAX_HAND_CARD_LEFT_SPREAD,
+        MIN_HAND_CARD_LEFT_SPREAD,
+        cards.length,
+    ]);
+
+    const [hover, setHover] = useState(false);
 
     return (
-        <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={true}>
-            {(provided) => (
-                <div ref={provided.innerRef}>
+        <Droppable droppableId={droppableId} isDropDisabled={true}>
+            {(p) => (
+                <div
+                    {...p.droppableProps}
+                    ref={p.innerRef}
+                    // Must be 0 to prevent cards next to dragged card jumping down.
+                    style={{ width: 0 }}
+                >
                     <div
-                        className="grid-item center"
-                        onMouseEnter={() => setShouldSpread(true)}
-                        onMouseLeave={() => setShouldSpread(false)}
-                        key={droppableId}
                         style={{
-                            position: "relative",
-                            minWidth: 0, // This stops the whole grid expanding with the cards
+                            position: "absolute",
                             display: "flex",
-                            bottom: 30,
-                            // This causes whole card row to move left on spread
-                            // left: (-spread / 2 - 0.5) * handCards.length,
-                            //left: x - (spread / 2) * handCards.length,
-                            transition: "180ms",
                             height: styles.cardHeight,
+                            width: "100%",
                         }}
-                        ref={(el) => refCallback(el, id)}
+                        ref={(el) => registerPlaceOffset(el, id)}
                     >
-                        {handCards.map((card, index) =>
-                            animationCardIds.includes(card.id) ? (
-                                <AnimatedCard
-                                    id={card.id}
-                                    index={index}
-                                    imageName={card.imageName}
-                                    currAnimations={animations}
-                                    gameSnapshot={snapshot}
-                                />
-                            ) : (
+                        {cards.map((card, index) =>
+                            !animationCardIds.includes(card.id) ? (
                                 <div
-                                    key={"handcard" + card.id}
                                     // This is a container div for one card and two spacers
                                     style={{
                                         height: styles.cardHeight,
-                                        display: "flex",
                                         position: "relative",
+                                        display: "flex",
+                                        left: spreadOffset,
+                                        transition: "180ms",
                                     }}
+                                    onMouseEnter={() => setShouldSpread(true)}
+                                    onMouseLeave={() => setShouldSpread(false)}
                                 >
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: spread / 2,
+                                            width: spread,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
-                                            // border:"thin green solid",
-                                            // zIndex: 100
                                         }}
                                     />
                                     <HandCard
                                         id={card.id}
                                         index={index}
-                                        imageName={card.imageName}
-                                        numHandCards={handCards.length}
+                                        image={card.imageName}
+                                        numHandCards={cards.length}
                                         key={card.id}
                                     />
 
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
                                         style={{
-                                            width: spread / 2,
+                                            width: spread,
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
-                                            // border:"thin red solid",
-                                            // zIndex: 100
                                         }}
                                     />
                                 </div>
+                            ) : (
+                                <AnimatedCard
+                                    key={card.id}
+                                    id={card.id}
+                                    currAnimations={animations.filter(
+                                        (a) => a.cardId === card.id && a.placeId === id
+                                    )}
+                                    imageName={card.imageName}
+                                    index={index}
+                                    gameSnapshot={gameSnapshot}
+                                />
                             )
                         )}
-                        {provided.placeholder}
                     </div>
+                    {p.placeholder}
                 </div>
             )}
         </Droppable>
     );
-});
+};
 
-export default Hand;
+export default NewHand;

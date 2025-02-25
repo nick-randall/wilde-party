@@ -64,4 +64,5 @@ export const getPlayerHandOffset = (numCards: number) => {
     const halfOffset = numCards / 2;
     const offset = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * halfOffset;
     return offset;
+    return 0;
 };

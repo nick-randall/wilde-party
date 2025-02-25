@@ -116,7 +116,7 @@ export const createDealCardsAnimation = (args: DealCardsArgs): ActiveAnimation =
     handStylesWithZIndex["z-index"] = `${middleZIndex}`;
     // This amount is for card spread amount
     const playerHandOffset = isStartGast ? 0 : getPlayerHandOffset(cardIds.length);
-    handStylesWithZIndex["left"] = `${leftNum + dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * i - playerHandOffset}px` // handCardSpread
+    handStylesWithZIndex["left"] = `${leftNum + dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * i + playerHandOffset}px` // handCardSpread
 
     const deckToMiddle = [
       new TableToMiddle({
