@@ -151,8 +151,9 @@ const HandCard = (props: HandCardProps) => {
                             // ref={cardRef}
                             // onMouseEnter={onEnter}
                             // onMouseLeave={onLeave}
-                            // onMouseEnter={() => setShortHover(true)}
-                            // onMouseLeave={() => setShortHover(false)}
+                            
+                            onMouseEnter={() => setShortHover(true)}
+                            onMouseLeave={() => setShortHover(false)}
                             id={id.toString()}
                             style={{
                                 ...normalStyles,

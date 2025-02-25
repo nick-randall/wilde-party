@@ -17,7 +17,7 @@ import UWZ from "../gameComponents/UWZ";
 import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import { RootState } from "../redux/store";
 import NewHand from "../gameComponents/Hand";
-import NewGCZ from "../gameComponents/ExperimentGCZ";
+import NewGCZ from "../gameComponents/NewGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { locatePlace } from "../helperFunctions/locateFunctions";

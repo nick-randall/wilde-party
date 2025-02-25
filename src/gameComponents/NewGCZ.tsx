@@ -1,17 +1,21 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import {
+    dimensionConstants,
+    getCardStyleValuesFromPlaceAndPlayer,
+} from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
     getCardRowShapeOnDraggedOver,
     getCardRowShapeOnRearrange,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import NewCardGroup from "./NewCardGroup";
 import { getEnchantableNeighbours } from "../helperFunctions/canEnchantNeighbour";
 import AnimatedCard from "./AnimatedCard";
-import "../css/global.css"
+import "../css/global.css";
+import ExperimentCardGroup from "./ExperimentCardGroup";
 
 interface NewGCZProps {
     id: number;
@@ -31,7 +35,7 @@ export const testCardRow = () => {
             pointValue: 1,
             action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
             actionType: "addDragged",
-          },
+        },
 
         {
             id: 1,
@@ -40,8 +44,8 @@ export const testCardRow = () => {
             imageName: "bff1",
             pointValue: 1,
             action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
-          actionType: "addDragged",
-          },
+            actionType: "addDragged",
+        },
     ];
     const cardRow = getCardGroupsObjs(row);
 };
@@ -71,7 +75,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
             : getCardRowShapeOnDraggedOver(cardRow);
-    
+
     cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
@@ -98,21 +102,40 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                             margin: 0,
                             border: "1px solid black",
                             position: "relative",
+                            display: "flex",
                             // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
-                            minHeight: cardHeight,
+                            height: cardHeight,
                             minWidth: cardWidth,
                         }}
                     >
                         {cardRow.map((cardGroup, index) =>
                             !animationCardIds.includes(cardGroup.id) ? (
-                                <NewCardGroup
+                                <ExperimentCardGroup
                                     cardGroup={cardGroup}
                                     cardGroupIndex={index}
                                     physicalIndex={cardRowShape[index]}
-                                    enchantableNeighbours={getEnchantableNeighbours(cardRow, index)}
-                                    key={cardGroup.id}
                                 />
                             ) : (
+                                // <Draggable draggableId={JSON.stringify({})} index={index}>
+                                //     {(d) => (
+                                //         <img
+                                //             {...d.draggableProps}
+                                //             ref={d.innerRef}
+                                //             {...d.dragHandleProps}
+                                //             src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                                //             alt={cardGroup.cards[0].imageName}
+                                //             draggable="false"
+                                //             style={{
+                                //                 // position: "absolute",
+                                //                 height: cardHeight,
+                                //                 width: cardWidth,
+                                //                 zIndex: 99,
+                                //                 ...d.draggableProps.style,
+                                //                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                //             }}
+                                //         />
+                                //     )}
+                                // </Draggable>
                                 <AnimatedCard
                                     key={cardGroup.id}
                                     id={cardGroup.id}
