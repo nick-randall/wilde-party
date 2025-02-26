@@ -1,8 +1,10 @@
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 import { useSelector } from "react-redux";
 import { dimensionConstants, getCardGroupStyles } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
+import GhostCard from "./GhostCard";
+import { getCard, locateCard } from "../helperFunctions/locateFunctions";
 
 export interface NewCardGroupProps {
     cardGroup: NewCardGroupObj;
@@ -24,6 +26,9 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
         "physicalIndex",
         physicalIndex
     );
+    const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
+        (state: RootState) => state.dragEventState
+    );
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { left, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
@@ -41,11 +46,16 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
         type: "cardGroup",
         id: cardGroup.id,
         calculatedIndex: cardGroup.index,
+        player: locateCard(cardGroup.id, currSnapshot).player ?? 0,
+        placeType: "guestCardZone",
+
         // enchantableNeighbours: enchantableNeighbours,
     };
 
     const droppableId = JSON.stringify(droppableData);
 
+    const ghostCardInPlace = draggedOver?.id === cardGroup.id;
+    const ghostCard = draggedHandCard && ghostCardInPlace ? draggedHandCard : undefined;
     if (cardGroup.cards.length === 2)
         return (
             <ZwillingCardGroup
@@ -63,25 +73,75 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
             // index={index}
         >
             {(d) => (
-                <img
-                    {...d.draggableProps}
-                    ref={d.innerRef}
-                    {...d.dragHandleProps}
-                    src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-                    alt={cardGroup.cards[0].imageName}
-                    draggable="false"
-                    style={{
-                        // position: "absolute",
-                        height: cardHeight,
-                        width: cardWidth,
-                        zIndex: 99,
-                        ...d.draggableProps.style,
-                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                    }}
-                />
+                <Droppable droppableId={droppableId}>
+                    {(drop) => (
+                        <div
+                            style={{
+                                height: cardHeight,
+                                width: cardWidth,
+                                outline: "solid 2px green",
+                            }}
+                            {...drop.droppableProps}
+                            ref={drop.innerRef}
+                        >
+                            <img
+                                {...d.draggableProps}
+                                ref={d.innerRef}
+                                {...d.dragHandleProps}
+                                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                                alt={cardGroup.cards[0].imageName}
+                                draggable="false"
+                                style={{
+                                    // position: "absolute",
+                                    height: cardHeight,
+                                    width: cardWidth,
+                                    zIndex: 99,
+                                    ...d.draggableProps.style,
+                                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                }}
+                            />
+                            {ghostCard && draggedHandCard && (
+                                <GhostCard
+                                    cardId={draggedHandCard.id}
+                                    index={cardGroupIndex}
+                                    imageName={draggedHandCard.imageName}
+                                    zIndex={0}
+                                    offsetTop={cardHeight / 2}
+                                />
+                            )}
+                            {drop.placeholder}
+                        </div>
+                    )}
+                </Droppable>
             )}
         </Draggable>
     );
+
+    // <Draggable
+    //     draggableId={draggableId}
+    //     index={cardGroupIndex}
+    //     // index={index}
+    // >
+    //     {(d) => (
+    //         <img
+    //             {...d.draggableProps}
+    //             ref={d.innerRef}
+    //             {...d.dragHandleProps}
+    //             src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+    //             alt={cardGroup.cards[0].imageName}
+    //             draggable="false"
+    //             style={{
+    //                 // position: "absolute",
+    //                 height: cardHeight,
+    //                 width: cardWidth,
+    //                 zIndex: 99,
+    //                 ...d.draggableProps.style,
+    //                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+    //             }}
+    //         />
+    //     )}
+    // </Draggable>
+    // );
 };
 
 interface BFFOrZwillingCardGroup {

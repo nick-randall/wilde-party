@@ -97,7 +97,7 @@ export const dragEventSlice = createSlice({
             );
         },
         SET_DRAGGABLE_DATA: (state, action: PayloadAction<DroppableData>) => {
-          console.log(action.payload)
+            console.log(action.payload);
             state.droppableData = action.payload;
         },
         START_REARRANGING: (state, action: PayloadAction<SimpleRearrangingData>) => {
@@ -112,9 +112,6 @@ export const dragEventSlice = createSlice({
             if (draggedHandCard) {
                 const actionResults = actionResultsMap[draggedHandCard.id];
                 const legalTargetIds = actionResults.map((ar) => ar.snapshotUpdateData.targetId);
-                console.log("main method", legalTargetIds);
-                const meth2 = getHighlights(draggedHandCard, actionResultsMap);
-                console.log("function method", meth2);
                 if (legalTargetIds.length > 0) {
                     state.highlights = legalTargetIds;
                     state.highlightType = actionResults[0].targetType;
@@ -159,6 +156,9 @@ export const dragEventSlice = createSlice({
                 state.draggedOver = data;
             } else if (type === "player") {
                 console.log(`Dragged over player ${id}`);
+                state.draggedOver = data;
+            } else if (type === "cardGroup") {
+                console.log(`Dragged over cardGroup ${draggedOverData?.id}`);
                 state.draggedOver = data;
             }
         },

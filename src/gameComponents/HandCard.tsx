@@ -13,6 +13,7 @@ import {
     dimensionConstants,
     getCardStyles,
     getCardStyleValues,
+    getCardStyleValuesFromPlaceAndPlayer,
 } from "../helperFunctions/getCardStyles";
 
 export interface HandCardProps {
@@ -86,8 +87,13 @@ const HandCard = (props: HandCardProps) => {
 
         if (snapshot.dropAnimation) {
             const { curve, duration, moveTo } = snapshot.dropAnimation;
-            let x = moveTo.x;
-            let y = moveTo.y;
+            let x = pushLeftWhileDragging//moveTo.x;
+            let y = 0;//moveTo.y;
+            if(draggedHandCard?.imageName === "zwilling" && draggedOver) {
+              const cardHeight = getCardStyleValuesFromPlaceAndPlayer(draggedOver.placeType || "guestCardZone", draggedOver.player || 0,  currSnapshot).cardHeight
+              y += cardHeight / 2;
+            }
+            // if(draggedHandCard?.cardType)
             //     if (highlightType === "card") {
             //         if (draggedHandCard && draggedHandCard.cardType === "bff") {
             //             x = BFFDraggedOverSide === "left" ? -60 : 40;
@@ -104,7 +110,7 @@ const HandCard = (props: HandCardProps) => {
             //         y = cardHeight - 195;
             //     }
 
-            const translate = `translate(${pushLeftWhileDragging}px, ${0}px)`;
+            const translate = `translate(${x}px, ${y}px)`;
             const scale = `scale(${0.83})`;
             // const scale = `scale(1)`;
             return {
