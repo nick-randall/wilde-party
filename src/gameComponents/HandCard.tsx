@@ -6,12 +6,11 @@ import {
     DraggableProvidedDraggableProps,
     DraggableStateSnapshot,
 } from "react-beautiful-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 import {
     dimensionConstants,
-    getCardStyles,
     getCardStyleValues,
     getCardStyleValuesFromPlaceAndPlayer,
 } from "../helperFunctions/getCardStyles";
@@ -47,7 +46,8 @@ const HandCard = (props: HandCardProps) => {
     const canPlay = phase === "playing" || phase === "drawing";
 
     const [shortHover, setShortHover] = useState(false);
-    const pushLeftWhileDragging = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * 3;
+    // This no longer seems necessary so set it to 0
+    const pushLeftWhileDragging = 0;//dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * 3;
 
     const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
         isDragging
@@ -59,7 +59,7 @@ const HandCard = (props: HandCardProps) => {
                   // height: 168,
                   // width: 105,
                   //left: 125 * (index - (numHandCards / 2 - 0.5))
-                  left: -pushLeftWhileDragging,
+                  // left: -pushLeftWhileDragging,
               }
             : {};
     const normalStyles: CSSProperties = {
@@ -142,6 +142,7 @@ const HandCard = (props: HandCardProps) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
+                    // style={isDragging ? provided.draggableProps.style?.transform?.replace("")}
                 >
                     <div
                         // The width of this element determines how far cards

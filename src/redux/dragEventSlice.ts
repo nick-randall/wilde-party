@@ -159,6 +159,7 @@ export const dragEventSlice = createSlice({
                 state.draggedOver = data;
             } else if (type === "cardGroup") {
                 console.log(`Dragged over cardGroup ${draggedOverData?.id}`);
+                console.log("draggedOverData", draggedOverData);
                 state.draggedOver = data;
             }
         },

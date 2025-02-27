@@ -108,10 +108,10 @@ const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(
 
 ///
 export const onBeforeCapture = (source: BeforeCapture) => {
-  // This prevents scrolling off the screen and the screen draggin along
-  // with it.
-    const body = document.getElementsByTagName("body")
-    body[0].style.position = "fixed"
+    // This prevents scrolling off the screen and the screen draggin along
+    // with it.
+    const body = document.getElementsByTagName("body");
+    body[0].style.position = "fixed";
     store.dispatch(
         SET_DRAGGED_HAND_CARD({
             gameSnapshot: store.getState().gameSnapshotState.currSnapshot,
@@ -165,8 +165,8 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
 };
 
 export const onDragEnd = (d: DropResult) => {
-   const body = document.getElementsByTagName("body")
-    body[0].style.position = "initial"
+    const body = document.getElementsByTagName("body");
+    body[0].style.position = "initial";
     const { source, destination } = d;
 
     if (destination) {
@@ -177,7 +177,6 @@ export const onDragEnd = (d: DropResult) => {
         const { type: destinationType, id: destinationId } = destinationData;
         const sourceResult = { id: sourceId, type: sourceType, index: source.index };
         const destResult = { id: destinationId, type: destinationType, index: destination.index };
-        console.log(sourceResult, destResult);
         // if (isRearrange(d)) store.dispatch(REARRANGE({ source: sourceResult, destination: destResult }));
         // else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }));
         // else if (isDestroy(d, gameSnapshot)) store.dispatch(destroyCardThunk({ source: d.source, destination: d.destination }));
@@ -185,26 +184,47 @@ export const onDragEnd = (d: DropResult) => {
         const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
         const draggedHandCard = store.getState().dragEventState.draggedHandCard;
         const numDraggedElements = draggableData?.type === "cardGroup" ? draggableData.numCards : 1;
-
-        if (!draggedHandCard) return;
+        if (!draggedHandCard) return; // What about rearrange?
         const { actionResultsMap } = gameSnapshot;
         const actionResults = actionResultsMap[draggedHandCard.id];
         const actionResult = actionResults.find(
             (res) => res.snapshotUpdateData.targetId === destinationId
         );
-        if (!actionResult) return;
+
+        if (!actionResult) throw Error("No action result found for this drop!");
         const snapshotUpdater = new SnapshotUpdater(gameSnapshot, actionResult.snapshotUpdateData);
 
-        snapshotUpdater.addChange({
-            destination: { placeId: destinationId, index: destination.index },
-            source: {
-                placeId: sourceData.id,
-                index: sourceData.calculatedIndex ?? source.index,
-                numDraggedElements: 1,
-            },
-        });
+        if (destResult.type === "cardGroup") {
+            const { calculatedIndex, id, placeType, player } = destinationData;
+           
+            if (!placeType || calculatedIndex === undefined || player === undefined) {
+                throw Error("No place type or calculated Index in CarGroup Droppable Data! ");
+            }
+            const placeId = player
+                ? gameSnapshot.nonPlayerPlaces[placeType].id
+                : gameSnapshot.players[player].places[placeType].id;
+            snapshotUpdater.addChange({
+                destination: { placeId, index: calculatedIndex },
+                source: {
+                    placeId: sourceData.id,
+                    index: source.index,
+                    numDraggedElements: 1,
+                },
+            });
+        }
+        if (destResult.type === "place") {
+            snapshotUpdater.addChange({
+                destination: { placeId: destinationId, index: destination.index },
+                source: {
+                    placeId: sourceData.id,
+                    index: sourceData.calculatedIndex ?? source.index,
+                    numDraggedElements: 1,
+                },
+            });
+        }
         snapshotUpdater.begin();
         const updatedSnapshot = snapshotUpdater.getNewSnapshot();
+        console.log("updatedSnapshot", updatedSnapshot);
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
         // if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
     }

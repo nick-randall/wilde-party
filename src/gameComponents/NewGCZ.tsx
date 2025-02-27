@@ -60,7 +60,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         gameSnapshot
     );
     // console.log(GCZCards);
-    const droppableId = JSON.stringify({ type: "place", id });
+    const droppableId = JSON.stringify({ type: "place", id, placeType: "guestCardZone", player });
 
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
@@ -75,7 +75,8 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
             : getCardRowShapeOnDraggedOver(cardRow);
-
+    console.log("cardrow", cardRow);
+    console.log("cardRowShape", cardRowShape);
     cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);

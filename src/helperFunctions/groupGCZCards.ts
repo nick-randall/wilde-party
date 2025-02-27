@@ -120,9 +120,9 @@ const createCardGroupObj = (cardGroupObj: GameCard[], index: number): NewCardGro
   cards: cardGroupObj,
 });
 
-const isBff = (card?: GameCard) => card && card.cardType === "bff";
+const isBff = (card?: GameCard) => card && card.imageName === "bff";
 
-const isZwilling = (card?: GameCard) => card && card.cardType === "zwilling";
+const isZwilling = (card?: GameCard) => card && card.imageName === "zwilling";
 
 const isGuestCard = (card?: GameCard) => card && card.cardType === "guest";
 
@@ -135,6 +135,7 @@ export const getCardGroupsObjs = (GCZCards: GameCard[]): NewCardGroupObj[] => {
     const cardToLeft: GameCard | undefined = GCZCards[i - 1];
     const cardToRight: GameCard | undefined = GCZCards[i + 1];
     const cardTwoToRight: GameCard | undefined = GCZCards[i + 2];
+
 
     if (isBff(cardToRight)) newCardGroup = [card, cardToRight, cardTwoToRight];
     if (isZwilling(cardToRight)) newCardGroup = [card, cardToRight];

@@ -41,7 +41,6 @@ export default class SnapshotUpdater {
     // this.newSnapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
     this.snapshot = { ...snapshot };
     this.newSnapshot = { ...snapshot, snapshotUpdateData, index: snapshot.index + 1 };
-    console.log("new SnapshotUpdater with newSnapshot update data as " + snapshotUpdateData);
   }
 
   public addChange(change: Change) {
@@ -110,7 +109,6 @@ export default class SnapshotUpdater {
         } else {
           splicedCard = draft.nonPlayerPlaces[originPlace].cards.splice(originIndex, this.numElements);
         }
-        splicedCard.forEach(c => console.log(c));
         const { player: destinationPlayer, placeType: destinationPlace, index: destIndex } = destination;
         if (destinationPlayer !== null) {
           draft.players[destinationPlayer].places[destinationPlace].cards.splice(destIndex, 0, ...splicedCard);

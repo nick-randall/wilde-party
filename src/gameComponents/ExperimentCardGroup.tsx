@@ -18,17 +18,10 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
     cardGroupIndex,
     physicalIndex,
 }) => {
-    console.log(
-        "cardGroup: ",
-        cardGroup,
-        "cardGroupIndex",
-        cardGroupIndex,
-        "physicalIndex",
-        physicalIndex
-    );
     const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
         (state: RootState) => state.dragEventState
     );
+    const isHighlighted = highlights.includes(cardGroup.id);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { left, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
@@ -45,12 +38,13 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
     const droppableData: DroppableData = {
         type: "cardGroup",
         id: cardGroup.id,
-        calculatedIndex: cardGroup.index,
+        calculatedIndex: cardGroup.index + 1,
         player: locateCard(cardGroup.id, currSnapshot).player ?? 0,
         placeType: "guestCardZone",
 
         // enchantableNeighbours: enchantableNeighbours,
     };
+    console.log("highlighted", isHighlighted);
 
     const droppableId = JSON.stringify(droppableData);
 
@@ -73,7 +67,7 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
             // index={index}
         >
             {(d) => (
-                <Droppable droppableId={droppableId}>
+                <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
                     {(drop) => (
                         <div
                             style={{
@@ -171,12 +165,16 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
         >
             {(d) => (
                 <div
+                    
+                    {...d.draggableProps}
+                    ref={d.innerRef}
+                    {...d.dragHandleProps}
                     style={{
-                        height: cardHeight * 1.5,
-                        width: cardWidth,
-                        left,
-                        position: "relative",
-                    }}
+                      height: cardHeight * 1.5,
+                      width: cardWidth,
+                      // left,
+                      position: "relative",
+                  }}
                 >
                     <img
                         src={`./images/${cardGroup.cards[0].imageName}.jpg`}
@@ -186,9 +184,9 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                             height: cardHeight,
                             width: cardWidth,
                             left: 0,
-                            top: cardHeight / 2,
+                            top: 0,
                             zIndex: 99,
-                            ...d.draggableProps.style,
+                            // ...d.draggableProps.style,
                             borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                         }}
                     />
@@ -198,11 +196,11 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                         style={{
                             position: "absolute",
                             left: 0,
-                            top: 0,
+                            top:  cardHeight/2,
                             height: cardHeight,
                             width: cardWidth,
                             zIndex: 99,
-                            ...d.draggableProps.style,
+                            // ...d.draggableProps.style,
                             borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                         }}
                     />
