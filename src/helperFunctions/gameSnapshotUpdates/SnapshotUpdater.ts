@@ -43,6 +43,11 @@ export default class SnapshotUpdater {
     this.newSnapshot = { ...snapshot, snapshotUpdateData, index: snapshot.index + 1 };
   }
 
+  public setSnapshotUpdateData(snapshotUpdateData: SnapshotUpdateData) {
+    this.snapshot = { ...this.snapshot, snapshotUpdateData };
+    this.newSnapshot = { ...this.newSnapshot, snapshotUpdateData };
+  }
+
   public addChange(change: Change) {
     this.snapshotUpdate = this.convertToSnapshotUpdate(change);
   }

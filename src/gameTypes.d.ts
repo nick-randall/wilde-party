@@ -179,6 +179,7 @@ type Current = {
 };
 
 type GameSnapshot = {
+    id: number;
     index: number;
     current: Current;
     players: GamePlayer[];

@@ -4,6 +4,7 @@ import { RootState } from "../redux/store";
 export const getUserPhase = (state: RootState): PlayerPhase => {
     const { myIndex } = state.userGameState;
     const { current } = state.gameSnapshotState.currSnapshot;
+    if (!current) throw new Error("No current in snapshot");
     if (current.counteringPlayer === myIndex) return "countering";
     if (current.player !== myIndex) return "notMyTurn";
     if (current.draws > 0) return "drawing";

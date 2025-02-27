@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { create } from "domain";
-import { set } from "ramda";
 
 export type UserGameState = {
     user?: User;

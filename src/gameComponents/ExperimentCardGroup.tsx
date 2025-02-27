@@ -44,7 +44,6 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
 
         // enchantableNeighbours: enchantableNeighbours,
     };
-    console.log("highlighted", isHighlighted);
 
     const droppableId = JSON.stringify(droppableData);
 

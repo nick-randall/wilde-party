@@ -230,7 +230,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     />
                     <div className="grid-item center-column align-start">
                         {/* <button onClick={testUpdate}></button> */}
-                        <NewGCZ
+                         <NewGCZ
                             id={p0.places.guestCardZone.id}
                             gameSnapshot={whichSnapshot(p0.places.guestCardZone.id)}
                             player={playerZero}

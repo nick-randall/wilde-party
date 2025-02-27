@@ -12,6 +12,7 @@ import {
 } from "../redux/dragEventSlice";
 import { Middleware } from "@reduxjs/toolkit";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
+import { sendGameMessage } from "../websocket/websocketActionCreators";
 
 // export const dragEventMiddleware: Middleware = ({ dispatch }) => {
 //   return (next: AppDispatch) => (action: DragEvent) => {
@@ -196,7 +197,7 @@ export const onDragEnd = (d: DropResult) => {
 
         if (destResult.type === "cardGroup") {
             const { calculatedIndex, id, placeType, player } = destinationData;
-           
+
             if (!placeType || calculatedIndex === undefined || player === undefined) {
                 throw Error("No place type or calculated Index in CarGroup Droppable Data! ");
             }
@@ -211,6 +212,12 @@ export const onDragEnd = (d: DropResult) => {
                     numDraggedElements: 1,
                 },
             });
+            const snapshotUpdateData: SnapshotUpdateData = {
+                type: "enchant",
+                targetId: destinationId,
+                playedCardIds: [draggedHandCard.id],
+            };
+            snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
         }
         if (destResult.type === "place") {
             snapshotUpdater.addChange({
@@ -221,11 +228,21 @@ export const onDragEnd = (d: DropResult) => {
                     numDraggedElements: 1,
                 },
             });
+            const snapshotUpdateData: SnapshotUpdateData = {
+                type: "addDragged",
+                targetId: destinationId,
+                playedCardIds: [draggedHandCard.id],
+            };
+            snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
         }
+
         snapshotUpdater.begin();
         const updatedSnapshot = snapshotUpdater.getNewSnapshot();
-        console.log("updatedSnapshot", updatedSnapshot);
+        console.log("updatedSnapshotData", updatedSnapshot.snapshotUpdateData);
+        const { gameData } = store.getState().userGameState;
+        if (!gameData) throw Error("No game data in userGameState");
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
+        store.dispatch(sendGameMessage(gameData.id, updatedSnapshot));
         // if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
     }
     store.dispatch(END_DRAG_CLEANUP());
