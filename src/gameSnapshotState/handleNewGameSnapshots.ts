@@ -52,13 +52,6 @@ export const sanitiseNewSnapshots = (
     return newSnapshots;
 };
 
-export interface NewServerSnapshots {
-    snapshots: GameSnapshot[];
-    user: User;
-    gameData: GameData;
-    initial: boolean;
-}
-
 let timer: NodeJS.Timer;
 
 const delay = (ms: number) =>
@@ -97,7 +90,7 @@ export function* continueHandlingSnapshots(): SagaIterator {
     yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
 }
 
-export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
+function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
     const { snapshots, user, gameData } = action.payload;
     const sanitisedSnapshots = sanitiseNewSnapshots(user, gameData, snapshots);
     if (sanitisedSnapshots.length === 0) return;
@@ -120,7 +113,7 @@ export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): S
 }
 
 export function* watchNewSnapshots() {
-    yield takeEvery("HANDLE_NEW_SNAPSHOTS", handleNewServerSnapshots);
+    yield takeEvery("HANDLE_NEW_SERVER_SNAPSHOTS", handleNewServerSnapshots);
     yield takeEvery("HANDLE_NEW_CLIENT_SNAPSHOT", handleNewClientSnapshot);
     yield takeEvery("CANCEL_ANIMATION_TIMER", () => clearTimeout(timer));
 }

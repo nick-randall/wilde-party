@@ -6,7 +6,7 @@ import store, { AppDispatch } from "../redux/store";
 import { Middleware } from "redux";
 import { addMessage, handleChatRoomDataUpdate, updateRoomUsers } from "../chat/chatSlice";
 import { setNotInGameError, updateActivePlayers } from "../gameSnapshotState/gameSnapshotSlice";
-import { NewServerSnapshots } from "../gameSnapshotState/handleNewGameSnapshots";
+import { handleNewServerSnapshots } from "../gameSnapshotState/newSnapshotsActionCreators";
 
 export const stompMiddleware: Middleware = ({ dispatch }) => {
     let stompClient: CompatClient;
@@ -85,10 +85,9 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
                 const { gameId } = action.payload;
 
                 const onIncomingGameBroadcast = (message: Message) => {
-                    const parsed = JSON.parse(message.body);
-                    console.log(parsed.newSnapshots);
+                    console.log("got a new message: ");
                     const gameMessage: IncomingGameMessage = JSON.parse(message.body);
-                    console.log(gameMessage);
+                    console.log(gameMessage.type);
                     if (gameMessage.type === "join") {
                         if (!gameMessage.activePlayers)
                             throw new Error("No active players in game message");
@@ -107,12 +106,7 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
                             gameData,
                             initial: false,
                         };
-                        dispatch({
-                            type: "HANDLE_NEW_SNAPSHOTS",
-                            payload,
-                        });
-
-                        // dispatch(handleNewGameSnapshots({ snapshots: gameMessage.newSnapshots, user, gameData }));
+                        dispatch(handleNewServerSnapshots(payload));
                     }
                 };
                 const onPersonalMessageReceived = (payload: Message) => {

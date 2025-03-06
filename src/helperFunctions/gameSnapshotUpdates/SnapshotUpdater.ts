@@ -103,6 +103,7 @@ export default class SnapshotUpdater {
 
   public begin() {
     this.newSnapshot = produce(this.snapshot, draft => {
+      draft.index++;
       // draft.id++;
       if (this.snapshotUpdate !== undefined) {
         const { origin, destination } = this.snapshotUpdate;

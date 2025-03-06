@@ -13,6 +13,7 @@ import {
 import { Middleware } from "@reduxjs/toolkit";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { sendGameMessage } from "../websocket/websocketActionCreators";
+import { getCardGroupsObjs, getCardRowShapeOnDraggedOver } from "../helperFunctions/groupGCZCards";
 
 // export const dragEventMiddleware: Middleware = ({ dispatch }) => {
 //   return (next: AppDispatch) => (action: DragEvent) => {
@@ -131,10 +132,11 @@ export const onDragStart = ({
     const draggableData: DraggableData = JSON.parse(draggableId);
     const droppableData: DroppableData = JSON.parse(source.droppableId);
     store.dispatch(SET_DRAGGABLE_DATA(draggableData));
-    if (isHandCard(droppableData.id, store.getState().gameSnapshotState.currSnapshot)) {
-        store.dispatch(SET_HIGHLIGHTS(store.getState().gameSnapshotState.currSnapshot));
+    // if (isHandCard(droppableData.id, store.getState().gameSnapshotState.currSnapshot)) {
+    const currSnapshot = store.getState().gameSnapshotState.currSnapshot;
+    if (droppableData.placeType === "hand") {
+        store.dispatch(SET_HIGHLIGHTS(currSnapshot));
     }
-    // { type: "SET_HIGHLIGHTS", payload: draggableId })
     else {
         store.dispatch(
             START_REARRANGING({
@@ -149,9 +151,18 @@ export const onDragStart = ({
 export const onDragUpdate = (dragUpdate: DragUpdate) => {
     let draggedOverData: DroppableData | undefined;
     if (dragUpdate.destination) {
-        const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
-        const { id, type, calculatedIndex, enchantableNeighbours, placeType, player } =
-            droppableData;
+      const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
+      const { id, type,  enchantableNeighbours, placeType, player } =
+          droppableData;
+      let { calculatedIndex } = droppableData;
+      if(type === "place" && placeType === "guestCardZone" && player !== undefined) { 
+        const GCZCards = store.getState().gameSnapshotState.currSnapshot.players[player].places.guestCardZone.cards;
+        const cardRow = getCardGroupsObjs(GCZCards);
+        const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
+        cardRowShape.unshift(0);
+        calculatedIndex = cardRowShape[dragUpdate.destination.index];
+      }
+
         const index = calculatedIndex ?? dragUpdate.destination.index;
         draggedOverData = { type, id, index, enchantableNeighbours, placeType, player };
     } else {
@@ -169,8 +180,10 @@ export const onDragEnd = (d: DropResult) => {
     const body = document.getElementsByTagName("body");
     body[0].style.position = "initial";
     const { source, destination } = d;
+    const draggedOverData = store.getState().dragEventState.draggedOver;
 
-    if (destination) {
+
+    if (destination && draggedOverData) {
         const draggableData = store.getState().dragEventState.draggableData;
         const sourceData: DroppableData = JSON.parse(source.droppableId);
         const destinationData: DroppableData = JSON.parse(destination.droppableId);
@@ -195,7 +208,7 @@ export const onDragEnd = (d: DropResult) => {
         if (!actionResult) throw Error("No action result found for this drop!");
         const snapshotUpdater = new SnapshotUpdater(gameSnapshot, actionResult.snapshotUpdateData);
 
-        if (destResult.type === "cardGroup") {
+        if (draggedOverData.type === "cardGroup") {
             const { calculatedIndex, id, placeType, player } = destinationData;
 
             if (!placeType || calculatedIndex === undefined || player === undefined) {
@@ -220,8 +233,9 @@ export const onDragEnd = (d: DropResult) => {
             snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
         }
         if (destResult.type === "place") {
+            if(draggedOverData.index === undefined) throw Error("No index in draggedOverData");
             snapshotUpdater.addChange({
-                destination: { placeId: destinationId, index: destination.index },
+                destination: { placeId: destinationId, index: draggedOverData.index ?? 0 },
                 source: {
                     placeId: sourceData.id,
                     index: sourceData.calculatedIndex ?? source.index,
