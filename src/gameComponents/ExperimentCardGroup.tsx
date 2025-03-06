@@ -163,46 +163,44 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
             // index={index}
         >
             {(d) => (
-                <div
-                    
-                    {...d.draggableProps}
-                    ref={d.innerRef}
-                    {...d.dragHandleProps}
-                    style={{
-                      height: cardHeight * 1.5,
-                      width: cardWidth,
-                      // left,
-                      position: "relative",
-                  }}
-                >
-                    <img
-                        src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-                        alt={cardGroup.cards[0].imageName}
+                <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
+                    <div
                         style={{
-                            position: "absolute",
-                            height: cardHeight,
+                            height: cardHeight * 1.5,
                             width: cardWidth,
-                            left: 0,
-                            top: 0,
-                            zIndex: 99,
-                            // ...d.draggableProps.style,
-                            borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            // left,
+                            position: "relative",
                         }}
-                    />
-                    <img
-                        src={`./images/${cardGroup.cards[1].imageName}.jpg`}
-                        alt={cardGroup.cards[1].imageName}
-                        style={{
-                            position: "absolute",
-                            left: 0,
-                            top:  cardHeight/2,
-                            height: cardHeight,
-                            width: cardWidth,
-                            zIndex: 99,
-                            // ...d.draggableProps.style,
-                            borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                        }}
-                    />
+                    >
+                        <img
+                            src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                            alt={cardGroup.cards[0].imageName}
+                            style={{
+                                position: "absolute",
+                                height: cardHeight,
+                                width: cardWidth,
+                                left: 0,
+                                top: 0,
+                                zIndex: 99,
+                                // ...d.draggableProps.style,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                        <img
+                            src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                            alt={cardGroup.cards[1].imageName}
+                            style={{
+                                position: "absolute",
+                                left: 0,
+                                top: cardHeight / 2,
+                                height: cardHeight,
+                                width: cardWidth,
+                                zIndex: 99,
+                                // ...d.draggableProps.style,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                    </div>
                 </div>
             )}
         </Draggable>

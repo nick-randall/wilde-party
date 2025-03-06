@@ -3,15 +3,17 @@ import { all, put, takeEvery, call } from "redux-saga/effects";
 import { SagaIterator } from "redux-saga";
 import store from "../redux/store";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { createDealCardsAnimation, DealCardsArgs } from "../animations/createAnimations";
-import { addNewSnapshots, resolveNewSnapshot, setNewSnapshot } from "./gameSnapshotSlice";
+import {
+    addNewSnapshots,
+    resolveNewSnapshot,
+    setActionResultsMap,
+    setNewSnapshot,
+} from "./gameSnapshotSlice";
 import { setActiveAnimation } from "../animationState/animationState";
-import { off } from "process";
-import { locatePlace } from "../helperFunctions/locateFunctions";
-import { pipe } from "ramda";
 import { selectAnimation } from "../animations/selectAnimation";
+import { act } from "react-dom/test-utils";
 
-const removeExistingSnapshots = (snapshots: GameSnapshot[]): GameSnapshot[] => {
+const handleExistingSnapshots = (snapshots: GameSnapshot[]): GameSnapshot[] => {
     const existingSnapshots = store.getState().gameSnapshotState.snapshots;
     return snapshots.filter(
         (newSn) => !existingSnapshots.some((oldSn) => oldSn.index === newSn.index)
@@ -47,17 +49,10 @@ export const sanitiseNewSnapshots = (
 ): GameSnapshot[] => {
     snapshots.sort((a, b) => a.index - b.index);
 
-    const newSnapshots = removeExistingSnapshots(snapshots);
+    const newSnapshots = handleExistingSnapshots(snapshots);
     // const modifiedSnapshots = modifySnapshotsPlayerOrder(user, gameData, newSnapshots);
     return newSnapshots;
 };
-
-export interface NewServerSnapshots {
-    snapshots: GameSnapshot[];
-    user: User;
-    gameData: GameData;
-    initial: boolean;
-}
 
 let timer: NodeJS.Timer;
 
@@ -97,10 +92,17 @@ export function* continueHandlingSnapshots(): SagaIterator {
     yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
 }
 
-export function* handleNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
+function* queueNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {
     const { snapshots, user, gameData } = action.payload;
+    const actionResultsMap = snapshots[snapshots.length - 1].actionResultsMap;
+
     const sanitisedSnapshots = sanitiseNewSnapshots(user, gameData, snapshots);
-    if (sanitisedSnapshots.length === 0) return;
+    if (sanitisedSnapshots.length === 0) {
+        if (actionResultsMap) {
+            yield put({ type: setActionResultsMap.type, payload: actionResultsMap });
+        }
+        return;
+    }
     yield put({ type: addNewSnapshots.type, payload: sanitisedSnapshots });
 
     const includesInitialSnapshot = sanitisedSnapshots[0].index === 0;
@@ -120,7 +122,7 @@ export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): S
 }
 
 export function* watchNewSnapshots() {
-    yield takeEvery("HANDLE_NEW_SNAPSHOTS", handleNewServerSnapshots);
+    yield takeEvery("HANDLE_NEW_SERVER_SNAPSHOTS", queueNewServerSnapshots);
     yield takeEvery("HANDLE_NEW_CLIENT_SNAPSHOT", handleNewClientSnapshot);
     yield takeEvery("CANCEL_ANIMATION_TIMER", () => clearTimeout(timer));
 }
@@ -128,5 +130,3 @@ export function* watchNewSnapshots() {
 export default function* rootSaga() {
     yield all([watchNewSnapshots()]);
 }
-
-
