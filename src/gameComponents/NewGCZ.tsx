@@ -13,6 +13,8 @@ import { Droppable } from "react-beautiful-dnd";
 import AnimatedCard from "./AnimatedCard";
 import "../css/global.css";
 import ExperimentCardGroup from "./ExperimentCardGroup";
+import GhostCard from "./GhostCard";
+import GhostCardGroup from "./GhostCardGroup";
 
 interface NewGCZProps {
     id: number;
@@ -46,8 +48,6 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
             : getCardRowShapeOnDraggedOver(cardRow);
-    console.log("cardrow", cardRow);
-    console.log("cardRowShape", cardRowShape);
     cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
@@ -59,7 +59,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
 
     return (
-        <div ref={(el) => registerPlaceOffset(el, id)}>
+        <div ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
             <Droppable
                 droppableId={droppableId}
                 direction="horizontal"
@@ -169,8 +169,21 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                     </div>
                 )} */}
             </Droppable>
-            
-        </div>
+
+                {ghostCard && draggedHandCard && (
+                    <GhostCard
+                        cardId={draggedHandCard.id}
+                        index={cardRowShape[draggedOver?.index ?? 0]}
+                        imageName={draggedHandCard.imageName}
+                        zIndex={0}
+                    />
+                )}
+                {ghostCardGroup && ghostCardIndex !== undefined && (
+                    <GhostCardGroup ghostCardGroup={ghostCardGroup} index={ghostCardIndex} />
+                )}
+            </div>
+
+ 
     );
 };
 

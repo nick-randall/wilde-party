@@ -29,27 +29,27 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
         return (
             <ZwillingGhostCardGroup
                 cardGroup={ghostCardGroup}
-                cardGroupIndex={ghostCardGroup.index}
+                cardGroupIndex={index}
                 //  physicalIndex={physicalIndex}
             />
         );
 
     return (
-          <img
-              src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
-              alt={ghostCardGroup.cards[0].imageName}
-              style={{
+        <img
+            src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
+            alt={ghostCardGroup.cards[0].imageName}
+            style={{
                 left: cardWidth * index,
-                  position: "absolute",
-                  height: cardHeight,
-                  width: cardWidth,
-                  top:0,
-                  zIndex: 99,
-                  borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                  WebkitFilter: "grayscale(100%)",
-                  opacity: 0.7,
-              }}
-          />
+                position: "absolute",
+                height: cardHeight,
+                width: cardWidth,
+                top: 0,
+                zIndex: 99,
+                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                WebkitFilter: "grayscale(100%)",
+                opacity: 0.7,
+            }}
+        />
     );
 };
 
@@ -71,40 +71,46 @@ const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
         currSnapshot
     );
     return (
-        <div
-            style={{
-                height: cardHeight * 1.5,
-                width: cardWidth,
-                // left,
-                position: "relative",
-            }}
-        >
-            <img
-                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-                alt={cardGroup.cards[0].imageName}
+        <div style={{ position: "absolute", left: cardWidth * cardGroupIndex, top: 0 }}>
+            <div
                 style={{
-                    position: "absolute",
-                    height: cardHeight,
-                    width: cardWidth,
-                    left: 0,
-                    top: 0,
-                    zIndex: 99,
-                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                    // height: cardHeight * 1.5,
+                    // width: cardWidth,
+                    // left,
+                    position: "relative",
                 }}
-            />
-            <img
-                src={`./images/${cardGroup.cards[1].imageName}.jpg`}
-                alt={cardGroup.cards[1].imageName}
-                style={{
-                    position: "absolute",
-                    left: 0,
-                    top: cardHeight / 2,
-                    height: cardHeight,
-                    width: cardWidth,
-                    zIndex: 99,
-                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                }}
-            />
+            >
+                <img
+                    src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                    alt={cardGroup.cards[0].imageName}
+                    style={{
+                        position: "absolute",
+                        height: cardHeight,
+                        width: cardWidth,
+                        left: 0,
+                        top: 0,
+                        zIndex: 99,
+                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                        WebkitFilter: "grayscale(100%)",
+
+                    }}
+                />
+                <img
+                    src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                    alt={cardGroup.cards[1].imageName}
+                    style={{
+                        position: "absolute",
+                        left: 0,
+                        top: cardHeight / 2,
+                        height: cardHeight,
+                        width: cardWidth,
+                        zIndex: 99,
+                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                        WebkitFilter: "grayscale(100%)",
+
+                    }}
+                />
+            </div>
         </div>
     );
 };

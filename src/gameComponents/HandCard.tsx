@@ -47,7 +47,7 @@ const HandCard = (props: HandCardProps) => {
 
     const [shortHover, setShortHover] = useState(false);
     // This no longer seems necessary so set it to 0
-    const pushLeftWhileDragging = 0;//dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * 3;
+    const pushLeftWhileDragging = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD * 3;
 
     const dragStyles = (isDragging: boolean | undefined): CSSProperties =>
         isDragging
@@ -59,7 +59,7 @@ const HandCard = (props: HandCardProps) => {
                   // height: 168,
                   // width: 105,
                   //left: 125 * (index - (numHandCards / 2 - 0.5))
-                  // left: -pushLeftWhileDragging,
+                  left: -pushLeftWhileDragging,
               }
             : {};
     const normalStyles: CSSProperties = {
