@@ -71,8 +71,6 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
                         <div
                             style={{
                                 height: cardHeight,
-                                width: cardWidth,
-                                outline: "solid 2px green",
                             }}
                             {...drop.droppableProps}
                             ref={drop.innerRef}
