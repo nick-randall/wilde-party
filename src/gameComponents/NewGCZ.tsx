@@ -34,7 +34,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     );
     // console.log(GCZCards);
     const droppableId = JSON.stringify({ type: "place", id, placeType: "guestCardZone", player });
-
+  
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
@@ -72,7 +72,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         ref={provided.innerRef}
                         style={{
                             margin: 0,
-                            border: "1px solid black",
+                            // border: "1px solid black",
                             position: "relative",
                             display: "flex",
                             // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
@@ -173,7 +173,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                 {ghostCard && draggedHandCard && (
                     <GhostCard
                         cardId={draggedHandCard.id}
-                        index={cardRowShape[draggedOver?.index ?? 0]}
+                        index={draggedOver?.index ?? 0}
                         imageName={draggedHandCard.imageName}
                         zIndex={0}
                     />

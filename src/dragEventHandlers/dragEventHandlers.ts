@@ -141,7 +141,7 @@ export const onDragStart = ({
         store.dispatch(
             START_REARRANGING({
                 placeId: droppableData.id,
-                sourceIndex: source.index,
+                sourceIndex: droppableData.calculatedIndex ?? source.index,
                 draggedId: draggableData.id,
             })
         );
@@ -162,9 +162,8 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
         cardRowShape.unshift(0);
         calculatedIndex = cardRowShape[dragUpdate.destination.index];
       }
-
-        const index = calculatedIndex ?? dragUpdate.destination.index;
-        draggedOverData = { type, id, index, enchantableNeighbours, placeType, player };
+        const index = dragUpdate.destination.index;
+        draggedOverData = { type, id, index, calculatedIndex, enchantableNeighbours, placeType, player };
     } else {
         draggedOverData = undefined;
     }
@@ -233,9 +232,10 @@ export const onDragEnd = (d: DropResult) => {
             snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
         }
         if (destResult.type === "place") {
+          console.log("dropping at place. calculatedIndex: ", draggedOverData.calculatedIndex, "index: ", draggedOverData.index);
             if(draggedOverData.index === undefined) throw Error("No index in draggedOverData");
             snapshotUpdater.addChange({
-                destination: { placeId: destinationId, index: draggedOverData.index ?? 0 },
+                destination: { placeId: destinationId, index: draggedOverData.calculatedIndex ?? 0 },
                 source: {
                     placeId: sourceData.id,
                     index: sourceData.calculatedIndex ?? source.index,

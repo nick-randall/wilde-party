@@ -133,21 +133,21 @@ export const dragEventSlice = createSlice({
                 return;
             }
             const data = draggedOverData as DroppableData;
-            const { id, index, type } = data;
+            const { id, index, type, calculatedIndex } = data;
             if (type === "place") {
                 const placeName = locatePlace(id, gameSnapshot).placeType;
-                console.log(`Dragged over ${placeName}: (id ${id}) at calculated index: ${index}`);
+                console.log(`Dragged over ${placeName}: (id ${id}) at index: ${index}  at calculated index: ${calculatedIndex}`);
 
-                if (isEnchantWithBFF(state.draggedHandCard)) {
-                    // TODO replace with logic based on cardGroups
-                    const neighbours = draggedOverData?.enchantableNeighbours;
-                    if (neighbours && neighbours.includes("left")) {
-                        state.BFFdraggedOverSide = "left";
-                    } else if (neighbours && neighbours.includes("right")) {
-                        state.BFFdraggedOverSide = "right";
-                    }
-                    state.draggedOver = data;
-                }
+                // if (isEnchantWithBFF(state.draggedHandCard)) {
+                //     // TODO replace with logic based on cardGroups
+                //     const neighbours = draggedOverData?.enchantableNeighbours;
+                //     if (neighbours && neighbours.includes("left")) {
+                //         state.BFFdraggedOverSide = "left";
+                //     } else if (neighbours && neighbours.includes("right")) {
+                //         state.BFFdraggedOverSide = "right";
+                //     }
+                //     state.draggedOver = data;
+                // }
                 if (isSpecialsColumn(type, id, gameSnapshot)) {
                     console.log(`Dragged over specials column at calculated index: ${index}`);
                     /// TODO not sure why we set it to 0 here

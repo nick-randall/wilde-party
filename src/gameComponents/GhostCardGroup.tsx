@@ -14,11 +14,6 @@ export interface GhostCardGroupProps {
     ghostCardGroup: NewCardGroupObj;
 }
 
-interface CardOffset {
-    left: number;
-    top: number;
-}
-
 const GhostCardGroup = (props: GhostCardGroupProps) => {
     const { ghostCardGroup, index } = props;
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
