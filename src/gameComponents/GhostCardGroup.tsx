@@ -1,48 +1,174 @@
 import { useSelector } from "react-redux";
-import { getCardStyleValues } from "../helperFunctions/getCardStyles";
+import {
+    dimensionConstants,
+    getCardGroupStyles,
+    getCardStyles,
+    getCardStyleValues,
+} from "../helperFunctions/getCardStyles";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
+import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 
 export interface GhostCardGroupProps {
-  index: number;
-  ghostCardGroup: CardGroupObj;
+    index: number;
+    ghostCardGroup: NewCardGroupObj;
 }
 
 interface CardOffset {
-  left: number;
-  top: number;
+    left: number;
+    top: number;
 }
 
 const GhostCardGroup = (props: GhostCardGroupProps) => {
-  const { ghostCardGroup, index } = props;
-  const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-  const { cardHeight, left } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
+    const { ghostCardGroup, index } = props;
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { cardHeight, cardWidth, left } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
+    console.log("ghost card group index: ", index);
 
-  
-  const getOffset = (card: GameCard, ghostCardGroupIndex: number): CardOffset => {
-    if (card.cardType === "bff") return { top: cardHeight / 2, left: left / 2 };
-    if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
-    if (ghostCardGroupIndex > 0) return { top: 0, left: left };
-    return { top: 0, left: 0 };
-  };
-  console.log(ghostCardGroup);
+    if (ghostCardGroup.cards.length === 2)
+        return (
+            <ZwillingGhostCardGroup
+                cardGroup={ghostCardGroup}
+                cardGroupIndex={ghostCardGroup.index}
+                //  physicalIndex={physicalIndex}
+            />
+        );
 
-  return (
-    <div id={`ghostcard-absolute-positioning-container${ghostCardGroup}`} style={{ position: "absolute", zIndex: 0 }}>
-      <div id={`ghostcard-relative-positioning-container${ghostCardGroup}`} style={{ position: "relative" }}>
-        {ghostCardGroup.cards.map((ghostCard, ghostCardGroupIndex) => (
-          <GhostCard
-            cardId={ghostCardGroup.id}
-            index={index}
-            imageName={ghostCard.imageName}
-            key={ghostCard.id}
-            offsetLeft={getOffset(ghostCard, ghostCardGroupIndex).left}
-            offsetTop={getOffset(ghostCard, ghostCardGroupIndex).top}
-            zIndex={5}
+    return (
+          <img
+              src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
+              alt={ghostCardGroup.cards[0].imageName}
+              style={{
+                left: cardWidth * index,
+                  position: "absolute",
+                  height: cardHeight,
+                  width: cardWidth,
+                  top:0,
+                  zIndex: 99,
+                  borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                  WebkitFilter: "grayscale(100%)",
+                  opacity: 0.7,
+              }}
           />
-        ))}
-      </div>
-    </div>
-  );
+    );
+};
+
+interface BFFOrZwillingGhostCardGroup {
+    cardGroup: CardGroupObj;
+    //  physicalIndex: number;
+    cardGroupIndex: number;
+}
+
+const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
+    cardGroup,
+    //  physicalIndex,
+    cardGroupIndex,
+}) => {
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { left, cardWidth, cardHeight } = getCardStyleValues(
+        cardGroup.id,
+        //  physicalIndex,
+        currSnapshot
+    );
+    return (
+        <div
+            style={{
+                height: cardHeight * 1.5,
+                width: cardWidth,
+                // left,
+                position: "relative",
+            }}
+        >
+            <img
+                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                alt={cardGroup.cards[0].imageName}
+                style={{
+                    position: "absolute",
+                    height: cardHeight,
+                    width: cardWidth,
+                    left: 0,
+                    top: 0,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+            <img
+                src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                alt={cardGroup.cards[1].imageName}
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    top: cardHeight / 2,
+                    height: cardHeight,
+                    width: cardWidth,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+        </div>
+    );
+};
+
+const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
+    cardGroup,
+    //  physicalIndex,
+    //  cardGroupIndex,
+}) => {
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { left, cardWidth, cardHeight } = getCardStyleValues(
+        cardGroup.id,
+        //  physicalIndex,
+        currSnapshot
+    );
+    return (
+        <div
+            style={{
+                height: cardHeight * 1.5,
+                width: cardWidth,
+                left,
+                position: "relative",
+            }}
+        >
+            <img
+                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                alt={cardGroup.cards[0].imageName}
+                style={{
+                    position: "absolute",
+                    height: cardHeight,
+                    width: cardWidth,
+                    left: 0,
+                    top: cardHeight / 2,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+            <img
+                src={`./images/${cardGroup.cards[2].imageName}.jpg`}
+                alt={cardGroup.cards[2].imageName}
+                style={{
+                    position: "absolute",
+                    left: cardWidth,
+                    top: cardWidth / 2,
+                    height: cardHeight,
+                    width: cardWidth,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+            <img
+                src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                alt={cardGroup.cards[1].imageName}
+                style={{
+                    position: "absolute",
+                    left: cardWidth / 2,
+                    top: 0,
+                    height: cardHeight,
+                    width: cardWidth,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+        </div>
+    );
 };
 export default GhostCardGroup;

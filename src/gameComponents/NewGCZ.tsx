@@ -16,6 +16,8 @@ import { getEnchantableNeighbours } from "../helperFunctions/canEnchantNeighbour
 import AnimatedCard from "./AnimatedCard";
 import "../css/global.css";
 import ExperimentCardGroup from "./ExperimentCardGroup";
+import GhostCard from "./GhostCard";
+import GhostCardGroup from "./GhostCardGroup";
 
 interface NewGCZProps {
     id: number;
@@ -23,32 +25,6 @@ interface NewGCZProps {
     player: number;
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
-
-export const testCardRow = () => {
-    const row: GameCard[] = [
-        {
-            id: 1,
-            cardType: "guest",
-            name: "guest1",
-            imageName: "guest1",
-            guestCardType: "rumgroelerin",
-            pointValue: 1,
-            action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
-            actionType: "addDragged",
-        },
-
-        {
-            id: 1,
-            cardType: "bff",
-            name: "bff1",
-            imageName: "bff1",
-            pointValue: 1,
-            action: { actionType: "destroy", highlightType: "card", targetPlayerType: "enemy" },
-            actionType: "addDragged",
-        },
-    ];
-    const cardRow = getCardGroupsObjs(row);
-};
 
 const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset }) => {
     const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
@@ -88,7 +64,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
 
     return (
-        <div ref={(el) => registerPlaceOffset(el, id)}>
+        <div ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
             <Droppable
                 droppableId={droppableId}
                 direction="horizontal"
@@ -100,13 +76,12 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                            margin: 0,
-                            border: "1px solid black",
-                            position: "relative",
+                            // position: "relative",
                             display: "flex",
-                            // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
                             height: cardHeight,
                             minWidth: cardWidth,
+                            // border: "1px solid black",
+                            // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
                         }}
                     >
                         {cardRow.map((cardGroup, index) =>
@@ -117,26 +92,33 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                                     physicalIndex={cardRowShape[index]}
                                 />
                             ) : (
-                                // <Draggable draggableId={JSON.stringify({})} index={index}>
-                                //     {(d) => (
-                                //         <img
-                                //             {...d.draggableProps}
-                                //             ref={d.innerRef}
-                                //             {...d.dragHandleProps}
-                                //             src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-                                //             alt={cardGroup.cards[0].imageName}
-                                //             draggable="false"
-                                //             style={{
-                                //                 // position: "absolute",
-                                //                 height: cardHeight,
-                                //                 width: cardWidth,
-                                //                 zIndex: 99,
-                                //                 ...d.draggableProps.style,
-                                //                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                                //             }}
-                                //         />
-                                //     )}
-                                // </Draggable>
+                                //   const draggableData: DraggableData = {
+                                //     id: cardGroup.id,
+                                //     type: "cardGroup",
+                                //     numCards: cardGroup.cards.length,
+                                // };
+                                //  return !animationCardIds.includes(cardGroup.id) ? (
+                                //       <Draggable draggableId={JSON.stringify(draggableData)} index={index}>
+                                //           {(d) => (
+                                //               <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
+                                //                   <img
+                                //                       src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                                //                       alt={cardGroup.cards[0].imageName}
+                                //                       draggable="false"
+                                //                       style={{
+                                //                           // position: "absolute",
+                                //                           height: cardHeight,
+                                //                           width: cardWidth,
+                                //                           left: cardWidth * cardRowShape[index],
+                                //                           zIndex: 99,
+                                //                           ...d.draggableProps.style,
+                                //                           borderRadius:
+                                //                               dimensionConstants.CARD_BORDER_RADIUS,
+                                //                       }}
+                                //                   />
+                                //               </div>
+                                //           )}
+                                //       </Draggable>
                                 <AnimatedCard
                                     key={cardGroup.id}
                                     id={cardGroup.id}
@@ -153,6 +135,17 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                     </div>
                 )}
             </Droppable>
+            {ghostCard && draggedHandCard && (
+                <GhostCard
+                    cardId={draggedHandCard.id}
+                    index={draggedOver?.index ?? 0}
+                    imageName={draggedHandCard.imageName}
+                    zIndex={0}
+                />
+            )}
+            {ghostCardGroup && ghostCardIndex !== undefined && (
+                <GhostCardGroup ghostCardGroup={ghostCardGroup} index={ghostCardIndex} />
+            )}
         </div>
     );
 };
