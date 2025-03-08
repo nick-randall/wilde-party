@@ -21,13 +21,14 @@ import NewHand from "../gameComponents/Hand";
 import NewGCZ from "../gameComponents/NewGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import { locatePlace } from "../helperFunctions/locateFunctions";
+import { getCard, locatePlace } from "../helperFunctions/locateFunctions";
 import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
 import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
-import { skipToEndOfAnimations } from "../animationState/skipAnimations";
+import { skipToEndOfAnimations, skipToAnimationNumber } from "../animationState/skipAnimations";
 import LargeButton from "../components/LargeButton";
 import { Center } from "../components/Center";
+import AnimatedCard from "../gameComponents/AnimatedCard";
 
 interface TableProps {
     gameData: GameData;
@@ -120,7 +121,19 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
 
     return (
         <div style={{ width: "100vw" }}>
-
+           {proxyAnimations.map(a => {
+            const {imageName} = getCard(a.cardId, currSnapshot);
+          return (
+            <AnimatedCard
+              key={`${a.cardId}-proxy-${a.track}`}
+              id={a.cardId}
+              index={0}
+              imageName={imageName}
+              currAnimations={proxyAnimations}
+              gameSnapshot={newSnapshot!}
+            />
+          );
+        })}
             <img
                 src="./icons/fast-forward.png"
                 alt=""
@@ -134,6 +147,20 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     opacity: activeAnimation ? 1 : 0,
                 }}
                 onClick={() => dispatch(skipToEndOfAnimations())}
+            />
+              <img
+                src="./icons/fast-forward.png"
+                alt=""
+                style={{
+                    position: "absolute",
+                    left: "55vw",
+                    height: 50,
+                    cursor: "pointer",
+                    transition: "300ms",
+                    zIndex: 99,
+                    opacity: activeAnimation ? 1 : 0,
+                }}
+                onClick={() => dispatch(skipToAnimationNumber(4))}
             />
             <div
                 style={{

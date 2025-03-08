@@ -6,6 +6,7 @@ import {
     ActiveAnimation,
     createDealCardsAnimation,
     createDealEnemysCardAnimation,
+    createEnchantAnimation,
     createHandToTableAnimation,
     createRearrangeAnimation,
     DealCardsArgs,
@@ -38,6 +39,8 @@ export const selectAnimation = (
             return dealCardAnimation(oldSnapshot, newSnapshot);
         case "addDragged":
             return createAddDraggedAnimation(oldSnapshot, newSnapshot);
+        case "enchant":
+            return createEnchantCardAnimation(oldSnapshot, newSnapshot);
         case "rearrangingTablePlace":
             return createRearrangeTablePlaceAnimation(oldSnapshot, newSnapshot);
     }
@@ -91,6 +94,29 @@ const createAddDraggedAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameS
     };
     return createHandToTableAnimation(handToTableArgs);
 };
+
+const createEnchantCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
+    const { snapshotUpdateData } = newSnapshot;
+    const { offsetMap } = store.getState().animationState;
+    if (!snapshotUpdateData) throw Error("No snapshot update data!");
+    const { player } = locateCard(snapshotUpdateData.playedCardIds[0], oldSnapshot);
+    if (player === null) throw Error("Hand cannot be NULL");
+    const handId = oldSnapshot.players[player].places.hand.id;
+    const { player: ownerOfTargetCard, placeType } = locateCard(snapshotUpdateData.targetId, newSnapshot);
+    if (ownerOfTargetCard === null) throw Error("Hand cannot be NULL");
+    const targetPlace = oldSnapshot.players[ownerOfTargetCard].places[placeType];
+    const args = {
+        cardId: snapshotUpdateData.playedCardIds[0],
+        handId: handId,
+        targetCardId: snapshotUpdateData.targetId,
+        targetPlaceId: targetPlace.id,
+        oldSnapshot: oldSnapshot,
+        newSnapshot: newSnapshot,
+        offsetMap: offsetMap,
+    };
+    return createEnchantAnimation(args);
+};
+
 const createRearrangeTablePlaceAnimation = (
     oldSnapshot: GameSnapshot,
     newSnapshot: GameSnapshot
