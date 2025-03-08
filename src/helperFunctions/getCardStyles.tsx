@@ -65,7 +65,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
         cardWidth: handCardWidth,
         left: handCardLeftSpread * index,
         top: 0,
-        zIndex: 5,
+        zIndex: 8,
         rotate: handCardRotation,
         rotateY: handRotateY,
         boxShadow: dimensionConstants.HAND_CARD_SHADOW,

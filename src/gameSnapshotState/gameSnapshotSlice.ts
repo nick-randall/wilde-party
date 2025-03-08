@@ -32,6 +32,7 @@ export const gameSnapshotSlice = createSlice({
         addNewSnapshots: (state, action: PayloadAction<GameSnapshot[]>) => {
             const newSnapshots = action.payload;
             state.snapshots.push(...newSnapshots);
+            state.snapshots.sort((a, b) => a.index - b.index);
             if (newSnapshots.length > 0 && newSnapshots[0].index === 0) {
                 state.currSnapshot = newSnapshots[0];
             }
@@ -52,7 +53,7 @@ export const gameSnapshotSlice = createSlice({
         },
         setActionResultsMap: (
             state,
-            action: PayloadAction<{ [key: number]: CardActionResult[] }>
+            action: PayloadAction<{ [key: number]: CardActionResult[] } | undefined>
         ) => {
             const latestSnapshot = {
               ...state.snapshots[state.snapshots.length - 1],

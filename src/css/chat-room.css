@@ -23,6 +23,7 @@
 
 .loading-overlay {
   position: absolute;
+  z-index: 99;
   background-color: #debb07;
   top: 0;
   left: 0;

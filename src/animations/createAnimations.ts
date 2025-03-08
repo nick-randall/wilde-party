@@ -31,11 +31,11 @@ export interface HandToTableArgs {
   targetPlaceId: number;
   oldSnapshot: GameSnapshot;
   newSnapshot: GameSnapshot;
-  placeRefMap: MutableRefObject<RefMap>;
+  offsetMap: { [key: number]: {dx: number; dy: number} };
 }
 
 export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimation => {
-  const { cardId, handId, targetPlaceId, oldSnapshot, newSnapshot, placeRefMap } = args;
+  const { cardId, handId, targetPlaceId, oldSnapshot, newSnapshot, offsetMap } = args;
   const fromPlaceOffset = store.getState().animationState.offsetMap[handId];
   // const targetPlace = placeRefMap.current[targetPlaceId];
   const targetPlaceOffset = store.getState().animationState.offsetMap[targetPlaceId];

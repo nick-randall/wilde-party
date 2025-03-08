@@ -109,7 +109,7 @@ export const dragEventSlice = createSlice({
             const gameSnapshot = action.payload;
             const { actionResultsMap } = gameSnapshot;
             const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
-            if (draggedHandCard) {
+            if (draggedHandCard && actionResultsMap) {
                 const actionResults = actionResultsMap[draggedHandCard.id];
                 const legalTargetIds = actionResults.map((ar) => ar.snapshotUpdateData.targetId);
                 if (legalTargetIds.length > 0) {

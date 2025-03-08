@@ -15,7 +15,6 @@ type DragDestinationData = {
  type DragSourceData = {
   placeId: number;
   index: number;
-  numDraggedElements: number
 }
 
 interface SnapshotChange {
@@ -36,11 +35,11 @@ export default class SnapshotUpdater {
 
   private numElements: number = 1;
 
-  constructor(snapshot: GameSnapshot, snapshotUpdateData: SnapshotUpdateData) {
+  constructor(snapshot: GameSnapshot) {
     // this.snapshot = { ...snapshot, snapshotUpdateData: {type: snapshotUpdateType} };
     // this.newSnapshot = { ...snapshot, snapshotUpdateType: snapshotUpdateType };
     this.snapshot = { ...snapshot };
-    this.newSnapshot = { ...snapshot, snapshotUpdateData, index: snapshot.index + 1 };
+    this.newSnapshot = { ...snapshot, index: snapshot.index + 1 };
   }
 
   public setSnapshotUpdateData(snapshotUpdateData: SnapshotUpdateData) {
@@ -104,7 +103,7 @@ export default class SnapshotUpdater {
   public begin() {
     this.newSnapshot = produce(this.snapshot, draft => {
       draft.index++;
-      // draft.id++;
+      draft.id++;
       if (this.snapshotUpdate !== undefined) {
         const { origin, destination } = this.snapshotUpdate;
         const { player: originPlayer, placeType: originPlace, index: originIndex } = origin;

@@ -8,6 +8,7 @@ import {
 } from "../dragEventHandlers/dragEventHandlers";
 import { useEffect } from "react";
 import "../css/grid.css";
+import "../css/chat-room.css";
 import { Deck } from "../gameComponents/Deck";
 import DiscardPile from "../gameComponents/DiscardPile";
 import PlayerAvatar from "../gameComponents/PlayerAvatar";
@@ -25,6 +26,8 @@ import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
 import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
 import { skipToEndOfAnimations } from "../animationState/skipAnimations";
+import LargeButton from "../components/LargeButton";
+import { Center } from "../components/Center";
 
 interface TableProps {
     gameData: GameData;
@@ -57,7 +60,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
             source: {
                 placeId: myHand.id,
                 index: handCardIndex,
-                numDraggedElements: 1,
             },
             destination: { placeId: myGCZ.id, index: 0 },
         };
@@ -66,10 +68,10 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
             playedCardIds: [myHand.cards[handCardIndex].id],
             targetId: myGCZ.id,
         };
-        const updater = new SnapshotUpdater(currSnapshot, snapshotUpdateData);
-        console.log(updater.getSnapshot().players[0].places.guestCardZone.cards);
+        const updater = new SnapshotUpdater(currSnapshot);
 
         updater.addChange(change);
+        updater.setSnapshotUpdateData(snapshotUpdateData);
         updater.begin();
         console.log(updater.getNewSnapshot().players[0].places.guestCardZone.cards);
         dispatch(testUpdateSnapshot(updater.getNewSnapshot()));
@@ -117,7 +119,8 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const p2 = currSnapshot.players[playerTwo];
 
     return (
-        <div style={{width: "100vw"}}>
+        <div style={{ width: "100vw" }}>
+
             <img
                 src="./icons/fast-forward.png"
                 alt=""
@@ -128,7 +131,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     cursor: "pointer",
                     transition: "300ms",
                     zIndex: 99,
-                    opacity: activeAnimation ? 1 :0,
+                    opacity: activeAnimation ? 1 : 0,
                 }}
                 onClick={() => dispatch(skipToEndOfAnimations())}
             />
@@ -230,7 +233,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     />
                     <div className="grid-item center-column align-start">
                         {/* <button onClick={testUpdate}></button> */}
-                         <NewGCZ
+                        <NewGCZ
                             id={p0.places.guestCardZone.id}
                             gameSnapshot={whichSnapshot(p0.places.guestCardZone.id)}
                             player={playerZero}
@@ -243,7 +246,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                             alignment=""
                             registerPlaceOffset={registerPlaceOffset}
                         />
-                       
                     </div>
                     <NewHand
                         id={p0.places.hand.id}
@@ -257,6 +259,22 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     />
                 </div>
             </DragDropContext>
+            {wsError && <ConnectionError error={wsError} />}
+            {wsLoading && <div className="loading-overlay">Connecting to Game...</div>}
+
+
+        </div>
+    );
+};
+
+const ConnectionError: React.FC<{ error: string }> = ({ error }) => {
+    return (
+        <div className="loading-overlay">
+            <Center>
+                Error: {error}
+                <div style={{ height: 10 }} />
+                <LargeButton text="Start Over" link="/game" />
+            </Center>
         </div>
     );
 };

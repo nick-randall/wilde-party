@@ -87,7 +87,16 @@ export function* continueHandlingSnapshots(): SagaIterator {
     const { newSnapshot } = store.getState().gameSnapshotState;
     if (!newSnapshot) throw Error("No new snapshot!");
     const newActiveAnimation = selectAnimation(currSnapshot, newSnapshot);
-    if (!newActiveAnimation) throw Error("No active animation!");
+    if (!newActiveAnimation) {
+        const { snapshotUpdateData } = newSnapshot;
+        if (snapshotUpdateData) {
+            throw Error(
+                "No active animation when trying to animate new snapshot with update type: " +
+                    snapshotUpdateData.type
+            );
+        }
+        throw Error("No active animation when trying to animate new snapshot -- update data not found");
+    }
     yield put({ type: setActiveAnimation.type, payload: newActiveAnimation });
     yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
 }
@@ -117,8 +126,9 @@ export function* handleNewClientSnapshot(action: PayloadAction<GameSnapshot>): S
     const newSnapshot = action.payload;
     yield put({ type: addNewSnapshots.type, payload: [newSnapshot] });
     // handle animations
-
     yield put({ type: resolveNewSnapshot.type });
+    yield put({ type: setActionResultsMap.type, payload: undefined });
+    console.log("handled new client snapshot", store.getState().gameSnapshotState.currSnapshot);
 }
 
 export function* watchNewSnapshots() {

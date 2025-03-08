@@ -87,7 +87,7 @@ const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
                         zIndex: 99,
                         borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                         WebkitFilter: "grayscale(100%)",
-
+                        opacity: 0.7,
                     }}
                 />
                 <img
@@ -102,7 +102,7 @@ const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
                         zIndex: 99,
                         borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                         WebkitFilter: "grayscale(100%)",
-
+                        opacity: 0.7,
                     }}
                 />
             </div>

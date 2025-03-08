@@ -1,10 +1,13 @@
-import { locatePlace } from "../helperFunctions/locateFunctions";
+import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
+import { HandToTable } from "./AnimationTimeline";
 import {
     ActiveAnimation,
     createDealCardsAnimation,
     createDealEnemysCardAnimation,
+    createHandToTableAnimation,
     DealCardsArgs,
+    HandToTableArgs,
 } from "./createAnimations";
 
 export const selectAnimation = (
@@ -31,6 +34,8 @@ export const selectAnimation = (
         }
         case "dealingStartingGuest":
             return dealCardAnimation(oldSnapshot, newSnapshot);
+        case "addDragged":
+            return createAddDraggedAnimation(oldSnapshot, newSnapshot);
     }
 };
 const dealCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
@@ -63,4 +68,22 @@ const dealEnemyCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnap
         offsetMap: offsetMap,
     };
     return createDealEnemysCardAnimation(dealCardsArgs);
+};
+
+const createAddDraggedAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
+    const { snapshotUpdateData } = newSnapshot;
+    const { offsetMap } = store.getState().animationState;
+    if (!snapshotUpdateData) throw Error("No snapshot update data!");
+    const {player} = locateCard(snapshotUpdateData.playedCardIds[0], oldSnapshot);
+    if(player === null) throw Error("Hand cannot be NULL");
+    const handId = oldSnapshot.players[player].places.hand.id;
+    const handToTableArgs: HandToTableArgs = {
+        cardId: snapshotUpdateData.playedCardIds[0],
+        handId: handId,
+        targetPlaceId: snapshotUpdateData.targetId,
+        oldSnapshot: oldSnapshot,
+        newSnapshot: newSnapshot,
+        offsetMap: offsetMap,
+    };
+    return createHandToTableAnimation(handToTableArgs);
 };

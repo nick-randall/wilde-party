@@ -1,8 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import {
-    getCardStyleValuesFromPlaceAndPlayer,
-} from "../helperFunctions/getCardStyles";
+import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
     getCardRowShapeOnDraggedOver,
@@ -34,12 +32,13 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     );
     // console.log(GCZCards);
     const droppableId = JSON.stringify({ type: "place", id, placeType: "guestCardZone", player });
-  
+
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
+    console.log("cardrow", cardRow.map((e) => e.cards[0].imageName));
 
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
@@ -103,87 +102,20 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         {provided.placeholder}
                     </div>
                 )}
-                  {/* {(provided) => (
-                    <div
-                        className={`pl0GCZ ${isHighlighted ? "highlighted" : ""}`}
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                            // position: "relative",
-                            display: "flex",
-                            height: cardHeight,
-                            minWidth: cardWidth,
-                            // border: "1px solid black",
-                            // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
-                        }}
-                    >
-                        {GCZCards.map((cardGroup, index) => {
-                            const draggableData: DraggableData = {
-                                id: cardGroup.id,
-                                type: "cardGroup",
-                                numCards: 1, //cardGroup.cards.length,
-                            };
-                            return !animationCardIds.includes(cardGroup.id) ? (
-                                <Draggable
-                                    draggableId={JSON.stringify(draggableData)}
-                                    index={index}
-                                >
-                                    {(d) => (
-                                        <div
-                                            {...d.draggableProps}
-                                            ref={d.innerRef}
-                                            {...d.dragHandleProps}
-                                        >
-                                            <img
-                                                src={`./images/${cardGroup.imageName}.jpg`}
-                                                alt={cardGroup.imageName}
-                                                draggable="false"
-                                                style={{
-                                                    // position: "absolute",
-                                                    height: cardHeight,
-                                                    width: cardWidth,
-                                                    left: cardWidth * cardRowShape[index],
-                                                    zIndex: 99,
-                                                    ...d.draggableProps.style,
-                                                    borderRadius:
-                                                        dimensionConstants.CARD_BORDER_RADIUS,
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ) : (                               
-                                <AnimatedCard
-                                    key={cardGroup.id}
-                                    id={cardGroup.id}
-                                    currAnimations={animations.filter(
-                                        (a) => a.cardId === cardGroup.id && a.placeId === id
-                                    )}
-                                    imageName={cardGroup.imageName}
-                                    index={index}
-                                    gameSnapshot={gameSnapshot}
-                                />
-                            );
-                        })}
-                        {provided.placeholder}
-                    </div>
-                )} */}
             </Droppable>
 
-                {ghostCard && draggedHandCard && (
-                    <GhostCard
-                        cardId={draggedHandCard.id}
-                        index={draggedOver?.index ?? 0}
-                        imageName={draggedHandCard.imageName}
-                        zIndex={0}
-                    />
-                )}
-                {ghostCardGroup && ghostCardIndex !== undefined && (
-                    <GhostCardGroup ghostCardGroup={ghostCardGroup} index={ghostCardIndex} />
-                )}
-            </div>
-
- 
+            {ghostCard && draggedHandCard && (
+                <GhostCard
+                    cardId={draggedHandCard.id}
+                    index={draggedOver?.index ?? 0}
+                    imageName={draggedHandCard.imageName}
+                    zIndex={0}
+                />
+            )}
+            {ghostCardGroup && ghostCardIndex !== undefined && ghostCardIndex !== -1 && (
+                <GhostCardGroup ghostCardGroup={ghostCardGroup} index={ghostCardIndex} />
+            )}
+        </div>
     );
 };
 

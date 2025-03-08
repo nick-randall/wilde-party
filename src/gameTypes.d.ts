@@ -185,7 +185,7 @@ type GameSnapshot = {
     players: GamePlayer[];
     nonPlayerPlaces: NonPlayerPlaces;
     snapshotUpdateData?: SnapshotUpdateData;
-    actionResultsMap: { [key: number]: CardActionResult[] };
+    actionResultsMap?: { [key: number]: CardActionResult[] };
     // number, CardActionResult[]
 };
 
