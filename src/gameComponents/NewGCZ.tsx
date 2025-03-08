@@ -10,7 +10,7 @@ import {
 import { Droppable } from "react-beautiful-dnd";
 import AnimatedCard from "./AnimatedCard";
 import "../css/global.css";
-import ExperimentCardGroup from "./ExperimentCardGroup";
+import NewCardGroup from "./NewCardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 
@@ -81,7 +81,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                     >
                         {cardRow.map((cardGroup, index) =>
                             !animationCardIds.includes(cardGroup.id) ? (
-                                <ExperimentCardGroup
+                                <NewCardGroup
                                     cardGroup={cardGroup}
                                     cardGroupIndex={index}
                                     physicalIndex={cardRowShape[index]}
