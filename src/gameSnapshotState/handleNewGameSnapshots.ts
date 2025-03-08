@@ -11,35 +11,12 @@ import {
 } from "./gameSnapshotSlice";
 import { setActiveAnimation } from "../animationState/animationState";
 import { selectAnimation } from "../animations/selectAnimation";
-import { act } from "react-dom/test-utils";
 
 const handleExistingSnapshots = (snapshots: GameSnapshot[]): GameSnapshot[] => {
     const existingSnapshots = store.getState().gameSnapshotState.snapshots;
     return snapshots.filter(
         (newSn) => !existingSnapshots.some((oldSn) => oldSn.index === newSn.index)
     );
-};
-
-const modifySnapshotsPlayerOrder = (
-    user: User,
-    gameData: GameData,
-    snapshots: GameSnapshot[]
-): GameSnapshot[] => {
-    const { id: userId } = user;
-    return snapshots.map((snapshot) => ({
-        ...snapshot,
-        players: modifyPlayerOrder(userId, snapshot.players),
-    }));
-};
-
-const modifyPlayerOrder = (userId: number, players: GamePlayer[]): GamePlayer[] => {
-    const playerIndex = players.findIndex((player) => player.userId === userId);
-    const playersCopy = [...players];
-    const numPlayersAfterUser = playersCopy.length - playerIndex;
-    const playersAfterUser = playersCopy.splice(playerIndex, numPlayersAfterUser);
-    const result = playersAfterUser.concat(playersCopy);
-
-    return result;
 };
 
 export const sanitiseNewSnapshots = (
@@ -77,7 +54,6 @@ function* resolveNewSnapshotFollowingAnimation(duration: number) {
 
 export function* continueHandlingSnapshots(): SagaIterator {
     const { snapshotIndex, snapshots, currSnapshot } = store.getState().gameSnapshotState;
-    const { activeAnimation } = store.getState().animationState;
     const remainingSnapshots = snapshots.length - snapshotIndex - 1;
     if (remainingSnapshots < 1) {
         yield put({ type: setActiveAnimation.type, payload: undefined });

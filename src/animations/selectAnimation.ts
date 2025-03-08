@@ -1,3 +1,4 @@
+import { off } from "process";
 import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import { HandToTable } from "./AnimationTimeline";
@@ -6,6 +7,7 @@ import {
     createDealCardsAnimation,
     createDealEnemysCardAnimation,
     createHandToTableAnimation,
+    createRearrangeAnimation,
     DealCardsArgs,
     HandToTableArgs,
 } from "./createAnimations";
@@ -36,6 +38,8 @@ export const selectAnimation = (
             return dealCardAnimation(oldSnapshot, newSnapshot);
         case "addDragged":
             return createAddDraggedAnimation(oldSnapshot, newSnapshot);
+        case "rearrangingTablePlace":
+            return createRearrangeTablePlaceAnimation(oldSnapshot, newSnapshot);
     }
 };
 const dealCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameSnapshot) => {
@@ -74,8 +78,8 @@ const createAddDraggedAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameS
     const { snapshotUpdateData } = newSnapshot;
     const { offsetMap } = store.getState().animationState;
     if (!snapshotUpdateData) throw Error("No snapshot update data!");
-    const {player} = locateCard(snapshotUpdateData.playedCardIds[0], oldSnapshot);
-    if(player === null) throw Error("Hand cannot be NULL");
+    const { player } = locateCard(snapshotUpdateData.playedCardIds[0], oldSnapshot);
+    if (player === null) throw Error("Hand cannot be NULL");
     const handId = oldSnapshot.players[player].places.hand.id;
     const handToTableArgs: HandToTableArgs = {
         cardId: snapshotUpdateData.playedCardIds[0],
@@ -86,4 +90,21 @@ const createAddDraggedAnimation = (oldSnapshot: GameSnapshot, newSnapshot: GameS
         offsetMap: offsetMap,
     };
     return createHandToTableAnimation(handToTableArgs);
+};
+const createRearrangeTablePlaceAnimation = (
+    oldSnapshot: GameSnapshot,
+    newSnapshot: GameSnapshot
+): ActiveAnimation | undefined => {
+    const { snapshotUpdateData } = newSnapshot;
+    const { offsetMap } = store.getState().animationState;
+    if (!snapshotUpdateData) throw Error("No snapshot update data!");
+
+    const args = {
+        cardIds: snapshotUpdateData.playedCardIds,
+        placeId: snapshotUpdateData.targetId,
+        oldSnapshot: oldSnapshot,
+        newSnapshot: newSnapshot,
+        offsetMap: offsetMap,
+    };
+    return createRearrangeAnimation(args);
 };

@@ -13,11 +13,12 @@ import {
   NothingHappens,
   TableToDiscard,
   TableToMiddle,
+  TableToTable,
   ToAppears,
 } from "./AnimationTimeline";
 import { getMiddleStyles, Offset } from "./getOffset";
 import store from "../redux/store";
-import { getCard, locateCard } from "../helperFunctions/locateFunctions";
+import { getCard } from "../helperFunctions/locateFunctions";
 
 export interface ActiveAnimation {
   animations: AnimationData[];
@@ -312,3 +313,49 @@ export const createDestroyAnimation = (args: DestroyArgs): ActiveAnimation => {
   timeline.addHideTrack(GCZCardId, GCZId);
   return timeline.getActiveAnimation();
 };
+
+export const createRearrangeAnimation = (args: {
+  cardIds: number[];
+  placeId: number;
+  oldSnapshot: GameSnapshot;
+  newSnapshot: GameSnapshot;
+  offsetMap: { [key: number]: {dx: number; dy: number} };
+}): ActiveAnimation => {    
+  const { cardIds, placeId, oldSnapshot, newSnapshot, offsetMap } = args;
+  const place = offsetMap[placeId];
+  if (!place) {
+    throw new Error("Offset not found for place with id of " +
+      placeId);
+  }
+
+ const leftToRightSteps = [
+    new TableToTable({
+      duration: 800,
+      fromOffset: new Offset(place),
+      fromStyles: getCardCSS(cardIds[0], oldSnapshot),
+      toOffset: new Offset(place),
+      toStyles: getCardCSS(cardIds[0], newSnapshot),
+      zeroOffset: "fromOffset",
+    }),
+  ];
+
+  const rightToLeftSteps = [
+    new TableToTable({
+      duration: 800,
+      fromOffset: new Offset(place),
+      fromStyles: getCardCSS(cardIds[1], oldSnapshot),
+      toOffset: new Offset(place),
+      toStyles: getCardCSS(cardIds[1], newSnapshot),
+      zeroOffset: "fromOffset",
+    }),
+  ];
+
+  const leftToRightTrack = new AnimationTrack({ cardId: cardIds[0], homePlaceId: placeId, steps: leftToRightSteps });
+  const rightToLeftTrack = new AnimationTrack({ cardId: cardIds[1], homePlaceId: placeId, steps: rightToLeftSteps });
+
+  const timeline = new MyAnimationTimeline({
+    showPrevSnapshot: [placeId],
+    animationTracks: [leftToRightTrack, rightToLeftTrack],
+  });
+  return timeline.getActiveAnimation();
+}

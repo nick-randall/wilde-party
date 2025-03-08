@@ -383,6 +383,8 @@ export class MiddleToHand extends AnimationTrackStep {}
 
 export class MiddleToTable extends AnimationTrackStep {}
 
+export class TableToTable extends AnimationTrackStep {}
+
 export class FromDisappears extends AnimationTrackStep {
   constructor(args: AnimationTrackStepArgs) {
     super({ ...args, duration: 10, visibility: "disappearing" });
