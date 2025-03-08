@@ -67,7 +67,6 @@ export const Deck: FC<DeckProps> = (props) => {
                             (a) => a.cardId === card.id && a.placeId === id
                         )}
                         imageName={card.imageName}
-                        index={index}
                         gameSnapshot={gameSnapshot}
                     />
                 )

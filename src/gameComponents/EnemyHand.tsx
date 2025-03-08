@@ -55,7 +55,6 @@ const EnemyHand = (props: EnemyHandProps) => {
                             (a) => a.cardId === card.id && a.placeId === id
                         )}
                         imageName={card.imageName}
-                        index={index}
                         gameSnapshot={gameSnapshot}
                     />
                 )

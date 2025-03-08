@@ -39,7 +39,6 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
                             (a) => a.cardId === card.id && a.placeId === id
                         )}
                         imageName={card.imageName}
-                        index={index}
                         gameSnapshot={gameSnapshot}
                     />
                 )

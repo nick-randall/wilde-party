@@ -127,7 +127,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
             <AnimatedCard
               key={`${a.cardId}-proxy-${a.track}`}
               id={a.cardId}
-              index={0}
               imageName={imageName}
               currAnimations={proxyAnimations}
               gameSnapshot={newSnapshot!}

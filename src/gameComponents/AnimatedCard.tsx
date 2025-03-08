@@ -2,7 +2,6 @@ import AnimationHandler from "../animations/AnimationHandler";
 import { getFrontAndBackStyles, getInnerWrapperStyle, getOuterWrapperStyles } from "../helperFunctions/getCardStyles";
 export interface AnimatedCardProps {
   id: number;
-  index: number;
   imageName: string;
   currAnimations: AnimationData[];
   gameSnapshot: GameSnapshot;
@@ -10,7 +9,7 @@ export interface AnimatedCardProps {
 
 const AnimatedCard : React.FC<AnimatedCardProps> = (props) => {
   
-  const { currAnimations, imageName, index, id, gameSnapshot } = props;
+  const { currAnimations, imageName,  id, gameSnapshot } = props;
 
   const mainAnimation = currAnimations.find(ani => ani.track === "main");
   const opacityAnimation = currAnimations.find(ani => ani.track === "opacityAndShadow");

@@ -135,7 +135,6 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                         (a) => a.cardId === card.id && a.placeId === id
                                     )}
                                     imageName={card.imageName}
-                                    index={index}
                                     gameSnapshot={gameSnapshot}
                                 />
                             )
