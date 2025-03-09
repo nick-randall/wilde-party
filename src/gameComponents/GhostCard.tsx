@@ -37,7 +37,6 @@ export const GhostCard = (props: GhostCardProps) => {
                 WebkitFilter: "grayscale(100%)",
                 opacity: 0.7,
                 width: cardWidth,
-                border: "thin solid",
                 left: index * cardWidth, //index * left + (offsetLeft || 0),
                 top: offsetTop || 0,
                 // rotate: rotation + "deg" || "0deg",
