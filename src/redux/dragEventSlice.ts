@@ -3,12 +3,6 @@ import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
-const nextPlayer = (gameSnapshot: GameSnapshot) => {
-    const currentPlayer = gameSnapshot.current.player;
-    const numPlayers = gameSnapshot.players.length;
-    return currentPlayer < numPlayers - 1 ? currentPlayer + 1 : 0;
-};
-
 export interface DragEventState {
     // gameSnapshot: GameSnapshot;
     screenSize: { width: number; height: number };

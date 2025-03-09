@@ -48,11 +48,10 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
         (cards.length * MIN_HAND_CARD_LEFT_SPREAD) / 2
     );
     useEffect(() => {
-        if (shouldSpread) {
-            if (!activeAnimation && !handCardDragged && !enemysTurn) {
+        if (shouldSpread && !activeAnimation && !handCardDragged && !enemysTurn) {
                 setSpread(MAX_HAND_CARD_LEFT_SPREAD);
                 setSpreadOffset((cards.length * -MAX_HAND_CARD_LEFT_SPREAD) / 2);
-            }
+            
         } else {
             setSpread(MIN_HAND_CARD_LEFT_SPREAD);
             const handOffset = getPlayerHandOffset(cards.length);
