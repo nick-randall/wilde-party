@@ -21,7 +21,7 @@ import NewHand from "../gameComponents/Hand";
 import NewGCZ from "../gameComponents/NewGCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
-import { getCard, locatePlace } from "../helperFunctions/locateFunctions";
+import { getCard } from "../helperFunctions/locateFunctions";
 import { appendOffsetMap } from "../animationState/animationState";
 import EnemyHand from "../gameComponents/EnemyHand";
 import { getUserPhase } from "../gameSnapshotState/gameSnapshotSelectors";
@@ -29,8 +29,8 @@ import { skipToEndOfAnimations, skipToAnimationNumber } from "../animationState/
 import LargeButton from "../components/LargeButton";
 import { Center } from "../components/Center";
 import AnimatedCard from "../gameComponents/AnimatedCard";
-import { join } from "path";
 import SmallButton from "../components/SmallButton";
+import { setWsError } from "../websocket/websocketSlice";
 
 interface TableProps {
     gameData: GameData;
@@ -99,7 +99,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     // th animations haven't been applied yet
     const whichSnapshot = (id: number) => {
         const showPrevSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-        if(id === 101) console.log("show prev snapshot in GCZ?",showPrevSnapshot);
+        if (id === 101) console.log("show prev snapshot in GCZ?", showPrevSnapshot);
         return showPrevSnapshot ? currSnapshot : newSnapshot!;
     };
     // Proxy animations' parent is the body, so they are not placed in a Place component
@@ -124,18 +124,18 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
 
     return (
         <div style={{ width: "100vw" }}>
-           {proxyAnimations.map(a => {
-            const {imageName} = getCard(a.cardId, currSnapshot);
-          return (
-            <AnimatedCard
-              key={`${a.cardId}-proxy-${a.track}`}
-              id={a.cardId}
-              imageName={imageName}
-              currAnimations={proxyAnimations}
-              gameSnapshot={newSnapshot!}
-            />
-          );
-        })}
+            {proxyAnimations.map((a) => {
+                const { imageName } = getCard(a.cardId, currSnapshot);
+                return (
+                    <AnimatedCard
+                        key={`${a.cardId}-proxy-${a.track}`}
+                        id={a.cardId}
+                        imageName={imageName}
+                        currAnimations={proxyAnimations}
+                        gameSnapshot={newSnapshot!}
+                    />
+                );
+            })}
             <img
                 src="./icons/fast-forward.png"
                 alt=""
@@ -150,7 +150,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                 }}
                 onClick={() => dispatch(skipToEndOfAnimations())}
             />
-              <img
+            <img
                 src="./icons/fast-forward.png"
                 alt=""
                 style={{
@@ -290,19 +290,19 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
             </DragDropContext>
             {wsError && <ConnectionError error={wsError} />}
             {wsLoading && <div className="loading-overlay">Connecting to Game...</div>}
-
-
         </div>
     );
 };
 
 const ConnectionError: React.FC<{ error: string }> = ({ error }) => {
-  const dispatch = useDispatch();
-  const retry = () => {
-    const gameId = store.getState().userGameState.gameData?.id;
-    if(gameId)
-    dispatch(connectWebsocket({ actionOnConnect:joinGame(gameId) }));
-  }
+    const dispatch = useDispatch();
+    const retry = () => {
+        const gameId = store.getState().userGameState.gameData?.id;
+        if (gameId) {
+            dispatch(setWsError(null));
+            dispatch(connectWebsocket({ actionOnConnect: joinGame(gameId) }));
+        }
+    };
     return (
         <div className="loading-overlay">
             <Center>

@@ -8,7 +8,6 @@ import {
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
 import { Droppable } from "react-beautiful-dnd";
-import AnimatedCard from "./AnimatedCard";
 import "../css/global.css";
 import NewCardGroup from "./NewCardGroup";
 import GhostCard from "./GhostCard";
@@ -30,18 +29,12 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
         player,
         gameSnapshot
     );
-    // console.log(GCZCards);
     const droppableId = JSON.stringify({ type: "place", id, placeType: "guestCardZone", player });
 
     const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
-    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
-    console.log("cardrow", cardRow.map((e) => e.cards[0].imageName));
-
-    const animations = activeAnimation?.animations ?? [];
-    const animationCardIds = animations.map((a) => a.cardId);
 
     const cardRowShape =
         rearrangingData.placeId === id
@@ -71,7 +64,6 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                         ref={provided.innerRef}
                         style={{
                             margin: 0,
-                            // border: "1px solid black",
                             position: "relative",
                             display: "flex",
                             // height: enchantmentsRowCards.length === 0 ? cardHeight : cardHeight * 1.5,
@@ -79,26 +71,15 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
                             minWidth: cardWidth,
                         }}
                     >
-                        {cardRow.map((cardGroup, index) =>
-                            !animationCardIds.includes(cardGroup.id) ? (
-                                <NewCardGroup
-                                    cardGroup={cardGroup}
-                                    cardGroupIndex={index}
-                                    physicalIndex={cardRowShape[index]}
-                                />
-                            ) : (
-                                <AnimatedCard
-                                    key={cardGroup.id}
-                                    id={cardGroup.id}
-                                    currAnimations={animations.filter(
-                                        (a) => a.cardId === cardGroup.id && a.placeId === id
-                                    )}
-                                    imageName={cardGroup.cards[0].imageName}
-                                    index={index}
-                                    gameSnapshot={gameSnapshot}
-                                />
-                            )
-                        )}
+                        {cardRow.map((cardGroup, index) => (
+                            <NewCardGroup
+                                cardGroup={cardGroup}
+                                cardGroupIndex={index}
+                                physicalIndex={cardRowShape[index]}
+                                gameSnapshot={gameSnapshot}
+                                placeId={id}
+                            />
+                        ))}
                         {provided.placeholder}
                     </div>
                 )}

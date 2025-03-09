@@ -23,7 +23,7 @@ import {
 } from "./AnimationTimeline";
 import { getMiddleStyles, Offset } from "./getOffset";
 import store from "../redux/store";
-import { getCard } from "../helperFunctions/locateFunctions";
+import { getCard, locateCard } from "../helperFunctions/locateFunctions";
 
 export interface ActiveAnimation {
     animations: AnimationData[];
@@ -45,6 +45,35 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
     const fromPlaceOffset = offsetMap[handId];
     // const targetPlace = placeRefMap.current[targetPlaceId];
     const targetPlaceOffset = offsetMap[targetPlaceId];
+    const { placeType, player } = locateCard(cardId, newSnapshot);
+    if (player === null) throw new Error("Player cannot be null");
+    // const oldCards = oldSnapshot.players[player].places[placeType].cards;
+    const newCards = newSnapshot.players[player].places[placeType].cards;
+    const newCardIndex = newCards.findIndex((c) => c.id === cardId);
+
+    const cardsToRight = newCards.slice(newCardIndex + 1);
+    const moveCardsRightTracks = [];
+    for (let i = 0; i < cardsToRight.length; i++) {
+        const moveCardsRightSteps = [
+            new NothingHappens(),
+            new NothingHappens(),
+            new TableToTable({
+                duration: 500,
+                fromOffset: new Offset(targetPlaceOffset),
+                fromStyles: getCardCSS(cardsToRight[i].id, oldSnapshot),
+                toOffset: new Offset(targetPlaceOffset),
+                toStyles: getCardCSS(cardsToRight[i].id, newSnapshot),
+                zeroOffset: "toOffset",
+            }),
+        ];
+        const moveCardRightTrack = new AnimationTrack({
+            cardId: cardsToRight[i].id,
+            homePlaceId: targetPlaceId,
+            steps: moveCardsRightSteps,
+        });
+        moveCardsRightTracks.push(moveCardRightTrack);
+    }
+
     // assumption: the targetPlace will position its children at its
     // absolute top left, then apply any styles they have.
 
@@ -85,7 +114,7 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
     }); //  naturalOffset: getOffsetOf(cardId),  naturalDimensions: getDimensions(1, "GCZ"),
 
     const timeline = new MyAnimationTimeline({
-        animationTracks: [handToMiddleTrack, middleToTableTrack],
+        animationTracks: [handToMiddleTrack, middleToTableTrack, ...moveCardsRightTracks],
         showPrevSnapshot: [handId],
     });
     return timeline.getActiveAnimation();
@@ -122,7 +151,7 @@ export const createEnchantAnimation = (args: {
         new FromDisappears({ visibility: "disappearing" }),
         new NothingHappens(),
     ];
-    
+
     const fromMiddleToTableSteps = [
         new NothingHappens(),
         new ToAppears({}),
@@ -447,43 +476,79 @@ export const createRearrangeAnimation = (args: {
     if (!place) {
         throw new Error("Offset not found for place with id of " + placeId);
     }
+    const { placeType, player } = locateCard(cardIds[0], oldSnapshot);
+    if (player === null) throw new Error("Player cannot be null");
+    const oldCards = oldSnapshot.players[player].places[placeType].cards;
+    const newCards = newSnapshot.players[player].places[placeType].cards;
 
-    const leftToRightSteps = [
-        new TableToTable({
-            duration: 800,
-            fromOffset: new Offset(place),
-            fromStyles: getCardCSS(cardIds[0], oldSnapshot),
-            toOffset: new Offset(place),
-            toStyles: getCardCSS(cardIds[0], newSnapshot),
-            zeroOffset: "fromOffset",
-        }),
-    ];
+    const prevIndex = oldCards.findIndex((c) => cardIds.includes(c.id));
+    const newIndex = newCards.findIndex((c) => cardIds.includes(c.id));
+    const movedRight = prevIndex < newIndex;
 
-    const rightToLeftSteps = [
-        new TableToTable({
-            duration: 800,
-            fromOffset: new Offset(place),
-            fromStyles: getCardCSS(cardIds[1], oldSnapshot),
-            toOffset: new Offset(place),
-            toStyles: getCardCSS(cardIds[1], newSnapshot),
-            zeroOffset: "fromOffset",
-        }),
-    ];
+    const cardsToMove = [];
+    for (let i = 0; i < newCards.length; i++) {
+        if (movedRight && i >= prevIndex && i < newIndex) {
+            cardsToMove.push(newCards[i]);
+        }
+        if (!movedRight && i <= prevIndex && i > newIndex) {
+            cardsToMove.push(newCards[i]);
+        }
+    }
 
-    const leftToRightTrack = new AnimationTrack({
-        cardId: cardIds[0],
-        homePlaceId: placeId,
-        steps: leftToRightSteps,
-    });
-    const rightToLeftTrack = new AnimationTrack({
-        cardId: cardIds[1],
-        homePlaceId: placeId,
-        steps: rightToLeftSteps,
-    });
+    const moveOtherCardsSteps = [];
+    const moveOtherCardsTracks = [];
+
+    if (movedRight) {
+        for (let i = 0; i < cardsToMove.length; i++) {
+            const moveOtherCardLeftStep = new TableToTable({
+                duration: 800,
+                fromOffset: new Offset(place),
+                fromStyles: getCardCSS(cardsToMove[i].id, oldSnapshot),
+                toOffset: new Offset(place),
+                toStyles: getCardCSS(cardsToMove[i].id, newSnapshot),
+                zeroOffset: "fromOffset",
+            });
+            moveOtherCardsSteps.push(moveOtherCardLeftStep);
+            const moveOtherCardsTrack = new AnimationTrack({
+                cardId: cardIds[0],
+                homePlaceId: placeId,
+                steps: moveOtherCardsSteps,
+            });
+            moveOtherCardsTracks.push(moveOtherCardsTrack);
+        }
+    }
+
+    // const leftToRightSteps = [
+    //     new TableToTable({
+    //         duration: 800,
+    //         fromOffset: new Offset(place),
+    //         fromStyles: getCardCSS(cardIds[0], oldSnapshot),
+    //         toOffset: new Offset(place),
+    //         toStyles: getCardCSS(cardIds[0], newSnapshot),
+    //         zeroOffset: "fromOffset",
+    //     }),
+    // ];
+
+    // const rightToLeftSteps = [
+    //     new TableToTable({
+    //         duration: 800,
+    //         fromOffset: new Offset(place),
+    //         fromStyles: getCardCSS(cardIds[1], oldSnapshot),
+    //         toOffset: new Offset(place),
+    //         toStyles: getCardCSS(cardIds[1], newSnapshot),
+    //         zeroOffset: "fromOffset",
+    //     }),
+    // ];
+
+    // const moveMovedCardTrack = new AnimationTrack({
+    //     cardId: cardIds[1],
+    //     homePlaceId: placeId,
+    //     steps: rightToLeftSteps,
+    // });
 
     const timeline = new MyAnimationTimeline({
         showPrevSnapshot: [placeId],
-        animationTracks: [leftToRightTrack, rightToLeftTrack],
+        animationTracks: [...moveOtherCardsTracks],
     });
     return timeline.getActiveAnimation();
 };

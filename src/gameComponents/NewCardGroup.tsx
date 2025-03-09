@@ -4,26 +4,31 @@ import { useSelector } from "react-redux";
 import { dimensionConstants, getCardGroupStyles } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
 import GhostCard from "./GhostCard";
-import { getCard, locateCard } from "../helperFunctions/locateFunctions";
+import { locateCard } from "../helperFunctions/locateFunctions";
+import AnimatedCard from "./AnimatedCard";
 
 export interface NewCardGroupProps {
     cardGroup: NewCardGroupObj;
     cardGroupIndex: number;
     physicalIndex: number; // how many cards from the left
+    gameSnapshot: GameSnapshot;
+    placeId: number;
     // enchantableNeighbours: EnchantableNeighbour[];
 }
 
-const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
+const NewCardGroup: React.FC<NewCardGroupProps> = ({
     cardGroup,
     cardGroupIndex,
     physicalIndex,
+    gameSnapshot,
+    placeId,
 }) => {
-    const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
+    const { draggedOver, draggedHandCard, highlights } = useSelector(
         (state: RootState) => state.dragEventState
     );
     const isHighlighted = highlights.includes(cardGroup.id);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+    const { cardHeight } = getCardGroupStyles(
         cardGroup,
         physicalIndex,
         currSnapshot
@@ -41,9 +46,11 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
         calculatedIndex: cardGroup.index + 1,
         player: locateCard(cardGroup.id, currSnapshot).player ?? 0,
         placeType: "guestCardZone",
-
-        // enchantableNeighbours: enchantableNeighbours,
     };
+
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
+    const animations = activeAnimation?.animations ?? [];
+    const animationCardIds = animations.map((a) => a.cardId);
 
     const droppableId = JSON.stringify(droppableData);
 
@@ -59,22 +66,12 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
             />
         );
 
-    return (
-        <Draggable
-            draggableId={draggableId}
-            index={cardGroupIndex}
-            // index={index}
-        >
+    return !animationCardIds.includes(cardGroup.cards[0].id) ? (
+        <Draggable draggableId={draggableId} index={cardGroupIndex}>
             {(d) => (
                 <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
                     {(drop) => (
-                        <div
-                            style={{
-                                height: cardHeight,
-                            }}
-                            {...drop.droppableProps}
-                            ref={drop.innerRef}
-                        >
+                        <div {...drop.droppableProps} ref={drop.innerRef}>
                             <img
                                 {...d.draggableProps}
                                 ref={d.innerRef}
@@ -83,9 +80,8 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
                                 alt={cardGroup.cards[0].imageName}
                                 draggable="false"
                                 style={{
-                                    // position: "absolute",
+                                    // position: "relative",
                                     height: cardHeight,
-                                    width: cardWidth,
                                     zIndex: 99,
                                     ...d.draggableProps.style,
                                     borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
@@ -106,6 +102,16 @@ const ExperimentCardGroup: React.FC<NewCardGroupProps> = ({
                 </Droppable>
             )}
         </Draggable>
+    ) : (
+        <AnimatedCard
+            key={cardGroup.id}
+            id={cardGroup.id}
+            currAnimations={animations.filter(
+                (a) => a.cardId === cardGroup.id && a.placeId === placeId
+            )}
+            imageName={cardGroup.cards[0].imageName}
+            gameSnapshot={gameSnapshot}
+        />
     );
 
     // <Draggable
@@ -280,4 +286,4 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     );
 };
 
-export default ExperimentCardGroup;
+export default NewCardGroup;
