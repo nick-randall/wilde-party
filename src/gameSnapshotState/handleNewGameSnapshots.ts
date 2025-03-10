@@ -74,7 +74,7 @@ export function* continueHandlingSnapshots(): SagaIterator {
         throw Error("No active animation when trying to animate new snapshot -- update data not found");
     }
     yield put({ type: setActiveAnimation.type, payload: newActiveAnimation });
-    yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration);
+    yield call(resolveNewSnapshotFollowingAnimation, newActiveAnimation.totalDuration - 20);
 }
 
 function* queueNewServerSnapshots(action: PayloadAction<NewServerSnapshots>): SagaIterator {

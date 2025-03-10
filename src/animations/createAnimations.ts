@@ -162,7 +162,7 @@ export const createEnchantAnimation = (args: {
 }): ActiveAnimation => {
     const { cardId, handId, targetCardId, targetPlaceId, oldSnapshot, newSnapshot, offsetMap } =
         args;
-    const fromPlaceOffset = offsetMap[handId];
+    const handOffset = offsetMap[handId];
     const targetPlaceOffset = offsetMap[targetPlaceId];
     if (!targetPlaceOffset) {
         throw new Error("Offset not found for target card with id of " + targetCardId);
@@ -172,7 +172,7 @@ export const createEnchantAnimation = (args: {
 
     const fromHandToMiddleSteps = [
         new HandToMiddle({
-            fromOffset: new Offset(fromPlaceOffset),
+            fromOffset: new Offset(handOffset),
             fromStyles: getCardCSS(cardId, oldSnapshot),
             toOffset: getMiddleOffset(),
             toStyles: getMiddleStyles(),
@@ -185,11 +185,11 @@ export const createEnchantAnimation = (args: {
 
     const fromMiddleToTableSteps = [
         new NothingHappens(),
-        new ToAppears({}),
+        new ToAppears({visibility: "appearing"}),
         new MiddleToTable({
             duration: 500,
             toOffset: new Offset(targetPlaceOffset),
-            toStyles: getCardCSS(targetCardId, oldSnapshot), // NOTE NEW_SNAPSHOT!,
+            toStyles: getCardCSS(cardId, newSnapshot), // NOTE NEW_SNAPSHOT!,
             fromOffset: getMiddleOffset(),
             fromStyles: getMiddleStyles(),
             zeroOffset: "toOffset",
@@ -208,7 +208,7 @@ export const createEnchantAnimation = (args: {
 
     const timeline = new MyAnimationTimeline({
         animationTracks: [handToMiddleTrack, middleToTableTrack],
-        showPrevSnapshot: [handId, targetPlaceId],
+        showPrevSnapshot: [handId],
     });
     return timeline.getActiveAnimation();
 };

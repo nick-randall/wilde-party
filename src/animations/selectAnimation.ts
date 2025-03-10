@@ -104,7 +104,7 @@ const createEnchantCardAnimation = (oldSnapshot: GameSnapshot, newSnapshot: Game
     const handId = oldSnapshot.players[player].places.hand.id;
     const { player: ownerOfTargetCard, placeType } = locateCard(snapshotUpdateData.targetId, newSnapshot);
     if (ownerOfTargetCard === null) throw Error("Hand cannot be NULL");
-    const targetPlace = oldSnapshot.players[ownerOfTargetCard].places[placeType];
+    const targetPlace = newSnapshot.players[ownerOfTargetCard].places[placeType];
     const args = {
         cardId: snapshotUpdateData.playedCardIds[0],
         handId: handId,
