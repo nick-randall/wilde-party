@@ -6,6 +6,7 @@ import { RootState } from "../redux/store";
 import GhostCard from "./GhostCard";
 import { locateCard } from "../helperFunctions/locateFunctions";
 import AnimatedCard from "./AnimatedCard";
+import AnimatedCardGroup from "./AnimatedCardGroup";
 
 export interface NewCardGroupProps {
     cardGroup: NewCardGroupObj;
@@ -63,6 +64,8 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
                 physicalIndex={physicalIndex}
+                animationCardIds={animationCardIds}
+                animations={animations}
             />
         );
 
@@ -146,6 +149,8 @@ interface BFFOrZwillingCardGroup {
     physicalIndex: number;
     draggableId: string;
     cardGroupIndex: number;
+    animationCardIds: number[];
+    animations: AnimationData[];
 }
 
 const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
@@ -153,13 +158,29 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     physicalIndex,
     draggableId,
     cardGroupIndex,
+    animationCardIds,
+    animations,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+    const { top, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
         physicalIndex,
         currSnapshot
     );
+    if(animationCardIds.includes(cardGroup.cards[0].id)) { 
+        return (
+          <AnimatedCardGroup 
+                key={cardGroup.id}
+                id={cardGroup.id}
+                currAnimations={animations.filter(
+                    (a) => a.cardId === cardGroup.id
+                )}
+                imageNames={cardGroup.cards.map(c => c.imageName)}
+                gameSnapshot={currSnapshot}
+          />
+        );
+    }
+
     return (
         <Draggable
             draggableId={draggableId}

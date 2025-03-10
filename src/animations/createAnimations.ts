@@ -22,8 +22,10 @@ import {
     ToAppears,
 } from "./AnimationTimeline";
 import { getMiddleStyles, Offset } from "./getOffset";
-import store from "../redux/store";
 import { getCard, locateCard } from "../helperFunctions/locateFunctions";
+import {
+    getCardGroupsObjs,
+} from "../helperFunctions/groupGCZCards";
 
 export interface ActiveAnimation {
     animations: AnimationData[];
@@ -43,35 +45,64 @@ export interface HandToTableArgs {
 export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimation => {
     const { cardId, handId, targetPlaceId, oldSnapshot, newSnapshot, offsetMap } = args;
     const fromPlaceOffset = offsetMap[handId];
-    // const targetPlace = placeRefMap.current[targetPlaceId];
     const targetPlaceOffset = offsetMap[targetPlaceId];
-    const { placeType, player } = locateCard(cardId, newSnapshot);
+    const { placeType: newPlaceType, player } = locateCard(cardId, newSnapshot);
     if (player === null) throw new Error("Player cannot be null");
-    // const oldCards = oldSnapshot.players[player].places[placeType].cards;
-    const newCards = newSnapshot.players[player].places[placeType].cards;
-    const newCardIndex = newCards.findIndex((c) => c.id === cardId);
 
-    const cardsToRight = newCards.slice(newCardIndex + 1);
     const moveCardsRightTracks = [];
-    for (let i = 0; i < cardsToRight.length; i++) {
-        const moveCardsRightSteps = [
-            new NothingHappens(),
-            new NothingHappens(),
-            new TableToTable({
-                duration: 500,
-                fromOffset: new Offset(targetPlaceOffset),
-                fromStyles: getCardCSS(cardsToRight[i].id, oldSnapshot),
-                toOffset: new Offset(targetPlaceOffset),
-                toStyles: getCardCSS(cardsToRight[i].id, newSnapshot),
-                zeroOffset: "toOffset",
-            }),
-        ];
-        const moveCardRightTrack = new AnimationTrack({
-            cardId: cardsToRight[i].id,
-            homePlaceId: targetPlaceId,
-            steps: moveCardsRightSteps,
-        });
-        moveCardsRightTracks.push(moveCardRightTrack);
+
+
+    if (newPlaceType === "guestCardZone") {
+        const cardRow = newSnapshot.players[player].places[newPlaceType].cards;
+        const cardGroupObjs = getCardGroupsObjs(cardRow);
+        const cardGroupIndex = cardGroupObjs.findIndex((c) => c.id === cardId);
+        const cardGroupsToRight = cardGroupObjs.slice(cardGroupIndex + 1);
+
+        for (let i = 0; i < cardGroupsToRight.length; i++) {
+            const moveCardsRightSteps = [
+                new NothingHappens(),
+                new NothingHappens(),
+                new TableToTable({
+                    duration: 500,
+                    fromOffset: new Offset(targetPlaceOffset),
+                    fromStyles: getCardCSS(cardGroupsToRight[i].id, oldSnapshot),
+                    toOffset: new Offset(targetPlaceOffset),
+                    toStyles: getCardCSS(cardGroupsToRight[i].id, newSnapshot),
+                    zeroOffset: "toOffset",
+                }),
+            ];
+            const moveCardRightTrack = new AnimationTrack({
+                cardId: cardGroupsToRight[i].id,
+                homePlaceId: targetPlaceId,
+                steps: moveCardsRightSteps,
+            });
+            moveCardsRightTracks.push(moveCardRightTrack);
+        }
+    } else {
+        const newCards = newSnapshot.players[player].places[newPlaceType].cards;
+        const newCardIndex = newCards.findIndex((c) => c.id === cardId);
+
+        const cardsToRight = newCards.slice(newCardIndex + 1);
+        for (let i = 0; i < cardsToRight.length; i++) {
+            const moveCardsRightSteps = [
+                new NothingHappens(),
+                new NothingHappens(),
+                new TableToTable({
+                    duration: 500,
+                    fromOffset: new Offset(targetPlaceOffset),
+                    fromStyles: getCardCSS(cardsToRight[i].id, oldSnapshot),
+                    toOffset: new Offset(targetPlaceOffset),
+                    toStyles: getCardCSS(cardsToRight[i].id, newSnapshot),
+                    zeroOffset: "toOffset",
+                }),
+            ];
+            const moveCardRightTrack = new AnimationTrack({
+                cardId: cardsToRight[i].id,
+                homePlaceId: targetPlaceId,
+                steps: moveCardsRightSteps,
+            });
+            moveCardsRightTracks.push(moveCardRightTrack);
+        }
     }
 
     // assumption: the targetPlace will position its children at its

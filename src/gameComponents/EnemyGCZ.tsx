@@ -1,8 +1,18 @@
 import { useSelector } from "react-redux";
-import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import {
+    dimensionConstants,
+    getCardGroupStyles,
+    getCardStyleValuesFromPlaceAndPlayer,
+} from "../helperFunctions/getCardStyles";
 import Card from "./Card";
 import { RootState } from "../redux/store";
 import AnimatedCard from "./AnimatedCard";
+import {
+    getCardGroupsObjs,
+    getCardRowShapeOnDraggedOver,
+    NewCardGroupObj,
+} from "../helperFunctions/groupGCZCards";
+import NewCardGroup from "./NewCardGroup";
 
 interface EnemyGCZProps {
     player: number;
@@ -23,14 +33,21 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
 
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
 
+    const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
+
+    const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
+    cardRowShape.unshift(0);
+
     const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, gameSnapshot);
     return (
-        <div className={`grid-item ${alignment}`} ref={(el) => registerPlaceOffset(el, id)}>
-            {GCZCards.map((card, index) =>
+        <div className={`grid-item ${alignment}`} ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
+            {cardRow.map((card, index) =>
                 !animationCardIds.includes(card.id) ? (
-                    <div key={card.id} style={{ left: index * styles.left, position: "relative" }}>
-                        <Card id={card.id} index={index} imageName={card.imageName} />
-                    </div>
+                    <EnemyCardGroup
+                        key={card.id}
+                        cardGroup={cardRow[index]}
+                        physicalIndex={index}
+                    />
                 ) : (
                     <AnimatedCard
                         key={card.id}
@@ -38,7 +55,7 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
                         currAnimations={animations.filter(
                             (a) => a.cardId === card.id && a.placeId === id
                         )}
-                        imageName={card.imageName}
+                        imageName={card.cards[0].imageName}
                         gameSnapshot={gameSnapshot}
                     />
                 )
@@ -55,3 +72,104 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
 };
 
 export default EnemyGCZ;
+
+interface EnemyCardGroupProps {
+    cardGroup: CardGroupObj;
+    physicalIndex: number;
+}
+
+const EnemyCardGroup = (props: EnemyCardGroupProps) => {
+    const { cardGroup, physicalIndex } = props;
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+        cardGroup,
+        physicalIndex,
+        currSnapshot
+    );
+    if (cardGroup.cards.length === 1) {
+        return (
+            <img
+                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                alt={cardGroup.cards[0].imageName}
+                style={{
+                    position: "absolute",
+                    left: cardWidth * physicalIndex,
+                    width: cardWidth * cardGroup.size,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+        );
+    }
+    if (cardGroup.cards.length === 2) {
+        return (
+            <div
+                style={{
+                    position: "relative",
+                    left: cardWidth * physicalIndex,
+                    width: cardWidth * cardGroup.size,
+                }}
+            >
+                <img
+                    src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                    alt={cardGroup.cards[0].imageName}
+                    style={{
+                        position: "absolute",
+                        height: cardHeight,
+                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                    }}
+                />
+                <img
+                    src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                    alt={cardGroup.cards[1].imageName}
+                    style={{
+                        position: "absolute",
+                        height: cardHeight,
+                        top: cardHeight / 2,
+                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                    }}
+                />
+            </div>
+        );
+    }
+    return (
+        <div>
+            <img
+                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                alt={cardGroup.cards[0].imageName}
+                style={{
+                    position: "absolute",
+                    height: cardHeight,
+                    width: cardWidth,
+                    left: 0,
+                    top: cardHeight / 2,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+            <img
+                src={`./images/${cardGroup.cards[2].imageName}.jpg`}
+                alt={cardGroup.cards[2].imageName}
+                style={{
+                    position: "absolute",
+                    left: cardWidth,
+                    top: cardWidth / 2,
+                    height: cardHeight,
+                    width: cardWidth,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+            <img
+                src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                alt={cardGroup.cards[1].imageName}
+                style={{
+                    position: "absolute",
+                    left: cardWidth / 2,
+                    top: 0,
+                    height: cardHeight,
+                    width: cardWidth,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                }}
+            />
+        </div>
+    );
+};

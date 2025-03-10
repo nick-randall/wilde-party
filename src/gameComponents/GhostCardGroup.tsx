@@ -1,11 +1,8 @@
 import { useSelector } from "react-redux";
 import {
     dimensionConstants,
-    getCardGroupStyles,
-    getCardStyles,
     getCardStyleValues,
 } from "../helperFunctions/getCardStyles";
-import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
 import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 

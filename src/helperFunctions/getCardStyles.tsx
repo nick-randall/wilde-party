@@ -2,19 +2,7 @@ import { CSSProperties } from "styled-components";
 import { CardCSSMap } from "../animations/animationHelperFunctions";
 import { getNumCards, locateCard } from "./locateFunctions";
 import store from "../redux/store";
-
-//   const card: GameCard = {
-//     pointValue: 1,
-//     action: { actionType: "addDragged", highlightType: "card", targetPlayerType: "enemy" },
-//     name: "temp",
-//     id: 99999999999,
-//     imageName: "test",
-//     cardType: "guest",
-//     index: 0,
-//   };
-//   gameSnapshot.players[player].places[placeType].cards.push(card);
-//   return getCardStyleValues(card.id, gameSnapshot);
-// };
+import { getCardGroupsObjs, getCumulativeWidths } from "./groupGCZCards";
 
 export const getCardStyleValues = (cardId: number, gameSnapshot: GameSnapshot) => {
     const { index, placeType, player } = locateCard(cardId, gameSnapshot);
@@ -38,7 +26,25 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
     const handCardHeight = dimensionConstants.HAND_CARD_HEIGHTS[playerType];
     const handCardWidth = handCardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
 
-    const cardLeftSpread = numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3;
+    let cardLeftSpread = numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3;
+    // TODO why would index ever be -1?
+    let left =
+        placeType !== "deck" && placeType !== "discardPile" && index > -1
+            ? cardLeftSpread * index
+            : 0;
+
+    if (place === "guestCardZone" && player !== null && index > -1) {
+        const card = gameSnapshot.players[player].places[placeType].cards[index];
+
+        const cardRow = gameSnapshot.players[player].places[placeType].cards;
+        const cardGroupObjs = getCardGroupsObjs(cardRow);
+        const cardGroupIndex = cardGroupObjs.findIndex((cardGroup) => cardGroup.id === card.id);
+
+        const widthMap = getCumulativeWidths(cardGroupObjs);
+
+        left = widthMap[cardGroupIndex] * tableCardWidth;
+    }
+
     const handCardLeftSpread = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD;
     const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
     const handCardRotation = 10 * index - (numCards / 2 - 0.5) * 10;
@@ -52,7 +58,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
         cardHeight: tableCardHeight,
         cardWidth: tableCardWidth,
         zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
-        left: placeType !== "deck" && placeType !== "discardPile" ? cardLeftSpread * index : 0,
+        left,
         top: cardTopSpread * index,
         rotate: tableCardRotate,
         rotateY: tableCardRotateY,
@@ -80,10 +86,12 @@ export const getCardGroupStyles = (
     physicalIndex: number,
     gameSnapshot: GameSnapshot
 ): CardDimensions => {
-    const { player } = locateCard(cardGroup.id, gameSnapshot);
+    const { player, placeType } = locateCard(cardGroup.id, gameSnapshot);
+    // if(player === null)
+
+    //   throw new Error("Player is null");
     const myIndex = store.getState().userGameState.myIndex;
 
-    
     const playerType = player === myIndex || player === null ? "self" : "enemy";
 
     const cardHeight = dimensionConstants.TABLE_CARD_HEIGHTS[playerType];

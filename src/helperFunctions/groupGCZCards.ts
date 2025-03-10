@@ -1,5 +1,6 @@
 import { pipe } from "ramda";
 import { filterOutDuplicates } from "./genericFunctions";
+import { get } from "http";
 
 // TODO cleanup!!!
 
@@ -151,25 +152,10 @@ export const getCardGroupsObjs = (GCZCards: GameCard[]): NewCardGroupObj[] => {
   return cardGroupObjs; 
 };
 
-const cardGroupType: { [cardType: string]: { start: number; length: number } } = {
-  bff: { start: -1, length: 3 },
-  zwilling: { start: 0, length: 2 },
-  guest: { start: 0, length: 1 },
-};
-interface CardGroupStructure {
-  [cardType: string]: number[];
-}
-const cardToLeft = -1;
-const thisCard = 0;
-const cardToRight = 1;
 
-const cardGroupStructures: CardGroupStructure = { bff: [cardToLeft, thisCard, cardToRight], zwilling: [cardToLeft, thisCard], guest: [thisCard] };
 
-const getCardGroups = (GCZCards: GameCard[]) =>
-  GCZCards.map((card, index) => {
-    const cardGroupStructure = cardGroupStructures[card.cardType];
-    return GCZCards.slice(index + cardGroupStructure[0], cardGroupStructure.length + cardGroupStructure[0]);
-  });
+
+
 
  export type NewCardGroupObj = {
     id: number;
@@ -190,4 +176,10 @@ export const getGCZTotalWidth = (GCZCards: GameCard[]) =>
 
 export const getGCZNumElementsAt = (GCZCards: GameCard[]) => "a"; //GCZCards.map(e => )
 
-const getGCZWidthMapFromObjs = (GCZCardObjs: NewCardGroupObj[]) => GCZCardObjs.map(cardGroup => cardGroup.width);
+export const getGCZWidthMapFromObjs = (GCZCardObjs: NewCardGroupObj[]) => GCZCardObjs.map(cardGroup => cardGroup.width);
+
+export const getCumulativeWidths = (GCZCardObjs: NewCardGroupObj[]) : number[]=> {
+  
+  const map = getGCZWidthMapFromObjs(GCZCardObjs).reduce((acc, curr) => [...acc , curr + acc[acc.length -1]], [0])
+  return map//map.slice(0, map.length - 1)
+};

@@ -3,8 +3,8 @@ import { RootState } from "../redux/store";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
-    getCardRowShapeOnDraggedOver,
     getCardRowShapeOnRearrange,
+    getCumulativeWidths,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
 import { Droppable } from "react-beautiful-dnd";
@@ -13,14 +13,14 @@ import NewCardGroup from "./NewCardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 
-interface NewGCZProps {
+interface GCZProps {
     id: number;
     gameSnapshot: GameSnapshot;
     player: number;
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
-const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset }) => {
+const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset }) => {
     const { draggedOver, rearrangingData, draggedHandCard, highlights } = useSelector(
         (state: RootState) => state.dragEventState
     );
@@ -39,7 +39,7 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     const cardRowShape =
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
-            : getCardRowShapeOnDraggedOver(cardRow);
+            : getCumulativeWidths(cardRow);
     cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
@@ -100,4 +100,4 @@ const NewGCZ: React.FC<NewGCZProps> = ({ id, gameSnapshot, player, registerPlace
     );
 };
 
-export default NewGCZ;
+export default GCZ;

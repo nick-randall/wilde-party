@@ -18,7 +18,7 @@ import UWZ from "../gameComponents/UWZ";
 import { connectWebsocket, joinGame } from "../websocket/websocketActionCreators";
 import store, { RootState } from "../redux/store";
 import NewHand from "../gameComponents/Hand";
-import NewGCZ from "../gameComponents/GCZ";
+import GCZ from "../gameComponents/GCZ";
 import { testUpdateSnapshot } from "../gameSnapshotState/gameSnapshotSlice";
 import SnapshotUpdater, { Change } from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { getCard } from "../helperFunctions/locateFunctions";
@@ -44,7 +44,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     const { offsetMap } = useSelector((state: RootState) => state.animationState);
 
     const phase = useSelector(getUserPhase);
-    console.log(phase);
 
     useEffect(() => {
         if (!wsConnected && !wsLoading && !wsError) {
@@ -99,7 +98,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
     // th animations haven't been applied yet
     const whichSnapshot = (id: number) => {
         const showPrevSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-        if (id === 101) console.log("show prev snapshot in GCZ?", showPrevSnapshot);
         return showPrevSnapshot ? currSnapshot : newSnapshot!;
     };
     // Proxy animations' parent is the body, so they are not placed in a Place component
@@ -262,7 +260,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                     />
                     <div className="grid-item center-column align-start">
                         {/* <button onClick={testUpdate}></button> */}
-                        <NewGCZ
+                        <GCZ
                             id={p0.places.guestCardZone.id}
                             gameSnapshot={whichSnapshot(p0.places.guestCardZone.id)}
                             player={playerZero}
