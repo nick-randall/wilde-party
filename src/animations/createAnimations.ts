@@ -23,9 +23,7 @@ import {
 } from "./AnimationTimeline";
 import { getMiddleStyles, Offset } from "./getOffset";
 import { getCard, locateCard } from "../helperFunctions/locateFunctions";
-import {
-    getCardGroupsObjs,
-} from "../helperFunctions/groupGCZCards";
+import { getCardGroupsObjs } from "../helperFunctions/groupGCZCards";
 
 export interface ActiveAnimation {
     animations: AnimationData[];
@@ -51,7 +49,6 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
 
     const moveCardsRightTracks = [];
 
-
     if (newPlaceType === "guestCardZone") {
         const cardRow = newSnapshot.players[player].places[newPlaceType].cards;
         const cardGroupObjs = getCardGroupsObjs(cardRow);
@@ -59,24 +56,27 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
         const cardGroupsToRight = cardGroupObjs.slice(cardGroupIndex + 1);
 
         for (let i = 0; i < cardGroupsToRight.length; i++) {
-            const moveCardsRightSteps = [
-                new NothingHappens(),
-                new NothingHappens(),
-                new TableToTable({
-                    duration: 500,
-                    fromOffset: new Offset(targetPlaceOffset),
-                    fromStyles: getCardCSS(cardGroupsToRight[i].id, oldSnapshot),
-                    toOffset: new Offset(targetPlaceOffset),
-                    toStyles: getCardCSS(cardGroupsToRight[i].id, newSnapshot),
-                    zeroOffset: "toOffset",
-                }),
-            ];
-            const moveCardRightTrack = new AnimationTrack({
-                cardId: cardGroupsToRight[i].id,
-                homePlaceId: targetPlaceId,
-                steps: moveCardsRightSteps,
-            });
-            moveCardsRightTracks.push(moveCardRightTrack);
+            for (let j = 0; j < cardGroupsToRight[i].cards.length; j++) {
+                const card = cardGroupsToRight[i].cards[j];
+                const moveCardsRightSteps = [
+                    new NothingHappens(),
+                    new NothingHappens(),
+                    new TableToTable({
+                        duration: 500,
+                        fromOffset: new Offset(targetPlaceOffset),
+                        fromStyles: getCardCSS(card.id, oldSnapshot),
+                        toOffset: new Offset(targetPlaceOffset),
+                        toStyles: getCardCSS(card.id, newSnapshot),
+                        zeroOffset: "toOffset",
+                    }),
+                ];
+                const moveCardRightTrack = new AnimationTrack({
+                    cardId: card.id,
+                    homePlaceId: targetPlaceId,
+                    steps: moveCardsRightSteps,
+                });
+                moveCardsRightTracks.push(moveCardRightTrack);
+            }
         }
     } else {
         const newCards = newSnapshot.players[player].places[newPlaceType].cards;
@@ -185,7 +185,7 @@ export const createEnchantAnimation = (args: {
 
     const fromMiddleToTableSteps = [
         new NothingHappens(),
-        new ToAppears({visibility: "appearing"}),
+        new ToAppears({ visibility: "appearing" }),
         new MiddleToTable({
             duration: 500,
             toOffset: new Offset(targetPlaceOffset),
@@ -196,16 +196,15 @@ export const createEnchantAnimation = (args: {
         }),
     ];
     const cardToEnchant = [
-      new NothingHappens(),
-      new NothingHappens(),
-      new AnimationTrackStep({
-        fromOffset: new Offset(targetPlaceOffset),
-        fromStyles: getCardCSS(targetCardId, oldSnapshot),
-        toOffset: new Offset(targetPlaceOffset),
-        toStyles: getCardCSS(targetCardId, newSnapshot),
-        zeroOffset: "fromOffset",
-      }),
-
+        new NothingHappens(),
+        new NothingHappens(),
+        new AnimationTrackStep({
+            fromOffset: new Offset(targetPlaceOffset),
+            fromStyles: getCardCSS(targetCardId, oldSnapshot),
+            toOffset: new Offset(targetPlaceOffset),
+            toStyles: getCardCSS(targetCardId, newSnapshot),
+            zeroOffset: "fromOffset",
+        }),
     ];
     const handToMiddleTrack = new AnimationTrack({
         cardId,
