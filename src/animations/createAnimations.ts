@@ -195,6 +195,18 @@ export const createEnchantAnimation = (args: {
             zeroOffset: "toOffset",
         }),
     ];
+    const cardToEnchant = [
+      new NothingHappens(),
+      new NothingHappens(),
+      new AnimationTrackStep({
+        fromOffset: new Offset(targetPlaceOffset),
+        fromStyles: getCardCSS(targetCardId, oldSnapshot),
+        toOffset: new Offset(targetPlaceOffset),
+        toStyles: getCardCSS(targetCardId, newSnapshot),
+        zeroOffset: "fromOffset",
+      }),
+
+    ];
     const handToMiddleTrack = new AnimationTrack({
         cardId,
         steps: fromHandToMiddleSteps,
@@ -205,9 +217,14 @@ export const createEnchantAnimation = (args: {
         steps: fromMiddleToTableSteps,
         homePlaceId: targetPlaceId,
     });
+    const cardToEnchantTrack = new AnimationTrack({
+        cardId: targetCardId,
+        steps: cardToEnchant,
+        homePlaceId: targetPlaceId,
+    });
 
     const timeline = new MyAnimationTimeline({
-        animationTracks: [handToMiddleTrack, middleToTableTrack],
+        animationTracks: [handToMiddleTrack, middleToTableTrack, cardToEnchantTrack],
         showPrevSnapshot: [handId],
     });
     return timeline.getActiveAnimation();

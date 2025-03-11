@@ -7,6 +7,7 @@ import GhostCard from "./GhostCard";
 import { locateCard } from "../helperFunctions/locateFunctions";
 import AnimatedCard from "./AnimatedCard";
 import AnimatedCardGroup from "./AnimatedCardGroup";
+import { getCardName } from "../animations/animationHelperFunctions";
 
 export interface NewCardGroupProps {
     cardGroup: NewCardGroupObj;
@@ -29,11 +30,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
     );
     const isHighlighted = highlights.includes(cardGroup.id);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { cardHeight } = getCardGroupStyles(
-        cardGroup,
-        physicalIndex,
-        currSnapshot
-    );
+    const { cardHeight } = getCardGroupStyles(cardGroup, physicalIndex, currSnapshot);
     const draggableData: DraggableData = {
         id: cardGroup.id,
         type: "cardGroup",
@@ -53,95 +50,97 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
 
+    const animated: { [key: number]: boolean } = {};
+    cardGroup.cards.forEach((c) => {
+        animated[c.id] = animationCardIds.includes(c.id);
+    });
+    const allAreAnimated = Object.values(animated).every((a) => a);
+    const noneAreAnimated = Object.values(animated).every((a) => !a);
+    if (!allAreAnimated && !noneAreAnimated) {
+        console.log("animated: ", animated);
+        throw new Error("Some cards in CardGroup are animated and some are not!!!");
+    }
+
     const droppableId = JSON.stringify(droppableData);
 
     const ghostCardInPlace = draggedOver?.id === cardGroup.id;
     const ghostCard = draggedHandCard && ghostCardInPlace ? draggedHandCard : undefined;
-    if (cardGroup.cards.length === 2)
+
+    if (allAreAnimated) {
         return (
-            <ZwillingCardGroup
+            <AnimatedCardGroup
+                key={cardGroup.id}
                 cardGroup={cardGroup}
-                cardGroupIndex={cardGroupIndex}
-                draggableId={draggableId}
-                physicalIndex={physicalIndex}
-                animationCardIds={animationCardIds}
-                animations={animations}
+                currAnimations={animations.filter((a) =>
+                    cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === placeId
+                )}
+                gameSnapshot={currSnapshot}
             />
         );
+    }
 
-    return !animationCardIds.includes(cardGroup.cards[0].id) ? (
-        <Draggable draggableId={draggableId} index={cardGroupIndex}>
-            {(d) => (
-                <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
-                    {(drop) => (
-                        <div {...drop.droppableProps} ref={drop.innerRef}>
-                            <img
-                                {...d.draggableProps}
-                                ref={d.innerRef}
-                                {...d.dragHandleProps}
-                                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-                                alt={cardGroup.cards[0].imageName}
-                                draggable="false"
-                                style={{
-                                    // position: "relative",
-                                    height: cardHeight,
-                                    zIndex: 99,
-                                    ...d.draggableProps.style,
-                                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                                }}
-                            />
-                            {ghostCard && draggedHandCard && (
-                                <GhostCard
-                                    cardId={draggedHandCard.id}
-                                    index={cardGroupIndex}
-                                    imageName={draggedHandCard.imageName}
-                                    zIndex={0}
-                                    offsetTop={cardHeight / 2}
+    if (cardGroup.cards.length === 1) {
+        return !animationCardIds.includes(cardGroup.cards[0].id) ? (
+            <Draggable draggableId={draggableId} index={cardGroupIndex}>
+                {(d) => (
+                    <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
+                        {(drop) => (
+                            <div {...drop.droppableProps} ref={drop.innerRef}>
+                                <img
+                                    {...d.draggableProps}
+                                    ref={d.innerRef}
+                                    {...d.dragHandleProps}
+                                    src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                                    alt={cardGroup.cards[0].imageName}
+                                    draggable="false"
+                                    style={{
+                                        // position: "relative",
+                                        height: cardHeight,
+                                        zIndex: 99,
+                                        ...d.draggableProps.style,
+                                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                    }}
+                                    key={cardGroup.cards[0].id}
                                 />
-                            )}
-                            {drop.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            )}
-        </Draggable>
-    ) : (
-        <AnimatedCard
-            key={cardGroup.id}
-            id={cardGroup.id}
-            currAnimations={animations.filter(
-                (a) => a.cardId === cardGroup.id && a.placeId === placeId
-            )}
-            imageName={cardGroup.cards[0].imageName}
-            gameSnapshot={gameSnapshot}
+                                {ghostCard && draggedHandCard && (
+                                    <GhostCard
+                                        cardId={draggedHandCard.id}
+                                        index={cardGroupIndex}
+                                        imageName={draggedHandCard.imageName}
+                                        zIndex={0}
+                                        offsetTop={cardHeight / 2}
+                                    />
+                                )}
+                                {drop.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                )}
+            </Draggable>
+        ) : (
+            <AnimatedCard
+                key={cardGroup.id}
+                id={cardGroup.id}
+                currAnimations={animations.filter(
+                    (a) => a.cardId === cardGroup.id && a.placeId === placeId
+                )}
+                imageName={cardGroup.cards[0].imageName}
+                gameSnapshot={gameSnapshot}
+            />
+        );
+    }
+
+    return (
+        <ZwillingCardGroup
+            cardGroup={cardGroup}
+            cardGroupIndex={cardGroupIndex}
+            draggableId={draggableId}
+            physicalIndex={physicalIndex}
+            animationCardIds={animationCardIds}
+            animations={animations}
+            placeId={placeId}
         />
     );
-
-    // <Draggable
-    //     draggableId={draggableId}
-    //     index={cardGroupIndex}
-    //     // index={index}
-    // >
-    //     {(d) => (
-    //         <img
-    //             {...d.draggableProps}
-    //             ref={d.innerRef}
-    //             {...d.dragHandleProps}
-    //             src={`./images/${cardGroup.cards[0].imageName}.jpg`}
-    //             alt={cardGroup.cards[0].imageName}
-    //             draggable="false"
-    //             style={{
-    //                 // position: "absolute",
-    //                 height: cardHeight,
-    //                 width: cardWidth,
-    //                 zIndex: 99,
-    //                 ...d.draggableProps.style,
-    //                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-    //             }}
-    //         />
-    //     )}
-    // </Draggable>
-    // );
 };
 
 interface BFFOrZwillingCardGroup {
@@ -151,6 +150,7 @@ interface BFFOrZwillingCardGroup {
     cardGroupIndex: number;
     animationCardIds: number[];
     animations: AnimationData[];
+    placeId: number;
 }
 
 const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
@@ -160,6 +160,7 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     cardGroupIndex,
     animationCardIds,
     animations,
+    placeId,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { top, cardWidth, cardHeight } = getCardGroupStyles(
@@ -167,19 +168,48 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
         physicalIndex,
         currSnapshot
     );
-    if(animationCardIds.includes(cardGroup.cards[0].id)) { 
+    if (animationCardIds.includes(cardGroup.cards[1].id)) {
         return (
-          <AnimatedCardGroup 
-                key={cardGroup.id}
-                id={cardGroup.id}
-                currAnimations={animations.filter(
-                    (a) => a.cardId === cardGroup.id
-                )}
-                imageNames={cardGroup.cards.map(c => c.imageName)}
-                gameSnapshot={currSnapshot}
-          />
+            <div>
+                <img
+                    src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                    alt={cardGroup.cards[0].imageName}
+                    style={{
+                        position: "absolute",
+                        height: cardHeight,
+                        // width: cardWidth,
+                        left: 0,
+                        top: 0,
+                        zIndex: 99,
+                        // ...d.draggableProps.style,
+                        borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                    }}
+                />
+                <AnimatedCard
+                    key={cardGroup.cards[1].id}
+                    id={cardGroup.cards[1].id}
+                    currAnimations={animations.filter(
+                        (a) => a.cardId === cardGroup.cards[1].id && a.placeId === placeId
+                    )}
+                    imageName={cardGroup.cards[1].imageName}
+                    gameSnapshot={currSnapshot}
+                />
+            </div>
         );
     }
+    // if (animationCardIds.includes(cardGroup.cards[0].id)) {
+    //     return (
+    //         <AnimatedCardGroup
+    //             key={cardGroup.id}
+    //             cardGroupId={cardGroup.id}
+    //             currAnimations={animations.filter(
+    //                 (a) => a.cardId === cardGroup.id && a.placeId === placeId
+    //             )}
+    //             imageNames={cardGroup.cards.map((c) => c.imageName)}
+    //             gameSnapshot={currSnapshot}
+    //         />
+    //     );
+    // }
 
     return (
         <Draggable
@@ -211,20 +241,33 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                             }}
                         />
-                        <img
-                            src={`./images/${cardGroup.cards[1].imageName}.jpg`}
-                            alt={cardGroup.cards[1].imageName}
-                            style={{
-                                position: "absolute",
-                                left: 0,
-                                top: cardHeight / 2,
-                                height: cardHeight,
-                                width: cardWidth,
-                                zIndex: 99,
-                                // ...d.draggableProps.style,
-                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                            }}
-                        />
+                        {!animationCardIds.includes(cardGroup.cards[1].id) && (
+                            <img
+                                src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                                alt={cardGroup.cards[1].imageName}
+                                style={{
+                                    position: "absolute",
+                                    left: 0,
+                                    top: cardHeight / 2,
+                                    height: cardHeight,
+                                    width: cardWidth,
+                                    zIndex: 99,
+                                    // ...d.draggableProps.style,
+                                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                }}
+                            />
+                        )}
+                        {animationCardIds.includes(cardGroup.cards[1].id) && (
+                            <AnimatedCard
+                                key={cardGroup.cards[1].id}
+                                id={cardGroup.cards[1].id}
+                                currAnimations={animations.filter(
+                                    (a) => a.cardId === cardGroup.cards[1].id
+                                )}
+                                imageName={cardGroup.cards[1].imageName}
+                                gameSnapshot={currSnapshot}
+                            />
+                        )}
                     </div>
                 </div>
             )}
