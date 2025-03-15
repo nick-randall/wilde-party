@@ -23,27 +23,11 @@ const AnimatedCardGroup: React.FC<AnimatedCardGroupProps> = (props) => {
     opacityAnimations.sort((a, b) => (a.cardId === cards[0].id ? -1 : 1));
     const zIndexAnimations = currAnimations.filter((ani) => ani.track === "zIndex");
     zIndexAnimations.sort((a, b) => (a.cardId === cards[0].id ? -1 : 1));
-    // TODO sorting for BFF three card animation!    
+    // TODO sorting for BFF three card animation!
 
     const innerWrapperStyles = cards.map((c) => getInnerWrapperStyle(c.id, gameSnapshot));
     const frontAndBackStyles = cards.map((c) => getFrontAndBackStyles(c.id, gameSnapshot));
     const outerWrapperStyles = getOuterWrapperStyles();
-
-    console.log("innerWrapperStyles: ", innerWrapperStyles);
-
-    // const { top, height } = getInnerWrapperStyle(cardGroupId, gameSnapshot);
-    // let zwillingTop = 0;
-    // if (typeof top === "string" && typeof height === "string") {
-    //     const stripped = top.replace("px", "");
-    //     const topNum = parseInt(stripped);
-
-    //     const strippedHeight = height.replace("px", "");
-    //     const heightNum = parseInt(strippedHeight);
-    //     zwillingTop = topNum + heightNum / 2;
-
-    //     console.log("top: ", topNum);
-    // }
-    // const card = getCard(cardGroupId, gameSnapshot);
 
     return (
         <>

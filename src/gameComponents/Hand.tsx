@@ -49,9 +49,8 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
     );
     useEffect(() => {
         if (shouldSpread && !activeAnimation && !handCardDragged && !enemysTurn) {
-                setSpread(MAX_HAND_CARD_LEFT_SPREAD);
-                setSpreadOffset((cards.length * -MAX_HAND_CARD_LEFT_SPREAD) / 2);
-            
+            setSpread(MAX_HAND_CARD_LEFT_SPREAD);
+            setSpreadOffset((cards.length * -MAX_HAND_CARD_LEFT_SPREAD) / 2);
         } else {
             setSpread(MIN_HAND_CARD_LEFT_SPREAD);
             const handOffset = getPlayerHandOffset(cards.length);
@@ -100,6 +99,7 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                     }}
                                     onMouseEnter={() => setShouldSpread(true)}
                                     onMouseLeave={() => setShouldSpread(false)}
+                                    key={card.id + "container"}
                                 >
                                     <div
                                         // This is a card spacer div, responsible for growing and pushing the hand cards apart.
@@ -108,13 +108,14 @@ const NewHand: React.FC<NewHandProps> = ({ id, player, registerPlaceOffset }) =>
                                             transition: "all 180ms",
                                             height: styles.cardHeight,
                                         }}
+                                        key={card.id + "spacer"}
                                     />
                                     <HandCard
                                         id={card.id}
                                         index={index}
                                         image={card.imageName}
                                         numHandCards={cards.length}
-                                        key={card.id}
+                                        key={card.id + "card"}
                                     />
 
                                     <div

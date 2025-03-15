@@ -79,7 +79,9 @@ export class MyAnimationTimeline {
   }
 
   _stringifyDimensions = (data: IntermediateStepData) => {
-    return `left: ${data.style.left};
+    return `
+    left: ${data.style.left};
+    top: ${data.style.top};
     height: ${data.style.height}; 
     width: ${data.style.width}; 
     transform: translate(${data.offset.dx}px, ${data.offset.dy}px) ${data.style.transform}; 
@@ -89,7 +91,8 @@ export class MyAnimationTimeline {
 
   _stringifyOpacity = (data: IntermediateStepData) => {
     const opacity = data.visibility === "appearing" || data.visibility === "hidden" ? 0 : 1;
-    return `opacity: ${opacity}; 
+    return `
+    opacity: ${opacity}; 
     box-shadow:${data.style["box-shadow"]}`;
   };
 

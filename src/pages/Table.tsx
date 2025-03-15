@@ -256,7 +256,7 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         gameSnapshot={whichSnapshot(p2.places.guestCardZone.id)}
                         player={playerTwo}
                         registerPlaceOffset={registerPlaceOffset}
-                        alignment="top-right"
+                        alignment="top-left align-start"
                     />
                     <div className="grid-item center-column align-start">
                         {/* <button onClick={testUpdate}></button> */}

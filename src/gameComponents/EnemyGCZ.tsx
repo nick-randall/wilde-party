@@ -2,17 +2,14 @@ import { useSelector } from "react-redux";
 import {
     dimensionConstants,
     getCardGroupStyles,
-    getCardStyleValuesFromPlaceAndPlayer,
 } from "../helperFunctions/getCardStyles";
-import Card from "./Card";
 import { RootState } from "../redux/store";
-import AnimatedCard from "./AnimatedCard";
 import {
     getCardGroupsObjs,
     getCardRowShapeOnDraggedOver,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
-import NewCardGroup from "./NewCardGroup";
+import AnimatedCardGroup from "./AnimatedCardGroup";
 
 interface EnemyGCZProps {
     player: number;
@@ -25,7 +22,7 @@ interface EnemyGCZProps {
 }
 
 const EnemyGCZ = (props: EnemyGCZProps) => {
-    const { id, gameSnapshot, alignment, player, registerPlaceOffset } = props;
+    const { id, gameSnapshot, player, registerPlaceOffset } = props;
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
 
     const animations = activeAnimation?.animations ?? [];
@@ -38,35 +35,36 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
     const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
     cardRowShape.unshift(0);
 
-    const styles = getCardStyleValuesFromPlaceAndPlayer("guestCardZone", player, gameSnapshot);
+    
+
     return (
-        <div className={`grid-item ${alignment}`} ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
-            {cardRow.map((card, index) =>
-                !animationCardIds.includes(card.id) ? (
+        <div  ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
+            {cardRow.map((cardGroup, index) =>{
+               const animated: { [key: number]: boolean } = {};
+               cardGroup.cards.forEach((c) => {
+                   animated[c.id] = animationCardIds.includes(c.id);
+               });
+               const allAreAnimated = Object.values(animated).every((a) => a);
+               const noneAreAnimated = Object.values(animated).every((a) => !a);
+               if (!allAreAnimated && !noneAreAnimated) {
+                   throw new Error("Some cards in CardGroup are animated and some are not!!!");
+               }
+                return !animationCardIds.includes(cardGroup.id) ? (
                     <EnemyCardGroup
-                        key={card.id}
+                        key={cardGroup.id}
                         cardGroup={cardRow[index]}
                         physicalIndex={index}
                     />
                 ) : (
-                    <AnimatedCard
-                        key={card.id}
-                        id={card.id}
-                        currAnimations={animations.filter(
-                            (a) => a.cardId === card.id && a.placeId === id
-                        )}
-                        imageName={card.cards[0].imageName}
-                        gameSnapshot={gameSnapshot}
+                    <AnimatedCardGroup 
+                      cardGroup={cardRow[index]}
+                      currAnimations={animations.filter((a) =>
+                        cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === id
+                    )}
+                    gameSnapshot={gameSnapshot}
                     />
-                )
+                )}
             )}
-            {/* <div style={{ top: styles.cardHeight / 2, position: "absolute" }}>
-        {enchantmentsRowCards.map(card => (
-          <div key={card.id} style={{ left: card.index * styles.left, position: "absolute" }}>
-            <Card id={card.id} index={card.index} imageName={card.imageName} />
-          </div>
-        ))}
-      </div> */}
         </div>
     );
 };
@@ -81,7 +79,7 @@ interface EnemyCardGroupProps {
 const EnemyCardGroup = (props: EnemyCardGroupProps) => {
     const { cardGroup, physicalIndex } = props;
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+    const { cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
         physicalIndex,
         currSnapshot

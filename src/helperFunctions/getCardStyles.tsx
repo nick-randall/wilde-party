@@ -1,5 +1,5 @@
 import { CSSProperties } from "styled-components";
-import { CardCSSMap } from "../animations/animationHelperFunctions";
+import { CardCSSMap, getCardName } from "../animations/animationHelperFunctions";
 import { getNumCards, locateCard } from "./locateFunctions";
 import store from "../redux/store";
 import { getCardGroupsObjs, getCumulativeWidths } from "./groupGCZCards";
@@ -32,21 +32,25 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
         placeType !== "deck" && placeType !== "discardPile" && index > -1
             ? cardLeftSpread * index
             : 0;
-
+    const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
+    let top = cardTopSpread * index;
+    // This part is for the guestCardZone, to ensure for example, that a card coming after a zwilling card group is not 
+    // placed two cards to the right, but only one, since a zwilling card group is made of two cards but only one card wide.
     if (place === "guestCardZone" && player !== null && index > -1) {
         const card = gameSnapshot.players[player].places[placeType].cards[index];
-
-        const cardRow = gameSnapshot.players[player].places[placeType].cards;
-        const cardGroupObjs = getCardGroupsObjs(cardRow);
-        const cardGroupIndex = cardGroupObjs.findIndex((cardGroup) => cardGroup.id === card.id);
-
+        const GCZCards = gameSnapshot.players[player].places[placeType].cards;
+        const cardGroupObjs = getCardGroupsObjs(GCZCards);
+        const cardGroupIndex = cardGroupObjs.findIndex((cardGroup) => cardGroup.cards.map(c => c.id).includes(card.id));
         const widthMap = getCumulativeWidths(cardGroupObjs);
-
         left = widthMap[cardGroupIndex] * tableCardWidth;
+
+        if(getCardName(card) === "zwilling") {
+            top = tableCardHeight / 2;
+        }
     }
 
     const handCardLeftSpread = dimensionConstants.MIN_HAND_CARD_LEFT_SPREAD;
-    const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
+
     const handCardRotation = 10 * index - (numCards / 2 - 0.5) * 10;
 
     const tableCardRotate = 0;
@@ -59,7 +63,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
         cardWidth: tableCardWidth,
         zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
         left,
-        top: cardTopSpread * index,
+        top,
         rotate: tableCardRotate,
         rotateY: tableCardRotateY,
         boxShadow: dimensionConstants.TABLE_CARD_SHADOW,

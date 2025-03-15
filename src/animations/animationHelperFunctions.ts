@@ -1,4 +1,5 @@
 import { dimensionConstants } from "../helperFunctions/getCardStyles";
+import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 import { Offset } from "./getOffset";
 export interface CardCSSMap {
     "z-index": string;
@@ -66,3 +67,17 @@ export const getPlayerHandOffset = (numCards: number) => {
     return offset;
     return 0;
 };
+
+export const getCardName = (card: GameCard) => {
+    const re = /[a-z_]+/;
+    const result = re.exec(card.imageName);
+    if (result) {
+        return result[0];
+    }
+    return "";
+
+}
+
+export const getCardGroupId = (cardGroup: NewCardGroupObj) => {
+    return cardGroup.cards[0].id + 100000;
+}
