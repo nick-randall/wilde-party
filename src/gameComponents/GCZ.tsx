@@ -73,6 +73,7 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
                     >
                         {cardRow.map((cardGroup, index) => (
                             <NewCardGroup
+                                key={cardGroup.id+"-"+index}
                                 cardGroup={cardGroup}
                                 cardGroupIndex={index}
                                 physicalIndex={cardRowShape[index]}

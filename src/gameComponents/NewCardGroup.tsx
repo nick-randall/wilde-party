@@ -71,8 +71,9 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
             <AnimatedCardGroup
                 key={cardGroup.id}
                 cardGroup={cardGroup}
-                currAnimations={animations.filter((a) =>
-                    cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === placeId
+                currAnimations={animations.filter(
+                    (a) =>
+                        cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === placeId
                 )}
                 gameSnapshot={currSnapshot}
             />
@@ -85,7 +86,11 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 {(d) => (
                     <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
                         {(drop) => (
-                            <div {...drop.droppableProps} ref={drop.innerRef}>
+                            <div
+                                {...drop.droppableProps}
+                                ref={drop.innerRef}
+                                key={cardGroup.cards[0].id + "droppable"}
+                            >
                                 <img
                                     {...d.draggableProps}
                                     ref={d.innerRef}
@@ -100,7 +105,6 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                                         ...d.draggableProps.style,
                                         borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                                     }}
-                                    key={cardGroup.cards[0].id}
                                 />
                                 {ghostCard && draggedHandCard && (
                                     <GhostCard

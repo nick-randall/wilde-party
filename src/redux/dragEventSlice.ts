@@ -90,9 +90,9 @@ export const dragEventSlice = createSlice({
                 (e) => e.id === id
             );
         },
-        SET_DRAGGABLE_DATA: (state, action: PayloadAction<DroppableData>) => {
-            console.log(action.payload);
-            state.droppableData = action.payload;
+        SET_DRAGGABLE_DATA: (state, action: PayloadAction<DraggableData>) => {
+            console.log("setting draggable data:",action.payload);
+            state.draggableData = action.payload;
         },
         START_REARRANGING: (state, action: PayloadAction<SimpleRearrangingData>) => {
             console.log(action.payload);

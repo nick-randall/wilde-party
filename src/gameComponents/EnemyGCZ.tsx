@@ -1,8 +1,5 @@
 import { useSelector } from "react-redux";
-import {
-    dimensionConstants,
-    getCardGroupStyles,
-} from "../helperFunctions/getCardStyles";
+import { dimensionConstants, getCardGroupStyles } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
 import {
     getCardGroupsObjs,
@@ -35,20 +32,18 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
     const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
     cardRowShape.unshift(0);
 
-    
-
     return (
-        <div  ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
-            {cardRow.map((cardGroup, index) =>{
-               const animated: { [key: number]: boolean } = {};
-               cardGroup.cards.forEach((c) => {
-                   animated[c.id] = animationCardIds.includes(c.id);
-               });
-               const allAreAnimated = Object.values(animated).every((a) => a);
-               const noneAreAnimated = Object.values(animated).every((a) => !a);
-               if (!allAreAnimated && !noneAreAnimated) {
-                   throw new Error("Some cards in CardGroup are animated and some are not!!!");
-               }
+        <div ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>
+            {cardRow.map((cardGroup, index) => {
+                const animated: { [key: number]: boolean } = {};
+                cardGroup.cards.forEach((c) => {
+                    animated[c.id] = animationCardIds.includes(c.id);
+                });
+                const allAreAnimated = Object.values(animated).every((a) => a);
+                const noneAreAnimated = Object.values(animated).every((a) => !a);
+                if (!allAreAnimated && !noneAreAnimated) {
+                    throw new Error("Some cards in CardGroup are animated and some are not!!!");
+                }
                 return !animationCardIds.includes(cardGroup.id) ? (
                     <EnemyCardGroup
                         key={cardGroup.id}
@@ -56,15 +51,18 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
                         physicalIndex={index}
                     />
                 ) : (
-                    <AnimatedCardGroup 
-                      cardGroup={cardRow[index]}
-                      currAnimations={animations.filter((a) =>
-                        cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === id
-                    )}
-                    gameSnapshot={gameSnapshot}
+                    <AnimatedCardGroup
+                        key={cardRow[index].id}
+                        cardGroup={cardRow[index]}
+                        currAnimations={animations.filter(
+                            (a) =>
+                                cardGroup.cards.map((c) => c.id).includes(a.cardId) &&
+                                a.placeId === id
+                        )}
+                        gameSnapshot={gameSnapshot}
                     />
-                )}
-            )}
+                );
+            })}
         </div>
     );
 };
@@ -79,11 +77,7 @@ interface EnemyCardGroupProps {
 const EnemyCardGroup = (props: EnemyCardGroupProps) => {
     const { cardGroup, physicalIndex } = props;
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { cardWidth, cardHeight } = getCardGroupStyles(
-        cardGroup,
-        physicalIndex,
-        currSnapshot
-    );
+    const { cardWidth, cardHeight } = getCardGroupStyles(cardGroup, physicalIndex, currSnapshot);
     if (cardGroup.cards.length === 1) {
         return (
             <img

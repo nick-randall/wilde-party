@@ -134,10 +134,10 @@ export const onDragStart = ({
     store.dispatch(SET_DRAGGABLE_DATA(draggableData));
     // if (isHandCard(droppableData.id, store.getState().gameSnapshotState.currSnapshot)) {
     const currSnapshot = store.getState().gameSnapshotState.currSnapshot;
+    console.log("draggableData", store.getState().dragEventState.draggableData);
     if (droppableData.placeType === "hand") {
         store.dispatch(SET_HIGHLIGHTS(currSnapshot));
-    }
-    else {
+    } else {
         store.dispatch(
             START_REARRANGING({
                 placeId: droppableData.id,
@@ -151,19 +151,28 @@ export const onDragStart = ({
 export const onDragUpdate = (dragUpdate: DragUpdate) => {
     let draggedOverData: DroppableData | undefined;
     if (dragUpdate.destination) {
-      const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
-      const { id, type,  enchantableNeighbours, placeType, player } =
-          droppableData;
-      let { calculatedIndex } = droppableData;
-      if(type === "place" && placeType === "guestCardZone" && player !== undefined) { 
-        const GCZCards = store.getState().gameSnapshotState.currSnapshot.players[player].places.guestCardZone.cards;
-        const cardRow = getCardGroupsObjs(GCZCards);
-        const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
-        cardRowShape.unshift(0);
-        calculatedIndex = cardRowShape[dragUpdate.destination.index];
-      }
+        const droppableData: DroppableData = JSON.parse(dragUpdate.destination.droppableId);
+        const { id, type, enchantableNeighbours, placeType, player } = droppableData;
+        let { calculatedIndex } = droppableData;
+        if (type === "place" && placeType === "guestCardZone" && player !== undefined) {
+            const GCZCards =
+                store.getState().gameSnapshotState.currSnapshot.players[player].places.guestCardZone
+                    .cards;
+            const cardRow = getCardGroupsObjs(GCZCards);
+            const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
+            cardRowShape.unshift(0);
+            calculatedIndex = cardRowShape[dragUpdate.destination.index];
+        }
         const index = dragUpdate.destination.index;
-        draggedOverData = { type, id, index, calculatedIndex, enchantableNeighbours, placeType, player };
+        draggedOverData = {
+            type,
+            id,
+            index,
+            calculatedIndex,
+            enchantableNeighbours,
+            placeType,
+            player,
+        };
     } else {
         draggedOverData = undefined;
     }
@@ -181,7 +190,6 @@ export const onDragEnd = (d: DropResult) => {
     const { source, destination } = d;
     const draggedOverData = store.getState().dragEventState.draggedOver;
 
-
     if (destination && draggedOverData) {
         const draggableData = store.getState().dragEventState.draggableData;
         const sourceData: DroppableData = JSON.parse(source.droppableId);
@@ -197,15 +205,23 @@ export const onDragEnd = (d: DropResult) => {
         const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
         const draggedHandCard = store.getState().dragEventState.draggedHandCard;
         const numDraggedElements = draggableData?.type === "cardGroup" ? draggableData.numCards : 1;
+
+        if (sourceData.id === destinationData.id && draggedOverData) {
+            handleRearrange(sourceData, draggedOverData, gameSnapshot, draggableData);
+            return;
+        }
+
         if (!draggedHandCard) return; // What about rearrange?
         const { actionResultsMap } = gameSnapshot;
+        if (!actionResultsMap)
+            throw Error("No action results map in gameSnapshot's actionResultsMap");
         const actionResults = actionResultsMap[draggedHandCard.id];
         const actionResult = actionResults.find(
             (res) => res.snapshotUpdateData.targetId === destinationId
         );
 
         if (!actionResult) throw Error("No action result found for this drop!");
-        const snapshotUpdater = new SnapshotUpdater(gameSnapshot, actionResult.snapshotUpdateData);
+        const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
 
         if (draggedOverData.type === "cardGroup") {
             const { calculatedIndex, id, placeType, player } = destinationData;
@@ -221,7 +237,6 @@ export const onDragEnd = (d: DropResult) => {
                 source: {
                     placeId: sourceData.id,
                     index: source.index,
-                    numDraggedElements: 1,
                 },
             });
             const snapshotUpdateData: SnapshotUpdateData = {
@@ -232,14 +247,21 @@ export const onDragEnd = (d: DropResult) => {
             snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
         }
         if (destResult.type === "place") {
-          console.log("dropping at place. calculatedIndex: ", draggedOverData.calculatedIndex, "index: ", draggedOverData.index);
-            if(draggedOverData.index === undefined) throw Error("No index in draggedOverData");
+            console.log(
+                "dropping at place. calculatedIndex: ",
+                draggedOverData.calculatedIndex,
+                "index: ",
+                draggedOverData.index
+            );
+            if (draggedOverData.index === undefined) throw Error("No index in draggedOverData");
             snapshotUpdater.addChange({
-                destination: { placeId: destinationId, index: draggedOverData.calculatedIndex ?? 0 },
+                destination: {
+                    placeId: destinationId,
+                    index: draggedOverData.calculatedIndex ?? 0,
+                },
                 source: {
                     placeId: sourceData.id,
                     index: sourceData.calculatedIndex ?? source.index,
-                    numDraggedElements: 1,
                 },
             });
             const snapshotUpdateData: SnapshotUpdateData = {
@@ -252,7 +274,6 @@ export const onDragEnd = (d: DropResult) => {
 
         snapshotUpdater.begin();
         const updatedSnapshot = snapshotUpdater.getNewSnapshot();
-        console.log("updatedSnapshotData", updatedSnapshot.snapshotUpdateData);
         const { gameData } = store.getState().userGameState;
         if (!gameData) throw Error("No game data in userGameState");
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
@@ -261,3 +282,43 @@ export const onDragEnd = (d: DropResult) => {
     }
     store.dispatch(END_DRAG_CLEANUP());
 };
+function handleRearrange(
+    sourceData: DroppableData,
+    draggedOverData: DroppableData,
+    gameSnapshot: GameSnapshot,
+    draggableData?: DraggableData
+) {
+    const rearrangingData = store.getState().dragEventState.rearrangingData;
+    const sourceIndex = rearrangingData.sourceIndex;
+    const numDraggedElements = draggableData?.numCards || 1;
+    if (sourceData.placeType === undefined || sourceIndex === undefined)
+        throw Error("No placeType in sourceData");
+    const playedCards = gameSnapshot.players[0].places[sourceData.placeType].cards.slice(
+        sourceIndex,
+        sourceIndex + numDraggedElements
+    );
+    const snapshotUpdateData: SnapshotUpdateData = {
+        type: "rearrangingTablePlace",
+        playedCardIds: playedCards.map((c) => c.id),
+        targetId: draggedOverData.id,
+    };
+
+    const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+    snapshotUpdater.addChangeWithMultipleCards(
+        {
+            source: { placeId: sourceData.id, index: sourceIndex },
+            destination: { placeId: sourceData.id, index: draggedOverData.calculatedIndex ?? 0 },
+        },
+        numDraggedElements
+    );
+    snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
+    snapshotUpdater.begin();
+
+    const updatedSnapshot = snapshotUpdater.getNewSnapshot();
+
+    const { gameData } = store.getState().userGameState;
+    if (!gameData) throw Error("No game data in userGameState");
+    store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
+    store.dispatch(sendGameMessage(gameData.id, updatedSnapshot));
+    store.dispatch(END_DRAG_CLEANUP());
+}

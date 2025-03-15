@@ -530,6 +530,7 @@ export const createRearrangeAnimation = (args: {
 
     const moveOtherCardsSteps = [];
     const moveOtherCardsTracks = [];
+    const movedThisCardTracks = [];
 
     if (placeType === "guestCardZone") {
         const newCardRow = newSnapshot.players[player].places[placeType].cards;
@@ -560,11 +561,11 @@ export const createRearrangeAnimation = (args: {
                         fromStyles: getCardCSS(cardGroupsToMove[i].id, oldSnapshot),
                         toOffset: new Offset(place),
                         toStyles: getCardCSS(cardGroupsToMove[i].id, newSnapshot),
-                        zeroOffset: "fromOffset",
+                        zeroOffset: "toOffset",
                     });
                     moveOtherCardsSteps.push(moveOtherCardLeftStep);
                     const moveOtherCardsTrack = new AnimationTrack({
-                        cardId: cardIds[0],
+                        cardId: cardGroupsToMove[i].cards[j].id,
                         homePlaceId: placeId,
                         steps: moveOtherCardsSteps,
                     });
@@ -572,44 +573,67 @@ export const createRearrangeAnimation = (args: {
                 }
             }
         }
+
+        const cardGroup = newCardGroupObjs[newCardGroupIndex];
+
+        for (let i = 0; i < cardGroup.cards.length; i++) {
+          const cardId = cardGroup.cards[i].id;
+            const movedThisCardStep = new TableToTable({
+                duration: 800,
+                fromOffset: new Offset(place),
+                fromStyles: getCardCSS(cardId, oldSnapshot),
+                toOffset: new Offset(place),
+                toStyles: getCardCSS(cardId, newSnapshot),
+                zeroOffset: "toOffset",
+            });
+            const movedThisCardTrack = new AnimationTrack({
+                cardId: cardId,
+                homePlaceId: placeId,
+                steps: [movedThisCardStep],
+            });
+            movedThisCardTracks.push(movedThisCardTrack);
+        }
     } else {
-        const prevIndex = oldCards.findIndex((c) => cardIds.includes(c.id));
-        const newIndex = newCards.findIndex((c) => cardIds.includes(c.id));
-        const movedRight = prevIndex < newIndex;
+        throw new Error("Only GCZ is supported for rearranging for now");
 
-        const cardsToMove = [];
-        for (let i = 0; i < newCards.length; i++) {
-            if (movedRight && i >= prevIndex && i < newIndex) {
-                cardsToMove.push(newCards[i]);
-            }
-            if (!movedRight && i <= prevIndex && i > newIndex) {
-                cardsToMove.push(newCards[i]);
-            }
-        }
+        // const prevIndex = oldCards.findIndex((c) => cardIds.includes(c.id));
+        // const newIndex = newCards.findIndex((c) => cardIds.includes(c.id));
+        // const movedRight = prevIndex < newIndex;
 
-        if (movedRight) {
-            for (let i = 0; i < cardsToMove.length; i++) {
-                const moveOtherCardLeftStep = new TableToTable({
-                    duration: 800,
-                    fromOffset: new Offset(place),
-                    fromStyles: getCardCSS(cardsToMove[i].id, oldSnapshot),
-                    toOffset: new Offset(place),
-                    toStyles: getCardCSS(cardsToMove[i].id, newSnapshot),
-                    zeroOffset: "fromOffset",
-                });
-                moveOtherCardsSteps.push(moveOtherCardLeftStep);
-                const moveOtherCardsTrack = new AnimationTrack({
-                    cardId: cardIds[0],
-                    homePlaceId: placeId,
-                    steps: moveOtherCardsSteps,
-                });
-                moveOtherCardsTracks.push(moveOtherCardsTrack);
-            }
-        }
+        // const cardsToMove = [];
+        // for (let i = 0; i < newCards.length; i++) {
+        //     if (movedRight && i >= prevIndex && i < newIndex) {
+        //         cardsToMove.push(newCards[i]);
+        //     }
+        //     if (!movedRight && i <= prevIndex && i > newIndex) {
+        //         cardsToMove.push(newCards[i]);
+        //     }
+        // }
+
+        // if (movedRight) {
+        //     for (let i = 0; i < cardsToMove.length; i++) {
+        //         const moveOtherCardLeftStep = new TableToTable({
+        //             duration: 800,
+        //             fromOffset: new Offset(place),
+        //             fromStyles: getCardCSS(cardsToMove[i].id, oldSnapshot),
+        //             toOffset: new Offset(place),
+        //             toStyles: getCardCSS(cardsToMove[i].id, newSnapshot),
+        //             zeroOffset: "toOffset",
+        //         });
+        //         moveOtherCardsSteps.push(moveOtherCardLeftStep);
+        //         const moveOtherCardsTrack = new AnimationTrack({
+        //             cardId: cardsToMove[i].id,
+        //             homePlaceId: placeId,
+        //             steps: moveOtherCardsSteps,
+        //         });
+        //         moveOtherCardsTracks.push(moveOtherCardsTrack);
+        //     }
+        // }
     }
+
     const timeline = new MyAnimationTimeline({
         showPrevSnapshot: [placeId],
-        animationTracks: [...moveOtherCardsTracks],
+        animationTracks: [...moveOtherCardsTracks, ...movedThisCardTracks],
     });
     return timeline.getActiveAnimation();
 };
