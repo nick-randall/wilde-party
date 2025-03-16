@@ -525,115 +525,43 @@ export const createRearrangeAnimation = (args: {
     }
     const { placeType, player } = locateCard(cardIds[0], oldSnapshot);
     if (player === null) throw new Error("Player cannot be null");
-    const oldCards = oldSnapshot.players[player].places[placeType].cards;
-    const newCards = newSnapshot.players[player].places[placeType].cards;
 
-    const moveOtherCardsSteps = [];
-    const moveOtherCardsTracks = [];
-    const movedThisCardTracks = [];
+    const moveCardsTracks = [];
 
     if (placeType === "guestCardZone") {
         const newCardRow = newSnapshot.players[player].places[placeType].cards;
-        const prevCardRow = oldSnapshot.players[player].places[placeType].cards;
+        const oldCardRow = oldSnapshot.players[player].places[placeType].cards;
         const newCardGroupObjs = getCardGroupsObjs(newCardRow);
-        const prevCardGroupObjs = getCardGroupsObjs(prevCardRow);
-        const prevCardGroupIndex = prevCardGroupObjs.findIndex((c) => c.id === cardIds[0]);
+        const oldCardGroupObjs = getCardGroupsObjs(oldCardRow);
+        for (let i = 0; i < newCardGroupObjs.length; i++) {
+            const cardGroupNew = oldCardGroupObjs.find((c) => c.id === newCardGroupObjs[i].id);
+            if (!cardGroupNew) throw new Error("Card group not found");
+            for (let j = 0; j < cardGroupNew.cards.length; j++) {
+                const card = cardGroupNew.cards[j];
+                const moveCardStep = new TableToTable({
+                    duration: 500,
+                    fromOffset: new Offset(place),
+                    fromStyles: getCardCSS(card.id, oldSnapshot),
+                    toOffset: new Offset(place),
+                    toStyles: getCardCSS(card.id, newSnapshot),
+                    zeroOffset: "toOffset",
+                });
 
-        const newCardGroupIndex = newCardGroupObjs.findIndex((c) => c.id === cardIds[0]);
-        const movedRight = prevCardGroupIndex < newCardGroupIndex;
-
-        const cardGroupsToMove = [];
-        for (let i = 0; i < newCardRow.length; i++) {
-            if (movedRight && i >= prevCardGroupIndex && i < newCardGroupIndex) {
-                cardGroupsToMove.push(newCardGroupObjs[i]);
+                const moveCardTrack = new AnimationTrack({
+                    cardId: card.id,
+                    homePlaceId: placeId,
+                    steps: [moveCardStep],
+                });
+                moveCardsTracks.push(moveCardTrack);
             }
-            if (!movedRight && i <= prevCardGroupIndex && i > newCardGroupIndex) {
-                cardGroupsToMove.push(newCardGroupObjs[i]);
-            }
-        }
-
-        if (movedRight) {
-            for (let i = 0; i < cardGroupsToMove.length; i++) {
-                for (let j = 0; j < cardGroupsToMove[i].cards.length; j++) {
-                    const moveOtherCardLeftStep = new TableToTable({
-                        duration: 800,
-                        fromOffset: new Offset(place),
-                        fromStyles: getCardCSS(cardGroupsToMove[i].id, oldSnapshot),
-                        toOffset: new Offset(place),
-                        toStyles: getCardCSS(cardGroupsToMove[i].id, newSnapshot),
-                        zeroOffset: "toOffset",
-                    });
-                    moveOtherCardsSteps.push(moveOtherCardLeftStep);
-                    const moveOtherCardsTrack = new AnimationTrack({
-                        cardId: cardGroupsToMove[i].cards[j].id,
-                        homePlaceId: placeId,
-                        steps: moveOtherCardsSteps,
-                    });
-                    moveOtherCardsTracks.push(moveOtherCardsTrack);
-                }
-            }
-        }
-
-        const cardGroup = newCardGroupObjs[newCardGroupIndex];
-
-        for (let i = 0; i < cardGroup.cards.length; i++) {
-          const cardId = cardGroup.cards[i].id;
-            const movedThisCardStep = new TableToTable({
-                duration: 800,
-                fromOffset: new Offset(place),
-                fromStyles: getCardCSS(cardId, oldSnapshot),
-                toOffset: new Offset(place),
-                toStyles: getCardCSS(cardId, newSnapshot),
-                zeroOffset: "toOffset",
-            });
-            const movedThisCardTrack = new AnimationTrack({
-                cardId: cardId,
-                homePlaceId: placeId,
-                steps: [movedThisCardStep],
-            });
-            movedThisCardTracks.push(movedThisCardTrack);
         }
     } else {
         throw new Error("Only GCZ is supported for rearranging for now");
-
-        // const prevIndex = oldCards.findIndex((c) => cardIds.includes(c.id));
-        // const newIndex = newCards.findIndex((c) => cardIds.includes(c.id));
-        // const movedRight = prevIndex < newIndex;
-
-        // const cardsToMove = [];
-        // for (let i = 0; i < newCards.length; i++) {
-        //     if (movedRight && i >= prevIndex && i < newIndex) {
-        //         cardsToMove.push(newCards[i]);
-        //     }
-        //     if (!movedRight && i <= prevIndex && i > newIndex) {
-        //         cardsToMove.push(newCards[i]);
-        //     }
-        // }
-
-        // if (movedRight) {
-        //     for (let i = 0; i < cardsToMove.length; i++) {
-        //         const moveOtherCardLeftStep = new TableToTable({
-        //             duration: 800,
-        //             fromOffset: new Offset(place),
-        //             fromStyles: getCardCSS(cardsToMove[i].id, oldSnapshot),
-        //             toOffset: new Offset(place),
-        //             toStyles: getCardCSS(cardsToMove[i].id, newSnapshot),
-        //             zeroOffset: "toOffset",
-        //         });
-        //         moveOtherCardsSteps.push(moveOtherCardLeftStep);
-        //         const moveOtherCardsTrack = new AnimationTrack({
-        //             cardId: cardsToMove[i].id,
-        //             homePlaceId: placeId,
-        //             steps: moveOtherCardsSteps,
-        //         });
-        //         moveOtherCardsTracks.push(moveOtherCardsTrack);
-        //     }
-        // }
     }
 
     const timeline = new MyAnimationTimeline({
-        showPrevSnapshot: [placeId],
-        animationTracks: [...moveOtherCardsTracks, ...movedThisCardTracks],
+        showPrevSnapshot: [],
+        animationTracks: [...moveCardsTracks],
     });
     return timeline.getActiveAnimation();
 };
