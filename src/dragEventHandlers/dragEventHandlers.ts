@@ -132,16 +132,14 @@ export const onDragStart = ({
     const draggableData: DraggableData = JSON.parse(draggableId);
     const droppableData: DroppableData = JSON.parse(source.droppableId);
     store.dispatch(SET_DRAGGABLE_DATA(draggableData));
-    // if (isHandCard(droppableData.id, store.getState().gameSnapshotState.currSnapshot)) {
     const currSnapshot = store.getState().gameSnapshotState.currSnapshot;
-    console.log("draggableData", store.getState().dragEventState.draggableData);
     if (droppableData.placeType === "hand") {
         store.dispatch(SET_HIGHLIGHTS(currSnapshot));
     } else {
         store.dispatch(
             START_REARRANGING({
                 placeId: droppableData.id,
-                sourceIndex: droppableData.calculatedIndex ?? source.index,
+                sourceIndex: source.index,
                 draggedId: draggableData.id,
             })
         );
@@ -194,9 +192,7 @@ export const onDragEnd = (d: DropResult) => {
         const draggableData = store.getState().dragEventState.draggableData;
         const sourceData: DroppableData = JSON.parse(source.droppableId);
         const destinationData: DroppableData = JSON.parse(destination.droppableId);
-        const { type: sourceType, id: sourceId } = sourceData;
         const { type: destinationType, id: destinationId } = destinationData;
-        const sourceResult = { id: sourceId, type: sourceType, index: source.index };
         const destResult = { id: destinationId, type: destinationType, index: destination.index };
         // if (isRearrange(d)) store.dispatch(REARRANGE({ source: sourceResult, destination: destResult }));
         // else if (isEnchant(d, gameSnapshot)) store.dispatch(enchantThunk({ source: d.source, destination: d.destination }));
@@ -289,11 +285,18 @@ function handleRearrange(
     draggableData?: DraggableData
 ) {
     const rearrangingData = store.getState().dragEventState.rearrangingData;
-    const sourceIndex = rearrangingData.sourceIndex;
     const numDraggedElements = draggableData?.numCards || 1;
-    if (sourceData.placeType === undefined || sourceIndex === undefined)
-        throw Error("No placeType in sourceData");
-    const playedCards = gameSnapshot.players[0].places[sourceData.placeType].cards.slice(
+    const { placeType, player } = locatePlace(sourceData.id, gameSnapshot);
+
+    // Okay I'm doing what I swore I wouldn't -- solve the sourceIndex by re-creating the cardRowShape
+    if (placeType !== "guestCardZone" || player === null) {
+        throw Error("Not a guestCardZone or player not found");
+    }
+    const cardRow = getCardGroupsObjs(gameSnapshot.players[player].places.guestCardZone.cards);
+    const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
+    cardRowShape.unshift(0);
+    const sourceIndex = cardRowShape[rearrangingData.sourceIndex];
+    const playedCards = gameSnapshot.players[player].places[placeType].cards.slice(
         sourceIndex,
         sourceIndex + numDraggedElements
     );

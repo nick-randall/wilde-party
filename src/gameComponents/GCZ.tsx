@@ -3,6 +3,7 @@ import { RootState } from "../redux/store";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
+    getCardRowShapeOnDraggedOver,
     getCardRowShapeOnRearrange,
     getCumulativeWidths,
     NewCardGroupObj,
@@ -39,7 +40,7 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
     const cardRowShape =
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
-            : getCumulativeWidths(cardRow);
+            : getCardRowShapeOnDraggedOver(cardRow);
     cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
