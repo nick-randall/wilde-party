@@ -13,7 +13,11 @@ import {
 import { Middleware } from "@reduxjs/toolkit";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { sendGameMessage } from "../websocket/websocketActionCreators";
-import { getCardGroupsObjs, getCardRowShapeOnDraggedOver } from "../helperFunctions/groupGCZCards";
+import {
+    getCardGroupsObjs,
+    getCardRowShapeOnDraggedOver,
+    getCardRowShapeOnRearrange,
+} from "../helperFunctions/groupGCZCards";
 
 // export const dragEventMiddleware: Middleware = ({ dispatch }) => {
 //   return (next: AppDispatch) => (action: DragEvent) => {
@@ -224,9 +228,10 @@ export const onDragEnd = (d: DropResult) => {
             let { calculatedIndex } = draggedOverData;
 
             if (!placeType || calculatedIndex === undefined || player === undefined) {
-                throw Error("No place type or calculated Index in CarGroup Droppable Data! ");
+                throw Error("No place type or calculated Index in CardGroup Droppable Data! ");
             }
 
+            // Handle bff placed on the right-hand card of the pair
             if (draggedHandCard.cardType === "bff" && placeType === "guestCardZone") {
                 const { snapshotUpdateData } = actionResult;
                 if (snapshotUpdateData.secondaryCardId !== null) {
@@ -251,14 +256,7 @@ export const onDragEnd = (d: DropResult) => {
                 playedCardIds: [draggedHandCard.id],
             };
             snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
-        }
-        if (destResult.type === "place") {
-            console.log(
-                "dropping at place. calculatedIndex: ",
-                draggedOverData.calculatedIndex,
-                "index: ",
-                draggedOverData.index
-            );
+        } else if (destResult.type === "place") {
             if (draggedOverData.index === undefined) throw Error("No index in draggedOverData");
             snapshotUpdater.addChange({
                 destination: {
@@ -280,6 +278,7 @@ export const onDragEnd = (d: DropResult) => {
 
         snapshotUpdater.begin();
         const updatedSnapshot = snapshotUpdater.getNewSnapshot();
+        const gcz = updatedSnapshot.players[0].places.guestCardZone;
         const { gameData } = store.getState().userGameState;
         if (!gameData) throw Error("No game data in userGameState");
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
@@ -302,10 +301,14 @@ function handleRearrange(
     if (placeType !== "guestCardZone" || player === null) {
         throw Error("Not a guestCardZone or player not found");
     }
+    if (draggedOverData.index === undefined) {
+        throw Error("No dragged over index!");
+    }
     const cardRow = getCardGroupsObjs(gameSnapshot.players[player].places.guestCardZone.cards);
-    const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
-    cardRowShape.unshift(0);
+    const cardRowShape = getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex);
     const sourceIndex = cardRowShape[rearrangingData.sourceIndex];
+    const destinationIndex = cardRowShape[draggedOverData.index];
+
     const playedCards = gameSnapshot.players[player].places[placeType].cards.slice(
         sourceIndex,
         sourceIndex + numDraggedElements
@@ -320,7 +323,7 @@ function handleRearrange(
     snapshotUpdater.addChangeWithMultipleCards(
         {
             source: { placeId: sourceData.id, index: sourceIndex },
-            destination: { placeId: sourceData.id, index: draggedOverData.calculatedIndex ?? 0 },
+            destination: { placeId: sourceData.id, index: destinationIndex },
         },
         numDraggedElements
     );
@@ -328,7 +331,7 @@ function handleRearrange(
     snapshotUpdater.begin();
 
     const updatedSnapshot = snapshotUpdater.getNewSnapshot();
-
+    const gcz = updatedSnapshot.players[0].places.guestCardZone;
     const { gameData } = store.getState().userGameState;
     if (!gameData) throw Error("No game data in userGameState");
     store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });

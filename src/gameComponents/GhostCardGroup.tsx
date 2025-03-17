@@ -1,8 +1,5 @@
 import { useSelector } from "react-redux";
-import {
-    dimensionConstants,
-    getCardStyleValues,
-} from "../helperFunctions/getCardStyles";
+import { dimensionConstants, getCardStyleValues } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
 import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 
@@ -17,6 +14,24 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
     const { cardHeight, cardWidth, left } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
     console.log("ghost card group index: ", index);
 
+    if (ghostCardGroup.cards.length === 1)
+        return (
+            <img
+                src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
+                alt={ghostCardGroup.cards[0].imageName}
+                style={{
+                    left: cardWidth * index,
+                    position: "absolute",
+                    height: cardHeight,
+                    width: cardWidth,
+                    top: 0,
+                    zIndex: 99,
+                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                    WebkitFilter: "grayscale(100%)",
+                    opacity: 0.7,
+                }}
+            />
+        );
     if (ghostCardGroup.cards.length === 2)
         return (
             <ZwillingGhostCardGroup
@@ -25,24 +40,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
                 //  physicalIndex={physicalIndex}
             />
         );
-
-    return (
-        <img
-            src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
-            alt={ghostCardGroup.cards[0].imageName}
-            style={{
-                left: cardWidth * index,
-                position: "absolute",
-                height: cardHeight,
-                width: cardWidth,
-                top: 0,
-                zIndex: 99,
-                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
-                WebkitFilter: "grayscale(100%)",
-                opacity: 0.7,
-            }}
-        />
-    );
+    else return <BFFCardGroup cardGroup={ghostCardGroup} cardGroupIndex={index} />;
 };
 
 interface BFFOrZwillingGhostCardGroup {
