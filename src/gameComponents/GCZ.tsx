@@ -37,6 +37,26 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
 
+    // Figure out which cards are the rightmost enchantable cards
+    const actionResultsMap = gameSnapshot.actionResultsMap;
+    const rightMostEnchantableCardIds: number[] = [];
+    if (actionResultsMap) {
+        for (const cardGroup of cardRow) {
+            const cardGroupId = cardGroup.cards[0].id;
+            const actionResults = Object.values(actionResultsMap)
+                .flat()
+                .filter((actionResult) => {
+                    return actionResult.snapshotUpdateData.targetId === cardGroupId;
+                });
+            if (!actionResults) continue;
+            for (const actionResult of actionResults) {
+                if (actionResult.snapshotUpdateData.secondaryCardId !== null) {
+                    rightMostEnchantableCardIds.push(cardGroupId);
+                }
+            }
+        }
+    }
+
     const cardRowShape =
         rearrangingData.placeId === id
             ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
@@ -74,12 +94,15 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
                     >
                         {cardRow.map((cardGroup, index) => (
                             <NewCardGroup
-                                key={cardGroup.id+"-"+index}
+                                key={cardGroup.id + "-" + index}
                                 cardGroup={cardGroup}
                                 cardGroupIndex={index}
                                 physicalIndex={cardRowShape[index]}
                                 gameSnapshot={gameSnapshot}
                                 placeId={id}
+                                rightMostEnchantable={rightMostEnchantableCardIds.includes(
+                                    cardGroup.id
+                                )}
                             />
                         ))}
                         {provided.placeholder}

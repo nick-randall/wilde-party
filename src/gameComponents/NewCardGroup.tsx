@@ -15,6 +15,7 @@ export interface NewCardGroupProps {
     physicalIndex: number; // how many cards from the left
     gameSnapshot: GameSnapshot;
     placeId: number;
+    rightMostEnchantable: boolean;
     // enchantableNeighbours: EnchantableNeighbour[];
 }
 
@@ -24,13 +25,14 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
     physicalIndex,
     gameSnapshot,
     placeId,
+    rightMostEnchantable,
 }) => {
     const { draggedOver, draggedHandCard, highlights } = useSelector(
         (state: RootState) => state.dragEventState
     );
     const isHighlighted = highlights.includes(cardGroup.id);
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { cardHeight } = getCardGroupStyles(cardGroup, physicalIndex, currSnapshot);
+    const { cardHeight, cardWidth } = getCardGroupStyles(cardGroup, physicalIndex, currSnapshot);
     const draggableData: DraggableData = {
         id: cardGroup.id,
         type: "cardGroup",
@@ -41,7 +43,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
     const droppableData: DroppableData = {
         type: "cardGroup",
         id: cardGroup.id,
-        calculatedIndex: cardGroup.index + 1,
+        calculatedIndex: rightMostEnchantable ? cardGroup.index - 1 : cardGroup.index + 1,
         player: locateCard(cardGroup.id, currSnapshot).player ?? 0,
         placeType: "guestCardZone",
     };
@@ -65,6 +67,12 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
 
     const ghostCardInPlace = draggedOver?.id === cardGroup.id;
     const ghostCard = draggedHandCard && ghostCardInPlace ? draggedHandCard : undefined;
+    let ghostCardOffsetLeft = 0;
+    if (rightMostEnchantable) {
+        ghostCardOffsetLeft = -cardWidth / 2;
+    } else if (ghostCard?.cardType === "bff") {
+        ghostCardOffsetLeft = cardWidth / 2;
+    }
 
     if (allAreAnimated) {
         return (
@@ -113,6 +121,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                                         imageName={draggedHandCard.imageName}
                                         zIndex={0}
                                         offsetTop={cardHeight / 2}
+                                        offsetLeft={ghostCardOffsetLeft}
                                     />
                                 )}
                                 {drop.placeholder}

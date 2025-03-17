@@ -87,29 +87,39 @@ const HandCard = (props: HandCardProps) => {
 
         if (snapshot.dropAnimation) {
             const { curve, duration, moveTo } = snapshot.dropAnimation;
-            let x = pushLeftWhileDragging//moveTo.x;
-            let y = 0;//moveTo.y;
-            if(draggedHandCard?.imageName === "zwilling" && draggedOver) {
-              const cardHeight = getCardStyleValuesFromPlaceAndPlayer(draggedOver.placeType || "guestCardZone", draggedOver.player || 0,  currSnapshot).cardHeight
-              y += cardHeight / 2;
+            let x = pushLeftWhileDragging; //moveTo.x;
+            let y = 0; //moveTo.y;
+            if (draggedHandCard?.imageName === "zwilling" && draggedOver) {
+                const cardHeight = getCardStyleValuesFromPlaceAndPlayer(
+                    draggedOver.placeType || "guestCardZone",
+                    draggedOver.player || 0,
+                    currSnapshot
+                ).cardHeight;
+                y += cardHeight / 2;
             }
-            // if(draggedHandCard?.cardType)
-            //     if (highlightType === "card") {
-            //         if (draggedHandCard && draggedHandCard.cardType === "bff") {
-            //             x = BFFDraggedOverSide === "left" ? -60 : 40;
-            //         } else x = -15;
-            //         y = 60;
-            //     } else if (
-            //         draggedHandCard &&
-            //         (draggedHandCard.cardType === "special" || draggedHandCard.cardType === "unwanted")
-            //     ) {
-            //         x = -15;
-            //         y = -15;
-            //     } else {
-            //         x = cardWidth - 175;
-            //         y = cardHeight - 195;
-            //     }
+            else if (draggedHandCard?.cardType === "bff" && draggedOver) {
+                const {cardHeight, cardWidth} = getCardStyleValuesFromPlaceAndPlayer(
+                    draggedOver.placeType || "guestCardZone",
+                    draggedOver.player || 0,
+                    currSnapshot
+                );
+                y += cardHeight / 2;
 
+                let targetIsRightmostEnchantable = false;
+                const actionResultsMap = currSnapshot.actionResultsMap;
+
+                if (actionResultsMap) {
+                    const actionResults = actionResultsMap[id];
+                    const target = actionResults.find(
+                        (res) =>
+                            res.snapshotUpdateData.targetId === draggedOver.id &&
+                            res.snapshotUpdateData.secondaryCardId !== null
+                    );
+                    if (target) targetIsRightmostEnchantable = true;
+                }
+                x += targetIsRightmostEnchantable ? -cardWidth / 2 : cardWidth / 2;
+                console.log("targetIsRightmostEnchantable", targetIsRightmostEnchantable,"x", x);
+            }
             const translate = `translate(${x}px, ${y}px)`;
             const scale = `scale(${0.83})`;
             // const scale = `scale(1)`;
@@ -158,7 +168,7 @@ const HandCard = (props: HandCardProps) => {
                             // ref={cardRef}
                             // onMouseEnter={onEnter}
                             // onMouseLeave={onLeave}
-                            
+
                             onMouseEnter={() => setShortHover(true)}
                             onMouseLeave={() => setShortHover(false)}
                             id={id.toString()}
