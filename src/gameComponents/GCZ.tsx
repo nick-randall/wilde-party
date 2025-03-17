@@ -3,9 +3,6 @@ import { RootState } from "../redux/store";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
-    getCardRowShapeOnDraggedOver,
-    getCardRowShapeOnRearrange,
-    getCumulativeWidths,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
 import { Droppable } from "react-beautiful-dnd";
@@ -57,11 +54,6 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
         }
     }
 
-    const cardRowShape =
-        rearrangingData.placeId === id
-            ? getCardRowShapeOnRearrange(cardRow, rearrangingData.sourceIndex)
-            : getCardRowShapeOnDraggedOver(cardRow);
-    cardRowShape.unshift(0);
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
     const isHighlighted = highlights.includes(id);

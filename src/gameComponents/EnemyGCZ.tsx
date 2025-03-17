@@ -3,7 +3,6 @@ import { dimensionConstants, getCardGroupStyles } from "../helperFunctions/getCa
 import { RootState } from "../redux/store";
 import {
     getCardGroupsObjs,
-    getCardRowShapeOnDraggedOver,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
 import AnimatedCardGroup from "./AnimatedCardGroup";
@@ -28,9 +27,6 @@ const EnemyGCZ = (props: EnemyGCZProps) => {
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
 
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
-
-    const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
-    cardRowShape.unshift(0);
 
     return (
         <div ref={(el) => registerPlaceOffset(el, id)} style={{ position: "relative" }}>

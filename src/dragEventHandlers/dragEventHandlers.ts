@@ -1,7 +1,6 @@
 import { BeforeCapture, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
-import store, { AppDispatch } from "../redux/store";
-import { addDraggedThunk } from "../redux/thunks";
+import { locatePlace } from "../helperFunctions/locateFunctions";
+import store from "../redux/store";
 import {
     END_DRAG_CLEANUP,
     SET_DRAGGABLE_DATA,
@@ -10,7 +9,6 @@ import {
     START_REARRANGING,
     UPDATE_DRAGGED_OVER,
 } from "../redux/dragEventSlice";
-import { Middleware } from "@reduxjs/toolkit";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { sendGameMessage } from "../websocket/websocketActionCreators";
 import {
@@ -162,7 +160,6 @@ export const onDragUpdate = (dragUpdate: DragUpdate) => {
                     .cards;
             const cardRow = getCardGroupsObjs(GCZCards);
             const cardRowShape = getCardRowShapeOnDraggedOver(cardRow);
-            cardRowShape.unshift(0);
             calculatedIndex = cardRowShape[dragUpdate.destination.index];
         }
         const index = dragUpdate.destination.index;
