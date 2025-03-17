@@ -10,7 +10,7 @@ import AnimatedCardGroup from "./AnimatedCardGroup";
 export interface NewCardGroupProps {
     cardGroup: NewCardGroupObj;
     cardGroupIndex: number;
-    physicalIndex: number; // how many cards from the left
+    // physicalIndex: number; // how many cards from the left
     gameSnapshot: GameSnapshot;
     placeId: number;
     rightMostEnchantable: boolean;
@@ -19,7 +19,6 @@ export interface NewCardGroupProps {
 
 interface BFFOrZwillingCardGroup {
     cardGroup: CardGroupObj;
-    physicalIndex: number;
     draggableId: string;
     cardGroupIndex: number;
 }
@@ -27,7 +26,7 @@ interface BFFOrZwillingCardGroup {
 const NewCardGroup: React.FC<NewCardGroupProps> = ({
     cardGroup,
     cardGroupIndex,
-    physicalIndex,
+    // physicalIndex,
     gameSnapshot,
     placeId,
     rightMostEnchantable,
@@ -36,7 +35,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
         (state: RootState) => state.dragEventState
     );
     const isHighlighted = highlights.includes(cardGroup.id);
-    const { cardHeight, cardWidth } = getCardGroupStyles(cardGroup, physicalIndex, gameSnapshot);
+    const { cardHeight, cardWidth } = getCardGroupStyles(cardGroup, cardGroupIndex, gameSnapshot);
     const draggableData: DraggableData = {
         id: cardGroup.id,
         type: "cardGroup",
@@ -99,7 +98,6 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroup={cardGroup}
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
-                physicalIndex={physicalIndex}
                 draggedHandCard={draggedHandCard}
                 droppableId={droppableId}
                 ghostCard={ghostCard}
@@ -115,7 +113,6 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroup={cardGroup}
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
-                physicalIndex={physicalIndex}
             />
         );
     else
@@ -124,14 +121,12 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroup={cardGroup}
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
-                physicalIndex={physicalIndex}
             />
         );
 };
 
 interface SingleCardGroupProps {
     cardGroup: CardGroupObj;
-    physicalIndex: number;
     draggableId: string;
     cardGroupIndex: number;
     droppableId: string;
@@ -143,7 +138,6 @@ interface SingleCardGroupProps {
 
 const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
     cardGroup,
-    physicalIndex,
     draggableId,
     cardGroupIndex,
     droppableId,
@@ -155,7 +149,7 @@ const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { top, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
-        physicalIndex,
+        cardGroupIndex,
         currSnapshot
     );
     return (
@@ -204,14 +198,13 @@ const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
 
 const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     cardGroup,
-    physicalIndex,
     draggableId,
     cardGroupIndex,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { top, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
-        physicalIndex,
+        cardGroupIndex,
         currSnapshot
     );
 
@@ -267,14 +260,13 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
 
 const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     cardGroup,
-    physicalIndex,
     draggableId,
     cardGroupIndex,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
     const { left, cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
-        physicalIndex,
+        cardGroupIndex,
         currSnapshot
     );
     return (
