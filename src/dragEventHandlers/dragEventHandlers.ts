@@ -220,14 +220,24 @@ export const onDragEnd = (d: DropResult) => {
         const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
 
         if (draggedOverData.type === "cardGroup") {
-            const { calculatedIndex, id, placeType, player } = destinationData;
+            const { id, placeType, player } = destinationData;
+            let { calculatedIndex } = draggedOverData;
 
             if (!placeType || calculatedIndex === undefined || player === undefined) {
                 throw Error("No place type or calculated Index in CarGroup Droppable Data! ");
             }
+
+            if (draggedHandCard.cardType === "bff" && placeType === "guestCardZone") {
+                const { snapshotUpdateData } = actionResult;
+                if (snapshotUpdateData.secondaryCardId !== null) {
+                    calculatedIndex -= 1;
+                }
+            }
+
             const placeId = player
                 ? gameSnapshot.nonPlayerPlaces[placeType].id
                 : gameSnapshot.players[player].places[placeType].id;
+
             snapshotUpdater.addChange({
                 destination: { placeId, index: calculatedIndex },
                 source: {

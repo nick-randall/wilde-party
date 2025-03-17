@@ -121,9 +121,9 @@ const createCardGroupObj = (cardGroupObj: GameCard[], index: number): NewCardGro
   cards: cardGroupObj,
 });
 
-const isBff = (card?: GameCard) => card && card.imageName === "bff";
+const isBff = (card?: GameCard) => card && card.cardType === "bff";
 
-const isZwilling = (card?: GameCard) => card && card.imageName === "zwilling";
+const isZwilling = (card?: GameCard) => card && card.cardType === "enchant";
 
 const isGuestCard = (card?: GameCard) => card && card.cardType === "guest";
 

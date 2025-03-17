@@ -111,7 +111,7 @@ type CardType =
     | "instant"
     | "interrupt"
     | "bff"
-    | "zwilling"
+    | "enchant"
     | "fillCard"
     | "ghostCard"
     | "special";

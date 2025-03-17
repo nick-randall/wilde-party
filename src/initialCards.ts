@@ -86,7 +86,7 @@ export const myHandCards: GameCard[] = [
 
         pointValue: 1,
         imageName: "zwilling",
-        cardType: "zwilling",
+        cardType: "enchant",
         action: {
             targetPlayerType: "self",
             actionType: "enchant",
@@ -118,7 +118,7 @@ export const myHandCards: GameCard[] = [
 
         pointValue: 1,
         imageName: "zwilling",
-        cardType: "zwilling",
+        cardType: "enchant",
         action: {
             actionType: "enchant",
             highlightType: "card",

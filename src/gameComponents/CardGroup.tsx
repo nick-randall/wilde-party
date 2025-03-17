@@ -26,7 +26,7 @@ const CardGroup: React.FC<CardGroupProps> = ({cardGroup, index}) => {
 
   const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
     if (card.cardType === "bff") return { top: cardHeight / 2, left: left / 2 };
-    if (card.cardType === "zwilling") return { top: cardHeight / 2, left: 0 };
+    if (card.cardType === "enchant") return { top: cardHeight / 2, left: 0 };
     if (cardGroupIndex > 0) return { top: 0, left: left };
     else return { top: 0, left: 0 };
   };
