@@ -21,6 +21,14 @@ export const getCardRowShapeOnRearrange = (cardRow: NewCardGroupObj[], sourceInd
   //   pipe(mapSizes, removeSourceIndex(sourceIndex), addZeroAtFirstIndex, getCumulativeSum)(cardGroups);
 };
 
+export const getWidthShapeOnRearrange = (cardRow: NewCardGroupObj[], sourceIndex: number) => {
+  const widths = cardRow.map(cardGroup => cardGroup.width);
+  widths.splice(sourceIndex, 1);
+  widths.unshift(0);
+  return cumulativeSum(widths);
+}
+
+
 // TODO: currently passing the id of the first card in the cardGrouObj
 const createCardGroupObj = (cardGroupObj: GameCard[], index: number): NewCardGroupObj => ({
   id: cardGroupObj[0].id,//`cardGroup${cardGroupObj[0].name}`,
@@ -62,10 +70,6 @@ export const getCardGroupsObjs = (GCZCards: GameCard[]): NewCardGroupObj[] => {
 };
 
 
-
-
-
-
  export type NewCardGroupObj = {
     id: number;
     index: number;
@@ -78,14 +82,7 @@ export const getCardGroupsObjs = (GCZCards: GameCard[]): NewCardGroupObj[] => {
 
 // export const getCardGroupObjsAlt = (GCZCards: GameCard[]): NewCardGroupObj[] => pipe(getCardGroups, filterOutDuplicates, convertArraysToObjs)(GCZCards)
 
-export const getGCZTotalWidth = (GCZCards: GameCard[]) =>
-  GCZCards.filter(card => card.cardType === "guest") // can't i just use .length?
-    .map(_ => 1)
-    .reduce((acc: number, curr) => acc + curr, 0);
-
-export const getGCZNumElementsAt = (GCZCards: GameCard[]) => "a"; //GCZCards.map(e => )
-
-export const getGCZWidthMapFromObjs = (GCZCardObjs: NewCardGroupObj[]) => GCZCardObjs.map(cardGroup => cardGroup.width);
+const getGCZWidthMapFromObjs = (GCZCardObjs: NewCardGroupObj[]) => GCZCardObjs.map(cardGroup => cardGroup.width);
 
 export const getCumulativeWidths = (GCZCardObjs: NewCardGroupObj[]) : number[]=> {
   

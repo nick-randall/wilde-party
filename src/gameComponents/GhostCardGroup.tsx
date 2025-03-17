@@ -4,15 +4,15 @@ import { RootState } from "../redux/store";
 import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 
 export interface GhostCardGroupProps {
-    index: number;
+    physicalIndex: number;
     ghostCardGroup: NewCardGroupObj;
 }
 
 const GhostCardGroup = (props: GhostCardGroupProps) => {
-    const { ghostCardGroup, index } = props;
+    const { ghostCardGroup, physicalIndex } = props;
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { cardHeight, cardWidth, left } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
-    console.log("ghost card group index: ", index);
+    const { cardHeight, cardWidth } = getCardStyleValues(ghostCardGroup.id, currSnapshot);
+    console.log("ghost card group physicalIndex: ", physicalIndex);
 
     if (ghostCardGroup.cards.length === 1)
         return (
@@ -20,7 +20,7 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
                 src={`./images/${ghostCardGroup.cards[0].imageName}.jpg`}
                 alt={ghostCardGroup.cards[0].imageName}
                 style={{
-                    left: cardWidth * index,
+                    left: cardWidth * physicalIndex,
                     position: "absolute",
                     height: cardHeight,
                     width: cardWidth,
@@ -33,35 +33,23 @@ const GhostCardGroup = (props: GhostCardGroupProps) => {
             />
         );
     if (ghostCardGroup.cards.length === 2)
-        return (
-            <ZwillingGhostCardGroup
-                cardGroup={ghostCardGroup}
-                cardGroupIndex={index}
-                //  physicalIndex={physicalIndex}
-            />
-        );
-    else return <BFFCardGroup cardGroup={ghostCardGroup} cardGroupIndex={index} />;
+        return <ZwillingGhostCardGroup cardGroup={ghostCardGroup} physicalIndex={physicalIndex} />;
+    else return <BFFCardGroup cardGroup={ghostCardGroup} physicalIndex={physicalIndex} />;
 };
 
 interface BFFOrZwillingGhostCardGroup {
     cardGroup: CardGroupObj;
-    //  physicalIndex: number;
-    cardGroupIndex: number;
+    physicalIndex: number;
 }
 
 const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
     cardGroup,
-    //  physicalIndex,
-    cardGroupIndex,
+    physicalIndex,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardStyleValues(
-        cardGroup.id,
-        //  physicalIndex,
-        currSnapshot
-    );
+    const { left, cardWidth, cardHeight } = getCardStyleValues(cardGroup.id, currSnapshot);
     return (
-        <div style={{ position: "absolute", left: cardWidth * cardGroupIndex, top: 0 }}>
+        <div style={{ position: "absolute", left: cardWidth * physicalIndex, top: 0 }}>
             <div
                 style={{
                     // height: cardHeight * 1.5,
@@ -105,25 +93,17 @@ const ZwillingGhostCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
     );
 };
 
-const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
-    cardGroup,
-    //  physicalIndex,
-     cardGroupIndex,
-}) => {
+const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({ cardGroup, physicalIndex }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardStyleValues(
+    const { cardWidth, cardHeight } = getCardStyleValues(
         cardGroup.id,
-        //  physicalIndex,
         currSnapshot
     );
     return (
-        <div style={{ position: "absolute", left: cardWidth * cardGroupIndex, top: 0 }}>
+        <div style={{ position: "absolute", left: cardWidth * physicalIndex, top: 0 }}>
             <div
                 style={{
-                    height: cardHeight * 1.5,
-                    width: cardWidth,
-                    left,
-                    position: "absolute",
+                    position: "relative",
                 }}
             >
                 <img
@@ -134,7 +114,7 @@ const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
                         height: cardHeight,
                         width: cardWidth,
                         left: 0,
-                        top: cardHeight / 2,
+                        top: 0,
                         zIndex: 99,
                         borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
                         WebkitFilter: "grayscale(100%)",
@@ -148,7 +128,7 @@ const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
                     style={{
                         position: "absolute",
                         left: cardWidth / 2,
-                        top: 0,
+                        top: cardHeight / 2,
                         height: cardHeight,
                         width: cardWidth,
                         zIndex: 99,
@@ -163,7 +143,7 @@ const BFFCardGroup: React.FC<BFFOrZwillingGhostCardGroup> = ({
                     style={{
                         position: "absolute",
                         left: cardWidth,
-                        top: cardWidth / 2,
+                        top: 0,
                         height: cardHeight,
                         width: cardWidth,
                         zIndex: 99,

@@ -3,6 +3,7 @@ import { RootState } from "../redux/store";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import {
     getCardGroupsObjs,
+    getWidthShapeOnRearrange,
     NewCardGroupObj,
 } from "../helperFunctions/groupGCZCards";
 import { Droppable } from "react-beautiful-dnd";
@@ -29,11 +30,17 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
     );
     const droppableId = JSON.stringify({ type: "place", id, placeType: "guestCardZone", player });
 
-    const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
-    const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
+    // const ghostCardIndex = draggedOver?.id === id ? draggedOver.index : rearrangingData.sourceIndex;
+
     const GCZCards = gameSnapshot.players[player].places.guestCardZone.cards;
     const cardRow: NewCardGroupObj[] = getCardGroupsObjs(GCZCards);
+    const cardWidthShape = getWidthShapeOnRearrange(cardRow, rearrangingData.sourceIndex);
+    const ghostCardIndex =
+        draggedOver?.id === id ? draggedOver.index : cardWidthShape[draggedOver?.index || 0];
 
+    const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
+
+    console.log(cardWidthShape);
     // Figure out which cards are the rightmost enchantable cards
     const actionResultsMap = gameSnapshot.actionResultsMap;
     const rightMostEnchantableCardIds: number[] = [];
@@ -53,7 +60,6 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
             }
         }
     }
-
 
     const ghostCardGroup = cardRow.find((e) => rearrangingData.draggedId === e.id);
     const isHighlighted = highlights.includes(id);
@@ -111,7 +117,10 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
                 />
             )}
             {ghostCardGroup && ghostCardIndex !== undefined && ghostCardIndex !== -1 && (
-                <GhostCardGroup ghostCardGroup={ghostCardGroup} index={ghostCardIndex} />
+                <GhostCardGroup
+                    ghostCardGroup={ghostCardGroup}
+                    physicalIndex={cardWidthShape ? cardWidthShape[ghostCardIndex] : 0}
+                />
             )}
         </div>
     );
