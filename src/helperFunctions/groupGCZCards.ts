@@ -13,6 +13,12 @@ export const getCardRowShapeOnDraggedOver = (cardRow: NewCardGroupObj[]) => {
   return cumulativeSum(sizes);
 };
 
+export const getWidthShapeOnDraggedOver = (cardRow: NewCardGroupObj[]) => {
+  const widths = cardRow.map(cardGroup => cardGroup.width);
+  widths.unshift(0);
+  return cumulativeSum(widths);
+ };
+
 export const getCardRowShapeOnRearrange = (cardRow: NewCardGroupObj[], sourceIndex: number) => {
   const sizes = cardRow.map(cardGroup => cardGroup.size);
   sizes.splice(sourceIndex, 1);

@@ -34,6 +34,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
             : 0;
     const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
     let top = cardTopSpread * index;
+    let zIndex = dimensionConstants.TABLE_CARD_Z_INDEX;
     // This part is for the guestCardZone, to ensure for example, that a card coming after a zwilling card group is not 
     // placed two cards to the right, but only one, since a zwilling card group is made of two cards but only one card wide.
     if (place === "guestCardZone" && player !== null && index > -1) {
@@ -46,6 +47,11 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
 
         if(getCardName(card) === "zwilling") {
             top = tableCardHeight / 2;
+        }
+        if(card.cardType === "bff") {
+           top = tableCardHeight / 2;
+           left += tableCardWidth / 2;
+           zIndex = dimensionConstants.TABLE_CARD_Z_INDEX + 1;
         }
     }
 
@@ -61,7 +67,7 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
     const dimensions: CardDimensions = {
         cardHeight: tableCardHeight,
         cardWidth: tableCardWidth,
-        zIndex: placeType !== "enchantmentsRow" ? 3 : 5,
+        zIndex: zIndex ?? 3,
         left,
         top,
         rotate: tableCardRotate,

@@ -195,17 +195,34 @@ export const createEnchantAnimation = (args: {
             zeroOffset: "toOffset",
         }),
     ];
-    const cardToEnchant = [
-        new NothingHappens(),
-        new NothingHappens(),
-        new AnimationTrackStep({
-            fromOffset: new Offset(targetPlaceOffset),
-            fromStyles: getCardCSS(targetCardId, oldSnapshot),
-            toOffset: new Offset(targetPlaceOffset),
-            toStyles: getCardCSS(targetCardId, newSnapshot),
-            zeroOffset: "fromOffset",
-        }),
-    ];
+    const { placeType: newPlaceType, player } = locateCard(targetCardId, newSnapshot);
+    if (player === null) throw new Error("Player cannot be null");
+    const cardRow = newSnapshot.players[player].places[newPlaceType].cards;
+    const cardGroupObjs = getCardGroupsObjs(cardRow);
+    const cardGroup = cardGroupObjs.find((g) => g.cards.map(c => c.id).includes(targetCardId));
+    if (!cardGroup) throw new Error("Card group not found");
+    const cardsToEnchant = cardGroup.cards.filter(c => c.cardType !== "bff" && c.cardType !== "enchant");
+    const cardsToEnchantTracks = [];
+    for (let i = 0; i < cardsToEnchant.length; i++) {
+        const card = cardsToEnchant[i];
+        const cardToEnchantSteps = [
+            new NothingHappens(),
+            new NothingHappens(),
+            new AnimationTrackStep({
+                fromOffset: new Offset(targetPlaceOffset),
+                fromStyles: getCardCSS(card.id, oldSnapshot),
+                toOffset: new Offset(targetPlaceOffset),
+                toStyles: getCardCSS(card.id, oldSnapshot),
+                zeroOffset: "fromOffset",
+            }),
+        ];
+        const cardToEnchantTrack = new AnimationTrack({
+          cardId: card.id,
+          steps: cardToEnchantSteps,
+          homePlaceId: targetPlaceId,
+      });
+      cardsToEnchantTracks.push(cardToEnchantTrack);
+    }
     const handToMiddleTrack = new AnimationTrack({
         cardId,
         steps: fromHandToMiddleSteps,
@@ -216,14 +233,10 @@ export const createEnchantAnimation = (args: {
         steps: fromMiddleToTableSteps,
         homePlaceId: targetPlaceId,
     });
-    const cardToEnchantTrack = new AnimationTrack({
-        cardId: targetCardId,
-        steps: cardToEnchant,
-        homePlaceId: targetPlaceId,
-    });
+    
 
     const timeline = new MyAnimationTimeline({
-        animationTracks: [handToMiddleTrack, middleToTableTrack, cardToEnchantTrack],
+        animationTracks: [handToMiddleTrack, middleToTableTrack, ...cardsToEnchantTracks],
         showPrevSnapshot: [handId],
     });
     return timeline.getActiveAnimation();

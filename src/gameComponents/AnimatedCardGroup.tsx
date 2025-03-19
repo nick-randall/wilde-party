@@ -17,12 +17,17 @@ const AnimatedCardGroup: React.FC<AnimatedCardGroupProps> = (props) => {
     const { currAnimations, cardGroup, gameSnapshot } = props;
     const { cards } = cardGroup;
 
+    const sort = (a: AnimationData, b: AnimationData) => {
+      const ids = cards.map(c => c.id);
+        return ids.indexOf(a.cardId) - ids.indexOf(b.cardId);
+      }
+
     const mainAnimations = currAnimations.filter((ani) => ani.track === "main");
-    mainAnimations.sort((a, b) => (a.cardId === cards[0].id ? -1 : 1));
+    mainAnimations.sort(sort);
     const opacityAnimations = currAnimations.filter((ani) => ani.track === "opacityAndShadow");
-    opacityAnimations.sort((a, b) => (a.cardId === cards[0].id ? -1 : 1));
+    opacityAnimations.sort(sort);
     const zIndexAnimations = currAnimations.filter((ani) => ani.track === "zIndex");
-    zIndexAnimations.sort((a, b) => (a.cardId === cards[0].id ? -1 : 1));
+    zIndexAnimations.sort(sort);
     // TODO sorting for BFF three card animation!
 
     const innerWrapperStyles = cards.map((c) => getInnerWrapperStyle(c.id, gameSnapshot));

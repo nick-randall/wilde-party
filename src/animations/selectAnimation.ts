@@ -41,6 +41,8 @@ export const selectAnimation = (
             return createAddDraggedAnimation(oldSnapshot, newSnapshot);
         case "enchant":
             return createEnchantCardAnimation(oldSnapshot, newSnapshot);
+        case "enchantWithBff":
+          return createEnchantCardAnimation(oldSnapshot, newSnapshot);
         case "rearrangingTablePlace":
             return createRearrangeTablePlaceAnimation(oldSnapshot, newSnapshot);
     }

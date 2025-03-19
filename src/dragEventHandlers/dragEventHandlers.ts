@@ -17,98 +17,7 @@ import {
     getCardRowShapeOnRearrange,
 } from "../helperFunctions/groupGCZCards";
 
-// export const dragEventMiddleware: Middleware = ({ dispatch }) => {
-//   return (next: AppDispatch) => (action: DragEvent) => {
-//     switch (action.type) {
-//       case "dragStart": {
-//         const { source, draggableId } = action.payload;
-//         const DroppableData: DroppableData = JSON.parse(draggableId);
-//         const droppableData: DroppableData = JSON.parse(source.droppableId);
-//         const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
-//         if (isHandCard(droppableData.id, gameSnapshot)) {
-//           dispatch(SET_HIGHLIGHTS(gameSnapshot));
-//         } else {
-//           dispatch(
-//             START_REARRANGING({
-//               placeId: droppableData.id,
-//               sourceIndex: source.index,
-//               draggedId: DroppableData.id,
-//             })
-//           );
-//         }
-//         break;
-//       }
-//       case "dragEnd":
-//         {
-//           const d = action.payload;
-//           const { source, destination } = action.payload;
-
-//           if (destination) {
-//             const sourceData: DroppableData = JSON.parse(source.droppableId);
-//             const destinationData: DroppableData = JSON.parse(destination.droppableId);
-//             const { type: sourceType, id: sourceId } = sourceData;
-//             const { type: destinationType, id: destinationId } = destinationData;
-//             const sourceResult = { id: sourceId, type: sourceType, index: source.index };
-//             const destResult = { id: destinationId, type: destinationType, index: destination.index };
-//             console.log(sourceResult, destResult);
-//             if (isRearrange(d)) dispatch(REARRANGE({ source: sourceResult, destination: destResult }));
-//             // else if (isEnchant(d, gameSnapshot)) dispatch(enchantThunk({ source: d.source, destination: d.destination }));
-//             // else if (isDestroy(d, gameSnapshot)) dispatch(destroyCardThunk({ source: d.source, destination: d.destination }));
-//             // TODO: figure out how handle this without store.dispatch
-//             else if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
-//           }
-//           dispatch(END_DRAG_CLEANUP());
-//         }
-//         break;
-//       default:
-//         return next(action);
-//     }
-//   };
-// };
-
-// type DragEvent = DragStart | DragEnd;
-
-// type DragEnd = { type: "dragEnd"; payload: DropResult };
-
-// type DragStart = { type: "dragStart"; payload: { source: DraggableLocation; draggableId: string } };
-
 export const dragEnd = (d: DropResult) => ({ type: "dragEnd", payload: d });
-
-const isHandCard = (sourceId: number, gameSnapshot: GameSnapshot) =>
-    locatePlace(sourceId, gameSnapshot).placeType === "hand";
-
-const cardHasChangedIndex = (d: DropResult) =>
-    d.destination && d.destination.index !== d.source.index;
-
-const cardMovedWithinOnePlace = (d: DropResult) =>
-    d.destination && d.destination.droppableId === d.source.droppableId;
-
-const isRearrange = (d: DropResult) => cardHasChangedIndex(d) && cardMovedWithinOnePlace(d);
-
-const isEnchant = (d: DropResult, gameSnapshot: GameSnapshot) => {
-    const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId));
-    return (
-        handCard?.action.actionType === "enchant" ||
-        handCard?.action.actionType === "enchantWithBff"
-    );
-};
-
-const isDestroy = (d: DropResult, gameSnapshot: GameSnapshot) => {
-    const handCard = getDraggedHandCard(gameSnapshot, parseInt(d.draggableId));
-    return handCard?.action.actionType === "destroy";
-};
-
-const getDraggedHandCard = (gameSnapshot: GameSnapshot, draggableId: number | undefined) =>
-    draggableId
-        ? gameSnapshot.players[0].places.hand.cards.find((e) => e.id === draggableId)
-        : undefined;
-
-const cardDidLeaveHand = (d: DropResult) =>
-    d.destination && d.destination.droppableId !== d.source.droppableId;
-
-const cardDroppedElswhere = (d: DropResult) => d.destination;
-
-const isAddDrag = (d: DropResult) => cardDidLeaveHand(d) && cardDroppedElswhere(d);
 
 ///
 export const onBeforeCapture = (source: BeforeCapture) => {
@@ -248,7 +157,7 @@ export const onDragEnd = (d: DropResult) => {
                 },
             });
             const snapshotUpdateData: SnapshotUpdateData = {
-                type: "enchant",
+                type: draggedHandCard.cardType === "bff" ? "enchantWithBff" : "enchant",
                 targetId: destinationId,
                 playedCardIds: [draggedHandCard.id],
             };
@@ -275,12 +184,10 @@ export const onDragEnd = (d: DropResult) => {
 
         snapshotUpdater.begin();
         const updatedSnapshot = snapshotUpdater.getNewSnapshot();
-        const gcz = updatedSnapshot.players[0].places.guestCardZone;
         const { gameData } = store.getState().userGameState;
         if (!gameData) throw Error("No game data in userGameState");
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
         store.dispatch(sendGameMessage(gameData.id, updatedSnapshot));
-        // if (isAddDrag(d)) store.dispatch(addDraggedThunk(sourceResult, destResult));
     }
     store.dispatch(END_DRAG_CLEANUP());
 };
@@ -328,7 +235,6 @@ function handleRearrange(
     snapshotUpdater.begin();
 
     const updatedSnapshot = snapshotUpdater.getNewSnapshot();
-    const gcz = updatedSnapshot.players[0].places.guestCardZone;
     const { gameData } = store.getState().userGameState;
     if (!gameData) throw Error("No game data in userGameState");
     store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });
