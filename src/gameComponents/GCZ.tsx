@@ -42,16 +42,12 @@ const GCZ: React.FC<GCZProps> = ({ id, gameSnapshot, player, registerPlaceOffset
     let ghostCardIndex = undefined;
     if (draggedOver?.id === id) {
         ghostCardIndex = draggedOver.index;
-    } else if (rearrangingData.draggedId === id) {
-        ghostCardIndex = cardWidthShape[draggedOver?.index || 0];
+    } else if (rearrangingData.draggedId === id && draggedOver?.index !== undefined) {
+        ghostCardIndex = cardWidthShape[draggedOver?.index];
     }
-    // const ghostCardIndex =
-    //     draggedOver?.id === id ? draggedOver.index : cardWidthShape[draggedOver?.index || 0];
 
     const ghostCard = draggedHandCard && ghostCardIndex !== undefined ? draggedHandCard : undefined;
-    console.log("ghostCardIndex", ghostCardIndex);
 
-    console.log(cardWidthShape);
     // Figure out which cards are the rightmost enchantable cards
     const actionResultsMap = gameSnapshot.actionResultsMap;
     const rightMostEnchantableCardIds: number[] = [];

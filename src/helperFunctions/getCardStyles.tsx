@@ -35,23 +35,29 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
     const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
     let top = cardTopSpread * index;
     let zIndex = dimensionConstants.TABLE_CARD_Z_INDEX;
-    // This part is for the guestCardZone, to ensure for example, that a card coming after a zwilling card group is not 
+    // This part is for the guestCardZone, to ensure for example, that a card coming after a zwilling card group is not
     // placed two cards to the right, but only one, since a zwilling card group is made of two cards but only one card wide.
     if (place === "guestCardZone" && player !== null && index > -1) {
         const card = gameSnapshot.players[player].places[placeType].cards[index];
         const GCZCards = gameSnapshot.players[player].places[placeType].cards;
         const cardGroupObjs = getCardGroupsObjs(GCZCards);
-        const cardGroupIndex = cardGroupObjs.findIndex((cardGroup) => cardGroup.cards.map(c => c.id).includes(card.id));
+        const cardGroupIndex = cardGroupObjs.findIndex((cardGroup) =>
+            cardGroup.cards.map((c) => c.id).includes(card.id)
+        );
         const widthMap = getCumulativeWidths(cardGroupObjs);
         left = widthMap[cardGroupIndex] * tableCardWidth;
 
-        if(getCardName(card) === "zwilling") {
+        if (card.cardType === "enchant") {
             top = tableCardHeight / 2;
         }
-        if(card.cardType === "bff") {
-           top = tableCardHeight / 2;
-           left += tableCardWidth / 2;
-           zIndex = dimensionConstants.TABLE_CARD_Z_INDEX + 1;
+        if (card.cardType === "bff") {
+            top = tableCardHeight / 2;
+            left += tableCardWidth / 2;
+            zIndex = dimensionConstants.TABLE_CARD_Z_INDEX + 1;
+        }
+        const cardGroup = cardGroupObjs[cardGroupIndex];
+        if (cardGroup.cards.findIndex((c) => c.id === card.id) === 2) {
+            left += tableCardWidth;
         }
     }
 
