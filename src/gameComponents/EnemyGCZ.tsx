@@ -11,8 +11,6 @@ interface EnemyGCZProps {
     player: number;
     id: number;
     gameSnapshot: GameSnapshot;
-    // GCZCards: GameCard[];
-    // currAnimations: AnimationData[];
     alignment: string;
     registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }

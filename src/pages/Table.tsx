@@ -216,13 +216,25 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         gameSnapshot={whichSnapshot(p2.places.hand.id)}
                         registerPlaceOffset={registerPlaceOffset}
                     />
-                    <SpecialsZone
-                        id={p1.places.specialsZone.id}
-                        player={playerOne}
-                        gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
-                        alignment="bottom-left"
-                        registerPlaceOffset={registerPlaceOffset}
-                    />
+                    <div style={{position: "relative"}}>
+                      <SpecialsZone
+                          id={p1.places.specialsZone.id}
+                          player={playerOne}
+                          gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
+                          alignment="bottom-left"
+                          registerPlaceOffset={registerPlaceOffset}
+                      />
+                       <div style={{position: "absolute", top: 0}}>
+                         <UWZ
+                            player={playerOne}
+                            id={p1.places.unwantedsZone.id}
+                            alignment="center-left"
+                            gameSnapshot={whichSnapshot(p1.places.unwantedsZone.id)}
+                            registerPlaceOffset={registerPlaceOffset}
+
+                                               />
+                       </div>
+                    </div>
 
                     <div className="grid-item center-gap-row">
                         <Deck
@@ -283,6 +295,9 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         player={playerZero}
                         id={p0.places.unwantedsZone.id}
                         alignment="center-right"
+                        gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
+                        registerPlaceOffset={registerPlaceOffset}
+
                     />
                 </div>
             </DragDropContext>

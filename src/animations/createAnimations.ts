@@ -79,30 +79,32 @@ export const createHandToTableAnimation = (args: HandToTableArgs): ActiveAnimati
             }
         }
     } else {
-        const newCards = newSnapshot.players[player].places[newPlaceType].cards;
-        const newCardIndex = newCards.findIndex((c) => c.id === cardId);
+      // UWZ doesn't need to move aside
+      
+        // const newCards = newSnapshot.players[player].places[newPlaceType].cards;
+        // const newCardIndex = newCards.findIndex((c) => c.id === cardId);
 
-        const cardsToRight = newCards.slice(newCardIndex + 1);
-        for (let i = 0; i < cardsToRight.length; i++) {
-            const moveCardsRightSteps = [
-                new NothingHappens(),
-                new NothingHappens(),
-                new TableToTable({
-                    duration: 500,
-                    fromOffset: new Offset(targetPlaceOffset),
-                    fromStyles: getCardCSS(cardsToRight[i].id, oldSnapshot),
-                    toOffset: new Offset(targetPlaceOffset),
-                    toStyles: getCardCSS(cardsToRight[i].id, newSnapshot),
-                    zeroOffset: "toOffset",
-                }),
-            ];
-            const moveCardRightTrack = new AnimationTrack({
-                cardId: cardsToRight[i].id,
-                homePlaceId: targetPlaceId,
-                steps: moveCardsRightSteps,
-            });
-            moveCardsRightTracks.push(moveCardRightTrack);
-        }
+        // const cardsToRight = newCards.slice(newCardIndex + 1);
+        // for (let i = 0; i < cardsToRight.length; i++) {
+        //     const moveCardsRightSteps = [
+        //         new NothingHappens(),
+        //         new NothingHappens(),
+        //         new TableToTable({
+        //             duration: 500,
+        //             fromOffset: new Offset(targetPlaceOffset),
+        //             fromStyles: getCardCSS(cardsToRight[i].id, oldSnapshot),
+        //             toOffset: new Offset(targetPlaceOffset),
+        //             toStyles: getCardCSS(cardsToRight[i].id, newSnapshot),
+        //             zeroOffset: "toOffset",
+        //         }),
+        //     ];
+        //     const moveCardRightTrack = new AnimationTrack({
+        //         cardId: cardsToRight[i].id,
+        //         homePlaceId: targetPlaceId,
+        //         steps: moveCardsRightSteps,
+        //     });
+        //     moveCardsRightTracks.push(moveCardRightTrack);
+        // }
     }
 
     // assumption: the targetPlace will position its children at its

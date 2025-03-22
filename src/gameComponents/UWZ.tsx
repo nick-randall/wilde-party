@@ -4,33 +4,34 @@ import Card from "./Card";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
 import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import AnimatedCard from "./AnimatedCard";
 
 interface UWZProps {
     id: number;
     alignment: string;
     player: number;
+    gameSnapshot: GameSnapshot;
+    registerPlaceOffset: (el: HTMLElement | null, id: number) => void;
 }
 
 export const UWZ = (props: UWZProps) => {
-    const { id, alignment, player } = props;
+    const { id, alignment, player, gameSnapshot, registerPlaceOffset } = props;
     const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
 
     const droppableData: DroppableData = {
         type: "place",
         id,
         placeType: "unwantedsZone",
-        player: myIndex,
+        player: myIndex, // TODO fix for other players
     };
     const droppableId = JSON.stringify(droppableData);
 
     const { draggedHandCard, draggedOver, highlights, rearrangingData } = useSelector(
         (state: RootState) => state.dragEventState
     );
-    const { currSnapshot, newSnapshot } = useSelector(
-        (state: RootState) => state.gameSnapshotState
-    );
     const { activeAnimation } = useSelector((state: RootState) => state.animationState);
-    const ghostCardIndex = draggedOver?.id === id ? (draggedOver.index || 0) : rearrangingData.sourceIndex;
+    const ghostCardIndex =
+        draggedOver?.id === id ? draggedOver.index || 0 : rearrangingData.sourceIndex;
     const ghostCard = draggedHandCard && ghostCardIndex !== -1 ? draggedHandCard : undefined;
 
     const isHighlighted = highlights.includes(id);
@@ -40,25 +41,42 @@ export const UWZ = (props: UWZProps) => {
     );
 
     const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
-    const useOldSnapshot = activeAnimation?.showPrevSnapshot.includes(id) ?? true;
-    const gameSnapshot = useOldSnapshot ? currSnapshot : newSnapshot!;
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
     const unwantedCards = gameSnapshot.players[player].places.unwantedsZone.cards;
     const dimensions = getCardStyleValuesFromPlaceAndPlayer("unwantedsZone", player, gameSnapshot);
     const { cardWidth, cardHeight, top } = dimensions;
+    const anis = animations.filter(
+      (a) => a.cardId === 4 && a.placeId === id
+  )
 
     return (
-        <div style={{ transition: "left 180ms" }} className={`grid-item ${alignment}`}>
-            {unwantedCards.map((card, index) => (
-                <Card
-                    id={card.id}
-                    imageName={card.imageName}
-                    index={index}
-                    offsetTop={index * dimensions.top}
-                    key={card.id}
-                />
-            ))}
+        <div
+            style={{ transition: "left 180ms" }}
+            className={`grid-item ${alignment}`}
+            ref={(el) => registerPlaceOffset(el, id)}
+        >
+            {unwantedCards.map((card, index) =>
+                !animationCardIds.includes(card.id) ? (
+                    <Card
+                        id={card.id}
+                        imageName={card.imageName}
+                        index={index}
+                        offsetTop={index * dimensions.top}
+                        key={card.id}
+                    />
+                ) : (
+                    <AnimatedCard
+                        id={card.id}
+                        imageName={card.imageName}
+                        key={card.id}
+                        currAnimations={animations.filter(
+                            (a) => a.cardId === card.id && a.placeId === id
+                        )}
+                        gameSnapshot={gameSnapshot}
+                    />
+                )
+            )}
             <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
                 {(provided) => (
                     <div

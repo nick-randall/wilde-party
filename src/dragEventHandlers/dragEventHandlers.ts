@@ -12,12 +12,11 @@ import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpda
 import { sendGameMessage } from "../websocket/websocketActionCreators";
 import { getCardGroupsObjs, getCardRowShapeOnDraggedOver } from "../helperFunctions/groupGCZCards";
 import {
-    addDragged,
+    handleAddDragged,
     DragEndData,
     handleEnchant,
     handleRearrange,
 } from "./handleClientSnapshotUpdates";
-import { AddDragged } from "../redux/actions";
 
 export const dragEnd = (d: DropResult) => ({ type: "dragEnd", payload: d });
 
@@ -146,7 +145,7 @@ export const onDragEnd = (d: DropResult) => {
         if (destinationData.type === "cardGroup") {
             updatedSnapshot = handleEnchant(data);
         } else if (destinationData.type === "place") {
-            updatedSnapshot = addDragged(data);
+            updatedSnapshot = handleAddDragged(data);
         }
 
         const { gameData } = store.getState().userGameState;

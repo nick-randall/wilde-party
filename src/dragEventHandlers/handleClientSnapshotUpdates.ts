@@ -21,38 +21,13 @@ export interface DragEndData {
     snapshotUpdater: SnapshotUpdater;
 }
 
-interface EnchantData {
-    sourceData: SourceData;
-    destinationData: DroppableData;
-    draggedOverData: DroppableData;
-    draggedHandCard: GameCard;
-    gameSnapshot: GameSnapshot;
-    actionResult: CardActionResult;
-    snapshotUpdater: SnapshotUpdater;
-}
-
-interface AddDraggedData {
-    sourceData: SourceData;
-    destinationData: DroppableData;
-    draggedOverData: DroppableData;
-    draggedHandCard: GameCard;
-    snapshotUpdater: SnapshotUpdater;
-}
-
-interface RearrangeData {
-    sourceData: DroppableData;
-    draggedOverData: DroppableData;
-    gameSnapshot: GameSnapshot;
-    draggableData?: DraggableData;
-}
-
-export const addDragged = ({
+export const handleAddDragged = ({
     destinationData,
     draggedOverData,
     sourceData,
     draggedHandCard,
     snapshotUpdater,
-}: AddDraggedData): GameSnapshot => {
+}: DragEndData): GameSnapshot => {
     if (draggedOverData.index === undefined) throw Error("No index in draggedOverData");
     snapshotUpdater.addChange({
         destination: {
@@ -83,7 +58,7 @@ export const handleEnchant = ({
     gameSnapshot,
     actionResult,
     snapshotUpdater,
-}: EnchantData): GameSnapshot => {
+}: DragEndData): GameSnapshot => {
     const { id, placeType, player } = destinationData;
     let { calculatedIndex } = draggedOverData;
 
@@ -120,6 +95,13 @@ export const handleEnchant = ({
 
     return snapshotUpdater.getNewSnapshot();
 };
+
+interface RearrangeData {
+    sourceData: DroppableData;
+    draggedOverData: DroppableData;
+    gameSnapshot: GameSnapshot;
+    draggableData?: DraggableData;
+}
 
 export const handleRearrange = ({
     sourceData,
