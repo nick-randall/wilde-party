@@ -99,7 +99,9 @@ export const stompMiddleware: Middleware = ({ dispatch }) => {
                         const { gameData, user } = store.getState().userGameState;
                         if (!gameData || !user)
                             throw new Error("No game data or user in game state");
-                        console.log("ns", gameMessage.newSnapshots);
+                        if(gameMessage.newSnapshots.length === 0) return;
+                        const last = gameMessage.newSnapshots[gameMessage.newSnapshots.length - 1];
+                        console.log("ns", last.players[0].places.guestCardZone.cards);
                         const payload: NewServerSnapshots = {
                             snapshots: gameMessage.newSnapshots,
                             user,
