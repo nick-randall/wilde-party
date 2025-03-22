@@ -1,5 +1,4 @@
 import { BeforeCapture, DraggableLocation, DragUpdate, DropResult } from "react-beautiful-dnd";
-import { locatePlace } from "../helperFunctions/locateFunctions";
 import store from "../redux/store";
 import {
     END_DRAG_CLEANUP,
@@ -11,12 +10,14 @@ import {
 } from "../redux/dragEventSlice";
 import SnapshotUpdater from "../helperFunctions/gameSnapshotUpdates/SnapshotUpdater";
 import { sendGameMessage } from "../websocket/websocketActionCreators";
+import { getCardGroupsObjs, getCardRowShapeOnDraggedOver } from "../helperFunctions/groupGCZCards";
 import {
-    getCardGroupsObjs,
-    getCardRowShapeOnDraggedOver,
-    getCardRowShapeOnRearrange,
-} from "../helperFunctions/groupGCZCards";
-import { addDragged, handleEnchant, handleRearrange } from "./handleClientSnapshotUpdates";
+    addDragged,
+    DragEndData,
+    handleEnchant,
+    handleRearrange,
+} from "./handleClientSnapshotUpdates";
+import { AddDragged } from "../redux/actions";
 
 export const dragEnd = (d: DropResult) => ({ type: "dragEnd", payload: d });
 
@@ -110,14 +111,19 @@ export const onDragEnd = (d: DropResult) => {
         const sourceData = { index: source.index, id: sourceDataObj.id, type: sourceDataObj.type };
 
         const gameSnapshot = store.getState().gameSnapshotState.currSnapshot;
-        const draggedHandCard = store.getState().dragEventState.draggedHandCard;
 
+        // HANDLE REARRANGE
         if (sourceData.id === destinationData.id && draggedOverData) {
             handleRearrange({ sourceData, draggedOverData, gameSnapshot, draggableData });
             return;
         }
 
-        if (!draggedHandCard) return; // What about rearrange?
+
+        let updatedSnapshot = gameSnapshot;
+        const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+
+        const draggedHandCard = store.getState().dragEventState.draggedHandCard;
+        if (!draggedHandCard) throw Error("No dragged hand card in dragEnd");
         const { actionResultsMap } = gameSnapshot;
         if (!actionResultsMap)
             throw Error("No action results map in gameSnapshot's actionResultsMap");
@@ -125,32 +131,24 @@ export const onDragEnd = (d: DropResult) => {
         const actionResult = actionResults.find(
             (res) => res.snapshotUpdateData.targetId === destinationId
         );
-
         if (!actionResult) throw Error("No action result found for this drop!");
-        const snapshotUpdater = new SnapshotUpdater(gameSnapshot);
+
+        const data: DragEndData = {
+            sourceData,
+            destinationData,
+            draggedOverData,
+            gameSnapshot,
+            snapshotUpdater,
+            draggedHandCard,
+            actionResult,
+        };
 
         if (destinationData.type === "cardGroup") {
-            handleEnchant({
-                destinationData,
-                draggedOverData,
-                sourceData,
-                draggedHandCard,
-                gameSnapshot,
-                actionResult,
-                snapshotUpdater,
-            });
+            updatedSnapshot = handleEnchant(data);
         } else if (destinationData.type === "place") {
-            addDragged({
-                destinationData,
-                draggedOverData,
-                sourceData,
-                draggedHandCard,
-                snapshotUpdater,
-            });
+            updatedSnapshot = addDragged(data);
         }
 
-        snapshotUpdater.begin();
-        const updatedSnapshot = snapshotUpdater.getNewSnapshot();
         const { gameData } = store.getState().userGameState;
         if (!gameData) throw Error("No game data in userGameState");
         store.dispatch({ type: "HANDLE_NEW_CLIENT_SNAPSHOT", payload: updatedSnapshot });

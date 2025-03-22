@@ -11,6 +11,16 @@ interface SourceData {
     type: DroppableEntityType;
 }
 
+export interface DragEndData {
+    sourceData: SourceData;
+    destinationData: DroppableData;
+    draggedOverData: DroppableData;
+    draggedHandCard: GameCard;
+    gameSnapshot: GameSnapshot;
+    actionResult: CardActionResult;
+    snapshotUpdater: SnapshotUpdater;
+}
+
 interface EnchantData {
     sourceData: SourceData;
     destinationData: DroppableData;
@@ -29,13 +39,20 @@ interface AddDraggedData {
     snapshotUpdater: SnapshotUpdater;
 }
 
+interface RearrangeData {
+    sourceData: DroppableData;
+    draggedOverData: DroppableData;
+    gameSnapshot: GameSnapshot;
+    draggableData?: DraggableData;
+}
+
 export const addDragged = ({
     destinationData,
     draggedOverData,
     sourceData,
     draggedHandCard,
     snapshotUpdater,
-}: AddDraggedData) => {
+}: AddDraggedData): GameSnapshot => {
     if (draggedOverData.index === undefined) throw Error("No index in draggedOverData");
     snapshotUpdater.addChange({
         destination: {
@@ -53,6 +70,9 @@ export const addDragged = ({
         playedCardIds: [draggedHandCard.id],
     };
     snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
+    snapshotUpdater.begin();
+
+    return snapshotUpdater.getNewSnapshot();
 };
 
 export const handleEnchant = ({
@@ -63,7 +83,7 @@ export const handleEnchant = ({
     gameSnapshot,
     actionResult,
     snapshotUpdater,
-}: EnchantData) => {
+}: EnchantData): GameSnapshot => {
     const { id, placeType, player } = destinationData;
     let { calculatedIndex } = draggedOverData;
 
@@ -96,14 +116,10 @@ export const handleEnchant = ({
         playedCardIds: [draggedHandCard.id],
     };
     snapshotUpdater.setSnapshotUpdateData(snapshotUpdateData);
-};
+    snapshotUpdater.begin();
 
-interface RearrangeData {
-    sourceData: DroppableData;
-    draggedOverData: DroppableData;
-    gameSnapshot: GameSnapshot;
-    draggableData?: DraggableData;
-}
+    return snapshotUpdater.getNewSnapshot();
+};
 
 export const handleRearrange = ({
     sourceData,
