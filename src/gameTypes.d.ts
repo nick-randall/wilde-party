@@ -1,16 +1,5 @@
 type CardGroup = GameCard[];
 
-// type PlaceDimensions = {
-//   cardHeight: number;
-//   cardWidth: number;
-//   cardLeftSpread: number;
-//   cardTopSpread: number;
-//   leftOffset: number;
-//   topOffset: number;
-//   zIndex: number;
-//   featuredCardScale: number;
-// };
-
 type CardDimensions = {
     cardHeight: number;
     cardWidth: number;
@@ -22,27 +11,6 @@ type CardDimensions = {
     zIndex: number;
     boxShadow: string;
 };
-
-// type AllDimensions = {
-//   cardHeight: number;
-//   cardWidth: number;
-//   cardLeftSpread: number;
-//   cardTopSpread: number;
-//   maxCardLeftSpread?: number;
-//   draggedCardScale: number;
-//   draggedCardWidth: number;
-//   draggedCardzIndex: number;
-//   tableCardzIndex: number;
-//   rotation: (index: number) => number;
-//   scale: number;
-//   featuredCardScale: number;
-//   zIndex: number;
-//   handToTableScaleFactor: number;
-//   tableCardHeight: number;
-//   tableCardWidth: number;
-//   // leftOffset: number;
-//   // topOffset: number;
-// };
 
 type SnapshotUpdateType =
     | "emptySnapshot"

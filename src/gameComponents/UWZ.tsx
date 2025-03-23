@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Card from "./Card";
 import GhostCard from "./GhostCard";
 import { RootState } from "../redux/store";
-import { getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
+import { getCardStyleValues, getCardStyleValuesFromPlaceAndPlayer } from "../helperFunctions/getCardStyles";
 import AnimatedCard from "./AnimatedCard";
 
 interface UWZProps {
@@ -18,11 +18,14 @@ export const UWZ = (props: UWZProps) => {
     const { id, alignment, player, gameSnapshot, registerPlaceOffset } = props;
     const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
 
+    const unwantedCards = gameSnapshot.players[player].places.unwantedsZone.cards;
+
     const droppableData: DroppableData = {
         type: "place",
         id,
         placeType: "unwantedsZone",
         player: myIndex, // TODO fix for other players
+        calculatedIndex: unwantedCards.length,
     };
     const droppableId = JSON.stringify(droppableData);
 
@@ -43,16 +46,11 @@ export const UWZ = (props: UWZProps) => {
     const allowDropping = isHighlighted || rearranging; // || containsTargetedCard; // better name!°
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
-    const unwantedCards = gameSnapshot.players[player].places.unwantedsZone.cards;
     const dimensions = getCardStyleValuesFromPlaceAndPlayer("unwantedsZone", player, gameSnapshot);
     const { cardWidth, cardHeight, top } = dimensions;
-    const anis = animations.filter(
-      (a) => a.cardId === 4 && a.placeId === id
-  )
-
     return (
         <div
-            style={{ transition: "left 180ms" }}
+            style={{ transition: "left 180ms", position: "relative" }}
             className={`grid-item ${alignment}`}
             ref={(el) => registerPlaceOffset(el, id)}
         >
@@ -62,7 +60,8 @@ export const UWZ = (props: UWZProps) => {
                         id={card.id}
                         imageName={card.imageName}
                         index={index}
-                        offsetTop={index * dimensions.top}
+                        offsetTop={getCardStyleValues(card.id, gameSnapshot).top}
+                        offsetLeft={getCardStyleValues(card.id, gameSnapshot).left}
                         key={card.id}
                     />
                 ) : (
@@ -77,33 +76,36 @@ export const UWZ = (props: UWZProps) => {
                     />
                 )
             )}
-            <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
-                {(provided) => (
-                    <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                            position: "relative",
-                            top: unwantedCards.length * top,
-                            height: cardHeight,
-                            minWidth: cardWidth,
-                            backgroundColor: isHighlighted ? "yellowgreen" : "",
-                            boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
-                            transition: "background-color 180ms, box-shadow 180ms, left 180ms",
-                        }}
-                    >
-                        {provided.placeholder}
-                        {ghostCard ? (
-                            <GhostCard
-                                cardId={ghostCard.id}
-                                index={ghostCardIndex}
-                                imageName={ghostCard.imageName}
-                                zIndex={9}
-                            />
-                        ) : null}
-                    </div>
-                )}
-            </Droppable>
+            <div style={{ position: "absolute", top: 0 }}>
+              <Droppable droppableId={droppableId} isDropDisabled={!allowDropping}>
+                  {(provided) => (
+                      <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={{
+                              position: "relative",
+                              // left: unwantedCards.length * 10,
+                              height: cardHeight,
+                              minWidth: cardWidth,
+                              backgroundColor: isHighlighted ? "yellowgreen" : "",
+                              boxShadow: isHighlighted ? "0px 0px 30px 30px yellowgreen" : "",
+                              transition: "background-color 180ms, box-shadow 180ms, left 180ms",
+                          }}
+                      >
+                          {provided.placeholder}
+                          {ghostCard ? (
+                              <GhostCard
+                                  cardId={ghostCard.id}
+                                  index={ghostCardIndex}
+                                  imageName={ghostCard.imageName}
+                                  offsetLeft={getCardStyleValues(ghostCard.id, gameSnapshot).left}
+                                  zIndex={9}
+                              />
+                          ) : null}
+                      </div>
+                  )}
+              </Droppable>
+            </div>
         </div>
     );
 };

@@ -9,6 +9,7 @@
   padding: 30px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 2fr;
+  gap:  5px;
 }
 
 .grid-item.bottom-left {

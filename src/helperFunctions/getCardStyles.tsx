@@ -27,13 +27,25 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
     const handCardWidth = handCardHeight / dimensionConstants.HEIGHT_TO_WIDTH_RATIO;
 
     let cardLeftSpread = numCards < 6 ? tableCardWidth : tableCardWidth - numCards * 3;
-    // TODO why would index ever be -1?
-    let left =
-        placeType !== "deck" && placeType !== "discardPile" && index > -1
-            ? cardLeftSpread * index
-            : 0;
+
     const cardTopSpread = place !== "specialsZone" ? (place === "unwantedsZone" ? -40 : 0) : -30;
     let top = cardTopSpread * index;
+    let left = cardLeftSpread * index;
+    if (placeType === "deck" || placeType === "discardPile") {
+        left = 0;
+    }
+    if (placeType === "unwantedsZone") {
+        if (index !== -1) {
+            left = index * 10;
+            top = 0;
+            console.log("unwanted index", index);
+        }
+        else {
+          left = 0;
+        }
+    }
+
+
     let zIndex = dimensionConstants.TABLE_CARD_Z_INDEX;
     // This part is for the guestCardZone, to ensure for example, that a card coming after a zwilling card group is not
     // placed two cards to the right, but only one, since a zwilling card group is made of two cards but only one card wide.
