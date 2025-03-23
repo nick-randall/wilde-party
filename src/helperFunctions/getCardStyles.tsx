@@ -38,7 +38,6 @@ export const getCardStyleValuesFromPlaceAndPlayer = (
         if (index !== -1) {
             left = index * 10;
             top = 0;
-            console.log("unwanted index", index);
         }
         else {
           left = 0;

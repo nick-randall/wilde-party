@@ -1,71 +1,328 @@
-import { Draggable } from "react-beautiful-dnd";
-import Card from "./Card";
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import { NewCardGroupObj } from "../helperFunctions/groupGCZCards";
 import { useSelector } from "react-redux";
+import { dimensionConstants, getCardGroupStyles } from "../helperFunctions/getCardStyles";
 import { RootState } from "../redux/store";
-import { getCardStyles, getCardStyleValues } from "../helperFunctions/getCardStyles";
+import GhostCard from "./GhostCard";
+import { locateCard } from "../helperFunctions/locateFunctions";
+import AnimatedCardGroup from "./AnimatedCardGroup";
 
-export interface CardGroupProps {
-  cardGroup: CardGroupObj;
-  index: number;
+export interface NewCardGroupProps {
+    cardGroup: NewCardGroupObj;
+    cardGroupIndex: number;
+    // physicalIndex: number; // how many cards from the left
+    gameSnapshot: GameSnapshot;
+    placeId: number;
+    rightMostEnchantable: boolean;
+    // enchantableNeighbours: EnchantableNeighbour[];
 }
 
-interface CardOffset {
-  left: number;
-  top: number;
+interface BFFOrZwillingCardGroup {
+    cardGroup: CardGroupObj;
+    draggableId: string;
+    cardGroupIndex: number;
 }
 
-const CardGroup: React.FC<CardGroupProps> = ({cardGroup, index}) => {
-  const {currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState)
-  const { left, cardHeight  } = getCardStyleValues(cardGroup.id, currSnapshot);
-  const draggableData: DraggableData = {
-    id: cardGroup.id,
-    type: "cardGroup",
-    numCards: cardGroup.cards.length,
-  };
-  const draggableId = JSON.stringify(draggableData);
+const NewCardGroup: React.FC<NewCardGroupProps> = ({
+    cardGroup,
+    cardGroupIndex,
+    // physicalIndex,
+    gameSnapshot,
+    placeId,
+    rightMostEnchantable,
+}) => {
+    const { draggedOver, draggedHandCard, highlights } = useSelector(
+        (state: RootState) => state.dragEventState
+    );
+    const isHighlighted = highlights.includes(cardGroup.id);
+    const { cardHeight, cardWidth } = getCardGroupStyles(cardGroup, cardGroupIndex, gameSnapshot);
+    const draggableData: DraggableData = {
+        id: cardGroup.id,
+        type: "cardGroup",
+        numCards: cardGroup.cards.length,
+    };
+    const draggableId = JSON.stringify(draggableData);
 
-  const getOffset = (card: GameCard, cardGroupIndex: number): CardOffset => {
-    if (card.cardType === "bff") return { top: cardHeight / 2, left: left / 2 };
-    if (card.cardType === "enchant") return { top: cardHeight / 2, left: 0 };
-    if (cardGroupIndex > 0) return { top: 0, left: left };
-    else return { top: 0, left: 0 };
-  };
+    const droppableData: DroppableData = {
+        type: "cardGroup",
+        id: cardGroup.id,
+        calculatedIndex: cardGroup.index + 1,
+        player: locateCard(cardGroup.id, gameSnapshot).player ?? 0,
+        placeType: "guestCardZone",
+    };
 
-  return (
-    <Draggable draggableId={draggableId} index={index} key={cardGroup.id}>
-      {provided => (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <div
-            // Container only the size of left ie. able to be smaller
-            // than the size of the cardGroups and allows overlapping cardGroups.
-            // It represents the matrix of draggable elements
-            style={{
-              // transition: "300ms",
-              width: cardGroup.size === 2 ? left * 2 : left,
-              // this here determines height of GCZ dragover area
-              height: cardHeight * 1.5,
-            }}
-          >
-            <div
-              // This relative container allows the cards to be positioned absolutely within the CardGroup
-              style={{ position: "relative" }}
-            >
-              {cardGroup.cards.map((card, cardGroupIndex) => (
-                <Card
-                  offsetTop={getOffset(card, cardGroupIndex).top}
-                  offsetLeft={getOffset(card, cardGroupIndex).left}
-                  //cardGroupIndex={cardGroupIndex}
-                  id={card.id}
-                  imageName={card.imageName}
-                  index={index}
-                  key={card.id}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </Draggable>
-  );
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
+    const animations = activeAnimation?.animations ?? [];
+    const animationCardIds = animations.map((a) => a.cardId);
+
+    const animated: { [key: number]: boolean } = {};
+    cardGroup.cards.forEach((c) => {
+        animated[c.id] = animationCardIds.includes(c.id);
+    });
+    const allAreAnimated = Object.values(animated).every((a) => a);
+    const noneAreAnimated = Object.values(animated).every((a) => !a);
+    if (!allAreAnimated && !noneAreAnimated) {
+        console.log("animated: ", animated);
+        throw new Error("Some cards in CardGroup are animated and some are not!!!");
+    }
+
+    const droppableId = JSON.stringify(droppableData);
+
+    const ghostCardInPlace = draggedOver?.id === cardGroup.id;
+    const ghostCard = draggedHandCard && ghostCardInPlace ? draggedHandCard : undefined;
+
+    let ghostCardOffsetLeft = 0;
+    if (rightMostEnchantable && ghostCard?.cardType === "bff") {
+        ghostCardOffsetLeft = -cardWidth / 2;
+    } else if (ghostCard?.cardType === "bff") {
+        ghostCardOffsetLeft = cardWidth / 2;
+    }
+
+    if (allAreAnimated) {
+        return (
+            <AnimatedCardGroup
+                key={cardGroup.id}
+                cardGroup={cardGroup}
+                currAnimations={animations.filter(
+                    (a) =>
+                        cardGroup.cards.map((c) => c.id).includes(a.cardId) && a.placeId === placeId
+                )}
+                gameSnapshot={gameSnapshot}
+            />
+        );
+    }
+
+    if (cardGroup.cards.length === 1) {
+        return (
+            <SingleCardGroup
+                cardGroup={cardGroup}
+                cardGroupIndex={cardGroupIndex}
+                draggableId={draggableId}
+                draggedHandCard={draggedHandCard}
+                droppableId={droppableId}
+                ghostCard={ghostCard}
+                isHighlighted={isHighlighted}
+                ghostCardOffsetLeft={ghostCardOffsetLeft}
+            />
+        );
+    }
+
+    if (cardGroup.cards.length === 2)
+        return (
+            <ZwillingCardGroup
+                cardGroup={cardGroup}
+                cardGroupIndex={cardGroupIndex}
+                draggableId={draggableId}
+            />
+        );
+    else
+        return (
+            <BFFCardGroup
+                cardGroup={cardGroup}
+                cardGroupIndex={cardGroupIndex}
+                draggableId={draggableId}
+            />
+        );
 };
-export default CardGroup;
+
+interface SingleCardGroupProps {
+    cardGroup: CardGroupObj;
+    draggableId: string;
+    cardGroupIndex: number;
+    droppableId: string;
+    ghostCard: GameCard | undefined;
+    draggedHandCard: GameCard | undefined;
+    isHighlighted: boolean;
+    ghostCardOffsetLeft?: number;
+}
+
+const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
+    cardGroup,
+    draggableId,
+    cardGroupIndex,
+    droppableId,
+    ghostCard,
+    draggedHandCard,
+    isHighlighted,
+    ghostCardOffsetLeft,
+}) => {
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { top, cardWidth, cardHeight } = getCardGroupStyles(
+        cardGroup,
+        cardGroupIndex,
+        currSnapshot
+    );
+    return (
+        <Draggable draggableId={draggableId} index={cardGroupIndex}>
+            {(d) => (
+                <Droppable droppableId={droppableId} isDropDisabled={!isHighlighted}>
+                    {(drop) => (
+                        <div
+                            {...drop.droppableProps}
+                            ref={drop.innerRef}
+                            key={cardGroup.cards[0].id + "droppable"}
+                        >
+                            <img
+                                {...d.draggableProps}
+                                ref={d.innerRef}
+                                {...d.dragHandleProps}
+                                src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                                alt={cardGroup.cards[0].imageName}
+                                draggable="false"
+                                style={{
+                                    // position: "relative",
+                                    height: cardHeight,
+                                    zIndex: 99,
+                                    ...d.draggableProps.style,
+                                    borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                }}
+                            />
+                            {ghostCard && draggedHandCard && (
+                                <GhostCard
+                                    cardId={draggedHandCard.id}
+                                    index={cardGroupIndex}
+                                    imageName={draggedHandCard.imageName}
+                                    zIndex={0}
+                                    offsetTop={cardHeight / 2}
+                                    offsetLeft={ghostCardOffsetLeft}
+                                />
+                            )}
+                            {drop.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            )}
+        </Draggable>
+    );
+};
+
+const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
+    cardGroup,
+    draggableId,
+    cardGroupIndex,
+}) => {
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { top, cardWidth, cardHeight } = getCardGroupStyles(
+        cardGroup,
+        cardGroupIndex,
+        currSnapshot
+    );
+
+    return (
+        <Draggable
+            draggableId={draggableId}
+            index={cardGroupIndex}
+            // index={index}
+        >
+            {(d) => (
+                <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
+                    <div
+                        style={{
+                            height: cardHeight * 1.5,
+                            width: cardWidth,
+                            // left,
+                            position: "relative",
+                        }}
+                    >
+                        <img
+                            src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                            alt={cardGroup.cards[0].imageName}
+                            style={{
+                                position: "absolute",
+                                height: cardHeight,
+                                width: cardWidth,
+                                left: 0,
+                                top: 0,
+                                // ...d.draggableProps.style,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+
+                        <img
+                            src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                            alt={cardGroup.cards[1].imageName}
+                            style={{
+                                position: "absolute",
+                                left: 0,
+                                top: cardHeight / 2,
+                                height: cardHeight,
+                                width: cardWidth,
+                                // ...d.draggableProps.style,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
+        </Draggable>
+    );
+};
+
+const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
+    cardGroup,
+    draggableId,
+    cardGroupIndex,
+}) => {
+    const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
+    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+        cardGroup,
+        cardGroupIndex,
+        currSnapshot
+    );
+    return (
+        <Draggable
+            draggableId={draggableId}
+            index={cardGroupIndex}
+            // index={index}
+        >
+            {(d) => (
+                <div {...d.dragHandleProps} {...d.draggableProps} ref={d.innerRef}>
+                    <div
+                        style={{
+                            height: cardHeight * 1.5,
+                            width: cardWidth * 2,
+                            // left,
+                            position: "relative",
+                        }}
+                    >
+                        <img
+                            src={`./images/${cardGroup.cards[0].imageName}.jpg`}
+                            alt={cardGroup.cards[0].imageName}
+                            style={{
+                                position: "absolute",
+                                height: cardHeight,
+                                left: 0,
+                                top: 0,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                        <img
+                            src={`./images/${cardGroup.cards[2].imageName}.jpg`}
+                            alt={cardGroup.cards[2].imageName}
+                            style={{
+                                position: "absolute",
+                                left: cardWidth,
+                                top: 0,
+                                height: cardHeight,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                        <img
+                            src={`./images/${cardGroup.cards[1].imageName}.jpg`}
+                            alt={cardGroup.cards[1].imageName}
+                            style={{
+                                position: "absolute",
+                                left: cardWidth / 2,
+                                top: cardHeight / 2,
+                                height: cardHeight,
+                                borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
+        </Draggable>
+    );
+};
+
+export default NewCardGroup;

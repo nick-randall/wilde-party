@@ -16,7 +16,6 @@ interface UWZProps {
 
 export const UWZ = (props: UWZProps) => {
     const { id, alignment, player, gameSnapshot, registerPlaceOffset } = props;
-    const myIndex = useSelector((state: RootState) => state.userGameState.myIndex);
 
     const unwantedCards = gameSnapshot.players[player].places.unwantedsZone.cards;
 
@@ -24,7 +23,7 @@ export const UWZ = (props: UWZProps) => {
         type: "place",
         id,
         placeType: "unwantedsZone",
-        player: myIndex, // TODO fix for other players
+        player,
         calculatedIndex: unwantedCards.length,
     };
     const droppableId = JSON.stringify(droppableData);

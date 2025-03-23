@@ -10,7 +10,7 @@ import {
 } from "../helperFunctions/groupGCZCards";
 import { Droppable } from "react-beautiful-dnd";
 import "../css/global.css";
-import NewCardGroup from "./NewCardGroup";
+import NewCardGroup from "./CardGroup";
 import GhostCard from "./GhostCard";
 import GhostCardGroup from "./GhostCardGroup";
 
