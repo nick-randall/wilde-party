@@ -69,7 +69,8 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({
         (state: RootState) => state.dragEventState.rearrangingData.placeId === id
     );
     const specialsCardsColumns = groupSpecialsColumns(cards); // R.groupWith<GameCard>((a, b) => a.specialsCardType === b.specialsCardType, specialsCards);
-    const draggedSpecialsType = draggedHandCard?.specialsCardType;
+    const draggedCardIsSpecial = draggedHandCard?.cardType === "special";
+    const draggedSpecialsType = draggedCardIsSpecial ? draggedHandCard?.guestCardType : undefined;
     const allowDropping =
         isHighlighted &&
         specialsCardsColumns.some(
@@ -84,7 +85,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({
     return (
         <Droppable droppableId={droppableId} direction="horizontal" isDropDisabled={!allowDropping}>
             {(provided) => (
-                <div ref={(el) => registerPlaceOffset(el, id)}>
+                <div ref={(el) => registerPlaceOffset(el, id)} style={{position: "relative"}}>
                     <div
                         className={`grid-item ${alignment} ${isHighlighted ? "highlighted" : ""}`}
                         ref={provided.innerRef}
@@ -96,6 +97,7 @@ export const SpecialsZone: React.FC<SpecialsZoneProps> = ({
                             minWidth: cardWidth,
                             height: cardHeight,
                             transition: "left 250ms",
+                            border: "1px solid black",
                         }}
                     >
                         {specialsCardsColumns.map((column, index) =>

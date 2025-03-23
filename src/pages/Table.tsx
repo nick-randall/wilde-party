@@ -216,24 +216,23 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         gameSnapshot={whichSnapshot(p2.places.hand.id)}
                         registerPlaceOffset={registerPlaceOffset}
                     />
-                    <div style={{position: "relative"}}>
-                      <SpecialsZone
-                          id={p1.places.specialsZone.id}
-                          player={playerOne}
-                          gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
-                          alignment="bottom-left"
-                          registerPlaceOffset={registerPlaceOffset}
-                      />
-                       <div style={{position: "absolute", top: 0}}>
-                         <UWZ
+                    <div style={{ position: "relative" }}>
+                        <SpecialsZone
+                            id={p1.places.specialsZone.id}
                             player={playerOne}
-                            id={p1.places.unwantedsZone.id}
-                            alignment="center-left"
-                            gameSnapshot={whichSnapshot(p1.places.unwantedsZone.id)}
+                            gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
+                            alignment="bottom-left"
                             registerPlaceOffset={registerPlaceOffset}
-
-                                               />
-                       </div>
+                        />
+                        <div style={{ position: "absolute", top: 0 }}>
+                            <UWZ
+                                player={playerOne}
+                                id={p1.places.unwantedsZone.id}
+                                alignment="center-left"
+                                gameSnapshot={whichSnapshot(p1.places.unwantedsZone.id)}
+                                registerPlaceOffset={registerPlaceOffset}
+                            />
+                        </div>
                     </div>
 
                     <div className="grid-item center-gap-row">
@@ -247,13 +246,24 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                             cards={nonPlayerPlaces.discardPile.cards}
                         />
                     </div>
-                    <SpecialsZone
-                        id={p2.places.specialsZone.id}
-                        player={playerTwo}
-                        gameSnapshot={whichSnapshot(p2.places.specialsZone.id)}
-                        alignment="bottom-right"
-                        registerPlaceOffset={registerPlaceOffset}
-                    />
+                    <div style={{ position: "relative" }}>
+                        <SpecialsZone
+                            id={p2.places.specialsZone.id}
+                            player={playerTwo}
+                            gameSnapshot={whichSnapshot(p2.places.specialsZone.id)}
+                            alignment="bottom-left"
+                            registerPlaceOffset={registerPlaceOffset}
+                        />
+                        <div style={{ position: "absolute", top: 0 }}>
+                            <UWZ
+                                player={playerTwo}
+                                id={p2.places.unwantedsZone.id}
+                                alignment="center-left"
+                                gameSnapshot={whichSnapshot(p2.places.unwantedsZone.id)}
+                                registerPlaceOffset={registerPlaceOffset}
+                            />
+                        </div>
+                    </div>
                     <EnemyGCZ
                         id={p1.places.guestCardZone.id}
                         gameSnapshot={whichSnapshot(p1.places.guestCardZone.id)}
@@ -297,7 +307,6 @@ export const Table: React.FC<TableProps> = ({ gameData, user }) => {
                         alignment="center-right"
                         gameSnapshot={whichSnapshot(p1.places.specialsZone.id)}
                         registerPlaceOffset={registerPlaceOffset}
-
                     />
                 </div>
             </DragDropContext>

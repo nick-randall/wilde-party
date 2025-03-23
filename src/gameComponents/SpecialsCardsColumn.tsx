@@ -26,7 +26,7 @@ export const SpecialsCardsColumn = forwardRef<RefMap, SpecialsCardsColumnProps>(
   const { highlights, draggedHandCard, draggedOver } = useSelector((state: RootState) => state.dragEventState);
 
   const {currSnapshot} = useSelector((state: RootState) => state.gameSnapshotState);
-    const specialsColumnType = cards[0].specialsCardType;
+    const specialsColumnType = cards[0].guestCardType;
 
   const draggableData: DraggableData = {
     type: "cardGroup",
@@ -36,13 +36,20 @@ export const SpecialsCardsColumn = forwardRef<RefMap, SpecialsCardsColumnProps>(
   const droppableData: DroppableData = {
     type: "place",
     id: specialsZoneId,
-    calculatedIndex: startingIndex,
+    calculatedIndex: cards.length,
   };
 
   const draggableId = JSON.stringify(draggableData);
   const droppableId = JSON.stringify(droppableData);
 
-  const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType === specialsColumnType;
+  const isHighlighted = highlights.includes(specialsZoneId) && draggedHandCard?.guestCardType === specialsColumnType;
+  console.log("isHighlighted", isHighlighted);
+  console.log("highlights", highlights);
+  console.log("specialsZoneId", specialsZoneId);
+  console.log("draggedHandCard", draggedHandCard);
+  console.log("specialsColumnType", specialsColumnType);
+  console.log("draggedOver", draggedOver);
+  console.log("startingIndex", startingIndex);
   const isDraggedOver = isHighlighted && draggedOver?.id === specialsZoneId && draggedOver?.index === startingIndex;
   const cardsNotAmongHighlights = highlights.includes(specialsZoneId) && draggedHandCard?.specialsCardType !== specialsColumnType;
   const ghostCard = draggedHandCard && isDraggedOver ? draggedHandCard : undefined;
