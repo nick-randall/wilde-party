@@ -4,9 +4,7 @@ import { locateCard, locatePlace } from "../helperFunctions/locateFunctions";
 const getScreenSize = () => ({ width: window.innerWidth, height: window.innerHeight });
 
 export interface DragEventState {
-    // gameSnapshot: GameSnapshot;
     screenSize: { width: number; height: number };
-    // transitionData: TransitionData[];
     draggedOver?: DroppableData;
     BFFdraggedOverSide?: string;
     rearrangingData: SimpleRearrangingData;
@@ -14,23 +12,29 @@ export interface DragEventState {
     draggableData?: DraggableData;
     highlights: number[];
     highlightType: string;
-    // aiPlaying: string;
 }
 
-const isGCZ = (placeId: number, gameSnapshot: GameSnapshot) =>
-    locatePlace(placeId, gameSnapshot).placeType === "guestCardZone";
-
-const isSpecialsZone = (type: DroppableEntityType, placeId: number, gameSnapshot: GameSnapshot) => {
-    if (type !== "place") return false;
-    return locatePlace(placeId, gameSnapshot).placeType === "specialsZone";
+const getHighlightType = (draggedHandCard: GameCard): CardHighlightType => {
+    switch (draggedHandCard.cardType) {
+        case "guest":
+            return "place";
+        case "unwanted":
+            return "place";
+        case "special":
+            return "place";
+        case "bff":
+            return "card";
+        case "enchant":
+            return "card";
+        default:
+            throw new Error("Haven't implemented the highlight type for that card yet!");
+    }
 };
 
 const isSpecialsColumn = (type: DroppableEntityType, id: number, gameSnapshot: GameSnapshot) => {
     if (type !== "cardGroup") return false;
     return locateCard(id, gameSnapshot).placeType === "specialsZone";
 };
-
-const isEnchantWithBFF = (handCard: GameCard | undefined) => handCard?.cardType === "bff";
 
 export interface DragEventState {
     // gameSnapshot: GameSnapshot;
@@ -91,7 +95,7 @@ export const dragEventSlice = createSlice({
             );
         },
         SET_DRAGGABLE_DATA: (state, action: PayloadAction<DraggableData>) => {
-            console.log("setting draggable data:",action.payload);
+            console.log("setting draggable data:", action.payload);
             state.draggableData = action.payload;
         },
         START_REARRANGING: (state, action: PayloadAction<SimpleRearrangingData>) => {
@@ -103,12 +107,14 @@ export const dragEventSlice = createSlice({
             const gameSnapshot = action.payload;
             const { actionResultsMap } = gameSnapshot;
             const draggedHandCard = state.draggedHandCard; //getDraggedHandCard(state, draggableId);
+            if (draggedHandCard) {
+                state.highlightType = getHighlightType(draggedHandCard);
+            }
             if (draggedHandCard && actionResultsMap) {
                 const actionResults = actionResultsMap[draggedHandCard.id];
                 const legalTargetIds = actionResults.map((ar) => ar.snapshotUpdateData.targetId);
                 if (legalTargetIds.length > 0) {
                     state.highlights = legalTargetIds;
-                    state.highlightType = actionResults[0].targetType;
                 }
             }
         },
@@ -130,7 +136,9 @@ export const dragEventSlice = createSlice({
             const { id, index, type, calculatedIndex } = data;
             if (type === "place") {
                 const placeName = locatePlace(id, gameSnapshot).placeType;
-                console.log(`Dragged over ${placeName}: (id ${id}) at index: ${index}  at calculated index: ${calculatedIndex}`);
+                console.log(
+                    `Dragged over ${placeName}: (id ${id}) at index: ${index}  at calculated index: ${calculatedIndex}`
+                );
 
                 // if (isEnchantWithBFF(state.draggedHandCard)) {
                 //     // TODO replace with logic based on cardGroups

@@ -14,13 +14,13 @@ export interface NewCardGroupProps {
     gameSnapshot: GameSnapshot;
     placeId: number;
     rightMostEnchantable: boolean;
-    // enchantableNeighbours: EnchantableNeighbour[];
 }
 
 interface BFFOrZwillingCardGroup {
     cardGroup: CardGroupObj;
     draggableId: string;
     cardGroupIndex: number;
+    notAmongHighlights?: boolean;
 }
 
 const NewCardGroup: React.FC<NewCardGroupProps> = ({
@@ -31,11 +31,14 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
     placeId,
     rightMostEnchantable,
 }) => {
-    const { draggedOver, draggedHandCard, highlights } = useSelector(
+    const { draggedOver, draggedHandCard, highlights, highlightType } = useSelector(
         (state: RootState) => state.dragEventState
     );
-    const isHighlighted = highlights.includes(cardGroup.id);
-    const { cardHeight, cardWidth } = getCardGroupStyles(cardGroup, cardGroupIndex, gameSnapshot);
+    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
+    const isHighlighted = cardGroup.cards.every((card) => highlights.includes(card.id));
+    const notAmongHighlights = highlightType === "card" && !isHighlighted;
+    console.log("highlightType", highlightType, "isHighlighted", isHighlighted, "notAmongHighlights", notAmongHighlights);
+    const { cardWidth } = getCardGroupStyles(cardGroup, cardGroupIndex, gameSnapshot);
     const draggableData: DraggableData = {
         id: cardGroup.id,
         type: "cardGroup",
@@ -51,7 +54,6 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
         placeType: "guestCardZone",
     };
 
-    const { activeAnimation } = useSelector((state: RootState) => state.animationState);
     const animations = activeAnimation?.animations ?? [];
     const animationCardIds = animations.map((a) => a.cardId);
 
@@ -103,6 +105,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 ghostCard={ghostCard}
                 isHighlighted={isHighlighted}
                 ghostCardOffsetLeft={ghostCardOffsetLeft}
+                notAmongHighlights={notAmongHighlights}
             />
         );
     }
@@ -113,6 +116,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroup={cardGroup}
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
+                notAmongHighlights={notAmongHighlights}
             />
         );
     else
@@ -121,6 +125,7 @@ const NewCardGroup: React.FC<NewCardGroupProps> = ({
                 cardGroup={cardGroup}
                 cardGroupIndex={cardGroupIndex}
                 draggableId={draggableId}
+                notAmongHighlights={notAmongHighlights}
             />
         );
 };
@@ -134,6 +139,7 @@ interface SingleCardGroupProps {
     draggedHandCard: GameCard | undefined;
     isHighlighted: boolean;
     ghostCardOffsetLeft?: number;
+    notAmongHighlights?: boolean;
 }
 
 const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
@@ -145,13 +151,10 @@ const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
     draggedHandCard,
     isHighlighted,
     ghostCardOffsetLeft,
+    notAmongHighlights,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { top, cardWidth, cardHeight } = getCardGroupStyles(
-        cardGroup,
-        cardGroupIndex,
-        currSnapshot
-    );
+    const { cardHeight } = getCardGroupStyles(cardGroup, cardGroupIndex, currSnapshot);
     return (
         <Draggable draggableId={draggableId} index={cardGroupIndex}>
             {(d) => (
@@ -175,6 +178,9 @@ const SingleCardGroup: React.FC<SingleCardGroupProps> = ({
                                     zIndex: 99,
                                     ...d.draggableProps.style,
                                     borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                    WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                    filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                    transition: "filter 250ms",
                                 }}
                             />
                             {ghostCard && draggedHandCard && (
@@ -200,9 +206,10 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     cardGroup,
     draggableId,
     cardGroupIndex,
+    notAmongHighlights,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { top, cardWidth, cardHeight } = getCardGroupStyles(
+    const {  cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
         cardGroupIndex,
         currSnapshot
@@ -212,7 +219,6 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
         <Draggable
             draggableId={draggableId}
             index={cardGroupIndex}
-            // index={index}
         >
             {(d) => (
                 <div {...d.draggableProps} ref={d.innerRef} {...d.dragHandleProps}>
@@ -220,8 +226,9 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                         style={{
                             height: cardHeight * 1.5,
                             width: cardWidth,
-                            // left,
                             position: "relative",
+                            WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                            filter: notAmongHighlights ? "grayscale(100%)" : "",
                         }}
                     >
                         <img
@@ -233,8 +240,11 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 width: cardWidth,
                                 left: 0,
                                 top: 0,
-                                // ...d.draggableProps.style,
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                transition: "filter 250ms",
+
                             }}
                         />
 
@@ -247,8 +257,11 @@ const ZwillingCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 top: cardHeight / 2,
                                 height: cardHeight,
                                 width: cardWidth,
-                                // ...d.draggableProps.style,
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                transition: "filter 250ms",
+
                             }}
                         />
                     </div>
@@ -262,12 +275,13 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
     cardGroup,
     draggableId,
     cardGroupIndex,
+    notAmongHighlights,
 }) => {
     const { currSnapshot } = useSelector((state: RootState) => state.gameSnapshotState);
-    const { left, cardWidth, cardHeight } = getCardGroupStyles(
+    const { cardWidth, cardHeight } = getCardGroupStyles(
         cardGroup,
         cardGroupIndex,
-        currSnapshot
+        currSnapshot,
     );
     return (
         <Draggable
@@ -281,7 +295,6 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                         style={{
                             height: cardHeight * 1.5,
                             width: cardWidth * 2,
-                            // left,
                             position: "relative",
                         }}
                     >
@@ -294,6 +307,10 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 left: 0,
                                 top: 0,
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                transition: "filter 250ms",
+
                             }}
                         />
                         <img
@@ -305,6 +322,10 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 top: 0,
                                 height: cardHeight,
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                transition: "filter 250ms",
+
                             }}
                         />
                         <img
@@ -316,6 +337,10 @@ const BFFCardGroup: React.FC<BFFOrZwillingCardGroup> = ({
                                 top: cardHeight / 2,
                                 height: cardHeight,
                                 borderRadius: dimensionConstants.CARD_BORDER_RADIUS,
+                                WebkitFilter: notAmongHighlights ? "grayscale(100%)" : "",
+                                filter: notAmongHighlights ? "grayscale(100%)" : "",
+                                transition: "filter 250ms",
+
                             }}
                         />
                     </div>
